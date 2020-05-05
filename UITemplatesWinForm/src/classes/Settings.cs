@@ -16,7 +16,6 @@ using System.Collections.ObjectModel;
 
 namespace Regata.UITemplates
 {
-    public enum Status { Info, Processing, Success, Canceled };
     public enum Languages { Russian, English };
 
     // NOTE: perhaps internal localization tools in winforms is better, but how I iderstood it doesn't allow to switch language during the runtime
@@ -26,7 +25,7 @@ namespace Regata.UITemplates
         private static bool _isFirstreading = true;
         private readonly string _path;
         public static string AssemblyName;
-        
+
         private Languages _currentLanguage;
 
         public Languages CurrentLanguage
@@ -85,7 +84,7 @@ namespace Regata.UITemplates
             Directory.CreateDirectory(Path.GetDirectoryName(_path));
             using (var f = File.CreateText(_path))
             { }
-            
+
             CurrentLanguage = Languages.English;
             NonDisplayedColumns = new ObservableCollection<string>();
         }
@@ -104,106 +103,6 @@ namespace Regata.UITemplates
             options.WriteIndented = true;
             File.WriteAllText(_path, JsonSerializer.Serialize(this, options));
         }
-    }
 
-    public abstract class Labels
-    {
-        public static Languages CurrentLanguage;
-
-        #region ControlLabels
-
-        public static string MenuItemMenu
-        {
-            get
-            {
-                switch (CurrentLanguage)
-                {
-                    case Languages.Russian:
-                        return "Menu";
-                    case Languages.English:
-                        return "Menu";
-                    default: return "";
-                }
-            }
-        }
-
-        public static string MenuItemMenuLang
-        {
-            get
-            {
-                switch (CurrentLanguage)
-                {
-                    case Languages.Russian:
-                        return "Language";
-                    case Languages.English:
-                        return "Language";
-                    default: return "";
-                }
-            }
-        }
-
-        public static string MenuItemMenuLangRus
-        {
-            get
-            {
-                switch (CurrentLanguage)
-                {
-                    case Languages.Russian:
-                        return "Russian";
-                    case Languages.English:
-                        return "Russian";
-                    default: return "";
-                }
-            }
-        }
-
-        public static string MenuItemMenuLangEng
-        {
-            get
-            {
-                switch (CurrentLanguage)
-                {
-                    case Languages.Russian:
-                        return "English";
-                    case Languages.English:
-                        return "English";
-                    default: return "";
-                }
-            }
-        }
-
-        public static string MenuItemViewShowColumns
-        { 
-            get
-            {
-                switch (CurrentLanguage)
-                {
-                    case Languages.Russian:
-                        return "Показывать столбцы";
-                    case Languages.English:
-                        return "Show columns";
-                    default:
-                        return "Show columns";
-                }
-            }
-        }
-
-        public static string MenuItemView
-        {
-            get
-            {
-                switch (CurrentLanguage)
-                {
-                    case Languages.Russian:
-                        return "Вид";
-                    case Languages.English:
-                        return "View";
-                    default:
-                        return "View";
-                }
-            }
-        }
-        #endregion
-
-    }
-}
+    } // public class Settings
+} // namespace Regata.UITemplates

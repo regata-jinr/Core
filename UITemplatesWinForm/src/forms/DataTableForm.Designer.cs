@@ -63,7 +63,8 @@ namespace Regata.UITemplates
             this.MenuStrip.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuItemMenu,
-            this.MenuItemView});
+            this.MenuItemView,
+            this.MenuItemMenuLang});
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip.Name = "MenuStrip";
             this.MenuStrip.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
@@ -74,8 +75,8 @@ namespace Regata.UITemplates
             // 
             // MenuItemMenu
             // 
-            this.MenuItemMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MenuItemMenuLang});
+            //this.MenuItemMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            //this.MenuItemMenuLang});
             this.MenuItemMenu.Name = "MenuItemMenu";
             this.MenuItemMenu.Size = new System.Drawing.Size(63, 24);
             this.MenuItemMenu.Text = "Меню";

@@ -15,7 +15,6 @@ using System.Windows.Forms;
 namespace Regata.UITemplates
 {
     // TODO:  add sort by any column
-    // FIXME: there is not possible to pass side labels
     // TODO:  add tests via test db table
     // TODO:  add autoupdate based on github releases
     // TODO:  add cicd
@@ -45,8 +44,16 @@ namespace Regata.UITemplates
 
             MenuItemMenuLangEng.CheckedChanged += LangStripMenuItem_CheckedChanged;
             MenuItemMenuLangRus.CheckedChanged += LangStripMenuItem_CheckedChanged;
+
+            ButtonsLayoutPanel.ControlAdded += DataTableForm_ControlAdded;
+            ControlAdded += DataTableForm_ControlAdded;
             ChangeLanguageOfControlsTexts(Controls);
             InitializeMenuViewShowColumns();
+        }
+
+        private void DataTableForm_ControlAdded(object sender, ControlEventArgs e)
+        {
+            ChangeLanguageOfControlsTexts(Controls);
         }
 
         private void LangStripMenuItem_CheckedChanged(object sender, EventArgs e)
@@ -113,24 +120,19 @@ namespace Regata.UITemplates
                 ChangeLanguageOfObjectText(cont);
         }
 
-        private string GetValueOfSetting(string name)
-        {
-            return typeof(Labels).GetProperty(name)?.GetValue(null).ToString();
-        }
-
         private void ChangeLanguageOfObjectText(object cont)
         {
             switch (cont)
             {
                 case GroupBox grpb:
-                    grpb.Text = GetValueOfSetting(grpb.Name);
+                    grpb.Text = Labels.GetLabel(grpb.Name);
                     ChangeLanguageOfControlsTexts(grpb.Controls);
                     break;
 
                 case TabControl tbcont:
                     foreach (TabPage page in tbcont.TabPages)
                     {
-                        page.Text = GetValueOfSetting(page.Name);
+                        page.Text = Labels.GetLabel(page.Name);
                         ChangeLanguageOfControlsTexts(page.Controls);
                     }
                     break;
@@ -138,9 +140,9 @@ namespace Regata.UITemplates
                 case DataGridView dgv:
                     foreach (DataGridViewColumn col in dgv.Columns)
                     {
-                        var headerTmp = GetValueOfSetting(col.Name);
+                        var headerTmp = Labels.GetLabel(col.Name);
                         if (!string.IsNullOrEmpty(headerTmp))
-                            col.HeaderText = GetValueOfSetting(col.Name);
+                            col.HeaderText = Labels.GetLabel(col.Name);
                     }
                     break;
 
@@ -150,9 +152,13 @@ namespace Regata.UITemplates
                     break;
 
                 case ToolStripMenuItem tsi:
-                    tsi.Text = GetValueOfSetting(tsi.Name);
+                    tsi.Text = Labels.GetLabel(tsi.Name);
                     foreach (ToolStripMenuItem innerTsi in tsi.DropDownItems)
                         ChangeLanguageOfObjectText(innerTsi);
+                    break;
+
+                case TableLayoutPanel tlp:
+                    ChangeLanguageOfControlsTexts(tlp.Controls);
                     break;
 
                 default:
@@ -160,7 +166,7 @@ namespace Regata.UITemplates
                     var setTextMethod = cont.GetType().GetProperty("Text").GetSetMethod();
 
                     var propertyName = getNameMethod.Invoke(cont, null).ToString();
-                    var NameFromLabels = GetValueOfSetting(propertyName);
+                    var NameFromLabels = Labels.GetLabel(propertyName);
 
                     if (!string.IsNullOrEmpty(NameFromLabels))
                         setTextMethod.Invoke(cont, new object[] { NameFromLabels });
@@ -173,5 +179,5 @@ namespace Regata.UITemplates
             }
         }
 
-    } // public partial class DataTableForm<Model> : Form
+    } // public abstract partial class DataTableForm<Model> : Form
 } // Regata.UITemplates
