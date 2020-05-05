@@ -11,40 +11,41 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using Regata.Utilities;
 
 namespace Regata.UITemplates
 {
-    // TODO: add sort by any column
-    // TODO: add tests via test db table
-    // TODO: add autoupdate based on github releases
-    // TODO: add cicd
+    // TODO:  add sort by any column
+    // FIXME: there is not possible to pass side labels
+    // TODO:  add tests via test db table
+    // TODO:  add autoupdate based on github releases
+    // TODO:  add cicd
 
-    public partial class DataTableForm<Model> : Form
+    public abstract partial class DataTableForm<Model> : Form
     {
-        private readonly BindingList<Model> _viewModels;
+        public readonly BindingList<Model> Data;
         private Settings _settings;
 
-        public DataTableForm(ref BindingList<Model> models, string AssemblyName)
+        public DataTableForm(string AssemblyName)
         {
-            if (models == null) throw new ArgumentNullException("Data can't be a null");
             if (string.IsNullOrEmpty(AssemblyName)) throw new ArgumentNullException("You must specify name of calling assembly. Just use 'System.Reflection.Assembly.GetExecutingAssembly().GetName().Name' as argument.");
 
             InitializeComponent();
-            _settings = new Settings(AssemblyName);
+            Settings.AssemblyName = AssemblyName;
+            _settings = new Settings();
 
-            if (Labels.CurrentLanguage == Languages.English)
+            _settings.LanguageChanged += () => ChangeLanguageOfControlsTexts(Controls);
+
+            if (_settings.CurrentLanguage == Languages.English)
                 MenuItemMenuLangEng.Checked = true;
             else
                 MenuItemMenuLangRus.Checked = true;
 
-            _viewModels = models;
-            DataGridView.DataSource = _viewModels;
+            Data = new BindingList<Model>();
+            DataGridView.DataSource = Data;
 
             MenuItemMenuLangEng.CheckedChanged += LangStripMenuItem_CheckedChanged;
             MenuItemMenuLangRus.CheckedChanged += LangStripMenuItem_CheckedChanged;
-
-            LangSwitcher.ChangeFormLanguage(this);
+            ChangeLanguageOfControlsTexts(Controls);
             InitializeMenuViewShowColumns();
         }
 
@@ -63,9 +64,8 @@ namespace Regata.UITemplates
                 _settings.CurrentLanguage = Languages.Russian;
                 MenuItemMenuLangEng.Checked = false;
             }
-            LangSwitcher.ChangeFormLanguage(this);
+
             InitializeMenuViewShowColumns();
-            _settings.SaveSettings();
         }
 
         private void InitializeMenuViewShowColumns()
@@ -96,16 +96,81 @@ namespace Regata.UITemplates
                 if (_settings.NonDisplayedColumns.Contains(t.Name))
                     _settings.NonDisplayedColumns.Remove(t.Name);
             }
-            _settings.SaveSettings();
 
             DataGridView.Columns[t.Name].Visible = t.Checked;
         }
 
-        public void AddButtonToLayout(ref Button btn)
+        public void AddButtonToLayout(Button btn)
         {
             btn.Size = new System.Drawing.Size(120, 35);
             ButtonsLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             ButtonsLayoutPanel.Controls.Add(btn);
+        }
+
+        private void ChangeLanguageOfControlsTexts(Control.ControlCollection controls)
+        {
+            foreach (var cont in controls)
+                ChangeLanguageOfObjectText(cont);
+        }
+
+        private string GetValueOfSetting(string name)
+        {
+            return typeof(Labels).GetProperty(name)?.GetValue(null).ToString();
+        }
+
+        private void ChangeLanguageOfObjectText(object cont)
+        {
+            switch (cont)
+            {
+                case GroupBox grpb:
+                    grpb.Text = GetValueOfSetting(grpb.Name);
+                    ChangeLanguageOfControlsTexts(grpb.Controls);
+                    break;
+
+                case TabControl tbcont:
+                    foreach (TabPage page in tbcont.TabPages)
+                    {
+                        page.Text = GetValueOfSetting(page.Name);
+                        ChangeLanguageOfControlsTexts(page.Controls);
+                    }
+                    break;
+
+                case DataGridView dgv:
+                    foreach (DataGridViewColumn col in dgv.Columns)
+                    {
+                        var headerTmp = GetValueOfSetting(col.Name);
+                        if (!string.IsNullOrEmpty(headerTmp))
+                            col.HeaderText = GetValueOfSetting(col.Name);
+                    }
+                    break;
+
+                case MenuStrip ms:
+                    foreach (ToolStripMenuItem item in ms.Items)
+                        ChangeLanguageOfObjectText(item);
+                    break;
+
+                case ToolStripMenuItem tsi:
+                    tsi.Text = GetValueOfSetting(tsi.Name);
+                    foreach (ToolStripMenuItem innerTsi in tsi.DropDownItems)
+                        ChangeLanguageOfObjectText(innerTsi);
+                    break;
+
+                default:
+                    var getNameMethod = cont.GetType().GetProperty("Name").GetGetMethod();
+                    var setTextMethod = cont.GetType().GetProperty("Text").GetSetMethod();
+
+                    var propertyName = getNameMethod.Invoke(cont, null).ToString();
+                    var NameFromLabels = GetValueOfSetting(propertyName);
+
+                    if (!string.IsNullOrEmpty(NameFromLabels))
+                        setTextMethod.Invoke(cont, new object[] { NameFromLabels });
+                    else
+                        setTextMethod.Invoke(cont, new object[] { propertyName });
+                    break;
+
+                case null:
+                    throw new ArgumentNullException("Have trying to set language for null control");
+            }
         }
 
     } // public partial class DataTableForm<Model> : Form

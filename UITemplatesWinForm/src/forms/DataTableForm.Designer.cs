@@ -10,7 +10,7 @@
 
 namespace Regata.UITemplates
 {
-    partial class DataTableForm<Model>
+    public abstract partial class DataTableForm<Model> : System.Windows.Forms.Form
     {
         /// <summary>
         /// Required designer variable.
@@ -39,18 +39,20 @@ namespace Regata.UITemplates
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataTableForm<Model>));
-            this.MenuStrip = new System.Windows.Forms.MenuStrip();
-            this.MenuItemMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuItemMenuLang = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuItemMenuLangRus = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuItemMenuLangEng = new System.Windows.Forms.ToolStripMenuItem();
-            this.DataGridView = new System.Windows.Forms.DataGridView();
-            this.FooterStatusStrip = new System.Windows.Forms.StatusStrip();
-            this.FooterStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+
+            this.MenuStrip               = new System.Windows.Forms.MenuStrip();
+            this.MenuItemMenu            = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemMenuLang        = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemMenuLangRus     = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemMenuLangEng     = new System.Windows.Forms.ToolStripMenuItem();
+            this.DataGridView            = new System.Windows.Forms.DataGridView();
+            this.FooterStatusStrip       = new System.Windows.Forms.StatusStrip();
+            this.FooterStatusLabel       = new System.Windows.Forms.ToolStripStatusLabel();
             this.FooterStatusProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.MenuItemView = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemView            = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemViewShowColumns = new System.Windows.Forms.ToolStripMenuItem();
-            this.ButtonsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.ButtonsLayoutPanel      = new System.Windows.Forms.TableLayoutPanel();
+
             this.MenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).BeginInit();
             this.FooterStatusStrip.SuspendLayout();

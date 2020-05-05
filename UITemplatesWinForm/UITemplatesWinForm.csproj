@@ -1,12 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
-  <ItemGroup>
-    <ProjectReference Include="..\Utilities\Utilities.csproj" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+    <Version>0.1.0</Version>
   </PropertyGroup>
 
 </Project>
