@@ -22,6 +22,7 @@ namespace Regata.UITemplates
     public abstract partial class DataTableForm<Model> : Form
     {
         public readonly BindingList<Model> Data;
+        public readonly string SettingsPath;
         private Settings _settings;
 
         public DataTableForm(string AssemblyName)
@@ -33,6 +34,7 @@ namespace Regata.UITemplates
             _settings = new Settings();
 
             _settings.LanguageChanged += () => ChangeLanguageOfControlsTexts(Controls);
+            SettingsPath = _settings.FilePath;
 
             if (_settings.CurrentLanguage == Languages.English)
                 MenuItemMenuLangEng.Checked = true;
@@ -109,7 +111,7 @@ namespace Regata.UITemplates
 
         public void AddButtonToLayout(Button btn)
         {
-            btn.Size = new System.Drawing.Size(120, 35);
+            btn.Size = new System.Drawing.Size(120, 50);
             ButtonsLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             ButtonsLayoutPanel.Controls.Add(btn);
         }

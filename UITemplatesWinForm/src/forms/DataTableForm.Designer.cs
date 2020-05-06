@@ -129,12 +129,12 @@ namespace Regata.UITemplates
             this.DataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.DataGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
             this.DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGridView.Location = new System.Drawing.Point(18, 85);
+            this.DataGridView.Location = new System.Drawing.Point(18, 105);
             this.DataGridView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.DataGridView.Name = "DataGridView";
             this.DataGridView.ReadOnly = true;
             this.DataGridView.RowHeadersVisible = false;
-            this.DataGridView.Size = new System.Drawing.Size(1164, 573);
+            this.DataGridView.Size = new System.Drawing.Size(1164, 553);
             this.DataGridView.TabIndex = 1;
             // 
             // FooterStatusStrip
@@ -181,7 +181,7 @@ namespace Regata.UITemplates
             this.ButtonsLayoutPanel.Name = "ButtonsLayoutPanel";
             this.ButtonsLayoutPanel.RowCount = 1;
             this.ButtonsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.ButtonsLayoutPanel.Size = new System.Drawing.Size(1164, 41);
+            this.ButtonsLayoutPanel.Size = new System.Drawing.Size(1164, 61);
             this.ButtonsLayoutPanel.TabIndex = 28;
             // 
             // Form1

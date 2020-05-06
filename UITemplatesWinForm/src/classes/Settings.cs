@@ -23,7 +23,7 @@ namespace Regata.UITemplates
     public class Settings
     {
         private static bool _isFirstreading = true;
-        private readonly string _path;
+        public readonly string FilePath;
         public static string AssemblyName;
 
         private Languages _currentLanguage;
@@ -51,11 +51,11 @@ namespace Regata.UITemplates
                 if (_isFirstreading)
                 {
                     _isFirstreading = false; // this fix stack overflow in json desirialize bellow
-                    if (File.Exists(_path))
+                    if (File.Exists(FilePath))
                     {
                         var options = new JsonSerializerOptions();
                         options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-                        var set = JsonSerializer.Deserialize<Settings>(File.ReadAllText(_path), options);
+                        var set = JsonSerializer.Deserialize<Settings>(File.ReadAllText(FilePath), options);
                         _currentLanguage = set.CurrentLanguage;
                         NonDisplayedColumns = set.NonDisplayedColumns;
 
@@ -81,8 +81,8 @@ namespace Regata.UITemplates
 
         private void ResetFileSettings()
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(_path));
-            using (var f = File.CreateText(_path))
+            Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
+            using (var f = File.CreateText(FilePath))
             { }
 
             CurrentLanguage = Languages.English;
@@ -92,7 +92,7 @@ namespace Regata.UITemplates
         public Settings()
         {
             if (string.IsNullOrEmpty(AssemblyName)) throw new ArgumentNullException("You must specify name of calling assembly. Just use 'System.Reflection.Assembly.GetExecutingAssembly().GetName().Name' as argument.");
-            _path = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\Regata\\{AssemblyName}\\settings.json";
+            FilePath = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\Regata\\{AssemblyName}\\settings.json";
             ReadSettings();
         }
 
@@ -101,7 +101,7 @@ namespace Regata.UITemplates
             var options = new JsonSerializerOptions();
             options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
             options.WriteIndented = true;
-            File.WriteAllText(_path, JsonSerializer.Serialize(this, options));
+            File.WriteAllText(FilePath, JsonSerializer.Serialize(this, options));
         }
 
     } // public class Settings
