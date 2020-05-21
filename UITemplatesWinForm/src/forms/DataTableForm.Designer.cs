@@ -197,7 +197,7 @@ namespace Regata.UITemplates
             this.MainMenuStrip = this.MenuStrip;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FaceForm";
-            this.Text = "GammaSpectrumInfo";
+            this.Text = "RegataBasicFormTemplate";
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).EndInit();

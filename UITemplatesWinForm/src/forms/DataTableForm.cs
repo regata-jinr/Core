@@ -10,12 +10,23 @@
 
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Regata.UITemplates
 {
     // TODO:  add sort by any column
+    // TODO: for global settings settings.json must be separated on the forms for views
+    /* 
+     * settings.json:
+     *  "language": "english",
+     *  {
+     *  "form1": {"hidedColumns": [...]},
+     *  "form2": {"hidedColumns": [...]},
+     *  }
+    */
     // TODO:  add tests via test db table
+    // TODO:  switching lang on the form should switch language also on already opened form
     // TODO:  add autoupdate based on github releases
     // TODO:  add cicd
 
@@ -23,20 +34,22 @@ namespace Regata.UITemplates
     {
         public readonly BindingList<Model> Data;
         public readonly string SettingsPath;
-        private Settings _settings;
+        private readonly string _derivedFormName;
 
-        public DataTableForm(string AssemblyName)
+
+        public DataTableForm(string AssemblyName, string DerivedFormName)
         {
             if (string.IsNullOrEmpty(AssemblyName)) throw new ArgumentNullException("You must specify name of calling assembly. Just use 'System.Reflection.Assembly.GetExecutingAssembly().GetName().Name' as argument.");
+            if (string.IsNullOrEmpty(DerivedFormName)) throw new ArgumentNullException("You must specify name of derived form for correct working of settings.");
+            Settings.AssemblyName = AssemblyName;
+            _derivedFormName = DerivedFormName;
 
             InitializeComponent();
-            Settings.AssemblyName = AssemblyName;
-            _settings = new Settings();
 
-            _settings.LanguageChanged += () => ChangeLanguageOfControlsTexts(Controls);
-            SettingsPath = _settings.FilePath;
+            Settings.LanguageChanged += () => ChangeLanguageOfControlsTexts(Controls);
+            SettingsPath = Settings.FilePath;
 
-            if (_settings.CurrentLanguage == Languages.English)
+            if (Settings.CurrentLanguage == Languages.English)
                 MenuItemMenuLangEng.Checked = true;
             else
                 MenuItemMenuLangRus.Checked = true;
@@ -47,6 +60,7 @@ namespace Regata.UITemplates
             MenuItemMenuLangEng.CheckedChanged += LangStripMenuItem_CheckedChanged;
             MenuItemMenuLangRus.CheckedChanged += LangStripMenuItem_CheckedChanged;
 
+            // is this redundant? User adds control the most frequantly during form init
             ButtonsLayoutPanel.ControlAdded += DataTableForm_ControlAdded;
             ControlAdded += DataTableForm_ControlAdded;
             ChangeLanguageOfControlsTexts(Controls);
@@ -60,18 +74,34 @@ namespace Regata.UITemplates
 
         private void LangStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
+            // circle switching
+
             var langStrip = sender as ToolStripMenuItem;
 
             if (langStrip.Checked && langStrip.Name == MenuItemMenuLangEng.Name)
             {
-                _settings.CurrentLanguage = Languages.English;
+                Settings.CurrentLanguage = Languages.English;
                 MenuItemMenuLangRus.Checked = false;
             }
 
             if (langStrip.Checked && langStrip.Name == MenuItemMenuLangRus.Name)
             {
-                _settings.CurrentLanguage = Languages.Russian;
+                Settings.CurrentLanguage = Languages.Russian;
                 MenuItemMenuLangEng.Checked = false;
+            }
+
+            if (!(MenuItemMenuLangEng.Checked || MenuItemMenuLangRus.Checked))
+            {
+                if (langStrip.Name == MenuItemMenuLangEng.Name)
+                {
+                    Settings.CurrentLanguage = Languages.Russian;
+                    MenuItemMenuLangRus.Checked = true;
+                }
+                if (langStrip.Name == MenuItemMenuLangRus.Name)
+                {
+                    Settings.CurrentLanguage = Languages.English;
+                    MenuItemMenuLangEng.Checked = true;
+                }
             }
 
             InitializeMenuViewShowColumns();
@@ -82,9 +112,11 @@ namespace Regata.UITemplates
             MenuItemViewShowColumns.DropDownItems.Clear();
             foreach (DataGridViewColumn col in DataGridView.Columns)
             {
+                if (_hidedColumnsIndexes.Contains(col.Index)) continue;
+
                 var t = new ToolStripMenuItem { Name = col.Name, Text = col.HeaderText, CheckOnClick = true, Checked = true};
 
-                if (_settings.NonDisplayedColumns.Contains(t.Name))
+                if (Settings.FormNonDisplayedColumns.ContainsKey(_derivedFormName) && Settings.FormNonDisplayedColumns[_derivedFormName].Contains(t.Name))
                 {
                     t.Checked = false;
                     col.Visible = false;
@@ -97,14 +129,12 @@ namespace Regata.UITemplates
         private void ShowColumns_CheckedChanged(object sender, EventArgs e)
         {
             var t = sender as ToolStripMenuItem;
+            //if (!(Settings.FormNonDisplayedColumns.ContainsKey(_derivedFormName) && Settings.FormNonDisplayedColumns[_derivedFormName].Contains(t.Name))) return;
 
             if (!t.Checked)
-                _settings.NonDisplayedColumns.Add(t.Name);
+                Settings.HideColumn(_derivedFormName, t.Name);
             else
-            {
-                if (_settings.NonDisplayedColumns.Contains(t.Name))
-                    _settings.NonDisplayedColumns.Remove(t.Name);
-            }
+                Settings.ShowColumn(_derivedFormName, t.Name);
 
             DataGridView.Columns[t.Name].Visible = t.Checked;
         }
@@ -116,7 +146,7 @@ namespace Regata.UITemplates
             ButtonsLayoutPanel.Controls.Add(btn);
         }
 
-        private void ChangeLanguageOfControlsTexts(Control.ControlCollection controls)
+        public void ChangeLanguageOfControlsTexts(Control.ControlCollection controls)
         {
             foreach (var cont in controls)
                 ChangeLanguageOfObjectText(cont);
@@ -126,19 +156,6 @@ namespace Regata.UITemplates
         {
             switch (cont)
             {
-                case GroupBox grpb:
-                    grpb.Text = Labels.GetLabel(grpb.Name);
-                    ChangeLanguageOfControlsTexts(grpb.Controls);
-                    break;
-
-                case TabControl tbcont:
-                    foreach (TabPage page in tbcont.TabPages)
-                    {
-                        page.Text = Labels.GetLabel(page.Name);
-                        ChangeLanguageOfControlsTexts(page.Controls);
-                    }
-                    break;
-
                 case DataGridView dgv:
                     foreach (DataGridViewColumn col in dgv.Columns)
                     {
@@ -150,34 +167,57 @@ namespace Regata.UITemplates
 
                 case MenuStrip ms:
                     foreach (ToolStripMenuItem item in ms.Items)
-                        ChangeLanguageOfObjectText(item);
+                    {
+                        item.Text = Labels.GetLabel(item.Name);
+                        foreach (ToolStripMenuItem innerTsi in item.DropDownItems)
+                            ChangeLanguageOfObjectText(innerTsi);
+                    }
                     break;
 
-                case ToolStripMenuItem tsi:
-                    tsi.Text = Labels.GetLabel(tsi.Name);
-                    foreach (ToolStripMenuItem innerTsi in tsi.DropDownItems)
-                        ChangeLanguageOfObjectText(innerTsi);
-                    break;
-
-                case TableLayoutPanel tlp:
-                    ChangeLanguageOfControlsTexts(tlp.Controls);
-                    break;
-
-                default:
-                    var getNameMethod = cont.GetType().GetProperty("Name").GetGetMethod();
-                    var setTextMethod = cont.GetType().GetProperty("Text").GetSetMethod();
-
-                    var propertyName = getNameMethod.Invoke(cont, null).ToString();
-                    var NameFromLabels = Labels.GetLabel(propertyName);
-
-                    if (!string.IsNullOrEmpty(NameFromLabels))
-                        setTextMethod.Invoke(cont, new object[] { NameFromLabels });
+                case Control nestedControl:
+                    if (nestedControl.Controls.Count > 0)
+                    {
+                        foreach (Control nc in nestedControl.Controls)
+                            ChangeLanguageOfObjectText(nc);
+                    }
                     else
-                        setTextMethod.Invoke(cont, new object[] { propertyName });
+                        SetTextLabel(nestedControl);
                     break;
-
+                
                 case null:
                     throw new ArgumentNullException("Have trying to set language for null control");
+
+                default:
+                    SetTextLabel(cont);
+                    break;
+            }
+        }
+
+        private void SetTextLabel(object comp)
+        {
+            var getNameMethod = comp.GetType().GetProperty("Name").GetGetMethod();
+            var setTextMethod = comp.GetType().GetProperty("Text").GetSetMethod();
+
+            var propertyName = getNameMethod.Invoke(comp, null).ToString();
+            var NameFromLabels = Labels.GetLabel(propertyName);
+
+            if (!string.IsNullOrEmpty(NameFromLabels))
+                setTextMethod.Invoke(comp, new object[] { NameFromLabels });
+            else
+                setTextMethod.Invoke(comp, new object[] { propertyName });
+
+            Text = Labels.GetLabel("FormText");
+            FooterStatusLabel.Text = "";
+        }
+
+        private int[] _hidedColumnsIndexes = { -1 };
+        public void HideColumnsWithIndexes(params int[] indexes)
+        {
+            _hidedColumnsIndexes = indexes;
+            foreach (var i in indexes)
+            {
+                DataGridView.Columns[i].Visible = false;
+                MenuItemViewShowColumns.DropDownItems[i].Visible = false;
             }
         }
 

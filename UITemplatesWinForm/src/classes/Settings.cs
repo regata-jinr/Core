@@ -12,23 +12,70 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.IO;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace Regata.UITemplates
 {
     public enum Languages { Russian, English };
 
-    // NOTE: perhaps internal localization tools in winforms is better, but how I iderstood it doesn't allow to switch language during the runtime
-
-    public class Settings
+    public struct Parameters
     {
-        private static bool _isFirstreading = true;
-        public readonly string FilePath;
-        public static string AssemblyName;
+        public Languages CurrentLanguage { get; set; }
+        public Dictionary<string, List<string>>  FormNonDisplayedColumns { get; set; }
+    }
 
-        private Languages _currentLanguage;
+    public static class Settings
+    {
+        public static string FilePath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(AssemblyName)) throw new ArgumentNullException("You must specify name of calling assembly. Just use 'System.Reflection.Assembly.GetExecutingAssembly().GetName().Name' as argument.");
+                return $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\Regata\\{AssemblyName}\\settings.json";
+            }
+        }
 
-        public Languages CurrentLanguage
+        private  static string _assmName;
+        public  static string AssemblyName { 
+            get { return _assmName; }
+            set
+            {
+                _assmName = value;
+                ReadSettings();
+
+            }
+        }
+
+        private static Languages _currentLanguage;
+        public static Dictionary<string, List<string>> FormNonDisplayedColumns { get; private set; }
+
+        private static void InitFormNonDisplayedColumnsDict(string formName)
+        {
+            if (string.IsNullOrEmpty(AssemblyName)) throw new ArgumentNullException("You must specify name of calling assembly. Just use 'System.Reflection.Assembly.GetExecutingAssembly().GetName().Name' as argument.");
+
+            if (FormNonDisplayedColumns.ContainsKey(formName)) return;
+
+            FormNonDisplayedColumns.Add(formName, new List<string>());
+
+        }
+
+        public static void ShowColumn(string formName, string columnName)
+        {
+            InitFormNonDisplayedColumnsDict(formName);
+            if (FormNonDisplayedColumns[formName].Contains(columnName))
+                FormNonDisplayedColumns[formName].Remove(columnName);
+            SaveSettings();
+        }
+
+        public static void HideColumn(string formName, string columnName)
+        {
+            InitFormNonDisplayedColumnsDict(formName);
+            if (!FormNonDisplayedColumns[formName].Contains(columnName))
+                FormNonDisplayedColumns[formName].Add(columnName);
+            SaveSettings();
+        }
+
+        public static Languages CurrentLanguage
         {
             get { return _currentLanguage; }
             set
@@ -40,33 +87,25 @@ namespace Regata.UITemplates
             }
         }
 
-        public event Action LanguageChanged;
+        public static event Action LanguageChanged;
 
-        public ObservableCollection<string> NonDisplayedColumns { get; set; }
-
-        private void ReadSettings()
+        private static void ReadSettings()
         {
             try
             {
-                if (_isFirstreading)
+                if (File.Exists(FilePath))
                 {
-                    _isFirstreading = false; // this fix stack overflow in json desirialize bellow
-                    if (File.Exists(FilePath))
-                    {
-                        var options = new JsonSerializerOptions();
-                        options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-                        var set = JsonSerializer.Deserialize<Settings>(File.ReadAllText(FilePath), options);
-                        _currentLanguage = set.CurrentLanguage;
-                        NonDisplayedColumns = set.NonDisplayedColumns;
+                    var options = new JsonSerializerOptions();
+                    options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+                    var parameters = JsonSerializer.Deserialize<Parameters>(File.ReadAllText(FilePath), options);
+                    FormNonDisplayedColumns = parameters.FormNonDisplayedColumns;
+                    CurrentLanguage = parameters.CurrentLanguage;
 
-                        if (NonDisplayedColumns == null)
-                            NonDisplayedColumns = new ObservableCollection<string>();
-
-                        NonDisplayedColumns.CollectionChanged += NonDisplayedColumns_CollectionChanged;
-                    }
-                    else
-                        ResetFileSettings();
+                    if (FormNonDisplayedColumns == null)
+                        FormNonDisplayedColumns = new Dictionary<string, List<string>>();
                 }
+                else
+                    ResetFileSettings();
             }
             catch (JsonException)
             {
@@ -74,34 +113,23 @@ namespace Regata.UITemplates
             }
         }
 
-        private void NonDisplayedColumns_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            SaveSettings();
-        }
-
-        private void ResetFileSettings()
+        private static void ResetFileSettings()
         {
             Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
             using (var f = File.CreateText(FilePath))
             { }
 
             CurrentLanguage = Languages.English;
-            NonDisplayedColumns = new ObservableCollection<string>();
+            FormNonDisplayedColumns = new Dictionary<string, List<string>>();
+            SaveSettings();
         }
 
-        public Settings()
-        {
-            if (string.IsNullOrEmpty(AssemblyName)) throw new ArgumentNullException("You must specify name of calling assembly. Just use 'System.Reflection.Assembly.GetExecutingAssembly().GetName().Name' as argument.");
-            FilePath = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\Regata\\{AssemblyName}\\settings.json";
-            ReadSettings();
-        }
-
-        public void SaveSettings()
+        public static void SaveSettings()
         {
             var options = new JsonSerializerOptions();
             options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
             options.WriteIndented = true;
-            File.WriteAllText(FilePath, JsonSerializer.Serialize(this, options));
+            File.WriteAllText(FilePath, JsonSerializer.Serialize(new Parameters { CurrentLanguage = CurrentLanguage, FormNonDisplayedColumns = FormNonDisplayedColumns }, options));
         }
 
     } // public class Settings
