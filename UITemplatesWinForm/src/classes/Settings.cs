@@ -36,6 +36,8 @@ namespace Regata.UITemplates
         }
 
         private  static string _assmName;
+        public static string ConnectionString;
+
         public  static string AssemblyName { 
             get { return _assmName; }
             set
@@ -81,7 +83,6 @@ namespace Regata.UITemplates
             set
             {
                 _currentLanguage = value;
-                Labels.CurrentLanguage = _currentLanguage;
                 LanguageChanged?.Invoke();
                 SaveSettings();
             }

@@ -25,6 +25,7 @@ namespace Regata.UITemplates
      *  "form2": {"hidedColumns": [...]},
      *  }
     */
+    // FIXME: dict solution support only hided columns in case of extensions I have to reimplements this part. Use global settings class and local settings class for each form.
     // TODO:  add tests via test db table
     // TODO:  switching lang on the form should switch language also on already opened form
     // TODO:  add autoupdate based on github releases
@@ -35,14 +36,17 @@ namespace Regata.UITemplates
         public readonly BindingList<Model> Data;
         public readonly string SettingsPath;
         private readonly string _derivedFormName;
+        protected readonly Labels _labels;
 
-
-        public DataTableForm(string AssemblyName, string DerivedFormName)
+        public DataTableForm(string DerivedFormName)
         {
-            if (string.IsNullOrEmpty(AssemblyName)) throw new ArgumentNullException("You must specify name of calling assembly. Just use 'System.Reflection.Assembly.GetExecutingAssembly().GetName().Name' as argument.");
+            if (string.IsNullOrEmpty(Settings.AssemblyName)) throw new ArgumentNullException("You must specify name of calling assembly. Just use 'System.Reflection.Assembly.GetExecutingAssembly().GetName().Name' as argument.");
             if (string.IsNullOrEmpty(DerivedFormName)) throw new ArgumentNullException("You must specify name of derived form for correct working of settings.");
-            Settings.AssemblyName = AssemblyName;
+            if (string.IsNullOrEmpty(Settings.ConnectionString)) throw new ArgumentNullException("You must assign Settings.ConnectionString for correct working of settings.");
+
             _derivedFormName = DerivedFormName;
+            _labels = new Labels(DerivedFormName);
+
 
             InitializeComponent();
 
@@ -159,16 +163,16 @@ namespace Regata.UITemplates
                 case DataGridView dgv:
                     foreach (DataGridViewColumn col in dgv.Columns)
                     {
-                        var headerTmp = Labels.GetLabel(col.Name);
+                        var headerTmp = _labels.GetLabel(col.Name);
                         if (!string.IsNullOrEmpty(headerTmp))
-                            col.HeaderText = Labels.GetLabel(col.Name);
+                            col.HeaderText = _labels.GetLabel(col.Name);
                     }
                     break;
 
                 case MenuStrip ms:
                     foreach (ToolStripMenuItem item in ms.Items)
                     {
-                        item.Text = Labels.GetLabel(item.Name);
+                        item.Text = _labels.GetLabel(item.Name);
                         foreach (ToolStripMenuItem innerTsi in item.DropDownItems)
                             ChangeLanguageOfObjectText(innerTsi);
                     }
@@ -199,14 +203,14 @@ namespace Regata.UITemplates
             var setTextMethod = comp.GetType().GetProperty("Text").GetSetMethod();
 
             var propertyName = getNameMethod.Invoke(comp, null).ToString();
-            var NameFromLabels = Labels.GetLabel(propertyName);
+            var NameFromLabels = _labels.GetLabel(propertyName);
 
             if (!string.IsNullOrEmpty(NameFromLabels))
                 setTextMethod.Invoke(comp, new object[] { NameFromLabels });
             else
                 setTextMethod.Invoke(comp, new object[] { propertyName });
 
-            Text = Labels.GetLabel("FormText");
+            Text = _labels.GetLabel("FormText");
             FooterStatusLabel.Text = "";
         }
 
