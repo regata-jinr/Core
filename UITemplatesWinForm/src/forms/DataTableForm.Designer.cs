@@ -210,18 +210,18 @@ namespace Regata.UITemplates
 
         #endregion
 
-        public System.Windows.Forms.MenuStrip MenuStrip;
-        public System.Windows.Forms.ToolStripMenuItem MenuItemMenu;
-        public System.Windows.Forms.ToolStripMenuItem MenuItemMenuLang;
-        public System.Windows.Forms.ToolStripMenuItem MenuItemMenuLangRus;
-        public System.Windows.Forms.ToolStripMenuItem MenuItemMenuLangEng;
-        public System.Windows.Forms.DataGridView DataGridView;
-        public System.Windows.Forms.StatusStrip FooterStatusStrip;
-        public System.Windows.Forms.ToolStripStatusLabel FooterStatusLabel;
-        public System.Windows.Forms.ToolStripProgressBar FooterStatusProgressBar;
-        public System.Windows.Forms.ToolStripMenuItem MenuItemView;
-        public System.Windows.Forms.ToolStripMenuItem MenuItemViewShowColumns;
-        public System.Windows.Forms.TableLayoutPanel ButtonsLayoutPanel;
+        protected System.Windows.Forms.MenuStrip MenuStrip;
+        protected System.Windows.Forms.ToolStripMenuItem MenuItemMenu;
+        protected System.Windows.Forms.ToolStripMenuItem MenuItemMenuLang;
+        protected System.Windows.Forms.ToolStripMenuItem MenuItemMenuLangRus;
+        protected System.Windows.Forms.ToolStripMenuItem MenuItemMenuLangEng;
+        protected System.Windows.Forms.DataGridView DataGridView;
+        protected System.Windows.Forms.StatusStrip FooterStatusStrip;
+        protected System.Windows.Forms.ToolStripStatusLabel FooterStatusLabel;
+        protected System.Windows.Forms.ToolStripProgressBar FooterStatusProgressBar;
+        protected System.Windows.Forms.ToolStripMenuItem MenuItemView;
+        protected System.Windows.Forms.ToolStripMenuItem MenuItemViewShowColumns;
+        protected System.Windows.Forms.TableLayoutPanel ButtonsLayoutPanel;
     }
 }
 

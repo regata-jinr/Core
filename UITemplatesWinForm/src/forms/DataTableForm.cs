@@ -9,13 +9,15 @@
  ***************************************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace Regata.UITemplates
 {
-    // TODO:  add sort by any column
+    // TODO: add sort by any column
     // TODO: for global settings settings.json must be separated on the forms for views
     /* 
      * settings.json:
@@ -26,8 +28,10 @@ namespace Regata.UITemplates
      *  }
     */
     // FIXME: dict solution support only hided columns in case of extensions I have to reimplements this part. Use global settings class and local settings class for each form.
+    // DONE:  the same functional like for translation but for user access - this is the bad idea, because user can do it easily
+    //        in the form constructor.
+    // DONE:   better is provide list of roles for user
     // TODO:  add tests via test db table
-    // TODO:  switching lang on the form should switch language also on already opened form
     // TODO:  add autoupdate based on github releases
     // TODO:  add cicd
 
@@ -46,6 +50,8 @@ namespace Regata.UITemplates
 
             _derivedFormName = DerivedFormName;
             _labels = new Labels(DerivedFormName);
+
+            UserRoles = GetUserRoles();
 
 
             InitializeComponent();
@@ -67,7 +73,7 @@ namespace Regata.UITemplates
             // is this redundant? User adds control the most frequantly during form init
             ButtonsLayoutPanel.ControlAdded += DataTableForm_ControlAdded;
             ControlAdded += DataTableForm_ControlAdded;
-            ChangeLanguageOfControlsTexts(Controls);
+            //ChangeLanguageOfControlsTexts(Controls);
             InitializeMenuViewShowColumns();
         }
 
@@ -133,7 +139,6 @@ namespace Regata.UITemplates
         private void ShowColumns_CheckedChanged(object sender, EventArgs e)
         {
             var t = sender as ToolStripMenuItem;
-            //if (!(Settings.FormNonDisplayedColumns.ContainsKey(_derivedFormName) && Settings.FormNonDisplayedColumns[_derivedFormName].Contains(t.Name))) return;
 
             if (!t.Checked)
                 Settings.HideColumn(_derivedFormName, t.Name);
@@ -150,68 +155,104 @@ namespace Regata.UITemplates
             ButtonsLayoutPanel.Controls.Add(btn);
         }
 
+        protected readonly string[] UserRoles;
+
+        private string[] GetUserRoles()
+        {
+            var ListOfRoles = new List<string>();
+            using (SqlConnection conn = new SqlConnection(Settings.ConnectionString))
+            {
+                var cs = new SqlConnectionStringBuilder(Settings.ConnectionString);
+                using (var cmd = new SqlCommand($"declare @results varchar(500) select @results = coalesce(@results + ',', '') +  a.Role from ( select distinct Role from UserRoles where UserName = '{cs.UserID}' and Role is not NULL) as a; select @results as roles;", conn))
+                {
+                    conn.Open();
+                    object o = cmd.ExecuteScalar();
+                    if (o == null || DBNull.Value == o) return ListOfRoles.ToArray();
+
+                    ListOfRoles.AddRange(o.ToString().Split(','));
+                }
+            }
+            return ListOfRoles.ToArray();
+        }
+     
         public void ChangeLanguageOfControlsTexts(Control.ControlCollection controls)
         {
             foreach (var cont in controls)
-                ChangeLanguageOfObjectText(cont);
+                ApplyActionToComponent(cont, SetTextLabel);
         }
 
-        private void ChangeLanguageOfObjectText(object cont)
+        private void ApplyActionToComponent(object component, Action<object> act)
         {
-            switch (cont)
+            switch (component)
             {
                 case DataGridView dgv:
+                    act(dgv);
                     foreach (DataGridViewColumn col in dgv.Columns)
-                    {
-                        var headerTmp = _labels.GetLabel(col.Name);
-                        if (!string.IsNullOrEmpty(headerTmp))
-                            col.HeaderText = _labels.GetLabel(col.Name);
-                    }
+                        act(col);
                     break;
 
                 case MenuStrip ms:
                     foreach (ToolStripMenuItem item in ms.Items)
                     {
                         item.Text = _labels.GetLabel(item.Name);
-                        foreach (ToolStripMenuItem innerTsi in item.DropDownItems)
-                            ChangeLanguageOfObjectText(innerTsi);
+                        ApplyActionToComponent(item, act);
+                      
                     }
+                    break;
+
+                case ToolStripMenuItem tsi:
+                    tsi.Text = _labels.GetLabel(tsi.Name);
+                    foreach (ToolStripMenuItem innerTsi in tsi.DropDownItems)
+                        ApplyActionToComponent(innerTsi,act);
                     break;
 
                 case Control nestedControl:
                     if (nestedControl.Controls.Count > 0)
                     {
                         foreach (Control nc in nestedControl.Controls)
-                            ChangeLanguageOfObjectText(nc);
+                            ApplyActionToComponent(nc,act);
                     }
                     else
-                        SetTextLabel(nestedControl);
+                        act(nestedControl);
                     break;
                 
                 case null:
                     throw new ArgumentNullException("Have trying to set language for null control");
 
                 default:
-                    SetTextLabel(cont);
+                    act(component);
                     break;
             }
         }
 
-        private void SetTextLabel(object comp)
+        private void SetTextLabel(object obj)
         {
-            var getNameMethod = comp.GetType().GetProperty("Name").GetGetMethod();
-            var setTextMethod = comp.GetType().GetProperty("Text").GetSetMethod();
+            switch (obj)
+            {
+                case DataGridViewColumn dgvc:
+                    var headerTmp = _labels.GetLabel(dgvc.Name);
+                    if (!string.IsNullOrEmpty(headerTmp))
+                        dgvc.HeaderText = _labels.GetLabel(dgvc.Name);
+                    break;
+                default:
 
-            var propertyName = getNameMethod.Invoke(comp, null).ToString();
-            var NameFromLabels = _labels.GetLabel(propertyName);
+                    var getNameMethod = obj.GetType().GetProperty("Name").GetGetMethod();
+                    var setTextMethod = obj.GetType().GetProperty("Text").GetSetMethod();
 
-            if (!string.IsNullOrEmpty(NameFromLabels))
-                setTextMethod.Invoke(comp, new object[] { NameFromLabels });
-            else
-                setTextMethod.Invoke(comp, new object[] { propertyName });
+                    if (getNameMethod == null || setTextMethod == null) return;
 
-            Text = _labels.GetLabel("FormText");
-            FooterStatusLabel.Text = "";
+                    var propertyName = getNameMethod.Invoke(obj, null).ToString();
+                    var NameFromLabels = _labels.GetLabel(propertyName);
+
+                    if (!string.IsNullOrEmpty(NameFromLabels))
+                        setTextMethod.Invoke(obj, new object[] { NameFromLabels });
+                    else
+                        setTextMethod.Invoke(obj, new object[] { propertyName });
+
+                    Text = _labels.GetLabel("FormText");
+                    FooterStatusLabel.Text = "";
+                    break;
+            }
         }
 
         private int[] _hidedColumnsIndexes = { -1 };
