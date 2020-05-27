@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UITemplateWinFormTest
+namespace Regata.Utilities.Tests
 {
     [Table("table_Sample_Set")]
     public class SamplesSetModel
@@ -11,5 +11,6 @@ namespace UITemplateWinFormTest
         public string Sample_Set_ID { get; set; }
         public string Sample_Set_Index { get; set; }
         public string Notes_2 { get; set; }
+
     }
 }

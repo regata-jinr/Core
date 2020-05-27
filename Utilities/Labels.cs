@@ -13,11 +13,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Regata.UITemplates
+namespace Regata.Utilities
 {
-
-
-
     [Table("UILabels")]
     public class UILabels
     {

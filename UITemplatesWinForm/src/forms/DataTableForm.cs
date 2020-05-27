@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using Regata.Utilities;
 
 namespace Regata.UITemplates
 {

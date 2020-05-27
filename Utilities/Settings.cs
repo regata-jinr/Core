@@ -14,7 +14,7 @@ using System.Text.Json.Serialization;
 using System.IO;
 using System.Collections.Generic;
 
-namespace Regata.UITemplates
+namespace Regata.Utilities
 {
     public enum Languages { Russian, English };
 
