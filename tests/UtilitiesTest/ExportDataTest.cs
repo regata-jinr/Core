@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Net;
 
 namespace Regata.Utilities.Tests
@@ -29,19 +30,19 @@ namespace Regata.Utilities.Tests
             var data = await ExportData.FromGoogleSheet<SamplesSetModel>("https://docs.google.com/spreadsheets/d/1c7c-mlEbANl0Fszxj1ITaTwexJb-Z9KbAWChX_1aCk8/edit#gid=0", new System.Threading.CancellationToken());
         }
 
+      
         [TestMethod]
-        public void SavingAsCSVTest()
+        public void ExportedDataTest()
         {
         }
 
         [TestMethod]
-        public void LoadingCSVToList()
+        [ExpectedException(typeof(TaskCanceledException))]
+        public async Task CancellingTest()
         {
-        }
-
-        [TestMethod]
-        public void CancellingTest()
-        {
+            var cts = new CancellationTokenSource();
+            cts.CancelAfter(10);
+            var data = await ExportData.FromGoogleSheet<SamplesSetModel>("https://docs.google.com/spreadsheets/d/1c7c-mlEbANl0Fszxj1ITaTwexJb-Z9KbAWChX_1aCk8/edit#gid=0", cts.Token);
         }
     }
 }

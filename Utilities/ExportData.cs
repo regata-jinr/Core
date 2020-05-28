@@ -11,6 +11,7 @@ namespace Regata.Utilities
 {
     public static class ExportData
     {
+        // TODO: add tests for parsed data
         /// <summary>
         /// Returns array of the model type T from shared by the link Google Sheet documnet.
         /// </summary>
@@ -96,12 +97,12 @@ namespace Regata.Utilities
         }
 
         /// <summary>
-        /// 
+        /// This is simple wrap for CSVHelper package.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="file"></param>
-        /// <param name="ct"></param>
-        /// <returns></returns>
+        /// <param name="file">Temporary file with exported data</param>
+        /// <param name="ct">CancellationToken</param>
+        /// <returns>Exported data array</returns>
         private static T[] FromCSVToArray<T>(string file)
         {
             CsvReader csv = null;

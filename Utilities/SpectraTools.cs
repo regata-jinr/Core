@@ -9,7 +9,7 @@ using System.IO;
 namespace Regata.Utilities
 {
     public enum IrradiationType { SLI, LLI1, LLI2};
-    public static class SpectraTools 
+    public static class SpectraTools
     {
         // TODO: move to libs
         // TODO: two regimes:
@@ -19,6 +19,11 @@ namespace Regata.Utilities
         // TODO: prepare context and models
         // TODO: Downaloading of each file sohuld be the chaing of searching and the downloading tasks
         // TODO: add tests
+        public static async Task UploadSpectraAsync(string SourcePath)
+        {
+
+        }
+
 
         public static IrradiationType Type;
         public static string SetKey;
@@ -45,16 +50,9 @@ namespace Regata.Utilities
 
         }
 
-
-
-        public static async Task UploadSpectraAsync(string SourcePath)
-        {
-            
-        }
-
         private static async Task GetListOfSamplesSpectraAsync(CancellationToken ct)
         {
-            
+
         }
 
         private static async Task GetListOfSRMsSpectraAsync(CancellationToken ct)
@@ -69,12 +67,12 @@ namespace Regata.Utilities
 
         public static async Task DownloadFilesAsync()
         {
-            
+
         }
 
         public static async Task DownloadBySpectraNameAsync(string spectra, CancellationToken ct)
         {
-            
+
         }
     }
 }
