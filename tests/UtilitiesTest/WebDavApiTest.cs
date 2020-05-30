@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Net;
+using System.IO;
 
 namespace Regata.Utilities.Tests
 {
@@ -12,15 +13,21 @@ namespace Regata.Utilities.Tests
         [TestMethod]
         public async Task UploadFileTest()
         {
-            await WebDavClientApi.UploadFile(@"D:\Spectra\2020\01\dji-1\1107798.cnf");
+           Assert.IsTrue(await WebDavClientApi.UploadFile(@"D:\Spectra\2020\01\dji-1\1107798.cnf"));
            Assert.IsTrue(await WebDavClientApi.IsFolderExists(@"D:\Spectra\2020\01\dji-1\1107798.cnf"));
+        }
 
+        [TestMethod]
+        [ExpectedException(typeof(System.IO.FileNotFoundException))]
+        public async Task UploadNonExistedFileTest()
+        {
+            await WebDavClientApi.UploadFile(@"D:\Spectra\2020\01\dji-1\110779.cnf");
         }
 
         [TestMethod]
         public async Task CreateFolderTest()
         {
-            await WebDavClientApi.CreateFolder(@"D:\Spectra\2020\01\dji-1");
+           await WebDavClientApi.CreateFolder(@"D:\Spectra\2020\01\dji-1");
            Assert.IsTrue(await WebDavClientApi.IsFolderExists(@"D:\Spectra\2020\01\dji-1"));
         }
 
@@ -34,7 +41,16 @@ namespace Regata.Utilities.Tests
         [TestMethod]
         public async Task MakeFileSharedTest()
         {
-            Assert.AreEqual("f3TrsxcJqfptET3", await WebDavClientApi.MakeShareable(@"D:\Spectra\2020\01\dji-1\1107798.cnf"));
+            Assert.AreEqual("qb7cqjj2LcaQpNW", await WebDavClientApi.MakeShareable(@"D:\Spectra\2020\01\dji-1\1107798.cnf"));
+        }
+
+        [TestMethod]
+        public async Task DownloadFileTest()
+        {
+            await WebDavClientApi.DownloadFile("qb7cqjj2LcaQpNW", $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\1107798.cnf");
+            Assert.IsTrue(File.Exists($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\1107798.cnf"));
+            File.Delete($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\1107798.cnf");
+            Assert.IsFalse(File.Exists($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\1107798.cnf"));
         }
 
     }
