@@ -13,8 +13,8 @@ namespace Regata.Utilities.Tests
         [TestMethod]
         public async Task UploadFileTest()
         {
-           Assert.IsTrue(await WebDavClientApi.UploadFile(@"D:\Spectra\2020\01\dji-1\1107798.cnf"));
-           Assert.IsTrue(await WebDavClientApi.IsFolderExists(@"D:\Spectra\2020\01\dji-1\1107798.cnf"));
+           Assert.IsTrue(await WebDavClientApi.UploadFile(@"D:\Spectra\2020\01\dji-1\1107815.cnf"));
+           Assert.IsTrue(await WebDavClientApi.IsFolderExists(@"D:\Spectra\2020\01\dji-1\1107815.cnf"));
         }
 
         [TestMethod]

@@ -7,9 +7,8 @@ namespace UITemplateWinFormTest
         public DbSet<SamplesSetModel> Sets{ get; set; }
 
         private readonly string connectionString = @"Data Source=RUMLAB\REGATALOCAL;Initial Catalog=NAA_DB_TEST;Integrated Security=True;";
-        public InfoContext(string connectionString) : base()
+        public InfoContext() : base()
         {
-            this.connectionString = connectionString;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

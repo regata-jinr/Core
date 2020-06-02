@@ -12,7 +12,6 @@ using System.Collections.Generic;
 namespace Regata.Utilities
 {
     // TODO: add cancellation exception
-    // TODO: add map sharedId with spectra file name to DB
     // TODO: generalize output parsing: repeat task in case of response e.g. 497 - to many requests
 
     public static class WebDavClientApi
@@ -51,9 +50,11 @@ namespace Regata.Utilities
             if (!File.Exists(path)) throw new FileNotFoundException($"File '{path}' doesn't exist");
             InitToken(ref cancellationToken);
             await CreateFolder(Path.GetDirectoryName(path));
-            HttpContent bytesContent = new ByteArrayContent(File.ReadAllBytes(path));
-            var response = await _httpClient.PutAsync($"{_hostBase}{_hostWebDavAPI}/{path.Substring(Path.GetPathRoot(path).Length)}", bytesContent, cancellationToken.Value).ConfigureAwait(false);
-            return IsSuccessfull(await response.Content.ReadAsStringAsync());
+            using (HttpContent bytesContent = new ByteArrayContent(File.ReadAllBytes(path)))
+            {
+                var response = await _httpClient.PutAsync($"{_hostBase}{_hostWebDavAPI}/{path.Substring(Path.GetPathRoot(path).Length)}", bytesContent, cancellationToken.Value).ConfigureAwait(false);
+                return IsSuccessfull(await response.Content.ReadAsStringAsync());
+            }
         }
 
         public static async Task<string> MakeShareable(string file, CancellationToken? cancellationToken = null)
@@ -69,7 +70,7 @@ namespace Regata.Utilities
 
                 var xe = XElement.Parse(content);
 
-                if (xe.Descendants("statuscode").First().Value == "404") throw new FileNotFoundException($"File '{file.Substring(Path.GetPathRoot(file).Length)}' has not found in disk.");
+                if (xe.Descendants("statuscode").First().Value == "404") throw new FileNotFoundException($"File '{file.Substring(Path.GetPathRoot(file).Length)}' has not found in the cloud storage. Upload it before than makes it shareable.");
                 return xe.Descendants("token").First().Value;
             }
         }
@@ -107,20 +108,19 @@ namespace Regata.Utilities
         public static async Task DownloadFile(string shareId, string path, CancellationToken? cancellationToken = null)
         {
             InitToken(ref cancellationToken);
+
+            if (!System.IO.Directory.Exists(Path.GetDirectoryName(path)))
+                System.IO.Directory.CreateDirectory(Path.GetDirectoryName(path));
+
             using (var request = new HttpRequestMessage(HttpMethod.Get, GetDownloadLink(shareId)))
             {
                 using (
                     Stream contentStream = await (await _httpClient.SendAsync(request,cancellationToken.Value)).Content.ReadAsStreamAsync(),
                     stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
                 {
-                    await contentStream.CopyToAsync(stream, cancellationToken.Value);
+                    await contentStream.CopyToAsync(stream, 4096, cancellationToken.Value);
                 }
             }
-        }
-
-        public static async Task<string> SearchFile(string fileName)
-        {
-            throw new NotImplementedException();
         }
 
         private static async Task<HttpResponseMessage> Send(

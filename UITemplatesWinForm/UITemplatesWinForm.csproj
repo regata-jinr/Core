@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net48;netcoreapp3.1</TargetFrameworks>
+    <LangVersion>8.0</LangVersion>
     <UseWindowsForms>true</UseWindowsForms>
     <Version>0.9.0</Version>
     <UserSecretsId>0ec4f6d5-4785-468d-b6bb-0eb729c98ac6</UserSecretsId>
