@@ -81,7 +81,7 @@ namespace Regata.Utilities
 
         }
 
-        public static async IAsyncEnumerable<SetSpectraSLI> SLISetSpectrasAsync(string SetKey, CancellationToken? ct = null)
+        public static async IAsyncEnumerable<SetSpectraSLI> SLISetSpectrasAsync(string SetKey, CancellationToken ct)
         {
             var sks = SetKey.Split('-');
             using (var ssc = new SpectraContext())
@@ -91,13 +91,13 @@ namespace Regata.Utilities
                     new SqlParameter("clientid", sks[1]),
                     new SqlParameter("year", sks[2]),
                     new SqlParameter("setnum", sks[3]),
-                    new SqlParameter("setind", sks[4])).AsAsyncEnumerable();
+                    new SqlParameter("setind", sks[4])).AsAsyncEnumerable().WithCancellation(ct);
                 await foreach (var spectraInfo in sliSpectras)
                     yield return spectraInfo; 
             }
         }
 
-        public static async IAsyncEnumerable<SetSpectraLLI> LLISetSpectrasAsync(string SetKey, IrradiationType type, CancellationToken? ct = null)
+        public static async IAsyncEnumerable<SetSpectraLLI> LLISetSpectrasAsync(string SetKey, IrradiationType type, CancellationToken ct)
         {
             var sks = SetKey.Split('-');
             using (var ssc = new SpectraContext())
@@ -108,14 +108,14 @@ namespace Regata.Utilities
                     new SqlParameter("year", sks[2]),
                     new SqlParameter("setnum", sks[3]),
                     new SqlParameter("setind", sks[4]),
-                    new SqlParameter("type", IrradiationTypeMap[type])).AsAsyncEnumerable();
+                    new SqlParameter("type", IrradiationTypeMap[type])).AsAsyncEnumerable().WithCancellation(ct);
 
               await foreach (var spectraInfo in lliSpectras)
                     yield return spectraInfo; 
             }
         }
 
-        public static async Task DownloadSpectraAsync(string spectra, string path, CancellationToken? ct = null)
+        public static async Task DownloadSpectraAsync(string spectra, string path, CancellationToken ct)
         {
             using (var ssc = new SpectraContext())
             {

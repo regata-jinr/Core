@@ -33,37 +33,27 @@ namespace Regata.Utilities
             var c = new ConfigManager();
 
             _httpClient = new HttpClient();
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(c.WebDavApiCredentials)));
+            if (!string.IsNullOrEmpty(c.WebDavApiCredentials))
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(c.WebDavApiCredentials)));
         }
 
-        private static void InitToken(ref CancellationToken? token)
-        {
-            if (token == null)
-            {
-                var cts = new CancellationTokenSource();
-                token = cts.Token;
-            }
-        }
-
-        public static async Task<bool> UploadFile(string path, CancellationToken? cancellationToken = null)
+        public static async Task<bool> UploadFile(string path, CancellationToken ct)
         {
             if (!File.Exists(path)) throw new FileNotFoundException($"File '{path}' doesn't exist");
-            InitToken(ref cancellationToken);
-            await CreateFolder(Path.GetDirectoryName(path));
+            await CreateFolder(Path.GetDirectoryName(path),ct);
             using (HttpContent bytesContent = new ByteArrayContent(File.ReadAllBytes(path)))
             {
-                var response = await _httpClient.PutAsync($"{_hostBase}{_hostWebDavAPI}/{path.Substring(Path.GetPathRoot(path).Length)}", bytesContent, cancellationToken.Value).ConfigureAwait(false);
+                var response = await _httpClient.PutAsync($"{_hostBase}{_hostWebDavAPI}/{path.Substring(Path.GetPathRoot(path).Length)}", bytesContent, ct).ConfigureAwait(false);
                 return IsSuccessfull(await response.Content.ReadAsStringAsync());
             }
         }
 
-        public static async Task<string> MakeShareable(string file, CancellationToken? cancellationToken = null)
+        public static async Task<string> MakeShareable(string file, CancellationToken ct)
         {
-            InitToken(ref cancellationToken);
             using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{_hostBase}{_hostOCSApi}?path={file.Substring(Path.GetPathRoot(file).Length)}&shareType=3&permissions=3&name={Path.GetFileNameWithoutExtension(file)}"))
             {
                 request.Headers.Add("OCS-APIRequest", "true");
-                var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken.Value).ConfigureAwait(false);
+                var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, ct).ConfigureAwait(false);
                 var content = await response.Content.ReadAsStringAsync();
 
                 if (string.IsNullOrEmpty(content)) throw new FileNotFoundException($"File '{file.Substring(Path.GetPathRoot(file).Length)}' has not found in disk.");
@@ -75,24 +65,22 @@ namespace Regata.Utilities
             }
         }
 
-        public static async Task<bool> IsFolderExists(string path, CancellationToken? cancellationToken = null)
+        public static async Task<bool> IsFolderExists(string path, CancellationToken ct)
         {
-            InitToken(ref cancellationToken);
-            var response = await Send(new Uri($"{_hostBase}{_hostWebDavAPI}/{path.Substring(Path.GetPathRoot(path).Length)}"), new HttpMethod("PROPFIND"), cancellationToken.Value);
+            var response = await Send(new Uri($"{_hostBase}{_hostWebDavAPI}/{path.Substring(Path.GetPathRoot(path).Length)}"), new HttpMethod("PROPFIND"), ct);
             return IsSuccessfull(await response.Content.ReadAsStringAsync());
         }
 
-        public static async Task CreateFolder(string path, CancellationToken? cancellationToken = null)
+        public static async Task CreateFolder(string path, CancellationToken ct)
         {
-            InitToken(ref cancellationToken);
             var dir = path.Substring(Path.GetPathRoot(path).Length);
             var subPath = "";
             foreach (var node in dir.Split(Path.DirectorySeparatorChar))
             {
                 subPath = $"{subPath}/{node}";
-                if (!await IsFolderExists(subPath))
+                if (!await IsFolderExists(subPath,ct))
                 {
-                    var response = await Send(new Uri($"{_hostBase}{_hostWebDavAPI}{subPath}"), new HttpMethod("MKCOL"), cancellationToken.Value);
+                    var response = await Send(new Uri($"{_hostBase}{_hostWebDavAPI}{subPath}"), new HttpMethod("MKCOL"), ct);
                     await response.Content.ReadAsStringAsync();
                 }
             }
@@ -105,9 +93,9 @@ namespace Regata.Utilities
             return true;
         }
 
-        public static async Task DownloadFile(string shareId, string path, CancellationToken? cancellationToken = null)
+        public static async Task DownloadFile(string shareId, string path, CancellationToken ct)
         {
-            InitToken(ref cancellationToken);
+            //InitToken(ref cancellationToken);
 
             if (!System.IO.Directory.Exists(Path.GetDirectoryName(path)))
                 System.IO.Directory.CreateDirectory(Path.GetDirectoryName(path));
@@ -115,10 +103,10 @@ namespace Regata.Utilities
             using (var request = new HttpRequestMessage(HttpMethod.Get, GetDownloadLink(shareId)))
             {
                 using (
-                    Stream contentStream = await (await _httpClient.SendAsync(request,cancellationToken.Value)).Content.ReadAsStreamAsync(),
+                    Stream contentStream = await (await _httpClient.SendAsync(request,ct)).Content.ReadAsStreamAsync(),
                     stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
                 {
-                    await contentStream.CopyToAsync(stream, 4096, cancellationToken.Value);
+                    await contentStream.CopyToAsync(stream, 4096, ct);
                 }
             }
         }
