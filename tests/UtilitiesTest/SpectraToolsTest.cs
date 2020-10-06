@@ -15,7 +15,8 @@ namespace Regata.Utilities.Tests
         [TestMethod]
         public async Task DownloadFileByNameTest()
         {
-            var spctr = "1107816";
+            //var spctr = "1107816";
+            var spctr = "1006019";
             Settings.ConnectionString = cons;
             Assert.IsFalse(File.Exists($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{spctr}.cnf"));
             await SpectraTools.DownloadSpectraAsync($"{spctr}", $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}", _cts.Token);
