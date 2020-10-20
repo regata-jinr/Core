@@ -1,4 +1,6 @@
-# Regata Base Libraries
+# R E G A T A
+
+# C O R E
 
 We have few applications that uses unify functional such as:
 
