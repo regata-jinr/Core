@@ -1,6 +1,4 @@
-# R E G A T A
-
-# C O R E
+# R E G A T A &nbsp;&nbsp; C O R E
 
 We have few applications that uses unify functional such as:
 
@@ -10,6 +8,45 @@ We have few applications that uses unify functional such as:
 * Notification
 
 This repo is attempt to prepare templates that will make development process dramatically easier.
+
+- [R E G A T A &nbsp;&nbsp; C O R E](#r-e-g-a-t-a--c-o-r-e)
+  - [Cloud](#cloud)
+  - [Cnf](#cnf)
+  - [Database](#database)
+  - [Export](#export)
+  - [Hardware](#hardware)
+  - [Logger](#logger)
+  - [Models](#models)
+  - [Notifications](#notifications)
+  - [Settings](#settings)
+  - [Tests](#tests)
+  - [UI Templates](#ui-templates)
+  - [Updater](#updater)
+  - [Some thoughts about future of regata software](#some-thoughts-about-future-of-regata-software)
+
+## Cloud
+
+## Cnf
+
+## Database
+
+## Export
+
+## Hardware
+
+## Logger
+
+## Models
+
+## Notifications
+
+## Settings
+
+## Tests
+
+## UI Templates
+
+## Updater
 
 ## Some thoughts about future of regata software
 
