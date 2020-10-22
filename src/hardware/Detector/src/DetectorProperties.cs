@@ -31,9 +31,9 @@ using System.Linq;
 using System.Collections.Generic;
 using CanberraDeviceAccessLib;
 using Regata.Measurements.Managers;
-using Regata.Measurements.Models;
+using Regata.Core.Models;
 
-namespace Regata.Measurements.Devices
+namespace Regata.Core.Hardware
 {
   /// <summary>
   ///  Enumeration of possible detector's working statuses
@@ -54,8 +54,8 @@ namespace Regata.Measurements.Devices
     private bool _isDisposed;
     private DetectorStatus _status;
 
-    public MeasurementInfo CurrentMeasurement { get; private set; }
-    public IrradiationInfo RelatedIrradiation { get; private set; }
+    public Measurement CurrentMeasurement { get; private set; }
+    public Irradiation RelatedIrradiation { get; private set; }
 
     public string Name { get { return _name; } }
 

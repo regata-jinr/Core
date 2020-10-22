@@ -8,30 +8,37 @@
  *                                                                         *
  ***************************************************************************/
 
-// Contains constructor of type, destructor and additional parameters. Like Status enumeration
-// Events arguments and so on
-// Detector class divided by few files:
-
-// ├── DetectorAcquisition.cs      --> Contains methods that allow to control spectra acquisition 
-// |                                   process.Start, stop, pause, clear acquisition process and
-// |                                   also specify acquisition mode.
-// ├── DetectorCalibration.cs      --> Contains methods for loading calibration files by energy and /// |                                   height
-// ├── DetectorConnection.cs       --> Contains methods for connection, disconnection to the device. // |                                   Reset connection and so on.
-// ├── DetectorFileInteractions.cs --> The code in this file determines interaction with acquiring //// |                                   spectra. 
-// |                                    E.g. filling information about sample. Save file.
-// ├── DetectorInitialization.cs   --> opened
-// ├── DetectorParameters.cs       --> Contains methods for getting and setting any parameters by   /// |                                   special code.
-// |                                    See codes here CanberraDeviceAccessLib.ParamCodes. 
-// |                                    Also some of important parameters wrapped into properties
-// ├── DetectorProperties.cs       --> Contains description of basics properties, events, 
-// └──                                 enumerations and additional classes
+/*
+ * 
+ * Contains constructor of type, destructor and additional parameters. Like Status enumeration
+ * Events arguments and so on
+ * Detector class divided by few files:
+ * 
+ * ├── DetectorAcquisition.cs      --> Contains methods that allow to control spectra acquisition 
+ * |                                   process.Start, stop, pause, clear acquisition process and
+ * |                                   also specify acquisition mode.
+ * ├── DetectorCalibration.cs      --> Contains methods for loading calibration files by energy and 
+ * |                                   height
+ * ├── DetectorConnection.cs       --> Contains methods for connection, disconnection to the device.
+ * |                                   Reset connection and so on.
+ * ├── DetectorFileInteractions.cs --> The code in this file determines interaction with acquiring
+ * |                                   spectra. 
+ * |                                    E.g. filling information about sample. Save file.
+ * ├── DetectorInitialization.cs   --> opened
+ * ├── DetectorParameters.cs       --> Contains methods for getting and setting any parameters by
+ * |                                   special code.
+ * |                                    See codes here CanberraDeviceAccessLib.ParamCodes. 
+ * |                                    Also some of important parameters wrapped into properties
+ * └── DetectorProperties.cs       --> Contains description of basics properties, events, 
+ *                                     enumerations and additional classes
+ */
 
 using System;
 using Regata.Measurements.Managers;
-using Regata.Measurements.Models;
+using Regata.Core.Models;
 using CanberraDeviceAccessLib;
 
-namespace Regata.Measurements.Devices
+namespace Regata.Core.Hardware
 {
   /// <summary>
   /// Detector is one of the main class, because detector is the main part of our experiment. It allows to manage real detector and has protection from crashes. You can start, stop and do any basics operations which you have with detector via mvcg.exe. This software based on dlls provided by [Genie2000] (https://www.mirion.com/products/genie-2000-basic-spectroscopy-software) for interactions with [HPGE](https://www.mirion.com/products/standard-high-purity-germanium-detectors) detectors also from [Mirion Tech.](https://www.mirion.com). Personally we are working with [Standard Electrode Coaxial Ge Detectors](https://www.mirion.com/products/sege-standard-electrode-coaxial-ge-detectors)
@@ -56,7 +63,7 @@ namespace Regata.Measurements.Devices
         Status = DetectorStatus.off;
         ErrorMessage = "";
         _device = new DeviceAccessClass();
-        CurrentMeasurement = new MeasurementInfo();
+        CurrentMeasurement = new Measurement();
 
         if (CheckNameOfDetector(name))
           _name = name;

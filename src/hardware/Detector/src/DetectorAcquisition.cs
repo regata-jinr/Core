@@ -29,7 +29,7 @@ using System;
 using CanberraDeviceAccessLib;
 using Regata.Measurements.Managers;
 
-namespace Regata.Measurements.Devices
+namespace Regata.Core.Hardware
 {
   public partial class Detector : IDisposable
   {

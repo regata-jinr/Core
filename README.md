@@ -52,6 +52,9 @@ This repo is attempt to prepare templates that will make development process dra
 
 Many of needed function already implemented in differences frameworks.
 
+> **Looks like [WinUI](https://docs.microsoft.com/en-us/windows/apps/winui/) is a future of desktop development for windows**
+> ![img](https://docs.microsoft.com/en-us/windows/apps/images/platforms-winui3.png)
+
 E.g. UWP  provides a [guidelines for app settings](https://docs.microsoft.com/en-us/windows/uwp/design/app-settings/guidelines-for-app-settings)
 
 It means that I can't avoid parsing settings file and view it as separate forms because it available by default.

@@ -30,11 +30,12 @@ using System.IO;
 using System.Linq;
 using CanberraDeviceAccessLib;
 using Regata.Measurements.Managers;
-using Regata.Measurements.Models;
+using Regata.Core.Models;
 
-namespace Regata.Measurements.Devices
+namespace Regata.Core.Hardware
+
 {
-  public partial class Detector : IDisposable
+    public partial class Detector : IDisposable
   {
     /// <summary>
     /// Save current measurement session on the device.
@@ -80,9 +81,9 @@ namespace Regata.Measurements.Devices
     /// </summary>
     /// <param name="measurement"></param>
     /// <param name="irradiation"></param>        
-    public void LoadMeasurementInfoToDevice(MeasurementInfo measurement, IrradiationInfo irradiation)
+    public void LoadMeasurementToDevice(Measurement measurement, Irradiation irradiation)
     {
-      if (!CheckIrradiationInfo(irradiation) || !CheckMeasurementInfo(measurement))
+      if (!CheckIrradiation(irradiation) || !CheckMeasurement(measurement))
         return;
 
       _nLogger.Info($"Set sample {measurement} to detector");
@@ -120,7 +121,7 @@ namespace Regata.Measurements.Devices
       }
     }
 
-    private bool CheckIrradiationInfo(IrradiationInfo irradiation)
+    private bool CheckIrradiation(Irradiation irradiation)
     {
       bool isCorrect = true;
       try
@@ -128,7 +129,7 @@ namespace Regata.Measurements.Devices
         if (irradiation == null)
           throw new ArgumentException("Irradiated sample has not chosen");
 
-        var type = typeof(IrradiationInfo);
+        var type = typeof(Irradiation);
         var neededProps = new string[] { "DateTimeStart", "Duration", "Weight" };
 
         foreach (var pi in type.GetProperties())
@@ -156,7 +157,7 @@ namespace Regata.Measurements.Devices
       return isCorrect;
     }
 
-    private bool CheckMeasurementInfo(MeasurementInfo measurement)
+    private bool CheckMeasurement(Measurement measurement)
     {
       bool isCorrect = true;
       try
@@ -164,7 +165,7 @@ namespace Regata.Measurements.Devices
         if (measurement == null)
           throw new ArgumentException("Sample for measurement should not be null");
 
-        var type = typeof(MeasurementInfo);
+        var type = typeof(Measurement);
         var neededProps = new string[] { "Type", "Duration", "Height" };
 
         foreach (var pi in type.GetProperties())
