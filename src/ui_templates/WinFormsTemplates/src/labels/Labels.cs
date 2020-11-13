@@ -8,25 +8,10 @@
  *                                                                         *
  ***************************************************************************/
 
-using System;
-using System.Collections.ObjectModel;
-
-namespace Regata.Core.Notifications
+namespace Regata.Core.UITemplates.WinForms
 {
-
-    // TODO: move to settings class
-    #region Move to settings class
-  
-#endregion
-
-    public class RException : Exception
+    public static class Labels
     {
-        public readonly RErrorCodes RErrorCode;
 
-        public RException(RErrorCodes erCode, Exception innerException = null) : base("", innerException)
-        {
-            RErrorCode = erCode;
-            Notify.NotifyError(this);
-        }
-    }
-}
+    } // public static class Labels
+}     // Regata.Core.UITemplates.WinForms

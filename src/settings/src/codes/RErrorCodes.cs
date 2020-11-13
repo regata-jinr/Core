@@ -8,12 +8,39 @@
  *                                                                         *
  ***************************************************************************/
 
+using System.Collections.ObjectModel;
 
 namespace Regata.Core.Settings.Codes
 {
+
+    public static class CriticalErrors
+    {
+        private static ObservableCollection<RErrorCodes> List;
+
+        static CriticalErrors()
+        {
+            List = new ObservableCollection<RErrorCodes>();
+            // TODO: fill from the settings
+        }
+
+        public static bool Contains(RErrorCodes ec)
+        {
+            return List.Contains(ec);
+        }
+
+        public static void Add(RErrorCodes ec)
+        {
+            List.Add(ec);
+        }
+
+        public static void Remove(RErrorCodes ec)
+        {
+            List.Remove(ec);
+        }
+    }
+
     public enum RErrorCodes 
     {
-        Empty=0,
         Unknown = 0,
         #region DataBase Errors
         ERR_DB_CON,
