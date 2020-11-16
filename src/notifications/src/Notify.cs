@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using System.Net;
 using System.Collections.ObjectModel;
+using Regata.Core.Notifications.Codes;
 
 namespace Regata.Core.Notifications
 {
@@ -27,41 +28,28 @@ namespace Regata.Core.Notifications
     {
         static Notify()
         {
-            _mailSubs = new ObservableCollection<string>();
-            //TODO: fill from settings
+            NLog.GlobalDiagnosticsContext.Set("LogConnectionString", SecretsManager.GetCredential(LogDbCredTarget).Secret);
+            _nLogger = NLog.LogManager.GetCurrentClassLogger();
+            _nLogger.SetProperty("Sender", typeof(AppManager).Name);
         }
 
-        // TODO: move to settings class
-        #region Move to settings class
-
-        private static ObservableCollection<string> _mailSubs;
-
-        public static void AddEmail(string email)
-        {
-            _mailSubs.Add(email);
-        }
-
-        public static void RemoveMail(string email)
-        {
-            _mailSubs.Remove(email);
-        }
-
-        #endregion
+   
 
         private static Dictionary<NotificationLevel, NLog.LogLevel> ExceptionLevel_LogLevel = new Dictionary<NotificationLevel, NLog.LogLevel> { { NotificationLevel.Error, NLog.LogLevel.Error }, { NotificationLevel.Warning, NLog.LogLevel.Warn }, { NotificationLevel.Info, NLog.LogLevel.Info } };
 
         // FIXME: in case of one of the available detector has already opened (e.g. by hand not in read only mode)
         //       application will not run. The problem related with this static event!
 
-        public static event Action<Notification> NotificationEvent;
+        public static IEnumerable<string> Emails;
 
+        public static event Action<Notification> NotificationEvent;
         public static event Action<Notification> NotifyErrorEvent;
         public static event Action<Notification> NotifySuccessEvent;
         public static event Action<Notification> NotifyWarningEvent;
         public static event Action<Notification> NotifyInfoEvent;
 
 
-        private static NLog.Logger _nLogger = AppManager.logger;
+        private static NLog.Logger _nLogger;
 
         public static void NotifyError(RException rex)
         {
@@ -167,6 +155,8 @@ namespace Regata.Core.Notifications
         // FIXME in case of network error will this suspend the app despite of SendAsync?
         private static void SendNotificationByEmail(Notification nea)
         {
+            if (Emails == null) return;
+
             var mail = SecretsManager.GetCredential(AppManager.MailServiceTarget).Name;
             var mailPass = SecretsManager.GetCredential(AppManager.MailServiceTarget).Secret;
             using (var smtp = new SmtpClient
@@ -179,7 +169,7 @@ namespace Regata.Core.Notifications
                 Credentials = new NetworkCredential(mail, mailPass)
             })
             {
-                foreach (var toAddress in _mailSubs)
+                foreach (var toAddress in Emails)
                 {
                     using (var message = new MailMessage(mail, toAddress)
                     {

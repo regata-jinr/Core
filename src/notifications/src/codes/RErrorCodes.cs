@@ -10,7 +10,7 @@
 
 using System.Collections.ObjectModel;
 
-namespace Regata.Core.Settings.Codes
+namespace Regata.Core.Notifications.Codes
 {
 
     public static class CriticalErrors

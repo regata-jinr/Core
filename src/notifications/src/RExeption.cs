@@ -14,10 +14,6 @@ using System.Collections.ObjectModel;
 namespace Regata.Core.Notifications
 {
 
-    // TODO: move to settings class
-    #region Move to settings class
-  
-#endregion
 
     public class RException : Exception
     {

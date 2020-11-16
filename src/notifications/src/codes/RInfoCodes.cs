@@ -9,7 +9,7 @@
  ***************************************************************************/
 
 
-namespace Regata.Core.Settings.Codes
+namespace Regata.Core.Notifications.Codes
 {
     public enum RInfoCodes 
     {
