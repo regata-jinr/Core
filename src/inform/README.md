@@ -9,6 +9,7 @@ Messaging of any level baised on the special code and could be shown with any GU
 - Info
 - Success
 - Warning
+- Error
 
 
 ## Exceptions
