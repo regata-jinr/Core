@@ -17,10 +17,24 @@ using System.Net.Mail;
 using System.Net;
 using AdysTech.CredentialManager;
 
-namespace Regata.Core.Inform
+namespace Regata.Core.Report
 {
-    public static class Inform
+    public static class Report
     {
+        /// <summary>
+        /// Initialization of Report service. The service allows to user setting up reporting system:
+        /// - logs
+        /// - different levels messaging:
+        ///     - info  
+        ///     - warn  
+        ///     - error
+        ///     - success
+        /// - email notification
+        /// - different gui notification
+        /// Initialization of the system based on secrets that keeps into Windows Credential Manager (WCM). You can load them via specifying Target as arguments:
+        /// </summary>
+        /// <param name="LogConnectionStringTarget">WCM target for connection string for NLog DataBase provider</param>
+        /// <param name="MailHostTarget">WCM target for Mail Host adress and password</param>
         public static void Init(string LogConnectionStringTarget, string  MailHostTarget)
         {
             NLog.GlobalDiagnosticsContext.Set("LogConnectionString", CredentialManager.GetCredentials(LogConnectionStringTarget).Password);
@@ -28,21 +42,21 @@ namespace Regata.Core.Inform
             _hostTarget = MailHostTarget;
         }
 
-
         private static string _hostTarget;
 
         private static readonly Dictionary<InformLevel, NLog.LogLevel> ExceptionLevel_LogLevel = new Dictionary<InformLevel, NLog.LogLevel> { { InformLevel.Error, NLog.LogLevel.Error }, { InformLevel.Warning, NLog.LogLevel.Warn }, { InformLevel.Info, NLog.LogLevel.Info } };
 
-        // FIXME: in case of one of the available detector has already opened (e.g. by hand not in read only mode)
-        //       application will not run. The problem related with this static event!
-
         public static MailAddressCollection Emails = new MailAddressCollection();
 
+        // FIXME: in case of one of the available detector has already opened in not read-only mode (e.g. by hand) application will not run. The problem related with this static event!
+        /// <summary>
+        /// This event can be use as entry point for GUI messaging
+        /// </summary>
         public static event Action<Message> NotificationEvent;
 
         private static NLog.Logger _nLogger;
 
-        public static Message ExceptionToMessage(Exception ex)
+        private static Message ExceptionToMessage(Exception ex)
         {
             var notif = new Message
             {
@@ -84,16 +98,22 @@ namespace Regata.Core.Inform
         {
             msg.Level = InformLevel.Error;
             await WriteMessage(msg, callEvent: true, WriteToLog: true, NotifyByEmail);
-
         }
-       
+
+        public static async Task Error(Exception excp, bool NotifyByEmail = true)
+        {
+            Error(ExceptionToMessage(excp), NotifyByEmail: NotifyByEmail);
+        }
+
         private static async Task WriteMessage(Message msg, bool callEvent, bool WriteToLog, bool NotifyByEmail = false)
         {
             try
             {
                 if (WriteToLog)
                 {
-                    _nLogger.WithProperty("Sender", msg.Sender);
+                    //_nLogger.WithProperty("assistant", msg.User);
+                    _nLogger.SetProperty("Assistant", msg.User);
+                    _nLogger.SetProperty("Sender", msg.Sender);
                     _nLogger.Log(ExceptionLevel_LogLevel[msg.Level], msg.TechBody);
                 }
 
