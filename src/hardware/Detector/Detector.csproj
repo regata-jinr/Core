@@ -1,11 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\models\models.csproj" />
+    <ProjectReference Include="..\..\database\mssql\models\mssql-models.csproj" />
+    <ProjectReference Include="..\..\report\report.csproj" />
+    <ProjectReference Include="..\..\settings\settings.csproj" />
   </ItemGroup>
 
   <ItemGroup>

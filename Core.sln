@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleChanger", "src\hardwa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scales", "src\hardware\Scales\Scales.csproj", "{C0466B1A-ECE7-4230-B12B-1B023A80196F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "report", "src\inform\report.csproj", "{CE07C9EE-A74A-4C46-AC18-6F71D802F490}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "report", "src\report\report.csproj", "{CE07C9EE-A74A-4C46-AC18-6F71D802F490}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "settings", "src\settings\settings.csproj", "{F8160F7C-411B-4A98-91F5-12ED4378D7BD}"
 EndProject

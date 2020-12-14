@@ -1,12 +1,14 @@
 /***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2017-2020, REGATA Experiment at FLNP|JINR                  *
+ * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
- * All rights reserved                                                     *
  *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
  *                                                                         *
  ***************************************************************************/
+
 
 // Contains description of basics properties, events, enumerations and additional classes
 // Detector class divided by few files:
@@ -30,97 +32,91 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using CanberraDeviceAccessLib;
-using Regata.Measurements.Managers;
-using Regata.Core.Models;
+using Regata.Core.Models.MSSQL;
 
 namespace Regata.Core.Hardware
 {
-  /// <summary>
-  ///  Enumeration of possible detector's working statuses
-  ///  ready - Detector is enabled and ready for acquiring
-  ///  off   - Detector is disabled
-  ///  busy  - Detector is acquiring spectrum
-  ///  error - Detector has porblems
-  /// </summary>
-  public enum DetectorStatus { off, ready, busy, error }
+    /// <summary>
+    ///  Enumeration of possible detector's working statuses
+    ///  ready - Detector is enabled and ready for acquiring
+    ///  off   - Detector is disabled
+    ///  busy  - Detector is acquiring spectrum
+    ///  error - Detector has porblems
+    /// </summary>
+    public enum DetectorStatus { off, ready, busy, error }
 
-  public partial class Detector : IDisposable
-  {
-    private readonly DeviceAccessClass _device;
-    private readonly string _name;
-    private readonly ConnectOptions _conOption;
-    private readonly NLog.Logger _nLogger;
-    private int _timeOutLimitSeconds;
-    private bool _isDisposed;
-    private DetectorStatus _status;
-
-    public Measurement CurrentMeasurement { get; private set; }
-    public Irradiation RelatedIrradiation { get; private set; }
-
-    public string Name { get { return _name; } }
-
-    public event EventHandler StatusChanged;
-    public string FullFileSpectraName { get; private set; }
-    public event EventHandler<DetectorEventsArgs> AcquiringStatusChanged;
-
-    private bool CheckNameOfDetector(string name)
+    public partial class Detector : IDisposable
     {
-      try
-      {
-        var detsList = (IEnumerable<object>)_device.ListSpectroscopyDevices;
-        if (detsList.Contains(name))
-        {
-          _nLogger.Info($"Detector with name '{name}' was found in the MID wizard list and will be used");
-          return true;
-        }
-        else
-        {
-          Status = DetectorStatus.error;
-          ErrorMessage = $"Detector with name '{name}' wasn't find in the MID wizard list. Status will change to 'error'";
-          NotificationManager.Notify(new ArgumentException(ErrorMessage), NotificationLevel.Error, AppManager.Sender);
-          return false;
-        }
-      }
-      catch (Exception e)
-      {
-        NotificationManager.Notify(e, NotificationLevel.Error, AppManager.Sender);
-        return false;
-      }
-    }
+        private readonly         DeviceAccessClass  _device;
+        public  DetectorSettings DetSet = new DetectorSettings();
+        private bool             _isDisposed;
+        private DetectorStatus   _status;
+        public Measurement       CurrentMeasurement { get; private set; }
+        public Irradiation       RelatedIrradiation { get; private set; }
+        public event             EventHandler       StatusChanged;
 
-    /// <summary> Returns status of detector. {ready, off, busy, error}. </summary>
-    /// <seealso cref="Enum Status"/>
-    public DetectorStatus Status
-    {
-      get { return _status; }
+        public string Name { get { return DetSet.Name; } }
 
-      private set
-      {
-        if (_status != value)
+        public string FullFileSpectraName              { get; private set; }
+        public event  EventHandler<DetectorEventsArgs> AcquiringStatusChanged;
+
+        private bool DetectorExists(string name)
         {
-          _nLogger.Info($"The detector status changed from {_status} to {value}");
-          _status = value;
-          StatusChanged?.Invoke(this, EventArgs.Empty);
+            try
+            {
+                var detsList = (IEnumerable<object>)_device.ListSpectroscopyDevices;
+                if (detsList.Contains(name))
+                {
+                    Report.Notify(Codes.INFO_DET_NAME_EXSTS);
+                    return true;
+                }
+                else
+                {
+                    Status = DetectorStatus.error;
+                    Report.Notify(Codes.ERR_DET_NAME_EXSTS);
+                    return false;
+                }
+            }
+            catch
+            {
+                Report.Notify(Codes.ERR_DET_NAME_EXSTS_UNREG);
+                return false;
+            }
         }
-      }
-    }
+
+        /// <summary> Returns status of detector. {ready, off, busy, error}. </summary>
+        /// <seealso cref="Enum Status"/>
+        public DetectorStatus Status
+        {
+            get { return _status; }
+
+            private set
+            {
+                if (_status != value)
+                {
+                    Report.Notify(Codes.INFO_DET_CHNG_STATUS);
+                    _status = value;
+                    StatusChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns error message.
+        /// </summary>
+        public string ErrorMessage { get; private set; }
+
+    } //  public partial class Detector : IDisposable
 
     /// <summary>
-    /// Returns error message.
+    /// This class shared information about events occured on the detector between callers.
     /// </summary>
-    public string ErrorMessage { get; private set; }
-
-  } //  public partial class Detector : IDisposable
-
-  /// <summary>
-  /// This class shared information about events occured on the detector between callers.
-  /// </summary>
-  public class DetectorEventsArgs : EventArgs
-  {
-    public string Name;
-    public DetectorStatus Status;
-    public int AcquireMessageParam;
-    public string Message;
-  }
+    public class DetectorEventsArgs : EventArgs
+    {
+        public string Name;
+        public DetectorStatus Status;
+        public int AcquireMessageParam;
+        public string Message;
+    }
 
 } // namespace Regata.Measurements.Devices

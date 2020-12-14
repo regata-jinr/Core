@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\inform\report.csproj" />
     <ProjectReference Include="..\..\src\database\postgres\postgres.csproj" />
+    <ProjectReference Include="..\..\src\report\report.csproj" />
   </ItemGroup>
 
 </Project>

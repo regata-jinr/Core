@@ -1,12 +1,14 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2017-2020, REGATA Experiment at FLNP|JINR                  *
+ * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
- * All rights reserved                                                     *
  *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
  *                                                                         *
  ***************************************************************************/
+
 
 // Contains methods for connection, disconnection to the device. Reset connection and so on.
 // Detector class divided by few files:
@@ -27,102 +29,101 @@
 
 using System;
 using System.Threading.Tasks;
-using Regata.Measurements.Managers;
+
 
 namespace Regata.Core.Hardware
 {
-  public partial class Detector : IDisposable
-  {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// TODO: find out what happened in case of long connection. How to add timeoutlimit, because device.Connect already async. 
-    public void Connect()
+    public partial class Detector : IDisposable
     {
-      try
-      {
-        _nLogger.Info($"Starts connecting to the detector");
-        ConnectInternal();
 
-        if (_device.IsConnected)
-          _nLogger.Info($"Connection to the detector was successful");
+        private void ConnectInternal()
+        {
+            try
+            {
+                Status = DetectorStatus.off;
+                _device.Connect(Name, DetSet.ConnectOption);
+                Status = DetectorStatus.ready;
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Contains("278e2a"))
+                {
+                    Status = DetectorStatus.busy;
+                    Report.Notify(Codes.WARN_DET_BUSY);
+                }
+                else
+                    Report.Notify(Codes.ERR_DET_INTR_CONN);
+            }
+        }
 
-      }
-      catch (TimeoutException te)
-      {
-        NotificationManager.Notify(te, NotificationLevel.Warning, AppManager.Sender);
-      }
-      catch (Exception e)
-      {
-        NotificationManager.Notify(e, NotificationLevel.Error, AppManager.Sender);
-      }
-    }
-
-    private void ConnectInternal()
-    {
-      try
-      {
-        _nLogger.Debug($"Starts internal connection to the detector {_name}");
-
-        Status = DetectorStatus.off;
-        _device.Connect(Name, _conOption);
-        Status = DetectorStatus.ready;
-
-        _nLogger.Debug($"Internal connection was successful");
-      }
-      catch (Exception e)
-      {
-        NotificationManager.Notify(e, NotificationLevel.Warning, AppManager.Sender);
-        if (e.Message.Contains("278e2a")) Status = DetectorStatus.busy;
-      }
-    }
-
-    /// <summary>
-    /// Recconects will trying to ressurect connection with detector. In case detector has status error or ready, 
-    /// it will do nothing. In case detector is off it will just call connect.
-    /// In case status is busy, it will run recursively before 3 attempts with 5sec pausing.
-    public async Task Reconnect()
-    {
-      _nLogger.Info($"Attempt to reconnect to the detector.");
-
-      var t1 = Task.Run(() => { while (!_device.IsConnected) { Disconnect(); } });
-      var t2 = Task.Delay(TimeSpan.FromSeconds(_timeOutLimitSeconds));
-
-      var t3 = await Task.WhenAny(t1, t2);
-
-      if (!_device.IsConnected)
-        Connect();
-
-      if (t3 == t1 && _device.IsConnected)
-        _nLogger.Info($"Reconnection successful");
-
-      if (t3 == t2)
-      {
-        _nLogger.Info($"Can not to disconnect from detector {_name}. Exceeded timeout limit.");
-        NotificationManager.Notify(new Notification { Level = NotificationLevel.Warning, Title = "Reconnection has exceeded timeout limit" });
-      }
-    }
-
-    public void Disconnect()
-    {
-      try
-      {
-        _nLogger.Info($"Disconnecting from the detector.");
-        if (_device.IsConnected)
-          _device.Disconnect();
-        _nLogger.Info($"Disconnecting was successful.");
-        Status = DetectorStatus.off;
-        ErrorMessage = "";
-      }
-      catch (Exception e)
-      {
-        NotificationManager.Notify(e, NotificationLevel.Error, AppManager.Sender);
-      }
-    }
-
-    public bool IsConnected => _device.IsConnected;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// TODO: find out what happenes in case of long connection. How to add timeoutlimit, because device.Connect already async. 
+        public void Connect()
+        {
+            try
+            {
+                ConnectInternal();
+                if (_device.IsConnected)
+                    Report.Notify(Codes.SUCC_DET_CON);
+            }
+            catch
+            {
+                Report.Notify(Codes.ERR_DET_CONN);
+            }
+        }
 
 
 
-  } //  public partial class Detector : IDisposable
+        /// <summary>
+        /// Recconects will trying to ressurect connection with detector. In case detector has status error or ready, 
+        /// it will do nothing. In case detector is off it will just call connect.
+        /// In case status is busy, it will run recursively before 3 attempts with 5sec pausing.
+        public async Task Reconnect()
+        {
+            Report.Notify(Codes.INFO_DET_RECON);
+
+            var t1 = Task.Run(() => { while (!_device.IsConnected) { Disconnect(); } });
+            var t2 = Task.Delay(DetSet.ConnectionTimeOut);
+
+            var t3 = await Task.WhenAny(t1, t2);
+
+            if (!_device.IsConnected)
+                Connect();
+
+            if (t3 == t1 && _device.IsConnected)
+                Report.Notify(Codes.SUCC_DET_RECON);
+
+            if (t3 == t2)
+            {
+                Report.Notify(Codes.WARN_DET_CONN_TIMEOUT);
+
+                
+            }
+        }
+
+        public void Disconnect()
+        {
+            try
+            {
+                Report.Notify(Codes.INFO_DET_DCON);
+                if (_device.IsConnected)
+                    _device.Disconnect();
+
+                Report.Notify(Codes.SUCC_DET_DCON);
+                Status = DetectorStatus.off;
+                ErrorMessage = "";
+            }
+            catch
+            {
+                Report.Notify(Codes.ERR_DET_DCON);
+            }
+        }
+
+        public bool IsConnected => _device.IsConnected;
+
+
+
+    } //  public partial class Detector : IDisposable
 } // namespace Regata.Measurements.Devices

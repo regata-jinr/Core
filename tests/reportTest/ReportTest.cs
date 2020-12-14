@@ -1,33 +1,33 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Regata.Core.Report;
+using Regata.Core;
 using System.Threading.Tasks;
 using Regata.Core.DataBase.Postgres.Context;
 using System.Linq;
 using System;
 
-namespace ReportTest
+namespace Tests
 {
     [TestClass]
     public class ReportTest
     {
         [TestMethod]
-        public async Task ReportInfoTest()
+        public void ReportInfoTest()
         {
-            Report.Init("MeasurementsLogConnectionString", "RegataMail");
-
+            Report.LogConnectionStringTarget = "MeasurementsLogConnectionString";
+            Report.User = "bdrum";
             var msg = new Message()
             {
                 Code     = 0,
                 BaseBody = "TestInform BaseBody",
-                Level    = InformLevel.Info,
+                Level    =  Status.Info,
                 Place    = "InformLevelTest",
-                Sender   = "InformLevelTest method",
+                Sender   = "ReportTest",
                 Title    = "InformLevelTest",
                 User     = "bdrum",
                 TechBody = "TestInform TechBody"
             };
 
-            await Report.Info(msg, write2logs: true );
+            Report.Notify(0);
 
 
             using (var lc = new LogContext("MeasurementsLogConnectionString"))
@@ -37,9 +37,10 @@ namespace ReportTest
                 Assert.AreEqual(msg.Level.ToString().ToUpper(), last_log.level);
                 Assert.IsTrue(10 > (DateTime.Now.AddHours(-2) - last_log.date_time).TotalSeconds);
                 Assert.AreEqual(msg.User, last_log.assistant);
-                Assert.AreEqual(msg.TechBody, last_log.message);
+                Assert.AreEqual(msg.Sender, last_log.frominstance);
             }
-
         }
-    }
-}
+
+
+    } // public class ReportTest
+}     // namespace ReportTest

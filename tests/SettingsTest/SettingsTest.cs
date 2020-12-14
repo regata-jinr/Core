@@ -1,3 +1,15 @@
+/***************************************************************************
+ *                                                                         *
+ *                                                                         *
+ * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
+ *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
+ *                                                                         *
+ ***************************************************************************/
+
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Regata.Core.Settings;
 using System;
@@ -5,71 +17,46 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace SettingsTest
+namespace Tests
 {
-
     public enum TestEnum { One, Two, Three }
 
-    public class InternalSettings
+    public class DetectorSettings
     {
-        public float     iset1 { get; set; }  = 0.1f;
-        public int       iset2 { get; set; } = -1;
-        public string    iset3 { get; set; } = "DefStr";
-        public bool      iset4 { get; set; } = true;
-        public TestEnum  iset5 { get; set; } = TestEnum.One;
-        public List<int> iset6 { get; set; } = new List<int> { 1, 2, 3, 4, 5 };
+        public int       count_time  { get; set; }  = 10;
+        public float     height      { get; set; } = 1;
+        public string    name        { get; set; } = "D1";
+        public bool      iswrite     { get; set; } = true;
+        public TestEnum  iset5       { get; set; } = TestEnum.One;
+        public List<int> iset6       { get; set; } = new List<int> { 1, 2, 3, 4, 5 };
     }
 
-    public class TestSettings : IEquatable<TestSettings>
+    public class AppSettings : IEquatable<AppSettings>
     {
-        public float            set1 { get; set; } = 0.1f;
-        public int              set2 { get; set; } = -1;
-        public string           set3 { get; set; } = "DefStr";
-        public bool             set4 { get; set; } = true;
-        public TestEnum         set5 { get; set; } = TestEnum.One;
-        public List<int>        set6 { get; set; } = new List<int> { 1, 2, 3, 4, 5 };
-        public InternalSettings set7 { get; set; } = new InternalSettings();
+        public float            width                { get; set; } = 0.1f;
+        public float            height               { get; set; } = 1;
+        public string           name                 { get; set; } = "TestApp";
+        public bool             showTitle            { get; set; } = true;
+        public TestEnum         iset5                { get; set; } = TestEnum.One;
+        public List<int>        iset6                { get; set; } = new List<int> { 1, 2, 3, 4, 5 };
+        public List<DetectorSettings> detectors      { get; set; } = new List<DetectorSettings>() { new DetectorSettings() };
 
-        public bool Equals(TestSettings rhv)
+        public bool Equals(AppSettings rhv)
         {
-            //var ts = typeof(TestSettings);
-            //var its = typeof(TestSettings);
-            //bool res = true;
-            //foreach (var p in rhv.GetType().GetProperties())
-            //{
-            //    if (p.PropertyType == its)
-            //    {
-            //        foreach (var ip in its.GetProperties())
-            //        {
-            //            var v1 = its.GetProperty(ip.Name).GetValue(rhv.set7);
-            //            var v2 = its.GetProperty(ip.Name).GetValue(set7);
-            //            res = res && (v1 == v2);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        var v1 = ts.GetProperty(p.Name).GetValue(rhv);
-            //        var v2 = ts.GetProperty(p.Name).GetValue(this);
-            //        res = res && p.PropertyType.Equals.Equals(v1,v2);
-            //    }
-            //}
-
-            //return res;
-
             var comparisonList = new List<bool>();
 
-            comparisonList.Add(set1 == rhv.set1);
-            comparisonList.Add(set2 == rhv.set2);
-            comparisonList.Add(set3 == rhv.set3);
-            comparisonList.Add(set4 == rhv.set4);
-            comparisonList.Add(set5 == rhv.set5);
-            //comparisonList.Add(set6 == rhv.set6);
-            comparisonList.Add(set7.iset1 == rhv.set7.iset1);
-            comparisonList.Add(set7.iset2 == rhv.set7.iset2);
-            comparisonList.Add(set7.iset3 == rhv.set7.iset3);
-            comparisonList.Add(set7.iset4 == rhv.set7.iset4);
-            comparisonList.Add(set7.iset5 == rhv.set7.iset5);
-            //comparisonList.Add(set7.iset6 == rhv.set7.iset6);
+            comparisonList.Add(width            == rhv.width);
+            comparisonList.Add(height           == rhv.height);
+            comparisonList.Add(name             == rhv.name);
+            comparisonList.Add(showTitle        == rhv.showTitle);
+            comparisonList.Add(iset5            == rhv.iset5);
+         // comparisonList.Add(set6 iset6     == rhv.set6);
+            comparisonList.Add(detectors[0].count_time  == rhv.detectors[0].count_time);
+            comparisonList.Add(detectors[0].height      == rhv.detectors[0].height);
+            comparisonList.Add(detectors[0].name        == rhv.detectors[0].name);
+            comparisonList.Add(detectors[0].iswrite     == rhv.detectors[0].iswrite);
+            comparisonList.Add(detectors[0].iset5       == rhv.detectors[0].iset5);
+            //comparisonList.Add(set7.iset6     == rhv.set7.iset6);
 
             return comparisonList.All(b => b);
 
@@ -81,7 +68,7 @@ namespace SettingsTest
             if (rho == null)
                 return false;
 
-            var casted_rho = rho as TestSettings;
+            var casted_rho = rho as AppSettings;
             if (casted_rho == null)
                 return false;
             else
@@ -89,7 +76,7 @@ namespace SettingsTest
         }
 
 
-        public static bool operator == (TestSettings lhv, TestSettings rhv)
+        public static bool operator == (AppSettings lhv, AppSettings rhv)
         {
             if (((object)lhv) == null || ((object)rhv) == null)
                 return Equals(lhv, rhv);
@@ -97,7 +84,7 @@ namespace SettingsTest
             return lhv.Equals(rhv);
         }
 
-        public static bool operator !=(TestSettings lhv, TestSettings rhv)
+        public static bool operator !=(AppSettings lhv, AppSettings rhv)
         {
             if (((object)lhv) == null || ((object)rhv) == null)
                 return !Equals(lhv, rhv);
@@ -109,46 +96,46 @@ namespace SettingsTest
     [TestClass]
     public class SettingsTest
     {
-        public TestSettings dfltSettings = new TestSettings();
+        public AppSettings dfltSettings = new AppSettings();
 
         [TestMethod]
         public void CreateSettingsFromScratchTest()
         {
             if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Regata", "TestSettings", "settings.json")))
-                File.Delete(Settings<TestSettings>.FilePath);
+                File.Delete(Settings<AppSettings>.FilePath);
 
-            Settings<TestSettings>.AssemblyName = "TestSettings";
-            Assert.AreEqual(Settings<TestSettings>.CurrentSettings, dfltSettings);
-            Assert.IsTrue(File.Exists(Settings<TestSettings>.FilePath));
+            Settings<AppSettings>.AssemblyName = "TestSettings";
+            Assert.AreEqual(Settings<AppSettings>.CurrentSettings, dfltSettings);
+            Assert.IsTrue(File.Exists(Settings<AppSettings>.FilePath));
         }
 
         [TestMethod]
         public void ChangeAndSaveTest()
         {
-            Settings<TestSettings>.AssemblyName = "TestSettings";
-            Settings<TestSettings>.CurrentSettings.set2 = 22;
-            Settings<TestSettings>.Save();
-            Assert.IsTrue(File.Exists(Settings<TestSettings>.FilePath));
-            Assert.AreNotEqual(Settings<TestSettings>.CurrentSettings, dfltSettings);
-            Settings<TestSettings>.CurrentSettings.set2 = -1;
-            Assert.AreEqual(Settings<TestSettings>.CurrentSettings, dfltSettings);
-            Settings<TestSettings>.Load();
-            Assert.AreNotEqual(Settings<TestSettings>.CurrentSettings, dfltSettings);
-            Assert.AreEqual(22, Settings<TestSettings>.CurrentSettings.set2);
+            Settings<AppSettings>.AssemblyName = "TestSettings";
+            Settings<AppSettings>.CurrentSettings.height = 2.5f;
+            Settings<AppSettings>.Save();
+            Assert.IsTrue(File.Exists(Settings<AppSettings>.FilePath));
+            Assert.AreNotEqual(Settings<AppSettings>.CurrentSettings, dfltSettings);
+            Settings<AppSettings>.CurrentSettings.height = 1f;
+            Assert.AreEqual(Settings<AppSettings>.CurrentSettings, dfltSettings);
+            Settings<AppSettings>.Load();
+            Assert.AreNotEqual(Settings<AppSettings>.CurrentSettings, dfltSettings);
+            Assert.AreEqual(2.5f, Settings<AppSettings>.CurrentSettings.height);
 
         }
 
         [TestMethod]
         public void ResetToDefaultsTest()
         {
-            Settings<TestSettings>.AssemblyName = "TestSettings";
-            Settings<TestSettings>.CurrentSettings.set2 = 222;
-            Assert.AreNotEqual(Settings<TestSettings>.CurrentSettings, dfltSettings);
-            Settings<TestSettings>.ResetToDefaults();
-            Assert.AreEqual(Settings<TestSettings>.CurrentSettings, dfltSettings);
-            Settings<TestSettings>.Load();
-            Assert.AreEqual(Settings<TestSettings>.CurrentSettings, dfltSettings);
+            Settings<AppSettings>.AssemblyName = "TestSettings";
+            Settings<AppSettings>.CurrentSettings.height = 222f;
+            Assert.AreNotEqual(Settings<AppSettings>.CurrentSettings, dfltSettings);
+            Settings<AppSettings>.ResetToDefaults();
+            Assert.AreEqual(Settings<AppSettings>.CurrentSettings, dfltSettings);
+            Settings<AppSettings>.Load();
+            Assert.AreEqual(Settings<AppSettings>.CurrentSettings, dfltSettings);
         }
 
-    }
-}
+    } // public class SettingsTest
+}     // namespace SettingsTest

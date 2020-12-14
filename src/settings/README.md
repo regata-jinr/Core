@@ -10,26 +10,25 @@ Entry point is specifying an settings class and assemply name:
 
 ~~~csharp
 
- public class InternalSettings
+  public class DetectorSettings
     {
-        public float     iset1 { get; set; }  = 0.1f;
-        public int       iset2 { get; set; } = -1;
-        public string    iset3 { get; set; } = "DefStr";
-        public bool      iset4 { get; set; } = true;
-        public TestEnum  iset5 { get; set; } = TestEnum.One;
-        public List<int> iset6 { get; set; } = new List<int> { 1, 2, 3, 4, 5 };
+        public int       count_time  { get; set; }  = 10;
+        public float     height      { get; set; } = 1;
+        public string    name        { get; set; } = "D1";
+        public bool      iswrite     { get; set; } = true;
+        public TestEnum  iset5       { get; set; } = TestEnum.One;
+        public List<int> iset6       { get; set; } = new List<int> { 1, 2, 3, 4, 5 };
     }
 
-    public class TestSettings : IEquatable<TestSettings>
+    public class AppSettings : IEquatable<AppSettings>
     {
-        public float            set1 { get; set; } = 0.1f;
-        public int              set2 { get; set; } = -1;
-        public string           set3 { get; set; } = "DefStr";
-        public bool             set4 { get; set; } = true;
-        public TestEnum         set5 { get; set; } = TestEnum.One;
-        public List<int>        set6 { get; set; } = new List<int> { 1, 2, 3, 4, 5 };
-        public InternalSettings set7 { get; set; } = new InternalSettings();
-    }
+        public float            width                { get; set; } = 0.1f;
+        public float            height               { get; set; } = 1;
+        public string           name                 { get; set; } = "TestApp";
+        public bool             showTitle            { get; set; } = true;
+        public TestEnum         iset5                { get; set; } = TestEnum.One;
+        public List<int>        iset6                { get; set; } = new List<int> { 1, 2, 3, 4, 5 };
+        public List<DetectorSettings> detectors      { get; set; } = new List<DetectorSettings>() { new DetectorSettings() };
 
 // ...
 
@@ -42,40 +41,42 @@ By default all settings keeping in json file with Path "User\AppData\Roaming\Reg
 # bdrum at RUMLAB in ~\AppData\Roaming\Regata\TestSettings [18:11:51]
 ➜ cat .\settings.json
 {
-  "set1": 0.1,
-  "set2": -1,
-  "set3": "DefStr",
-  "set4": true,
-  "set5": "one",
-  "set6": [
+  "width": 0.1,
+  "height": 1,
+  "name": "DefStr",
+  "showTitle": true,
+  "iset5": "one",
+  "iset6": [
     1,
     2,
     3,
     4,
     5
   ],
-  "set7": {
-    "iset1": 0.1,
-    "iset2": -1,
-    "iset3": "DefStr",
-    "iset4": true,
-    "iset5": "one",
-    "iset6": [
-      1,
-      2,
-      3,
-      4,
-      5
-    ]
-  }
+  "detectors": [
+    {
+      "count_time": 10,
+      "height": 1,
+      "name": "D1",
+      "iswrite": true,
+      "iset5": "one",
+      "iset6": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ]
 }
 ~~~
 
-To give access to settings values use CurrentSettings field. It could be saved to the file.
+In order to get access to settings values use CurrentSettings field. It could be saved to the file.
 
 ~~~csharp
 Settings<TestSettings>.AssemblyName = "TestSettings";
-Settings<TestSettings>.CurrentSettings.set2 = 22;
+Settings<TestSettings>.CurrentSettings.height = 22f;
 Settings<TestSettings>.Save();
 ~~~
 

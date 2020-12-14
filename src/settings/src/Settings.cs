@@ -15,7 +15,6 @@ using System.IO;
 
 namespace Regata.Core.Settings
 {
-
     public static class Settings<AppSettings> 
     {
         public static AppSettings CurrentSettings;

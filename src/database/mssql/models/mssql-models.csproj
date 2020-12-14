@@ -1,7 +1,37 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="src\Core.src.cloud.SpectraTools.cs" />
+    <Compile Remove="src\Core.src.models.Core.src.cloud.SpectraTools.cs" />
+    <Compile Remove="src\Core.src.settings.Labels.cs" />
+    <Compile Remove="src\DataBaseClient.Extensions.Models.Sample.cs" />
+    <Compile Remove="src\DataBaseClient.Extensions.Models.SampleType.cs" />
+    <Compile Remove="src\DataBaseClient.Extensions.Models.ScRecord.cs" />
+    <Compile Remove="src\DataBaseClient.Extensions.Models.Setnfo.cs" />
+    <Compile Remove="src\Extensions.Extensions.src.Models.cs" />
+    <Compile Remove="src\GammaSpectroscopyAutomatisation.WebMonitor.Data.Log.cs" />
+    <Compile Remove="src\regata.GammaSpectroscopyAutomatisation.models.IrradiationInfo.cs" />
+    <Compile Remove="src\regata.GammaSpectroscopyAutomatisation.models.MeasurementInfo.cs" />
+    <Compile Remove="src\regata.GammaSpectroscopyAutomatisation.ShareSpectra.Models.cs" />
+    <Compile Remove="src\regata.GammaSpectrumInfo.SpectraFileParser.Program.cs" />
+    <Compile Remove="src\regata.SWeight.Models.Models.cs" />
+    <Compile Remove="src\SamplesWeightingApp.src.models.Irradiations.cs" />
+    <Compile Remove="src\SamplesWeightingApp.src.models.Monitors.cs" />
+    <Compile Remove="src\SamplesWeightingApp.src.models.Samples.cs" />
+    <Compile Remove="src\SamplesWeightingApp.src.models.SRMs.cs" />
+    <Compile Remove="src\Sources.Classes.Models.IrradiationLogInfo.cs" />
+    <Compile Remove="src\src.tests.UITemplateWinFormTest.SamplesSetModel.cs" />
+    <Compile Remove="src\src.tests.UtilitiesTest.SamplesSetModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.1" />
+  </ItemGroup>
 
 </Project>

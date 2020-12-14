@@ -21,26 +21,26 @@ namespace Regata.Utilities
 
     public class SetSpectraSLI
     {
-        public string SampleType    { get; set; }
+        public string SampleType { get; set; }
         public string SampleSpectra { get; set; }
-        public string token         { get; set; }
+        public string token { get; set; }
     }
 
     public class SetSpectraLLI
     {
-        public int    LoadNumber    { get; set; }
-        public string irtype        { get; set; }
-        public short  Container     { get; set; }
-        public string SampleType    { get; set; }
+        public int LoadNumber { get; set; }
+        public string irtype { get; set; }
+        public short Container { get; set; }
+        public string SampleType { get; set; }
         public string SampleSpectra { get; set; }
-        public string token         { get; set; }
+        public string token { get; set; }
     }
 
     public class SpectraContext : DbContext
     {
         public DbSet<SharedSpectra> SharedSpectras { get; set; }
-        public DbSet<SetSpectraSLI> SLISpectras    { get; set; }
-        public DbSet<SetSpectraLLI> LLISpectras    { get; set; }
+        public DbSet<SetSpectraSLI> SLISpectras { get; set; }
+        public DbSet<SetSpectraLLI> LLISpectras { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -67,7 +67,7 @@ namespace Regata.Utilities
     public static class SpectraTools
     {
         // TODO: implement GetBackgroundSpectra
-        public static IReadOnlyDictionary<IrradiationType, string> IrradiationTypeMap =  new Dictionary<IrradiationType, string>()
+        public static IReadOnlyDictionary<IrradiationType, string> IrradiationTypeMap = new Dictionary<IrradiationType, string>()
                                                                                 {
                                                                                     {IrradiationType.SLI, "SLI"},
                                                                                     {IrradiationType.LLI1, "LLI-1"},
@@ -93,7 +93,7 @@ namespace Regata.Utilities
                     new SqlParameter("setnum", sks[3]),
                     new SqlParameter("setind", sks[4])).AsAsyncEnumerable().WithCancellation(ct);
                 await foreach (var spectraInfo in sliSpectras)
-                    yield return spectraInfo; 
+                    yield return spectraInfo;
             }
         }
 
@@ -110,8 +110,8 @@ namespace Regata.Utilities
                     new SqlParameter("setind", sks[4]),
                     new SqlParameter("type", IrradiationTypeMap[type])).AsAsyncEnumerable().WithCancellation(ct);
 
-              await foreach (var spectraInfo in lliSpectras)
-                    yield return spectraInfo; 
+                await foreach (var spectraInfo in lliSpectras)
+                    yield return spectraInfo;
             }
         }
 

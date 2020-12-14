@@ -21,7 +21,7 @@ namespace Regata.Core.DataBase.Postgres.Models
         public DateTime date_time     { get; set; }
         public string   level         { get; set; }
         public string   assistant     { get; set; }
-        public string   frominstance { get; set; }
+        public string   frominstance  { get; set; }
         public string   message       { get; set; }
     }
 }

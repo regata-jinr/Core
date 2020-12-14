@@ -27,21 +27,20 @@
 
 using System;
 using System.IO;
-using Regata.Measurements.Managers;
 
 namespace Regata.Core.Hardware
 {
   public partial class Detector : IDisposable
   {
     public void AddEfficiencyCalibrationFileByHeight(decimal height)
-    {
+    {   
       try
       {
-        // fixme: here some problem with matching decimal values with combobox selected value
-        //        conflict is possible in such manner: 20.0 == 20
-        if (height == 20) height = 20m;
-        if (height == 10) height = 10m;
-        if (height == 5) height = 5m;
+        // TODO: move direct path to files in settings
+        //        conflict  is possible in such manner: 20.0 == 20
+        if (height == 20)   height = 20m;
+        if (height == 10)   height = 10m;
+        if (height == 5)    height = 5m;
         if (height == 2.5m) height = 2.5m;
 
         string effFileName = $"C:\\GENIE2K\\CALFILES\\Efficiency\\{Name}\\{Name}-eff-{height.ToString().Replace('.', ',')}.CAL";
@@ -50,7 +49,7 @@ namespace Regata.Core.Hardware
           throw new FileNotFoundException($"Efficiency file {effFileName} not found!");
 
 
-        _nLogger.Info($"Efficiency file {effFileName} will add to the detector");
+        Report.Notify(); //$"Efficiency file {effFileName} will add to the detector");
         var effFile = new CanberraDataAccessLib.DataAccess();
         effFile.Open(effFileName);
         effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_GEOM);
@@ -59,11 +58,11 @@ namespace Regata.Core.Hardware
       }
       catch (FileNotFoundException fnfe)
       {
-        NotificationManager.Notify(fnfe, NotificationLevel.Warning, AppManager.Sender);
+        Report.Notify(); //fnfe, NotificationLevel.Warning, AppManager.Sender);
       }
       catch (Exception e)
       {
-        NotificationManager.Notify(e, NotificationLevel.Error, AppManager.Sender);
+        Report.Notify(); //e, NotificationLevel.Error, AppManager.Sender);
       }
     }
 
@@ -77,7 +76,7 @@ namespace Regata.Core.Hardware
         if (!File.Exists(effFileName))
           throw new FileNotFoundException($"Efficiency file {effFileName} not found!");
 
-        _nLogger.Info($"Efficiency file {effFileName} will add to the detector");
+        Report.Notify(); //$"Efficiency file {effFileName} will add to the detector");
         var effFile = new CanberraDataAccessLib.DataAccess();
         effFile.Open(effFileName);
         effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_SHAPECALRES);
@@ -87,11 +86,11 @@ namespace Regata.Core.Hardware
       }
       catch (FileNotFoundException fnfe)
       {
-        NotificationManager.Notify(fnfe, NotificationLevel.Warning, AppManager.Sender);
+        Report.Notify(); //fnfe, NotificationLevel.Warning, AppManager.Sender);
       }
       catch (Exception e)
       {
-        NotificationManager.Notify(e, NotificationLevel.Error, AppManager.Sender);
+        Report.Notify(); //e, NotificationLevel.Error, AppManager.Sender);
       }
     }
 
