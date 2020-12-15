@@ -14,7 +14,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Regata.Core.Models.MSSQL
+namespace Regata.Core.DB.MSSQL.Models
 {
     public class Irradiation
     {

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Regata.Core.DataBase.Postgres.Context;
 using System.Linq;
 using System;
+using System.IO;
 
 namespace Tests
 {
@@ -14,12 +15,14 @@ namespace Tests
         public void ReportInfoTest()
         {
             Report.LogConnectionStringTarget = "MeasurementsLogConnectionString";
+            Report.LogDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test", "ReportTest");
+            Directory.CreateDirectory(Report.LogDir);
             Report.User = "bdrum";
             var msg = new Message()
             {
                 Code     = 0,
                 BaseBody = "TestInform BaseBody",
-                Level    =  Status.Info,
+                Level    =  Status.Error,
                 Place    = "InformLevelTest",
                 Sender   = "ReportTest",
                 Title    = "InformLevelTest",

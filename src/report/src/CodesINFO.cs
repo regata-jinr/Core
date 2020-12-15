@@ -74,6 +74,12 @@ namespace Regata.Core
         public const ushort INFO_DET_ACQ_COUNTS_CHNG = 18;
         public const ushort INFO_DET_ACQ_MODE_CHNG   = 19;
 
+        public const ushort INFO_DET_EFF_H_FILE_ADD = 20; //$"Efficiency file {effFileName} will add to the detector");
+        public const ushort INFO_DET_EFF_ENG_FILE_ADD = 21; //$"Efficiency file {effFileName} will add to the detector");
+
+        public const ushort INFO_DET_SAVED = 22;
+        public const ushort INFO_DET_LOAD_SMPL_INFO = 23;
+
         #endregion
 
     }

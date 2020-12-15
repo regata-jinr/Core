@@ -35,13 +35,35 @@ namespace Regata.Core
     /// </summary>
     public static class Report
     {
-        public  static Status LogVerbosity  = Status.Info;
-        public  static Status ShowVerbosity = Status.Warning;
-        public  static Status MailVerbosity = Status.Error;
+        public static Status LogVerbosity = Status.Info;
+        public static Status ShowVerbosity = Status.Warning;
+        public static Status MailVerbosity = Status.Error;
 
         public static string MailHostTarget;
         public static string User;
         public static string PathToMessages;
+        private static string _logDir;
+
+        public static string LogDir
+        {
+            get { return _logDir; }
+            set
+            {
+                if (string.IsNullOrEmpty(LogConnectionStringTarget))
+                    return;
+
+                if (_nLogger == null)
+                {
+                    NLog.GlobalDiagnosticsContext.Set("LogConnectionString", CredentialManager.GetCredentials(LogConnectionStringTarget).Password);
+                    _nLogger = NLog.LogManager.GetCurrentClassLogger();
+                }
+
+                _logDir = value;
+                NLog.GlobalDiagnosticsContext.Set("LogDir", _logDir);
+
+            }
+        }
+
         private static string _logConnectionStringTarget;
 
         public static string LogConnectionStringTarget

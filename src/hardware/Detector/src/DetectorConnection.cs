@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2017-2020, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -52,7 +52,7 @@ namespace Regata.Core.Hardware
                     Report.Notify(Codes.WARN_DET_BUSY);
                 }
                 else
-                    Report.Notify(Codes.ERR_DET_INTR_CONN);
+                    Report.Notify(Codes.ERR_DET_INTR_CONN_UNREG);
             }
         }
 
@@ -70,7 +70,7 @@ namespace Regata.Core.Hardware
             }
             catch
             {
-                Report.Notify(Codes.ERR_DET_CONN);
+                Report.Notify(Codes.ERR_DET_CONN_UNREG);
             }
         }
 
@@ -96,11 +96,7 @@ namespace Regata.Core.Hardware
                 Report.Notify(Codes.SUCC_DET_RECON);
 
             if (t3 == t2)
-            {
                 Report.Notify(Codes.WARN_DET_CONN_TIMEOUT);
-
-                
-            }
         }
 
         public void Disconnect()
@@ -117,7 +113,7 @@ namespace Regata.Core.Hardware
             }
             catch
             {
-                Report.Notify(Codes.ERR_DET_DCON);
+                Report.Notify(Codes.ERR_DET_DCON_UNREG);
             }
         }
 

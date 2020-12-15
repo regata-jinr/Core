@@ -3,8 +3,9 @@
  *                                                                         *
  * Copyright(c) 2017-2020, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
- * All rights reserved                                                     *
  *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
  *                                                                         *
  ***************************************************************************/
 
@@ -27,61 +28,67 @@
 
 using System;
 using CanberraDeviceAccessLib;
-using Regata.Measurements.Managers;
 
 namespace Regata.Core.Hardware
 {
-  public partial class Detector : IDisposable
-  {
-    public string GetParameterValue(ParamCodes parCode)
+    public partial class Detector : IDisposable
     {
-      try
-      {
-        return _device.Param[parCode].ToString();
-      }
-      catch (Exception e)
-      {
-        NotificationManager.Notify(new Exception($"A problem with getting information from device. {parCode} doesn't exist.{Environment.NewLine}{e.Message}"), NotificationLevel.Warning, AppManager.Sender);
-        return string.Empty;
-      }
-    }
+        public string GetParameterValue(ParamCodes parCode)
+        {
+            try
+            {
+                return _device.Param[parCode].ToString();
+            }
+            catch
+            {
+                Report.Notify(Codes.ERR_DET_GET_PARAM_UNREG);
+                return string.Empty;
+            }
+        }
 
-    public void SetParameterValue<T>(ParamCodes parCode, T val)
-    {
-      try
-      {
-        if (val == null)
-          throw new ArgumentNullException($"{parCode} can't be a null");
+        public void SetParameterValue<T>(ParamCodes parCode, T val)
+        {
+            try
+            {
+                if (val == null)
+                {
+                    Report.Notify(Codes.ERR_DET_SET_NULL_PARAM);
+                    return;
+                }
 
-        _device.Param[parCode] = val;
-        _device.Save("", true);
-      }
-      catch (ArgumentNullException ae)
-      {
-        NotificationManager.Notify(ae, NotificationLevel.Warning, AppManager.Sender);
-      }
-      catch (Exception e)
-      {
-        NotificationManager.Notify(new Exception($"A problem with saving information to file. {parCode} can't has a value {val}"), NotificationLevel.Warning, AppManager.Sender);
-      }
-    }
+                _device.Param[parCode] = val;
+                _device.Save("", true);
+            }
+            catch
+            {
+                Report.Notify(Codes.ERR_DET_SET_PARAM_UNREG);
+            }
+        }
 
-    public bool IsHV => _device.HighVoltage.On;
-    public int PresetRealTime => int.Parse(GetParameterValue(CanberraDeviceAccessLib.ParamCodes.CAM_X_PREAL));
-    public int PresetLiveTime => int.Parse(GetParameterValue(CanberraDeviceAccessLib.ParamCodes.CAM_X_PLIVE));
-    public decimal ElapsedRealTime => decimal.Parse(GetParameterValue(CanberraDeviceAccessLib.ParamCodes.CAM_X_EREAL));
-    public decimal ElapsedLiveTime => decimal.Parse(GetParameterValue(CanberraDeviceAccessLib.ParamCodes.CAM_X_ELIVE));
+        public bool IsHV               => _device.HighVoltage.On;
+        public uint PresetRealTime      => uint.Parse(GetParameterValue(CanberraDeviceAccessLib.ParamCodes.CAM_X_PREAL));
+        public uint PresetLiveTime      => uint.Parse(GetParameterValue(CanberraDeviceAccessLib.ParamCodes.CAM_X_PLIVE));
+        public float ElapsedRealTime   => float.Parse(GetParameterValue(CanberraDeviceAccessLib.ParamCodes.CAM_X_EREAL));
+        public float ElapsedLiveTime   => float.Parse(GetParameterValue(CanberraDeviceAccessLib.ParamCodes.CAM_X_ELIVE));
 
-    public decimal DeadTime
-    {
-      get
-      {
-        if (ElapsedRealTime == 0)
-          return 0;
-        else
-          return Math.Round(100 * (1 - ElapsedLiveTime / ElapsedRealTime), 2);
-      }
-    }
-  }
-}
+        public float DeadTime
+        {
+            get
+            {
+                try
+                {
+                    if (ElapsedRealTime == 0)
+                        return 0;
+                    else
+                        return (float)Math.Round(100 * (1 - (ElapsedLiveTime / ElapsedRealTime)), 2);
+                }
+                catch
+                {
+                    Report.Notify(Codes.ERR_DET_GET_DEADT_UNREG);
+                    return -1.0f;
+                }
+            }
+        }
+    } // public partial class Detector : IDisposable
+}     // namespace Regata.Core.Hardware
 

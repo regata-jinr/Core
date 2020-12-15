@@ -36,12 +36,12 @@
 
 using System;
 using CanberraDeviceAccessLib;
-using Regata.Core.Models.MSSQL;
+using Regata.Core.DB.MSSQL.Models;
 
 namespace Regata.Core.Hardware
 {
     /// <summary>
-    /// Detector is one of the main class, because detector is the main part of our experiment. It allows to manage real detector and has protection from crashes. You can start, stop and do any basics operations which you have with detector via mvcg.exe. This software based on dlls provided by [Genie2000] (https://www.mirion.com/products/genie-2000-basic-spectroscopy-software) for interactions with [HPGE](https://www.mirion.com/products/standard-high-purity-germanium-detectors) detectors also from [Mirion Tech.](https://www.mirion.com). Personally we are working with [Standard Electrode Coaxial Ge Detectors](https://www.mirion.com/products/sege-standard-electrode-coaxial-ge-detectors)
+    /// Detector class take control of real detector and has protection from crashes, resources manager, convinient abstractions of many operations and parameters. You can start, stop and do any basics operations which you have with detector via mvcg.exe. This software based on dlls provided by [Genie2000] (https://www.mirion.com/products/genie-2000-basic-spectroscopy-software) for interactions with [HPGE](https://www.mirion.com/products/standard-high-purity-germanium-detectors) detectors also from [Mirion Tech.](https://www.mirion.com). Personally we are working with [Standard Electrode Coaxial Ge Detectors](https://www.mirion.com/products/sege-standard-electrode-coaxial-ge-detectors)
     /// </summary>
     /// <seealso cref="https://www.mirion.com/products/genie-2000-basic-spectroscopy-software"/>
     public partial class Detector : IDisposable
@@ -60,13 +60,14 @@ namespace Regata.Core.Hardware
                 ErrorMessage = "";
                 _device = new DeviceAccessClass();
                 CurrentMeasurement = new Measurement();
-                DetSet.EffCalFolder = @"C:\\GENIE2K\\CALFILES\\Efficiency";
+                DetSet.EffCalFolder = @"C:\GENIE2K\CALFILES\Efficiency";
 
                 if (DetectorExists(name))
                     DetSet.Name = name;
                 else
                 {
-                    throw new Exception($"Detector with name '{name}' doesn't exist in MID Data base");
+                    Report.Notify(Codes.ERR_DET_NAME_N_EXST);
+                    return;
                 }
 
                 _device.DeviceMessages += DeviceMessagesHandler;
@@ -126,7 +127,7 @@ namespace Regata.Core.Hardware
                 if (Status == DetectorStatus.ready)
                     Report.Notify(Codes.SUCC_DET_RST);
                 else
-                    throw new Exception($"Something were wrong during reseting of the detector '{Name}'");
+                    Report.Notify(Codes.WARN_DET_RST);
             }
             catch
             {
@@ -136,23 +137,21 @@ namespace Regata.Core.Hardware
 
         public static bool IsDetectorAvailable(string name)
         {
-            var isAvailable = false;
             try
             {
                 var dev = new DeviceAccess();
                 dev.Connect(name);
                 if (dev.IsConnected)
                 {
-                    isAvailable = true;
                     dev.Disconnect();
+                    return true;
                 }
             }
             catch
             {
                 Report.Notify(Codes.ERR_DET_AVAIL_UNREG);
-
             }
-            return isAvailable;
+            return false;
         }
 
     } //  public partial class Detector : IDisposable

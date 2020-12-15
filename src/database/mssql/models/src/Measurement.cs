@@ -19,7 +19,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Regata.Core.Models.MSSQL
+namespace Regata.Core.DB.MSSQL.Models
 {
     [AutoMap(typeof(Irradiation))]
     public class Measurement : INotifyPropertyChanged

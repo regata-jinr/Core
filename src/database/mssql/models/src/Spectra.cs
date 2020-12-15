@@ -10,27 +10,33 @@
  ***************************************************************************/
 
 
-using System;
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace Regata.Core.DB.MSSQL.Models
 {
-    public class MeasurementsRegisterInfo
+    [Table("SharedSpectra")]
+    public class SharedSpectra
     {
-        [Key]
-        public int       Id             { get; set; }
-        [Required]
-        public string    Name           { get; set; }
-        public int       LoadNumber     { get; set; }
-        [Required]
-        public string    Type           { get; set; }
-        public DateTime? DateTimeStart  { get; set; }
-        public DateTime? DateTimeFinish { get; set; }
-        public int       SamplesCnt     { get; set; }
-        public string    Detectors      { get; set; }
-        public string    Assistant      { get; set; }
-        public string    Note           { get; set; }
+        public string fileS { get; set; }
+        public string token { get; set; }
+    }
 
+    public class SetSpectraSLI
+    {
+        public string SampleType { get; set; }
+        public string SampleSpectra { get; set; }
+        public string token { get; set; }
+    }
+
+    public class SetSpectraLLI
+    {
+        public int LoadNumber { get; set; }
+        public string irtype { get; set; }
+        public short Container { get; set; }
+        public string SampleType { get; set; }
+        public string SampleSpectra { get; set; }
+        public string token { get; set; }
     }
 }
 

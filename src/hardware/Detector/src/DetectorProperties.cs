@@ -1,7 +1,7 @@
 /***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2017-2020, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -32,7 +32,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using CanberraDeviceAccessLib;
-using Regata.Core.Models.MSSQL;
+using Regata.Core.DB.MSSQL.Models;
 
 namespace Regata.Core.Hardware
 {

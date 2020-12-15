@@ -28,7 +28,8 @@ namespace Regata.Core
 
         public const ushort WARN_DET_BUSY = 2000; // Un
         public const ushort WARN_DET_CONN_TIMEOUT = 2001;  // "Can not to disconnect from detector {_name}. Exceeded timeout limit.");
-                
+        public const ushort WARN_DET_RST = 2002;
+        
 
         #endregion
 

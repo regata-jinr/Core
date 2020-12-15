@@ -1,0 +1,183 @@
+﻿/***************************************************************************
+ *                                                                         *
+ *                                                                         *
+ * Copyright(c) 2017-2020, REGATA Experiment at FLNP|JINR                  *
+ * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
+ *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
+ *                                                                         *
+ ***************************************************************************/
+
+using CanberraDataAccessLib;
+using System;
+using System.IO;
+using AutoMapper;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Regata.Core.Hardware;
+using Regata.Core.DB.MSSQL.Models;
+using Regata.Core;
+
+namespace Tests
+{
+    //TODO: add stress-test!
+ 
+    [TestClass]
+    public class DetectorsTest
+    {
+        public Detector _d1;
+        DataAccess f1 = new DataAccess();
+
+        public DetectorsTest()
+        {
+            Report.LogConnectionStringTarget = "MeasurementsLogConnectionString";
+            Report.LogDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test", "DetectorTest");
+            Directory.CreateDirectory(Report.LogDir);
+
+            _d1 = new Detector("D1");
+        }
+
+        [TestMethod]
+        public void Logs()
+        {
+            Assert.IsTrue(File.Exists(Path.Combine(Report.LogDir, $"{DateTime.Now.ToString("yyyy-MM-dd")}.log")));
+        }
+
+        [TestMethod]
+        public void Names()
+        {
+            Assert.AreEqual("D1", _d1.Name);
+        }
+
+        [TestMethod]
+        public void Statuses()
+        {
+            Assert.AreEqual(DetectorStatus.ready, _d1.Status);
+        }
+
+        [TestMethod]
+        public void Connections()
+        {
+            Assert.IsTrue(_d1.IsConnected);
+        }
+
+        [TestMethod]
+        public void Disconnections()
+        {
+            System.Threading.Thread.Sleep(2000);
+
+            Assert.IsTrue(_d1.IsConnected);
+            _d1.Disconnect();
+
+            System.Threading.Thread.Sleep(2000);
+
+            Assert.IsFalse(_d1.IsConnected);
+            Assert.AreEqual(DetectorStatus.off, _d1.Status);
+
+            _d1.Connect();
+        }
+
+        [TestMethod]
+        public void StartStopStartStopSave()
+        {
+            var sd = new Irradiation()
+            {
+                CountryCode = "RO",
+                ClientNumber = "2",
+                Year = "19",
+                SetNumber = "12",
+                SetIndex = "b",
+                SampleNumber = "2",
+                Weight = 0.2m,
+                Assistant = "bdrum",
+                Note = "test2",
+                DateTimeStart = DateTime.Now,
+                DateTimeFinish = DateTime.Now.AddSeconds(3),
+                Duration = 3
+            };
+
+            var configuration = new MapperConfiguration(cfg => cfg.AddMaps("mssql-models"));
+            var mapper = new Mapper(configuration);
+            var m = mapper.Map<Measurement>(sd);
+            m.Duration = 5;
+            m.Detector = "D1";
+            m.Height = 10;
+            m.Type = "SLI";
+            m.FileSpectra = "testD1";
+            m.Assistant = "bdrum";
+            m.Note = "bdrum-test";
+
+            _d1.LoadMeasurementInfoToDevice(m, sd);
+            Assert.AreEqual(m.Duration, _d1.PresetRealTime);
+
+            _d1.Start();
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
+            
+            Assert.AreEqual(DetectorStatus.busy, _d1.Status);
+            Assert.AreNotEqual(0, _d1.ElapsedRealTime);
+            _d1.Pause();
+
+            Assert.AreEqual(DetectorStatus.ready, _d1.Status);
+            Assert.AreEqual(2f, (float)_d1.ElapsedRealTime, 1.0f);
+            _d1.Start();
+
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
+            Assert.AreEqual(DetectorStatus.busy, _d1.Status);
+            Assert.AreNotEqual(2f, (float)_d1.ElapsedRealTime, 0.5f);
+
+            _d1.Pause();
+            Assert.AreEqual(m.Duration, _d1.PresetRealTime);
+
+            _d1.Save();
+            Assert.IsTrue(File.Exists(_d1.FullFileSpectraName));
+            Assert.AreEqual(Path.Combine(Path.GetDirectoryName(_d1.FullFileSpectraName),$"{m.FileSpectra}.cnf"), _d1.FullFileSpectraName);
+
+            _d1.Save();
+            Assert.IsTrue(File.Exists(_d1.FullFileSpectraName));
+            Assert.AreEqual(Path.Combine(Path.GetDirectoryName(_d1.FullFileSpectraName), $"{m.FileSpectra}(1).cnf"), _d1.FullFileSpectraName);
+
+            _d1.Save();
+            Assert.IsTrue(File.Exists(_d1.FullFileSpectraName));
+            Assert.AreEqual(Path.Combine(Path.GetDirectoryName(_d1.FullFileSpectraName), $"{m.FileSpectra}(2).cnf"), _d1.FullFileSpectraName);
+
+            Assert.AreEqual(DetectorStatus.ready, _d1.Status);
+
+            Assert.IsTrue(File.Exists(_d1.FullFileSpectraName));
+            Assert.AreEqual(m.Duration, _d1.PresetRealTime);
+            _d1.Stop();
+
+            f1.Open(_d1.FullFileSpectraName);
+
+            Assert.AreEqual($"{_d1.CurrentMeasurement.SampleKey}",                     f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_STITLE].ToString()); // title
+            Assert.AreEqual(_d1.CurrentMeasurement.Assistant,                          f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SCOLLNAME].ToString()); // operator's name
+            Assert.AreEqual(_d1.CurrentMeasurement.Note,                               f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SDESC1].ToString());
+            Assert.AreEqual(_d1.CurrentMeasurement.SetKey,                             f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SIDENT].ToString()); // sd code
+            Assert.AreEqual(_d1.RelatedIrradiation.Weight.ToString(),                  f1.Param[CanberraDataAccessLib.ParamCodes.CAM_F_SQUANT].ToString()); // weight
+            Assert.AreEqual("0",                                                       f1.Param[CanberraDataAccessLib.ParamCodes.CAM_F_SQUANTERR].ToString()); // err, 0
+            Assert.AreEqual("gram",                                                    f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SUNITS].ToString()); // units, gram
+            Assert.AreEqual(_d1.RelatedIrradiation.DateTimeStart.ToString(), f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_SDEPOSIT].ToString()); // irr start date time
+            Assert.AreEqual(_d1.RelatedIrradiation.DateTimeFinish.ToString().Replace(" ", ""), f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_STIME].ToString().Replace(" ", "")); // irr finish date time
+            Assert.AreEqual("0",                                                       f1.Param[CanberraDataAccessLib.ParamCodes.CAM_F_SSYSERR].ToString()); // Random sd error (%)
+            Assert.AreEqual("0",                                                       f1.Param[CanberraDataAccessLib.ParamCodes.CAM_F_SSYSTERR].ToString()); // Non-random sd error 
+            Assert.AreEqual(_d1.CurrentMeasurement.Type,                               f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_STYPE].ToString());
+            Assert.AreEqual(_d1.CurrentMeasurement.Height.Value,                       float.Parse(f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SGEOMTRY].ToString()));
+
+            Assert.AreEqual(_d1.PresetRealTime, uint.Parse(f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_PREAL].ToString())); // irr start date time
+            Assert.AreEqual(m.Duration, uint.Parse(f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_PREAL].ToString())); // irr start date time
+
+            f1.Close();
+
+            File.Delete(_d1.FullFileSpectraName);
+            File.Delete(Path.Combine(Path.GetDirectoryName(_d1.FullFileSpectraName), $"{m.FileSpectra}(1).cnf"));
+            File.Delete(Path.Combine(Path.GetDirectoryName(_d1.FullFileSpectraName), $"{m.FileSpectra}.cnf"));
+            
+            Assert.AreEqual(m.Duration, _d1.PresetRealTime);
+
+            Assert.IsFalse(File.Exists(_d1.FullFileSpectraName));
+            Assert.IsFalse(File.Exists(Path.Combine(Path.GetDirectoryName(_d1.FullFileSpectraName), $"{m.FileSpectra}.cnf")));
+            Assert.IsFalse(File.Exists(Path.Combine(Path.GetDirectoryName(_d1.FullFileSpectraName), $"{m.FileSpectra}(1).cnf")));
+        }
+
+    } // public class DetectorsTest
+}     // namespace Tests
+

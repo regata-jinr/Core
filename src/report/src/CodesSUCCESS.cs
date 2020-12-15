@@ -27,12 +27,14 @@ namespace Regata.Core
 
         #region Detector
 
-        public const ushort SUCC_DET_RST = 1010; //$"Success reseting of the detector"
-        public const ushort SUCC_DET_CON = 1011; //$"Successful connection to the detector"
-        public const ushort SUCC_DET_RECON = 1012; //$"Reconnection successful"
-        public const ushort SUCC_DET_DCON = 1013; //$"Disconnection successful"
-        public const ushort SUCC_DET_ACQ_STOP = 1014;
-        public const ushort SUCC_DET_ACQ_PAUSE = 1015;
+        public const ushort SUCC_DET_RST        = 1010; //$"Success reseting of the detector"
+        public const ushort SUCC_DET_CON        = 1011; //$"Successful connection to the detector"
+        public const ushort SUCC_DET_RECON      = 1012; //$"Reconnection successful"
+        public const ushort SUCC_DET_DCON       = 1013; //$"Disconnection successful"
+        public const ushort SUCC_DET_ACQ_STOP   = 1014;
+        public const ushort SUCC_DET_ACQ_PAUSE  = 1015;
+        public const ushort SUCC_DET_FILE_SAVED = 1016;
+        
         #endregion
 
 

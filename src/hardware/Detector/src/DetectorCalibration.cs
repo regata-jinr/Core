@@ -30,70 +30,62 @@ using System.IO;
 
 namespace Regata.Core.Hardware
 {
-  public partial class Detector : IDisposable
-  {
-    public void AddEfficiencyCalibrationFileByHeight(decimal height)
-    {   
-      try
-      {
-        // TODO: move direct path to files in settings
-        //        conflict  is possible in such manner: 20.0 == 20
-        if (height == 20)   height = 20m;
-        if (height == 10)   height = 10m;
-        if (height == 5)    height = 5m;
-        if (height == 2.5m) height = 2.5m;
-
-        string effFileName = $"C:\\GENIE2K\\CALFILES\\Efficiency\\{Name}\\{Name}-eff-{height.ToString().Replace('.', ',')}.CAL";
-
-        if (!File.Exists(effFileName))
-          throw new FileNotFoundException($"Efficiency file {effFileName} not found!");
-
-
-        Report.Notify(); //$"Efficiency file {effFileName} will add to the detector");
-        var effFile = new CanberraDataAccessLib.DataAccess();
-        effFile.Open(effFileName);
-        effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_GEOM);
-        effFile.Close();
-        _device.Save("", true);
-      }
-      catch (FileNotFoundException fnfe)
-      {
-        Report.Notify(); //fnfe, NotificationLevel.Warning, AppManager.Sender);
-      }
-      catch (Exception e)
-      {
-        Report.Notify(); //e, NotificationLevel.Error, AppManager.Sender);
-      }
-    }
-
-
-    public void AddEfficiencyCalibrationFileByEnergy()
+    public partial class Detector : IDisposable
     {
-      try
-      {
-        string effFileName = $"C:\\GENIE2K\\CALFILES\\Efficiency\\{Name}\\{Name}-energy.CAL";
+        public void AddEfficiencyCalibrationFileByHeight(float height)
+        {
+            try
+            {
+                var tmpl = "2,5";
+                if (height != 2.5)
+                        tmpl = height.ToString();
 
-        if (!File.Exists(effFileName))
-          throw new FileNotFoundException($"Efficiency file {effFileName} not found!");
+                string effFileName = Path.Combine(DetSet.EffCalFolder, Name, $"{Name}-eff-{tmpl}.CAL");
 
-        Report.Notify(); //$"Efficiency file {effFileName} will add to the detector");
-        var effFile = new CanberraDataAccessLib.DataAccess();
-        effFile.Open(effFileName);
-        effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_SHAPECALRES);
-        effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_CALRESULTS);
-        effFile.Close();
-        _device.Save("", true);
-      }
-      catch (FileNotFoundException fnfe)
-      {
-        Report.Notify(); //fnfe, NotificationLevel.Warning, AppManager.Sender);
-      }
-      catch (Exception e)
-      {
-        Report.Notify(); //e, NotificationLevel.Error, AppManager.Sender);
-      }
-    }
+                if (!File.Exists(effFileName))
+                {
+                    Report.Notify(Codes.ERR_DET_EFF_H_FILE_NF);
+                    return;
+                }
 
-  }
-}
+                Report.Notify(Codes.INFO_DET_EFF_H_FILE_ADD); 
+                var effFile = new CanberraDataAccessLib.DataAccess();
+                effFile.Open(effFileName);
+                effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_GEOM);
+                effFile.Close();
+                _device.Save("", true);
+            }
+            catch
+            {
+                Report.Notify(Codes.ERR_DET_EFF_H_FILE_UNREG);
+            }
+        }
 
+        public void AddEfficiencyCalibrationFileByEnergy()
+        {
+            try
+            {
+                string effFileName = Path.Combine(DetSet.EffCalFolder, $"{Name}", $"{Name}-energy.CAL");
+
+                if (!File.Exists(effFileName))
+                {
+                    Report.Notify(Codes.ERR_DET_EFF_ENG_FILE_NF);
+                    return;
+                }
+
+                Report.Notify(Codes.INFO_DET_EFF_ENG_FILE_ADD);
+                var effFile = new CanberraDataAccessLib.DataAccess();
+                effFile.Open(effFileName);
+                effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_SHAPECALRES);
+                effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_CALRESULTS);
+                effFile.Close();
+                _device.Save("", true);
+            }
+            catch
+            {
+                Report.Notify(Codes.ERR_DET_EFF_ENG_FILE_UNREG);
+            }
+        }
+
+    } // public partial class Detector : IDisposable
+}     // namespace Regata.Core.Hardware
