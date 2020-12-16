@@ -16,20 +16,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Regata.Core.DB.MSSQL.Models
 {
     [Table("SharedSpectra")]
-    public class SharedSpectra
+    public class SharedSpectrum
     {
         public string fileS { get; set; }
         public string token { get; set; }
     }
 
-    public class SetSpectraSLI
+    public class SpectrumSLI
     {
         public string SampleType { get; set; }
         public string SampleSpectra { get; set; }
         public string token { get; set; }
     }
 
-    public class SetSpectraLLI
+    public class SpectrumLLI
     {
         public int LoadNumber { get; set; }
         public string irtype { get; set; }

@@ -28,15 +28,18 @@ namespace Regata.Core.DB.MSSQL.Context
 
         public DbSet<Irradiation>        Irradiations    { get; set; }
         public DbSet<Measurement>        Measurements    { get; set; }
-        public DbSet<SharedSpectra>      SharedSpectras  { get; set; }
-        public DbSet<SetSpectraSLI>      SLISpectras     { get; set; }
-        public DbSet<SetSpectraLLI>      LLISpectras     { get; set; }
+        public DbSet<SharedSpectrum>      SharedSpectra  { get; set; }
+        public DbSet<SpectrumSLI>        SLISpectra     { get; set; }
+        public DbSet<SpectrumLLI>        LLISpectra     { get; set; }
 
         private readonly string _csTraget;
 
         public RegataContext(string ConnectionStringTarget)
         {
-            _csTraget = ConnectionStringTarget;
+            if (string.IsNullOrEmpty(ConnectionStringTarget))
+                Report.Notify(Codes.ERR_DB_EMPTY_TARGET);
+
+                _csTraget = ConnectionStringTarget;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -134,11 +137,11 @@ namespace Regata.Core.DB.MSSQL.Context
                                mr.Id
                            });
 
-            modelBuilder.Entity<SetSpectraLLI>()
+            modelBuilder.Entity<SpectrumLLI>()
                  .HasKey(slis => slis.SampleSpectra);
-            modelBuilder.Entity<SetSpectraSLI>()
+            modelBuilder.Entity<SpectrumSLI>()
                    .HasKey(llis => llis.SampleSpectra);
-            modelBuilder.Entity<SharedSpectra>()
+            modelBuilder.Entity<SharedSpectrum>()
                    .HasKey(ss => ss.fileS);
 
         }

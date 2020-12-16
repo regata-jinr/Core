@@ -17,29 +17,38 @@ namespace Regata.Core
 {
     /// <summary>
     /// Codes class contains unique identificator of message. 
-    /// - [0-1000) - Info codes
     /// - [1000-2000) - Success codes
-    /// - [2000-3000) - Warning codes
-    /// - [3000-4000) - Error codes
+    ///    -[1000-1099) - DataBase           success codes
+    ///    -[1100-1199) - Cloud              success codes
+    ///    -[1200-1299) - Detector           success codes
+    ///    -[1300-1399) - Logger             success codes
+    ///    -[1400-1499) - Settings           success codes
+    ///    -[1500-1599) - Export:Excel       success codes
+    ///    -[1600-1699) - Export:GoogleSheet success codes
+    ///    -[1700-1799) - Export:CSV         success codes
     /// </summary>
     public partial  struct Codes
     {
 
-        #region Detector
+        #region Cloud
 
-        public const ushort SUCC_DET_RST        = 1010; //$"Success reseting of the detector"
-        public const ushort SUCC_DET_CON        = 1011; //$"Successful connection to the detector"
-        public const ushort SUCC_DET_RECON      = 1012; //$"Reconnection successful"
-        public const ushort SUCC_DET_DCON       = 1013; //$"Disconnection successful"
-        public const ushort SUCC_DET_ACQ_STOP   = 1014;
-        public const ushort SUCC_DET_ACQ_PAUSE  = 1015;
-        public const ushort SUCC_DET_FILE_SAVED = 1016;
-        
+        public const ushort SUCC_CLD_TRGT      = 1100;
+        public const ushort SUCC_CLD_GOOD_RSPN = 1101;
+        public const ushort SUCC_CLD_UPL_FILE  = 1102;
+
         #endregion
 
+        #region Detector
 
+        public const ushort SUCC_DET_RST        = 1200; //$"Success reseting of the detector"
+        public const ushort SUCC_DET_CON        = 1201; //$"Successful connection to the detector"
+        public const ushort SUCC_DET_RECON      = 1202; //$"Reconnection successful"
+        public const ushort SUCC_DET_DCON       = 1203; //$"Disconnection successful"
+        public const ushort SUCC_DET_ACQ_STOP   = 1204;
+        public const ushort SUCC_DET_ACQ_PAUSE  = 1205;
+        public const ushort SUCC_DET_FILE_SAVED = 1206;
 
-
+        #endregion
 
     }
 }

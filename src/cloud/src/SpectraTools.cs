@@ -20,49 +20,60 @@ using Regata.Core.DB.MSSQL.Models;
 using Regata.Core.DB.MSSQL.Context;
 using Microsoft.EntityFrameworkCore;
 
+// TODO: add documentation
+// TODO: implement GetBackgroundSpectra
+
+/// <summary>
+/// 
+/// </summary>
 namespace Regata.Core.Cloud
 {
-
     public enum IrradiationType { SLI, LLI1, LLI2, BCKG }
 
+    /// <summary>
+    /// SpectraTools is the high level abstractions for basics operation with cloud storage units.
+    /// </summary>
     public static class SpectraTools
     {
-        // TODO: implement GetBackgroundSpectra
-        public static IReadOnlyDictionary<IrradiationType, string> IrradiationTypeMap = new Dictionary<IrradiationType, string>()
-                                                                                {
-                                                                                    {IrradiationType.SLI, "SLI"},
-                                                                                    {IrradiationType.LLI1, "LLI-1"},
-                                                                                    {IrradiationType.LLI2, "LLI-2"},
-                                                                                    {IrradiationType.BCKG, "BCKG"}
-                                                                                 };
+        public static string DBTarget;
 
-        public static async Task GetBackgroundSpectra(string SetKey, CancellationToken? ct = null)
+        public static IReadOnlyDictionary<IrradiationType, string> IrradiationTypeMap = 
+            new Dictionary<IrradiationType, string>()
+                {
+                    {IrradiationType.SLI, "SLI"},
+                    {IrradiationType.LLI1, "LLI-1"},
+                    {IrradiationType.LLI2, "LLI-2"},
+                    {IrradiationType.BCKG, "BCKG"}
+                };
+
+        public static async Task GetBackgroundSpectraForSampleSetAsync(string SetKey, CancellationToken? ct = null)
         {
             throw new NotImplementedException();
         }
 
-        public static async IAsyncEnumerable<SetSpectraSLI> SLISetSpectrasAsync(string SetKey, CancellationToken ct)
+        public static async IAsyncEnumerable<SpectrumSLI> GetSLISpectraForSampleSetAsync(string SetKey, CancellationToken ct)
         {
             var sks = SetKey.Split('-');
-            using (var ssc = new RegataContext(""))
+            using (var ssc = new RegataContext(DBTarget))
             {
-                var sliSpectras = ssc.SLISpectras.FromSqlRaw("exec FormSLIFilesList @countryCode, @clientid, @year, @setnum, @setind",
+                var sliSpectras = ssc.SLISpectra.FromSqlRaw("exec FormSLIFilesList @countryCode, @clientid, @year, @setnum, @setind",
                     new SqlParameter("countrycode", sks[0]),
                     new SqlParameter("clientid", sks[1]),
                     new SqlParameter("year", sks[2]),
                     new SqlParameter("setnum", sks[3]),
                     new SqlParameter("setind", sks[4])).AsAsyncEnumerable().WithCancellation(ct);
+
                 await foreach (var spectraInfo in sliSpectras)
                     yield return spectraInfo;
             }
         }
 
-        public static async IAsyncEnumerable<SetSpectraLLI> LLISetSpectrasAsync(string SetKey, IrradiationType type, CancellationToken ct)
+        public static async IAsyncEnumerable<SpectrumLLI> GetLLISpectraForSampleSetAsync(string SetKey, IrradiationType type, CancellationToken ct)
         {
             var sks = SetKey.Split('-');
-            using (var ssc = new RegataContext(""))
+            using (var ssc = new RegataContext(DBTarget))
             {
-                var lliSpectras = ssc.LLISpectras.FromSqlRaw("exec FormLLIFilesList @countryCode, @clientid, @year, @setnum, @setind, @type",
+                var lliSpectras = ssc.LLISpectra.FromSqlRaw("exec FormLLIFilesList @countryCode, @clientid, @year, @setnum, @setind, @type",
                     new SqlParameter("countrycode", sks[0]),
                     new SqlParameter("clientid", sks[1]),
                     new SqlParameter("year", sks[2]),
@@ -77,48 +88,80 @@ namespace Regata.Core.Cloud
 
         public static async Task DownloadSpectraAsync(string spectra, string path, CancellationToken ct)
         {
-            using (var ssc = new RegataContext(""))
+            try
             {
-                var sharedSpectra = ssc.SharedSpectras.Where(ss => ss.fileS == spectra).FirstOrDefault();
-                if (sharedSpectra == null) throw new FileNotFoundException($"Spectra '{spectra}' was not found");
-                await WebDavClientApi.DownloadFile(sharedSpectra.token, $"{path}/{spectra}.cnf", ct);
+                using (var ssc = new RegataContext(DBTarget))
+                {
+                    var sharedSpectra = ssc.SharedSpectra.Where(ss => ss.fileS == spectra).FirstOrDefault();
+                    if (sharedSpectra == null)
+                    {
+                        Report.Notify(Codes.ERR_CLD_DWLD_FNFND);
+                        return;
+                    }
+                    await WebDavClientApi.DownloadFileAsync(sharedSpectra.token, $"{path}/{spectra}.cnf", ct);
+                }
+            }
+            catch
+            {
+                Report.Notify(Codes.ERR_CLD_DWLD_UNREG);
             }
         }
 
-        public static async Task<bool> UploadFileToCloud(string file, CancellationToken Token)
+        public static async Task<bool> UploadFileToCloudAsync(string file, CancellationToken Token)
         {
-            var result = false;
-            var token = "";
-            result = await WebDavClientApi.UploadFile(file, Token);
-            if (result)
-                token = await WebDavClientApi.MakeShareable(file, Token);
-            else
-                throw new InvalidOperationException("Can't upload file");
-
-            if (string.IsNullOrEmpty(token)) throw new InvalidOperationException("File hasn't got token!");
-
-            var ss = new SharedSpectra()
+            try
             {
-                fileS = Path.GetFileNameWithoutExtension(file),
-                token = token
-            };
+                Report.Notify(Codes.INFO_CLD_UPL_FILE);
 
-            using (var ic = new RegataContext(""))
-            {
-                bool IsExists = ic.SharedSpectras.Where(s => s.fileS == ss.fileS).Any();
-
-                if (IsExists)
-                {
-                    ic.SharedSpectras.Update(ss);
-                }
+                var result = false;
+                var token = "";
+                result = await WebDavClientApi.UploadFileAsync(file, Token);
+                if (result)
+                    token = await WebDavClientApi.MakeShareableAsync(file, Token);
                 else
                 {
-                    await ic.SharedSpectras.AddAsync(ss, Token);
+                    Report.Notify(Codes.ERR_CLD_UPL_FILE);
+                    return false;
                 }
 
-                await ic.SaveChangesAsync(Token);
-                return result;
+                if (string.IsNullOrEmpty(token))
+                {
+                    Report.Notify(Codes.ERR_CLD_GEN_TKN);
+                    return false;
+                }
+
+                var ss = new SharedSpectrum()
+                {
+                    fileS = Path.GetFileNameWithoutExtension(file),
+                    token = token
+                };
+
+                using (var ic = new RegataContext(DBTarget))
+                {
+                    bool IsExists = await ic.SharedSpectra.Where(s => s.fileS == ss.fileS).AnyAsync();
+
+                    if (IsExists)
+                    {
+                        ic.SharedSpectra.Update(ss);
+                    }
+                    else
+                    {
+                        await ic.SharedSpectra.AddAsync(ss, Token);
+                    }
+
+                    await ic.SaveChangesAsync(Token);
+                    return result;
+                }
+
+                Report.Notify(Codes.SUCC_CLD_UPL_FILE);
+            }
+
+            catch
+            {
+                Report.Notify(Codes.ERR_CLD_UPL_UNREG);
+                return false;
             }
         }
+
     } // public static class SpectraTools
 }     // namespace Regata.Core.Cloud

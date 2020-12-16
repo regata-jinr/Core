@@ -17,21 +17,34 @@ namespace Regata.Core
 {
     /// <summary>
     /// Codes class contains unique identificator of message. 
-    /// - [0-1000) - Info codes
-    /// - [1000-2000) - Success codes
     /// - [2000-3000) - Warning codes
-    /// - [3000-4000) - Error codes
+    ///    -[2000-2099) - DataBase           warning codes
+    ///    -[2100-2199) - Cloud              warning codes
+    ///    -[2200-2299) - Detector           warning codes
+    ///    -[2300-2399) - Logger             warning codes
+    ///    -[2400-2499) - Settings           warning codes
+    ///    -[2500-2599) - Export:Excel       warning codes
+    ///    -[2600-2699) - Export:GoogleSheet warning codes
+    ///    -[2700-2799) - Export:CSV         warning codes
     /// </summary>
     public partial struct Codes
     {
-        #region Detector
 
-        public const ushort WARN_DET_BUSY = 2000; // Un
-        public const ushort WARN_DET_CONN_TIMEOUT = 2001;  // "Can not to disconnect from detector {_name}. Exceeded timeout limit.");
-        public const ushort WARN_DET_RST = 2002;
-        
+        #region Cloud
+
+        public const ushort WRN_CLD_BAD_RSPN = 2100;
 
         #endregion
+
+        #region Detector
+
+        public const ushort WARN_DET_BUSY = 2200; // Un
+        public const ushort WARN_DET_CONN_TIMEOUT = 2201;  // "Can not to disconnect from detector {_name}. Exceeded timeout limit.");
+        public const ushort WARN_DET_RST = 2202;
+
+        #endregion
+
+
 
     }
 }

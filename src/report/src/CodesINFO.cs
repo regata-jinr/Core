@@ -22,9 +22,14 @@ namespace Regata.Core
     /// <summary>
     /// Codes class contains unique identificator of message. 
     /// - [0-1000) - Info codes
-    /// - [1000-2000) - Success codes
-    /// - [2000-3000) - Warning codes
-    /// - [3000-4000) - Error codes
+    ///    -[  0- 99) - DataBase           info codes
+    ///    -[100-199) - Cloud              info codes
+    ///    -[200-299) - Detector           info codes
+    ///    -[300-399) - Logger             info codes
+    ///    -[400-499) - Settings           info codes
+    ///    -[500-599) - Export:Excel       info codes
+    ///    -[600-699) - Export:GoogleSheet info codes
+    ///    -[700-799) - Export:CSV         info codes
     /// </summary>
     public partial struct Codes
     {
@@ -58,29 +63,39 @@ namespace Regata.Core
 
         #endregion
 
-        #region Detector
 
-        public const ushort INFO_DET_NAME_EXSTS = 7;  //.Info($"Detector with name '{name}' was found in the MID wizard list and will be used");
-        public const ushort INFO_DET_CHNG_STATUS = 8; // detector status has changed
-        public const ushort INFO_DET_CLN = 9; //$"Cleaning of the detector {Name}"
-        public const ushort INFO_DET_RST = 10; //$"Reseting of the detector {Name}"
-        public const ushort INFO_DET_RECON = 11; //        $"Attempt to reconnect to the detector."
-        public const ushort INFO_DET_DCON = 12; // $"Disconnecting from the detector.");
-        public const ushort INFO_DET_ACQ_START = 13; // acqusition has started
-        public const ushort INFO_DET_ACQ_STOP        = 14;
-        public const ushort INFO_DET_ACQ_PAUSE       = 15;
-        public const ushort INFO_DET_ACQ_CLR         = 16;
-        public const ushort INFO_DET_ACQ_DONE        = 17;
-        public const ushort INFO_DET_ACQ_COUNTS_CHNG = 18;
-        public const ushort INFO_DET_ACQ_MODE_CHNG   = 19;
+        #region Cloud
 
-        public const ushort INFO_DET_EFF_H_FILE_ADD = 20; //$"Efficiency file {effFileName} will add to the detector");
-        public const ushort INFO_DET_EFF_ENG_FILE_ADD = 21; //$"Efficiency file {effFileName} will add to the detector");
-
-        public const ushort INFO_DET_SAVED = 22;
-        public const ushort INFO_DET_LOAD_SMPL_INFO = 23;
+        public const ushort INFO_CLD_UPL_FILE = 100;
+        public const ushort INFO_CLD_RMV_FILE = 101;
+        public const ushort INFO_CLD_IS_EXST  = 102;
+        public const ushort INFO_CLD_FL_SHRNG = 103;
+        public const ushort INFO_CLD_CRT_DIR  = 104;
 
         #endregion
+
+        #region Detector
+
+        public const ushort INFO_DET_NAME_EXSTS       = 200;  //.Info($"Detector with name '{name}' was found in the MID wizard
+        public const ushort INFO_DET_CHNG_STATUS      = 201; // detector status has changed
+        public const ushort INFO_DET_CLN              = 202; //$"Cleaning of the detector {Name}"
+        public const ushort INFO_DET_RST              = 203; //$"Reseting of the detector {Name}"
+        public const ushort INFO_DET_RECON            = 204; //        $"Attempt to reconnect to the detector."
+        public const ushort INFO_DET_DCON             = 205; // $"Disconnecting from the detector.");
+        public const ushort INFO_DET_ACQ_START        = 206; // acqusition has started
+        public const ushort INFO_DET_ACQ_STOP         = 207;
+        public const ushort INFO_DET_ACQ_PAUSE        = 208;
+        public const ushort INFO_DET_ACQ_CLR          = 209;
+        public const ushort INFO_DET_ACQ_DONE         = 210;
+        public const ushort INFO_DET_ACQ_COUNTS_CHNG  = 211;
+        public const ushort INFO_DET_ACQ_MODE_CHNG    = 212;
+        public const ushort INFO_DET_EFF_H_FILE_ADD   = 213; //$"Efficiency file {effFileName} will add to the detector");
+        public const ushort INFO_DET_EFF_ENG_FILE_ADD = 214; //$"Efficiency file {effFileName} will add to the detector");
+        public const ushort INFO_DET_SAVED            = 215;
+        public const ushort INFO_DET_LOAD_SMPL_INFO   = 216;
+
+        #endregion
+
 
     }
 }

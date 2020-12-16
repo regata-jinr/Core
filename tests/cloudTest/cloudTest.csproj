@@ -13,4 +13,9 @@
     <PackageReference Include="coverlet.collector" Version="1.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\cloud\cloud.csproj" />
+    <ProjectReference Include="..\..\src\report\report.csproj" />
+  </ItemGroup>
+
 </Project>

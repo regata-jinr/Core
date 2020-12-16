@@ -34,6 +34,9 @@
  *                                     enumerations and additional classes
  */
 
+
+// TODO: coverage by documentation
+
 using System;
 using CanberraDeviceAccessLib;
 using Regata.Core.DB.MSSQL.Models;
