@@ -3,8 +3,9 @@
  *                                                                         *
  * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
- * All rights reserved                                                     *
  *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
  *                                                                         *
  ***************************************************************************/
 
@@ -15,6 +16,9 @@ using System.IO;
 
 namespace Regata.Core.Settings
 {
+
+    public enum Languages { Russian, English };
+
     public static class Settings<AppSettings> 
     {
         public static AppSettings CurrentSettings;
@@ -23,7 +27,11 @@ namespace Regata.Core.Settings
         {
             get
             {
-                if (string.IsNullOrEmpty(AssemblyName)) throw new ArgumentNullException("You must specify name of calling assembly. Just use 'System.Reflection.Assembly.GetExecutingAssembly().GetName().Name' as argument.");
+                if (string.IsNullOrEmpty(AssemblyName))
+                {
+                    Report.Notify(Codes.ERR_SET_GET_FILE_SET_EMPT_ASMBL);
+                    return string.Empty;
+                }
                 return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),"Regata",AssemblyName,"settings.json");
             }
         }
@@ -35,12 +43,26 @@ namespace Regata.Core.Settings
             set
             {
                 _assmName = value;
+                Report.Notify(Codes.INFO_SET_SET_ASMBL_NAME);
+                if (string.IsNullOrEmpty(AssemblyName))
+                {
+                    Report.Notify(Codes.ERR_SET_SET_ASMBL_NAME_EMPTY);
+                    return;
+                }
+
                 Load();
             }
         }
 
         public static void Load()
         {
+
+            if (string.IsNullOrEmpty(AssemblyName))
+            {
+                Report.Notify(Codes.ERR_SET_LOAD_EMPT_ASMBL);
+                return;
+            }
+
             try
             {
                 if (File.Exists(FilePath))
@@ -51,28 +73,56 @@ namespace Regata.Core.Settings
                 }
                 else
                 {
+                    Report.Notify(Codes.WARN_SET_FILE_NOT_EXST);
                     ResetToDefaults();
                 }
             }
-            catch (JsonException)
+            catch
             {
+                Report.Notify(Codes.ERR_SET_LOAD_UNREG);
                 ResetToDefaults();
             }
         }
 
         public static void ResetToDefaults()
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
-            CurrentSettings = Activator.CreateInstance<AppSettings>();
-            Save();
+            if (string.IsNullOrEmpty(AssemblyName))
+            {
+                Report.Notify(Codes.ERR_SET_RST_EMPT_ASMBL);
+                return;
+            }
+
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
+                CurrentSettings = Activator.CreateInstance<AppSettings>();
+                Save();
+            }
+            catch
+            {
+                Report.Notify(Codes.ERR_SET_RST_UNREG);
+            }
         }
 
         public static void Save()
         {
-            var options = new JsonSerializerOptions();
-            options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-            options.WriteIndented = true;
-            File.WriteAllText(FilePath, JsonSerializer.Serialize(CurrentSettings, options));
+            if (string.IsNullOrEmpty(AssemblyName))
+            {
+                Report.Notify(Codes.ERR_SET_SAVE_EMPT_ASMBL);
+                return;
+            }
+
+            try
+            {
+                var options = new JsonSerializerOptions();
+                options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+                options.WriteIndented = true;
+                File.WriteAllText(FilePath, JsonSerializer.Serialize(CurrentSettings, options));
+            }
+            catch
+            {
+                Report.Notify(Codes.ERR_SET_SAVE_UNREG);
+            }
         }
 
     } // public static class Settings<AppSettings> 

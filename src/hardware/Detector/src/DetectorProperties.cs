@@ -48,7 +48,7 @@ namespace Regata.Core.Hardware
     public partial class Detector : IDisposable
     {
         private readonly         DeviceAccessClass  _device;
-        public  DetectorSettings DetSet = new DetectorSettings();
+        public  static  DetectorSettings DetSet = new DetectorSettings();
         private bool             _isDisposed;
         private DetectorStatus   _status;
         public Measurement       CurrentMeasurement { get; private set; }

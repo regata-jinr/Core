@@ -44,7 +44,11 @@ namespace Regata.Core
 
         #endregion
 
+        #region
 
+        public const ushort WARN_SET_FILE_NOT_EXST = 2400;
+        
+        #endregion
 
     }
 }

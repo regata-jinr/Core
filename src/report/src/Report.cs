@@ -94,29 +94,6 @@ namespace Regata.Core
         /// </summary>
         public  static event Action<Message> NotificationEvent;
 
-
-        //TODO: how to fill some information e.g. User automatically?
-        private static Message ExceptionToMessage(Exception ex)
-        {
-            var notif = new Message
-            {
-                Level = Status.Error,
-                TechBody = ex.ToString(),
-                BaseBody = ex.Message,
-                Title = $"[{Status.Error}]: Unregistered error",
-                User = "",
-                Sender = ""
-            };
-
-            //TODO: exception message length as parameter to settings
-            if (notif.TechBody.Length > 200)
-                notif.TechBody = notif.TechBody.Substring(0, 200);
-            return notif;
-
-        }
-
-        // TODO: how to get strict connection between status and code?
-        // TODO: get message for status-code
         public static void Notify(ushort code, bool callEvent=false, bool WriteToLog=false, bool NotifyByEmail = false) 
         {
             try
@@ -168,7 +145,7 @@ namespace Regata.Core
         }
 
 
-        // FIXME in case of network error will this suspend the app despite of SendAsync?
+        // FIXME in case of network error will this freeze the app despite of SendAsync?
         private static void SendMessageByEmail(Message msg)
         {
             if (Emails == null || !Emails.Any()) return;
@@ -211,7 +188,7 @@ namespace Regata.Core
     public enum Status { Info, Success, Warning, Error }
 
 
-    public class Message : EventArgs
+    public class Message
     {
         public string BaseBody;
         public string TechBody;

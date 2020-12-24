@@ -18,23 +18,7 @@ using Regata.Utilities;
 
 namespace Regata.UITemplates
 {
-    // TODO: add sort by any column
-    // TODO: for global settings settings.json must be separated on the forms for views
-    /* 
-     * settings.json:
-     *  "language": "english",
-     *  {
-     *  "form1": {"hidedColumns": [...]},
-     *  "form2": {"hidedColumns": [...]},
-     *  }
-    */
-    // FIXME: dict solution support only hided columns in case of extensions I have to reimplements this part. Use global settings class and local settings class for each form.
-    // DONE:  the same functional like for translation but for user access - this is the bad idea, because user can do it easily
-    //        in the form constructor.
-    // DONE:   better is provide list of roles for user
-    // TODO:  add tests via test db table
-    // TODO:  add autoupdate based on github releases
-    // TODO:  add cicd
+
 
     public abstract partial class DataTableForm<Model> : Form
     {

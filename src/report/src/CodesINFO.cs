@@ -96,6 +96,11 @@ namespace Regata.Core
 
         #endregion
 
+        #region Settings
+
+        public const ushort INFO_SET_SET_ASMBL_NAME = 400;
+
+        #endregion
 
     }
 }

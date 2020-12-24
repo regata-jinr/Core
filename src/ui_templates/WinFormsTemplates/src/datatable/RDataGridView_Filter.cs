@@ -3,15 +3,33 @@
  *                                                                         *
  * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
- * All rights reserved                                                     *
  *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
  *                                                                         *
  ***************************************************************************/
 
-namespace Regata.Core.UITemplates.WinForms
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Regata.Core.UI.WinForms
 {
-    public static class Labels
+
+    public abstract partial class RDataGridView<Model> : DataGridView
     {
 
-    } // public static class Labels
-}     // Regata.Core.UITemplates.WinForms
+
+        public async Task FilterAsync<T>(DataGridViewColumn dataGridViewColumn, List<T> filter_values)
+        {
+            
+        }
+
+
+
+    }
+}
