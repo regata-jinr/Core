@@ -17,7 +17,7 @@ using System.Threading;
 using Regata.Core.Cloud;
 using Regata.Core;
 
-namespace Test
+namespace Regata.Tests.Cloud.SpectraToolses
 {
     [TestClass]
     public class SpectraToolsTest

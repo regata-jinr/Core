@@ -21,7 +21,7 @@ using Regata.Core.UI.WinForms.Settings;
 namespace Regata.Core.UI.WinForms
 {
 
-    public abstract partial class RDataGridView<Model> : DataGridView
+    public partial class RDataGridView<Model> : DataGridView
     {
 
         private  void CellValidating(object sender,

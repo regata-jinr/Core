@@ -18,7 +18,7 @@ using Regata.Core.Hardware;
 using Regata.Core.DB.MSSQL.Models;
 using Regata.Core;
 
-namespace Tests
+namespace Regata.Tests.Hardware.Detectors
 {
     //TODO: add stress-test!
  

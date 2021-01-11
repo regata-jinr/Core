@@ -17,7 +17,7 @@ using System.IO;
 using Regata.Core.Cloud;
 using Regata.Core;
 
-namespace Test
+namespace Regata.Tests.Cloud.WebDavApi
 {
     [TestClass]
     public class WebDavApiTest

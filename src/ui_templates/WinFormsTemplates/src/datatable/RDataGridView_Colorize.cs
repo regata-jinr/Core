@@ -21,7 +21,7 @@ namespace Regata.Core.UI.WinForms
 {
     public enum ColorizeMode { None, Even, ByValue }
 
-    public abstract partial class RDataGridView<Model> : DataGridView
+    public partial class RDataGridView<Model> : DataGridView
     {
 
         public async Task ColorizeAsync(ColorizeMode mode, DataGridViewColumn dataGridViewColumn = null)

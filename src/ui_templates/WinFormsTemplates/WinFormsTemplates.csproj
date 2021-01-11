@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\database\mssql\context\mssql-context.csproj" />
+    <ProjectReference Include="..\..\database\mssql\models\mssql-models.csproj" />
     <ProjectReference Include="..\..\report\report.csproj" />
     <ProjectReference Include="..\..\settings\settings.csproj" />
   </ItemGroup>
@@ -24,6 +26,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="src\datatable\RDataGridViewSettings.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AdysTech.CredentialManager" Version="2.3.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
   </ItemGroup>
 
 </Project>

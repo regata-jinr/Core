@@ -20,7 +20,7 @@ using System.Windows.Forms;
 namespace Regata.Core.UI.WinForms
 {
 
-    public abstract partial class RDataGridView<Model> : DataGridView
+    public partial class RDataGridView<Model> : DataGridView
     {
 
 

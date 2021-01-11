@@ -11,13 +11,12 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Regata.Core;
-using System.Threading.Tasks;
 using Regata.Core.DataBase.Postgres.Context;
 using System.Linq;
 using System;
 using System.IO;
 
-namespace Tests
+namespace Regata.Tests.Reports
 {
     [TestClass]
     public class ReportTest

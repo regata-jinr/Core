@@ -9,26 +9,18 @@
  *                                                                         *
  ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+namespace Regata.Tests.WinForms
 
-namespace Regata.Core.UI.WinForms
 {
-
-    public partial class RDataGridView<Model> : DataGridView
+    public class Sample
     {
-
-        public async Task SortAsync(DataGridViewColumn dataGridViewColumn, ListSortDirection direction)
-        {
-            base.Sort(dataGridViewColumn, direction);
-            
-        }
-
-
+        public string Country_Code      { get; set; }
+        public string Client_ID         { get; set; }
+        public string Year              { get; set; }
+        public string Sample_Set_ID     { get; set; }
+        public string Sample_Set_Index  { get; set; }
+        public string Sample_Id         { get; set; }
+        public string Client_Sample_Id  { get; set; }
+        public string Type              { get; set; }
     }
 }

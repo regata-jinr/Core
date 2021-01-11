@@ -14,7 +14,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Regata.Core;
 
 // TODO: add checking for level bins - INFO from 1 to 999 and so on
-namespace Tests
+namespace Regata.Tests.Reports
 {
     [TestClass]
     public class CodesTest

@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Tests
+namespace Regata.Tests.Settings
 {
     public enum TestEnum { One, Two, Three }
 

@@ -27,7 +27,7 @@ namespace Regata.Core.DB.MSSQL.Models
         public string    SetIndex       { get; set; } // j
         public string    SampleNumber   { get; set; } // 1
         public string    Type           { get; set; } // SLI
-        public decimal?  Weight         { get; set; }
+        //public decimal?  Weight         { get; set; }
         public DateTime? DateTimeStart  { get; set; }
         public int?      Duration       { get; set; }
         public DateTime? DateTimeFinish { get; set; }
@@ -35,8 +35,8 @@ namespace Regata.Core.DB.MSSQL.Models
         public short?    Position       { get; set; }
         public short?    Channel        { get; set; }
         public int?      LoadNumber     { get; set; }
-        public string    Rehandler      { get; set; }
-        public string    Assistant      { get; set; }
+        public int?    Rehandler      { get; set; }
+        public int?    Assistant      { get; set; }
         public string    Note           { get; set; }
 
         [NotMapped]
