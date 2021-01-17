@@ -26,9 +26,15 @@ namespace Regata.Core
     ///    -[1500-1599) - Export:Excel       success codes
     ///    -[1600-1699) - Export:GoogleSheet success codes
     ///    -[1700-1799) - Export:CSV         success codes
+    ///    -[1800-1899) - UI:WinForms        success codes
     /// </summary>
     public partial  struct Codes
     {
+        #region DataBase
+        
+        public const ushort SUCC_DB_CONN = 1000;
+
+        #endregion
 
         #region Cloud
 

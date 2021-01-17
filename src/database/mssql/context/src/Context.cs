@@ -12,7 +12,6 @@
 
 using Microsoft.EntityFrameworkCore;
 using Regata.Core.DB.MSSQL.Models;
-using AdysTech;
 
 namespace Regata.Core.DB.MSSQL.Context
 {
@@ -32,19 +31,19 @@ namespace Regata.Core.DB.MSSQL.Context
         public DbSet<SpectrumSLI>        SLISpectra     { get; set; }
         public DbSet<SpectrumLLI>        LLISpectra     { get; set; }
 
-        private readonly string _csTraget;
+        private readonly string _cs;
 
-        public RegataContext(string ConnectionStringTarget)
+        public RegataContext(string ConnectionString)
         {
-            if (string.IsNullOrEmpty(ConnectionStringTarget))
-                Report.Notify(Codes.ERR_DB_EMPTY_TARGET);
+            if (string.IsNullOrEmpty(ConnectionString))
+                Report.Notify(Codes.ERR_DB_EMPTY_CS);
 
-                _csTraget = ConnectionStringTarget;
+            _cs = ConnectionString;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(AdysTech.CredentialManager.CredentialManager.GetCredentials(_csTraget).Password, 
+            optionsBuilder.UseSqlServer(_cs, 
                                         options => 
                                             {
                                                 options.EnableRetryOnFailure(3);
@@ -144,6 +143,21 @@ namespace Regata.Core.DB.MSSQL.Context
             modelBuilder.Entity<SharedSpectrum>()
                    .HasKey(ss => ss.fileS);
 
+        }
+
+
+        public bool CanConnect()
+        {
+            if (Database.CanConnect())
+            {
+                Report.Notify(Codes.SUCC_DB_CONN);
+                return true;
+            }
+            else
+            {
+                Report.Notify(Codes.ERR_DB_CON);
+                return true;
+            }    
         }
 
     } // public class WeightingContext : DbContext

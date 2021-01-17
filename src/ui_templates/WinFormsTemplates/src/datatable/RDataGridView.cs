@@ -43,8 +43,29 @@ namespace Regata.Core.UI.WinForms
     public partial class RDataGridView<Model> : DataGridView , IDisposable
         where Model : class
     {
-
         private BindingList<Model> _data = new BindingList<Model>();
+
+        public BindingList<Model> Data
+        {
+            get { return _data; }
+
+            set 
+            {
+                if (value == null)
+                {
+                    _data = new BindingList<Model>();
+                    Report.Notify(Codes.ERR_UI_WF_RDGV_Null_Data);
+                    return;
+                }
+
+                if (value.Count == 0)
+                    Report.Notify(Codes.WARN_UI_WF_RDGV_Empty_Data);
+                
+                _data = value;
+
+                DataSource = _data;
+            }
+        }
 
         public DbSet<Model> CurrentDbSet;
 
@@ -80,8 +101,56 @@ namespace Regata.Core.UI.WinForms
             AutoSizeColumnsMode = RDGV_Set.ColumnSize;
 
 
+            DataBindingComplete += RDataGridView_DataBindingComplete;
+
+            ColumnHeaderMouseClick += RDataGridView_ColumnHeaderMouseClick;
+
             HideColumns();
             SetUpReadOnlyColumns();
+
+        }
+
+        private void RDataGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            // Put each of the columns into programmatic sort mode.
+            foreach (DataGridViewColumn column in Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
+        }
+
+        private void RDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            DataGridViewColumn newColumn = Columns[e.ColumnIndex];
+            DataGridViewColumn oldColumn = SortedColumn;
+            ListSortDirection direction;
+
+            // If oldColumn is null, then the DataGridView is not sorted.
+            if (oldColumn != null)
+            {
+                // Sort the same column again, reversing the SortOrder.
+                if (oldColumn == newColumn &&
+                    SortOrder == SortOrder.Ascending)
+                {
+                    direction = ListSortDirection.Descending;
+                }
+                else
+                {
+                    // Sort a new column and remove the old SortGlyph.
+                    direction = ListSortDirection.Ascending;
+                    oldColumn.HeaderCell.SortGlyphDirection = SortOrder.None;
+                }
+            }
+            else
+            {
+                direction = ListSortDirection.Ascending;
+            }
+
+            // Sort the selected column.
+            Sort(newColumn, direction);
+            newColumn.HeaderCell.SortGlyphDirection =
+                direction == ListSortDirection.Ascending ?
+                SortOrder.Ascending : SortOrder.Descending;
         }
 
         public void HideColumns()
@@ -130,6 +199,12 @@ namespace Regata.Core.UI.WinForms
             GC.SuppressFinalize(this);
         }
 
+        public override void Sort(DataGridViewColumn dataGridViewColumn, ListSortDirection direction)
+        {
+
+           
+            
+        }
 
 
     } // public abstract partial class RDataGridView<Model> : DataGridView

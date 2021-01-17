@@ -26,6 +26,7 @@ namespace Regata.Core
     ///    -[2500-2599) - Export:Excel       warning codes
     ///    -[2600-2699) - Export:GoogleSheet warning codes
     ///    -[2700-2799) - Export:CSV         warning codes
+    ///    -[2800-2899) - UI:WinForms        warning codes
     /// </summary>
     public partial struct Codes
     {
@@ -47,7 +48,14 @@ namespace Regata.Core
         #region
 
         public const ushort WARN_SET_FILE_NOT_EXST = 2400;
-        
+
+        #endregion
+
+
+        #region UI:WinForms
+        public const ushort WARN_UI_WF_RDGV_Empty_Data = 2800;
+        public const ushort WARN_UI_WF_RDGV_Wrong_Value_Type = 2801;
+
         #endregion
 
     }

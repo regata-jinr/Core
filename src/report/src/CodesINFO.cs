@@ -30,6 +30,7 @@ namespace Regata.Core
     ///    -[500-599) - Export:Excel       info codes
     ///    -[600-699) - Export:GoogleSheet info codes
     ///    -[700-799) - Export:CSV         info codes
+    ///    -[800-899) - UI:WinForms        info codes
     /// </summary>
     public partial struct Codes
     {
@@ -60,6 +61,7 @@ namespace Regata.Core
         public const ushort INFO_DB_EXEC   = 4;
         public const ushort INFO_DB_REMOVE = 5;
         public const ushort INFO_DB_PRIV   = 6;
+        public const ushort INFO_DB_TEST   = 7;
 
         #endregion
 
