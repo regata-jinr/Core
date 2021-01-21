@@ -97,26 +97,24 @@ namespace Regata.Core.Hardware
             {
                 CurrentMeasurement = measurement;
                 RelatedIrradiation = irradiation;
-                _device.Param[ParamCodes.CAM_T_STITLE]      = measurement.SampleKey;                  // title
-                _device.Param[ParamCodes.CAM_T_SCOLLNAME]   = measurement.Assistant;                  // operator's name
-                _device.Param[ParamCodes.CAM_T_SIDENT]      = measurement.SetKey;                     // sample code
-                _device.Param[ParamCodes.CAM_F_SQUANT]      = (double)irradiation.Weight.Value;       // weight
-                _device.Param[ParamCodes.CAM_F_SQUANTERR]   = 0;                                      // err = 0
-                _device.Param[ParamCodes.CAM_T_SUNITS]      = "gram";                                 // units = gram
-                _device.Param[ParamCodes.CAM_T_BUILDUPTYPE] = "IRRAD";
-                _device.Param[ParamCodes.CAM_X_SDEPOSIT]    = irradiation.DateTimeStart.Value;        // irr start date time
-                _device.Param[ParamCodes.CAM_X_STIME]       = irradiation.DateTimeFinish.Value;       // irr finish date time
-                _device.Param[ParamCodes.CAM_F_SSYSERR]     = 0;                                      // Random sample error (%)
-                _device.Param[ParamCodes.CAM_F_SSYSTERR]    = 0;                                      // Non-random sample error (%)
-                _device.Param[ParamCodes.CAM_T_STYPE]       = measurement.Type;
-                _device.Param[ParamCodes.CAM_T_SGEOMTRY]    = measurement.Height.Value.ToString("f"); // height
+                Sample.SampleKey   = measurement.SampleKey;                  // title
+                Sample.Assistant   = measurement.Assistant;                  // operator's name
+                Sample.SampleCode     = measurement.SetKey;                     // sample code
+                //_device.Param[ParamCodes.CAM_F_SQUANT]      = (double)irradiation.Weight.Value;       // weight
+                Sample.Error   = 0;                                      // err = 0
+                Sample.WeightUnits     = "gram";                                 // units = gram
+                Sample.BuildType = "IRRAD";
+                Sample.DateTimeStart   = irradiation.DateTimeStart.Value;        // irr start date time
+                Sample.DateTimeFinish    = irradiation.DateTimeFinish.Value;       // irr finish date time
+                Sample.StatError    = 0;                                      // Random sample error (%)
+                Sample.SysEror    = 0;                                      // Non-random sample error (%)
+                Sample.Type     = measurement.Type;
+                Sample.Height   = measurement.Height.Value; // height
 
-                AddEfficiencyCalibrationFileByHeight(measurement.Height.Value);
-                AddEfficiencyCalibrationFileByEnergy();
-
-                DivideString(CurrentMeasurement.Note); //filling description field in file
-
+                Sample.Note = CurrentMeasurement.Note; //filling description field in file
                 Counts = measurement.Duration.Value;
+                
+                AddEfficiencyCalibrationFileByEnergy();
 
                 _device.Save("", true);
             }
@@ -210,46 +208,6 @@ namespace Regata.Core.Hardware
             return true;
         }
 
-        /// <summary>
-        /// Spectra file has four row for notes, Each row allows to keep 64 charatcer.
-        /// This method divide a big string to these rows.
-        /// </summary>
-        /// <param name="iStr">input string</param>
-        private void DivideString(string iStr)
-        {
-            if (string.IsNullOrEmpty(iStr)) return;
-            int descriptionsCount = iStr.Length / 65;
-
-            switch (descriptionsCount)
-            {
-                case 0:
-                    _device.Param[ParamCodes.CAM_T_SDESC1] = iStr;
-                    break;
-                case 1:
-                    _device.Param[ParamCodes.CAM_T_SDESC1] = iStr.Substring(0, 65);
-                    _device.Param[ParamCodes.CAM_T_SDESC2] = iStr.Substring(66);
-                    break;
-                case 2:
-                    _device.Param[ParamCodes.CAM_T_SDESC1] = iStr.Substring(0, 65);
-                    _device.Param[ParamCodes.CAM_T_SDESC2] = iStr.Substring(66, 65);
-                    _device.Param[ParamCodes.CAM_T_SDESC3] = iStr.Substring(132);
-                    break;
-                case 3:
-                    _device.Param[ParamCodes.CAM_T_SDESC1] = iStr.Substring(0, 65);
-                    _device.Param[ParamCodes.CAM_T_SDESC2] = iStr.Substring(66, 65);
-                    _device.Param[ParamCodes.CAM_T_SDESC3] = iStr.Substring(132, 65);
-                    _device.Param[ParamCodes.CAM_T_SDESC4] = iStr.Substring(198);
-                    break;
-                default:
-                    _device.Param[ParamCodes.CAM_T_SDESC1] = iStr.Substring(0, 65);
-                    _device.Param[ParamCodes.CAM_T_SDESC2] = iStr.Substring(66, 65);
-                    _device.Param[ParamCodes.CAM_T_SDESC3] = iStr.Substring(132, 65);
-                    _device.Param[ParamCodes.CAM_T_SDESC4] = iStr.Substring(198, 65);
-                    break;
-            }
-        }
-
-
         private string GetUniqueName(string fullFileName)
         {
             string validatedNameInit = Path.GetFileNameWithoutExtension(fullFileName);
@@ -261,6 +219,11 @@ namespace Regata.Core.Hardware
                 validatedName = $"{validatedNameInit}({tries++})";
             }
             return Path.Combine(folderPath, $"{validatedName}.cnf");
+        }
+
+        public void SetWeight(float wght)
+        {
+            _device.Param[ParamCodes.CAM_F_SQUANT]      = wght;       // weight
         }
 
     } // public partial class Detector : IDisposable

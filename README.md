@@ -1,54 +1,64 @@
 # R E G A T A &nbsp;&nbsp; C O R E
 
-We have few applications that uses unify functional such as:
-
-* Data representation via tables that means editing, adding, exporting, view
-* Common scenarios for Settings: keeping parameters in files
-* Logger
-* Notification
-
-This repo is attempt to prepare templates that will make development process dramatically easier.
+Regata Core is the software framework of our experiment.
+It contains more than 20 DLLs and represents our base activities.
 
 - [R E G A T A &nbsp;&nbsp; C O R E](#r-e-g-a-t-a--c-o-r-e)
   - [Cloud](#cloud)
   - [Cnf](#cnf)
   - [Database](#database)
+    - [MS-SQL](#ms-sql)
+    - [POSTGRES](#postgres)
   - [Export](#export)
+    - [Excel](#excel)
+    - [CSV](#csv)
+    - [GoogleSheets](#googlesheets)
   - [Hardware](#hardware)
-  - [Logger](#logger)
-  - [Models](#models)
-  - [Notifications](#notifications)
+    - [Detector](#detector)
+    - [SampleChanger](#samplechanger)
+    - [Scales](#scales)
+  - [Report](#report)
   - [Settings](#settings)
-  - [Tests](#tests)
   - [UI Templates](#ui-templates)
+    - [WinForms](#winforms)
   - [Updater](#updater)
-  - [Some thoughts about future of regata software](#some-thoughts-about-future-of-regata-software)
+  - [Thoughts about future of regata software](#thoughts-about-future-of-regata-software)
 
-## Cloud
+## [Cloud](https://github.com/regata-jinr/Core/tree/master/src/cloud)
 
-## Cnf
+## [Cnf](https://github.com/regata-jinr/Core/tree/master/src/cloud)
 
-## Database
+## [Database](https://github.com/regata-jinr/Core/tree/master/src/database)
 
-## Export
+### [MS-SQL](https://github.com/regata-jinr/Core/tree/master/src/database/mssql)
+### [POSTGRES](https://github.com/regata-jinr/Core/tree/master/src/database/postgres)
 
-## Hardware
+## [Export](https://github.com/regata-jinr/Core/tree/master/src/export)
+  
+### [Excel](https://github.com/regata-jinr/Core/tree/master/src/export/csv)
+  
+### [CSV](https://github.com/regata-jinr/Core/tree/master/src/export/excel)
+### [GoogleSheets](https://github.com/regata-jinr/Core/tree/master/src/export/google_sheets)
 
-## Logger
+## [Hardware](https://github.com/regata-jinr/Core/tree/master/src/hardware)
 
-## Models
+### [Detector](https://github.com/regata-jinr/Core/tree/master/src/hardware/Detector)
 
-## Notifications
+### [SampleChanger](https://github.com/regata-jinr/Core/tree/master/src/hardware/SampleChanger)
 
-## Settings
+### [Scales](https://github.com/regata-jinr/Core/tree/master/src/hardware/Scales)
 
-## Tests
+## [Report](https://github.com/regata-jinr/Core/tree/master/src/report)
 
-## UI Templates
+## [Settings](https://github.com/regata-jinr/Core/tree/master/src/settings)
 
-## Updater
+## [UI Templates](https://github.com/regata-jinr/Core/tree/master/src/ui_templates)
 
-## Some thoughts about future of regata software
+### [WinForms](https://github.com/regata-jinr/Core/tree/master/src/ui_templates/WinFormsTemplates)
+
+## [Updater](https://github.com/regata-jinr/Core/tree/master/src/updater)
+
+## Thoughts about future of regata software
 
 Many of needed function already implemented in differences frameworks.
 

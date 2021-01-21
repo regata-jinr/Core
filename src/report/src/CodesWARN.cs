@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2020-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -55,7 +55,9 @@ namespace Regata.Core
         #region UI:WinForms
         public const ushort WARN_UI_WF_RDGV_Empty_Data = 2800;
         public const ushort WARN_UI_WF_RDGV_Wrong_Value_Type = 2801;
-
+        public const ushort WARN_UI_WF_WRONG_PIN_FORMAT = 2802;
+        public const ushort WARN_UI_WF_EMPTY_FIELD = 2803;
+        
         #endregion
 
     }

@@ -32,7 +32,7 @@ namespace Regata.Core.Hardware
 {
     public partial class Detector : IDisposable
     {
-        public void AddEfficiencyCalibrationFileByHeight(float height)
+        private void AddEfficiencyCalibrationFileByHeight(float height)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace Regata.Core.Hardware
             }
         }
 
-        public void AddEfficiencyCalibrationFileByEnergy()
+        private void AddEfficiencyCalibrationFileByEnergy()
         {
             try
             {

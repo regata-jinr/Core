@@ -80,6 +80,7 @@ namespace Regata.Core.Hardware
                 Connect();
 
                 AcquisitionMode = AcquisitionModes.aCountToRealTime;
+                Sample = new SampleInfo(this);
             }
             catch
             {

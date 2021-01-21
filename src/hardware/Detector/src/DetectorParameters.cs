@@ -28,21 +28,22 @@
 
 using System;
 using CanberraDeviceAccessLib;
+using System.ComponentModel;
 
 namespace Regata.Core.Hardware
 {
     public partial class Detector : IDisposable
     {
-        public string GetParameterValue(ParamCodes parCode)
+        public T GetParameterValue<T>(ParamCodes parCode)
         {
             try
             {
-                return _device.Param[parCode].ToString();
+                return _device.Param[parCode].ToString().Convert<T>();
             }
             catch
             {
                 Report.Notify(Codes.ERR_DET_GET_PARAM_UNREG);
-                return string.Empty;
+                return default(T);
             }
         }
 
@@ -66,10 +67,35 @@ namespace Regata.Core.Hardware
         }
 
         public bool IsHV               => _device.HighVoltage.On;
-        public uint PresetRealTime      => uint.Parse(GetParameterValue(CanberraDeviceAccessLib.ParamCodes.CAM_X_PREAL));
-        public uint PresetLiveTime      => uint.Parse(GetParameterValue(CanberraDeviceAccessLib.ParamCodes.CAM_X_PLIVE));
-        public float ElapsedRealTime   => float.Parse(GetParameterValue(CanberraDeviceAccessLib.ParamCodes.CAM_X_EREAL));
-        public float ElapsedLiveTime   => float.Parse(GetParameterValue(CanberraDeviceAccessLib.ParamCodes.CAM_X_ELIVE));
+
+        public uint PresetRealTime
+        {
+            get
+            {
+                
+                return GetParameterValue<uint>(ParamCodes.CAM_X_PREAL);
+            }
+            set
+            {
+                SetParameterValue(ParamCodes.CAM_X_PREAL, value);
+            }
+        }
+
+        public uint PresetLiveTime
+        {
+            get
+            {
+
+                return GetParameterValue<uint>(ParamCodes.CAM_X_PLIVE);
+            }
+            set
+            {
+                SetParameterValue(ParamCodes.CAM_X_PLIVE, value);
+            }
+        }
+
+        public float ElapsedRealTime   => GetParameterValue<float>(CanberraDeviceAccessLib.ParamCodes.CAM_X_EREAL);
+        public float ElapsedLiveTime   => GetParameterValue<float>(CanberraDeviceAccessLib.ParamCodes.CAM_X_ELIVE);
 
         public float DeadTime
         {
@@ -90,5 +116,29 @@ namespace Regata.Core.Hardware
             }
         }
     } // public partial class Detector : IDisposable
+
+
+    public static class StringExtensions
+    {
+        public static T Convert<T>(this string input)
+        {
+            try
+            {
+                var converter = TypeDescriptor.GetConverter(typeof(T));
+                if (converter != null)
+                {
+                    return (T)converter.ConvertFromString(input);
+                }
+                Report.Notify(Codes.ERR_DET_SMPL_CNVTR);
+                return default(T);
+            }
+            catch (NotSupportedException)
+            {
+                Report.Notify(Codes.ERR_DET_SMPL_CNVTR_UNREG);
+                return default(T);
+            }
+        }
+    }
+
 }     // namespace Regata.Core.Hardware
 

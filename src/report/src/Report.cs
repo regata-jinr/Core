@@ -64,7 +64,7 @@ namespace Regata.Core
             }
         }
 
-        private static string _logConnectionStringTarget;
+        private static string _logConnectionStringTarget = "MeasurementsLogConnectionString";
 
         public static string LogConnectionStringTarget
         {
@@ -101,7 +101,6 @@ namespace Regata.Core
                 StackTrace st = new StackTrace();
                 StackFrame sf = st.GetFrame(1);
                 var method = sf.GetMethod();
-                Console.WriteLine($"{method.DeclaringType}.{method.Name}");
                 Status status = code == 0 ? Status.Error : (Status)(code / 1000);
                 _nLogger.SetProperty("Sender", method.DeclaringType.Name);
                 _nLogger.SetProperty("Assistant", User);

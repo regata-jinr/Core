@@ -116,6 +116,8 @@ namespace Regata.Core
         public const ushort ERR_DET_GET_PARAM_UNREG = 3236;
         public const ushort ERR_DET_SET_NULL_PARAM = 3237;
         public const ushort ERR_DET_SET_PARAM_UNREG = 3238;
+        public const ushort ERR_DET_SMPL_CNVTR_UNREG = 3239;
+        public const ushort ERR_DET_SMPL_CNVTR = 3240;
 
         #endregion
 
@@ -169,19 +171,28 @@ namespace Regata.Core
 
         #region UI:Winforms
 
-        public const ushort ERR_UI_WF_RDGV_Null_Data                        = 3800;
-        public const ushort ERR_UI_WINFORMS_LOGIN_UNREG                     = 3801;
-        public const ushort ERR_UI_WINFORMS_LOGIN_ENTER_WRONG_PIN_OR_USER   = 3802;
-        public const ushort ERR_UI_WINFORMS_LOGIN_ENTER_WRONG_LOGIN_OR_PASS = 3803;
-        public const ushort ERR_UI_WINFORMS_LOGIN_ENTER_UNREG               = 3804;
-        public const ushort ERR_UI_WINFORMS_LOGIN_ENTER_PIN_NOT_FOUND       = 3805;
-        public const ushort ERR_UI_WINFORMS_LOGIN_APP_ALREADY_OPENED        = 3806;
-        public const ushort ERR_UI_WINFORMS_CRT_PIN_UNREG                   = 3807;
-        public const ushort ERR_UI_WINFORMS_CRT_PIN_FIELD_UNREG             = 3808;
-        public const ushort ERR_UI_WINFORMS_CHCK_PSWD_UNREG                 = 3809;
-        public const ushort ERR_UI_WINFORMS_CHCK_PIN_UNREG                  = 3810;
-        public const ushort ERR_UI_WINFORMS_ADD_PIN_UNREG                   = 3811;
-        
+        public const ushort ERR_UI_WF_RDGV_Null_Data                  = 3800;
+        public const ushort ERR_UI_WF_LOGIN_UNREG                     = 3801;
+        public const ushort ERR_UI_WF_LOGIN_ENTER_WRONG_PIN_OR_USER   = 3802;
+        public const ushort ERR_UI_WF_LOGIN_ENTER_WRONG_LOGIN_OR_PASS = 3803;
+        public const ushort ERR_UI_WF_LOGIN_ENTER_UNREG               = 3804;
+        public const ushort ERR_UI_WF_LOGIN_ENTER_PIN_NOT_FOUND       = 3805;
+        public const ushort ERR_UI_WF_LOGIN_APP_ALREADY_OPENED        = 3806;
+        public const ushort ERR_UI_WF_CRT_PIN_UNREG                   = 3807;
+        public const ushort ERR_UI_WF_CRT_PIN_FIELD_UNREG             = 3808;
+        public const ushort ERR_UI_WF_CHCK_PSWD_UNREG                 = 3809;
+        public const ushort ERR_UI_WF_CHCK_PIN_UNREG                  = 3810;
+        public const ushort ERR_UI_WF_ADD_PIN_UNREG                   = 3811;
+        public const ushort ERR_UI_WF_CRT_PIN_WRONG_PASS_OR_USER      = 3812;
+        public const ushort ERR_UI_WF_TIME_CHNG_UNREG                 = 3813;
+        public const ushort ERR_UI_WF_DET_SAVE_UNREG                  = 3814;
+        public const ushort ERR_UI_WF_DET_STOP_UNREG                  = 3815;
+        public const ushort ERR_UI_WF_DET_HGHT_CHNG_UNREG             = 3816;
+        public const ushort ERR_UI_WF_DET_STAT_CHNG_UNREG             = 3817;
+        public const ushort ERR_UI_WF_DCP_PAUSE_UNREG                 = 3818;
+        public const ushort ERR_UI_WF_DCP_CLR_UNREG                   = 3819;
+        public const ushort ERR_UI_WF_DCP_REFR_TIME_UNREG             = 3820;
+        public const ushort ERR_UI_WF_DCP_INIT_UNREG                  = 3821;
 
 
         #endregion

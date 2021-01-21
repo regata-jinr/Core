@@ -54,6 +54,7 @@ namespace Regata.Core.Hardware
         public Measurement       CurrentMeasurement { get; private set; }
         public Irradiation       RelatedIrradiation { get; private set; }
         public event             EventHandler       StatusChanged;
+        public SampleInfo Sample;
 
         public string Name { get { return DetSet.Name; } }
 
@@ -105,6 +106,10 @@ namespace Regata.Core.Hardware
         /// Returns error message.
         /// </summary>
         public string ErrorMessage { get; private set; }
+
+
+
+
 
     } //  public partial class Detector : IDisposable
 

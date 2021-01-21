@@ -88,8 +88,7 @@ namespace Regata.Tests.Hardware.Detectors
                 SetNumber = "12",
                 SetIndex = "b",
                 SampleNumber = "2",
-                Weight = 0.2m,
-                Assistant = "bdrum",
+                Assistant = 1,
                 Note = "test2",
                 DateTimeStart = DateTime.Now,
                 DateTimeFinish = DateTime.Now.AddSeconds(3),
@@ -148,19 +147,19 @@ namespace Regata.Tests.Hardware.Detectors
 
             f1.Open(_d1.FullFileSpectraName);
 
-            Assert.AreEqual($"{_d1.CurrentMeasurement.SampleKey}",                     f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_STITLE].ToString()); // title
-            Assert.AreEqual(_d1.CurrentMeasurement.Assistant,                          f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SCOLLNAME].ToString()); // operator's name
-            Assert.AreEqual(_d1.CurrentMeasurement.Note,                               f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SDESC1].ToString());
-            Assert.AreEqual(_d1.CurrentMeasurement.SetKey,                             f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SIDENT].ToString()); // sd code
-            Assert.AreEqual(_d1.RelatedIrradiation.Weight.ToString(),                  f1.Param[CanberraDataAccessLib.ParamCodes.CAM_F_SQUANT].ToString()); // weight
+            Assert.AreEqual($"{_d1.Sample.SampleKey}",                     f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_STITLE].ToString()); // title
+            Assert.AreEqual(_d1.Sample.Assistant,                          f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SCOLLNAME].ToString()); // operator's name
+            Assert.AreEqual(_d1.Sample.Note,                               $"{f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SDESC1].ToString()} {f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SDESC2].ToString()}  ");
+            Assert.AreEqual(_d1.Sample.SampleCode,                             f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SIDENT].ToString()); // sd code
+            Assert.AreEqual(_d1.Sample.Weight.ToString(), f1.Param[CanberraDataAccessLib.ParamCodes.CAM_F_SQUANT].ToString()); // weight
             Assert.AreEqual("0",                                                       f1.Param[CanberraDataAccessLib.ParamCodes.CAM_F_SQUANTERR].ToString()); // err, 0
             Assert.AreEqual("gram",                                                    f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SUNITS].ToString()); // units, gram
-            Assert.AreEqual(_d1.RelatedIrradiation.DateTimeStart.ToString(), f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_SDEPOSIT].ToString()); // irr start date time
-            Assert.AreEqual(_d1.RelatedIrradiation.DateTimeFinish.ToString().Replace(" ", ""), f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_STIME].ToString().Replace(" ", "")); // irr finish date time
+            Assert.AreEqual(_d1.Sample.DateTimeStart.ToString().Replace(" ", ""), f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_SDEPOSIT].ToString().Replace(" ", "")); // irr start date time
+            Assert.AreEqual(_d1.Sample.DateTimeFinish.ToString().Replace(" ", ""), f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_STIME].ToString().Replace(" ", "")); // irr finish date time
             Assert.AreEqual("0",                                                       f1.Param[CanberraDataAccessLib.ParamCodes.CAM_F_SSYSERR].ToString()); // Random sd error (%)
             Assert.AreEqual("0",                                                       f1.Param[CanberraDataAccessLib.ParamCodes.CAM_F_SSYSTERR].ToString()); // Non-random sd error 
-            Assert.AreEqual(_d1.CurrentMeasurement.Type,                               f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_STYPE].ToString());
-            Assert.AreEqual(_d1.CurrentMeasurement.Height.Value,                       float.Parse(f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SGEOMTRY].ToString()));
+            Assert.AreEqual(_d1.Sample.Type,                               f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_STYPE].ToString());
+            Assert.AreEqual(_d1.Sample.Height,                       float.Parse(f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SGEOMTRY].ToString()));
 
             Assert.AreEqual(_d1.PresetRealTime, uint.Parse(f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_PREAL].ToString())); // irr start date time
             Assert.AreEqual(m.Duration, uint.Parse(f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_PREAL].ToString())); // irr start date time

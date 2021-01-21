@@ -156,7 +156,7 @@ namespace Regata.Core.DB.MSSQL.Context
             else
             {
                 Report.Notify(Codes.ERR_DB_CON);
-                return true;
+                return false;
             }    
         }
 
