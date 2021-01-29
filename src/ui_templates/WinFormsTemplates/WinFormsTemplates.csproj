@@ -13,22 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="src\datatable\RDataGridView_Validation.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="src\datatable\RDataGridView_Filter.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="src\datatable\RDataGridView_Colorize.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="src\datatable\RDataGridView_Sort.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="src\datatable\RDataGridViewSettings.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AdysTech.CredentialManager" Version="2.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
   </ItemGroup>
