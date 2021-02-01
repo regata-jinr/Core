@@ -9,6 +9,8 @@
      Debug configuratoin for the build command.(By default)
     .PARAMETER Test
      Build and Run test projects
+    .PARAMETER projName
+     Will be passed to fiter options of gci with *.csproj
     .EXAMPLE
      
     #>
@@ -16,7 +18,8 @@
     (
          [switch]$Release,
          [switch]$Debug,
-         [switch]$Test
+         [switch]$Test,
+         [string]$Name
     )
 
 
@@ -29,12 +32,12 @@ function GetProjects
     
     if ($Test)
     {
-        gci -Recurse -Path .\tests -Filter *.csproj
+        gci -Recurse -Path .\tests -Filter $Name*.csproj
     }
     else 
     {
-        gci -Recurse -Path src -Filter *.csproj -Exclude test
     }
+        gci -Recurse -Path src -Filter $Name*.csproj -Exclude test
 }
 
 

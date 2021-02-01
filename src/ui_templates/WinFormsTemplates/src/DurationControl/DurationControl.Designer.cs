@@ -1,4 +1,14 @@
-﻿
+﻿/***************************************************************************
+ *                                                                         *
+ *                                                                         *
+ * Copyright(c) 2021, REGATA Experiment at FLNP|JINR                       *
+ * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
+ *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
+ *                                                                         *
+ ***************************************************************************/
+
 namespace Regata.Core.UI.WinForms
 {
     partial class DurationControl
@@ -16,8 +26,8 @@ namespace Regata.Core.UI.WinForms
         {
             if (disposing && (components != null))
             {
-                DurationControlNumericUpDownDays.ValueChanged    -= DurationControlNumericUpDownDays_ValueChanged;
-                DurationControlNumericUpDownHours.ValueChanged   -= DurationControlNumericUpDownHours_ValueChanged;
+                DurationControlNumericUpDownDays.ValueChanged -= DurationControlNumericUpDownDays_ValueChanged;
+                DurationControlNumericUpDownHours.ValueChanged -= DurationControlNumericUpDownHours_ValueChanged;
                 DurationControlNumericUpDownMinutes.ValueChanged -= DurationControlNumericUpDownMinutes_ValueChanged;
                 DurationControlNumericUpDownSeconds.ValueChanged -= DurationControlNumericUpDownSeconds_ValueChanged;
                 components.Dispose();
@@ -150,9 +160,9 @@ namespace Regata.Core.UI.WinForms
             this.DurationControlGroupBox.Controls.Add(this.DurationControlNumericUpDownMinutes);
             this.DurationControlGroupBox.Controls.Add(this.DurationControlLabelSeconds);
             this.DurationControlGroupBox.Controls.Add(this.DurationControlNumericUpDownSeconds);
-            this.DurationControlGroupBox.Location = new System.Drawing.Point(-1, -1);
+            this.DurationControlGroupBox.Location = new System.Drawing.Point(0, 0);
             this.DurationControlGroupBox.Name = "DurationControlGroupBox";
-            this.DurationControlGroupBox.Size = new System.Drawing.Size(266, 87);
+            this.DurationControlGroupBox.Size = new System.Drawing.Size(279, 87);
             this.DurationControlGroupBox.TabIndex = 25;
             this.DurationControlGroupBox.TabStop = false;
             this.DurationControlGroupBox.Text = "Duration";
@@ -161,10 +171,9 @@ namespace Regata.Core.UI.WinForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.DurationControlGroupBox);
             this.Name = "DurationControl";
-            this.Size = new System.Drawing.Size(265, 86);
+            this.Size = new System.Drawing.Size(285, 90);
             ((System.ComponentModel.ISupportInitialize)(this.DurationControlNumericUpDownDays)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DurationControlNumericUpDownMinutes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DurationControlNumericUpDownSeconds)).EndInit();

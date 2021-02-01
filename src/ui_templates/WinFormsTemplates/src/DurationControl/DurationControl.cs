@@ -1,4 +1,15 @@
-﻿using System;
+﻿/***************************************************************************
+ *                                                                         *
+ *                                                                         *
+ * Copyright(c) 2021, REGATA Experiment at FLNP|JINR                       *
+ * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
+ *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
+ *                                                                         *
+ ***************************************************************************/
+
+using System;
 using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms
@@ -22,6 +33,8 @@ namespace Regata.Core.UI.WinForms
                 DurationControlNumericUpDownHours.Value   = value.Hours;
                 DurationControlNumericUpDownMinutes.Value = value.Minutes;
                 DurationControlNumericUpDownSeconds.Value = value.Seconds;
+                //DurationChanged?.Invoke(this, new EventArgs());
+
             }
         }
 
@@ -60,26 +73,26 @@ namespace Regata.Core.UI.WinForms
 
         private void DurationControlNumericUpDownSeconds_ValueChanged(object sender, EventArgs e)
         {
-            SecondsChanged?.Invoke(sender, e);
-            DurationChanged?.Invoke(sender, e);
+            SecondsChanged?.Invoke(this, e);
+            DurationChanged?.Invoke(this, e);
         }
 
         private void DurationControlNumericUpDownMinutes_ValueChanged(object sender, EventArgs e)
         {
-            MinutesChanged?.Invoke(sender, e);
-            DurationChanged?.Invoke(sender, e);
+            MinutesChanged?.Invoke(this, e);
+            DurationChanged?.Invoke(this, e);
         }
 
         private void DurationControlNumericUpDownHours_ValueChanged(object sender, EventArgs e)
         {
-            HoursChanged?.Invoke(sender, e);
-            DurationChanged?.Invoke(sender, e);
+            HoursChanged?.Invoke(this, e);
+            DurationChanged?.Invoke(this, e);
         }
 
         private void DurationControlNumericUpDownDays_ValueChanged(object sender, EventArgs e)
         {
-            DaysChanged?.Invoke(sender, e);
-            DurationChanged?.Invoke(sender, e);
+            DaysChanged?.Invoke(this, e);
+            DurationChanged?.Invoke(this, e);
         }
 
     }

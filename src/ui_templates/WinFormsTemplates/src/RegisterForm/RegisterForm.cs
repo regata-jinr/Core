@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using System.Drawing;
+using System.ComponentModel;
 using NewForms.Models;
 
 namespace Regata.Core.UI.WinForms
@@ -30,16 +32,16 @@ namespace Regata.Core.UI.WinForms
 
         private void InitializeMainTable(string cs)
         {
-            this.MainRDGV = new RDataGridView<MainTableModel>(cs);
+            MainRDGV = new RDataGridView<MainTableModel>(cs);
 
-            ((System.ComponentModel.ISupportInitialize)(this.MainRDGV)).BeginInit();
+            ((ISupportInitialize)MainRDGV).BeginInit();
 
-            MainRDGV.Location = new System.Drawing.Point(14, 35);
+            MainRDGV.Location = new Point(14, 35);
             MainRDGV.Margin = new Padding(4, 3, 4, 3);
             MainRDGV.Name = "MainRDGV";
             MainRDGV.RowHeadersVisible = false;
             MainRDGV.SelectionMode = DataGridViewSelectionMode.CellSelect;
-            MainRDGV.Size = new System.Drawing.Size(1660, 627);
+            MainRDGV.Size = new Size(1660, 627);
             MainRDGV.TabIndex = 0;
 
             MainRDGV.AllowUserToAddRows = false;
@@ -49,34 +51,33 @@ namespace Regata.Core.UI.WinForms
             | AnchorStyles.Left)
             | AnchorStyles.Right)));
             MainRDGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            MainRDGV.BackgroundColor = System.Drawing.Color.White;
+            MainRDGV.BackgroundColor = Color.White;
             MainRDGV.BorderStyle = BorderStyle.None;
             MainRDGV.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
 
             var rdgvCellStyle1 = new DataGridViewCellStyle();
             rdgvCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            rdgvCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            rdgvCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            rdgvCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            rdgvCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            rdgvCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            rdgvCellStyle1.BackColor = SystemColors.Control;
+            rdgvCellStyle1.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            rdgvCellStyle1.ForeColor = SystemColors.WindowText;
+            rdgvCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            rdgvCellStyle1.SelectionForeColor = SystemColors.HighlightText;
             rdgvCellStyle1.WrapMode = DataGridViewTriState.True;
             MainRDGV.ColumnHeadersDefaultCellStyle = rdgvCellStyle1;
             MainRDGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
             var rdgvCellStyle2 = new DataGridViewCellStyle();
             rdgvCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            rdgvCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            rdgvCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            rdgvCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            rdgvCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            rdgvCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            rdgvCellStyle2.BackColor = SystemColors.Window;
+            rdgvCellStyle2.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            rdgvCellStyle2.ForeColor = SystemColors.ControlText;
+            rdgvCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            rdgvCellStyle2.SelectionForeColor = SystemColors.HighlightText;
             rdgvCellStyle2.WrapMode = DataGridViewTriState.False;
             MainRDGV.DefaultCellStyle = rdgvCellStyle2;
 
-         
-            this.Controls.Add(this.MainRDGV);
-            ((System.ComponentModel.ISupportInitialize)(this.MainRDGV)).EndInit();
+            Controls.Add(MainRDGV);
+            ((ISupportInitialize)MainRDGV).EndInit();
         }
 
 

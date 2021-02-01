@@ -60,7 +60,7 @@ namespace Regata.Tests.WinForms
             Assert.AreEqual(20359, _rdgv[0, 0].Value);
             Assert.AreEqual("m", _rdgv[1, 0].Value);
             Assert.AreEqual(GetDurationFromDb(20359), _rdgv[9, 0].Value);
-            Assert.AreEqual(344340,  _rdgv[9, 1].Value);
+            Assert.AreEqual(10,  _rdgv[9, 1].Value);
             Assert.AreEqual("m",  _rdgv[1, 3].Value);
 
         }
