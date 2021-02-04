@@ -10,6 +10,8 @@
  ***************************************************************************/
 
 using System.Windows.Forms;
+using System.ComponentModel;
+using System.Drawing;
 using Regata.Core.WinForms;
 
 namespace Regata.Core.UI.WinForms
@@ -17,6 +19,14 @@ namespace Regata.Core.UI.WinForms
     partial class RegisterForm<MainTableModel>
         where MainTableModel : class
     {
+
+        public RDataGridView<MainTableModel> MainRDGV;
+        public DGVTabPaneControl TabsPane;
+        public StatusStrip statusStrip1;
+        public MenuStrip menuStrip1;
+        public ToolStripStatusLabel toolStripStatusLabel1;
+        public ToolStripProgressBar toolStripProgressBar1;
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -35,6 +45,75 @@ namespace Regata.Core.UI.WinForms
             base.Dispose(disposing);
         }
 
+        private void InitializeMainTable(string cs)
+        {
+            MainRDGV = new RDataGridView<MainTableModel>(cs);
+
+            ((ISupportInitialize)MainRDGV).BeginInit();
+
+            MainRDGV.Location = new Point(10, 35);
+            MainRDGV.Margin = new Padding(4, 3, 4, 3);
+            MainRDGV.Name = "MainRDGV";
+            MainRDGV.RowHeadersVisible = false;
+            MainRDGV.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            MainRDGV.Size = new Size(1660, 627);
+            MainRDGV.TabIndex = 0;
+
+            MainRDGV.AllowUserToAddRows = false;
+            MainRDGV.AllowUserToDeleteRows = false;
+            MainRDGV.AllowUserToResizeRows = false;
+            MainRDGV.Anchor = (((((AnchorStyles.Top | AnchorStyles.Bottom)
+            | AnchorStyles.Left)
+            | AnchorStyles.Right)));
+            MainRDGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            MainRDGV.BackgroundColor = Color.White;
+            MainRDGV.BorderStyle = BorderStyle.None;
+            MainRDGV.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+
+            var rdgvCellStyle1 = new DataGridViewCellStyle();
+            rdgvCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            rdgvCellStyle1.BackColor = SystemColors.Control;
+            rdgvCellStyle1.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            rdgvCellStyle1.ForeColor = SystemColors.WindowText;
+            rdgvCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            rdgvCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            rdgvCellStyle1.WrapMode = DataGridViewTriState.True;
+            MainRDGV.ColumnHeadersDefaultCellStyle = rdgvCellStyle1;
+            MainRDGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+
+            var rdgvCellStyle2 = new DataGridViewCellStyle();
+            rdgvCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            rdgvCellStyle2.BackColor = SystemColors.Window;
+            rdgvCellStyle2.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            rdgvCellStyle2.ForeColor = SystemColors.ControlText;
+            rdgvCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            rdgvCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            rdgvCellStyle2.WrapMode = DataGridViewTriState.False;
+            MainRDGV.DefaultCellStyle = rdgvCellStyle2;
+
+            Controls.Add(MainRDGV);
+            ((ISupportInitialize)MainRDGV).EndInit();
+        }
+
+
+        private void InitializeTabControl(uint tabsNum, uint dgvsNum, float BigDgvSizeCoeff)
+        {
+            TabsPane = new DGVTabPaneControl(tabsNum, dgvsNum, BigDgvSizeCoeff);
+
+            TabsPane.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+           | System.Windows.Forms.AnchorStyles.Right)));
+            TabsPane.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            TabsPane.Location = new System.Drawing.Point(11, 674);
+            TabsPane.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            TabsPane.Name = "TabsPane";
+            TabsPane.Size = new System.Drawing.Size(918, 253);
+            TabsPane.TabIndex = 1;
+            this.Controls.Add(TabsPane);
+
+        }
+
+
+
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -49,11 +128,6 @@ namespace Regata.Core.UI.WinForms
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.TabsPane = new System.Windows.Forms.TabControl();
            
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -84,72 +158,20 @@ namespace Regata.Core.UI.WinForms
             // 
             // menuStrip1
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1,
-            this.toolStripMenuItem2,
-            this.toolStripMenuItem3});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1687, 24);
             this.menuStrip1.TabIndex = 24;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(125, 20);
-            this.toolStripMenuItem1.Text = "toolStripMenuItem1";
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(125, 20);
-            this.toolStripMenuItem2.Text = "toolStripMenuItem2";
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(125, 20);
-            this.toolStripMenuItem3.Text = "toolStripMenuItem3";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(936, 699);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(738, 224);
-            this.tableLayoutPanel1.TabIndex = 25;
-            // 
-            // TabsPane
-            // 
-            this.TabsPane.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TabsPane.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.TabsPane.Location = new System.Drawing.Point(11, 674);
-            this.TabsPane.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.TabsPane.Name = "TabsPane";
-            this.TabsPane.SelectedIndex = 0;
-            this.TabsPane.Size = new System.Drawing.Size(918, 253);
-            this.TabsPane.TabIndex = 1;
-            this.TabsPane.Tag = "";
-            // 
             // RegisterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1687, 966);
-            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.TabsPane);
           
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "RegisterForm";
@@ -164,18 +186,7 @@ namespace Regata.Core.UI.WinForms
 
         }
 
-        #endregion
+    } // partial class RegisterForm<MainTableModel>
+}     // namespace Regata.Core.UI.WinForms
 
-        private RDataGridView<MainTableModel> MainRDGV;
-        private StatusStrip statusStrip1;
-        private MenuStrip menuStrip1;
-        private ToolStripStatusLabel toolStripStatusLabel1;
-        private ToolStripProgressBar toolStripProgressBar1;
-        private ToolStripMenuItem toolStripMenuItem1;
-        private ToolStripMenuItem toolStripMenuItem2;
-        private ToolStripMenuItem toolStripMenuItem3;
-        private TableLayoutPanel tableLayoutPanel1;
-        private TabControl TabsPane;
-    }
-}
 

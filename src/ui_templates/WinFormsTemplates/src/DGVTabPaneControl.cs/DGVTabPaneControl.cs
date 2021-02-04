@@ -154,5 +154,17 @@ namespace Regata.Core.UI.WinForms
             }
         }
 
+        /// <summary>
+        /// Returns selected rows from last dgv on active page
+        /// </summary>
+        public DataGridViewSelectedRowCollection SelectedRows
+        {
+            get
+            {
+                var curPageIndex = Pages.IndexOf(ActiveTabPage);
+                return this[curPageIndex, Pages[curPageIndex].Controls.OfType<DataGridView>().Count() - 1].SelectedRows;
+            }
+        }
+
     } // public partial class DGVTabPaneControl : UserControl
 }     // namespace WinFormsTemplates.src.RegataTabPaneControl

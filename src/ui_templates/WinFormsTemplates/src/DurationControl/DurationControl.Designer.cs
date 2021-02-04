@@ -194,5 +194,5 @@ namespace Regata.Core.UI.WinForms
         private System.Windows.Forms.Label DurationControlLabelHours;
         private System.Windows.Forms.NumericUpDown DurationControlNumericUpDownHours;
         private System.Windows.Forms.GroupBox DurationControlGroupBox;
-    }
-}
+    } // partial class DurationControl
+}     // namespace Regata.Core.UI.WinForms

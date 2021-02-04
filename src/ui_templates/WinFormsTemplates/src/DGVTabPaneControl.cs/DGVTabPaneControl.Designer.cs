@@ -56,7 +56,7 @@ namespace Regata.Core.UI.WinForms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl);
             this.Name = "TabPaneControl";
-            this.Size = new System.Drawing.Size(763, 301);
+            this.Size = new System.Drawing.Size(765, 305);
             this.ResumeLayout(false);
 
         }
