@@ -12,12 +12,12 @@
 using System;
 using System.Windows.Forms;
 
-namespace Measurements.UI.Desktop.Components
+namespace Regata.Core.UI.WinForms.Items
 {
     /// <summary>
     /// Control provide the opportunity to wrap enumeration to MenuItem strip and Status label for a statustrip
     /// </summary>
-    public class EnumControl<T>
+    public class EnumItem<T>
         where T : Enum
     {
         public ToolStripMenuItem EnumMenuItem;
@@ -27,7 +27,7 @@ namespace Measurements.UI.Desktop.Components
   
         private string _enumName;
 
-        public EnumControl()
+        public EnumItem()
         {
             var values = Enum.GetValues(typeof(T));
             _enumName = typeof(T).Name;

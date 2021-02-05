@@ -1,62 +1,49 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2017-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
- * All rights reserved                                                     *
  *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
  *                                                                         *
  ***************************************************************************/
 
 using System;
-using System.Windows.Forms;
 using System.IO.Ports;
 
-namespace SamplesWeighting
+// TODO: https://github.com/regata-jinr/Core/issues/37
+
+namespace Regata.Core.Hardware
 {
     public static class Scales 
     {
-        private static SerialPort port;
-
-        static Scales()
+        public static float GetWeight(string comName)
         {
+            if (string.IsNullOrEmpty(comName))
+                Report.Notify(Codes.ERR_SCL_EMPT_COM);
+
+            float weight = -1.0f;
             try
             {
-                string com = ConfigurationManager.ComPort;
-                if (string.IsNullOrEmpty(com))
+                using (var port = new SerialPort(comName, 9600, Parity.None, 8, StopBits.One))
                 {
-                    MessageBox.Show("The scales are not found! Please Check the list of available devices.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    if (port == null) throw new InvalidOperationException("Can't get data from the scales!");
+                    port.Open();
+                    port.ReadExisting();
+                    string weightstr = port.ReadLine().Replace("\r", "");
+                    if (!float.TryParse(weightstr, out weight))
+                    {
+                        Report.Notify(Codes.ERR_SCL_GET_WGHT);
+                    }
                 }
-                port = new SerialPort(com, 9600, Parity.None, 8, StopBits.One);
             }
-            catch (UnauthorizedAccessException)
-            { MessageBox.Show("The scales in the sleep mode or we be not able to connect to it. Try to enable it.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
-            catch (Exception ex)
-            { MessageBox.Show($"Exception has occurred in process of getting the data from scales:\n {ex.ToString()}", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-        }
-
-        public static float GetWeight()
-        {
-            try
+            catch
             {
-                if (port == null) throw new InvalidOperationException("Can't get data from the scales!");
-                port.Open();
-                float weight = -1.0f;
-                port.ReadExisting();
-                string weightstr = port.ReadLine().Replace("\r", "");
-                if (!float.TryParse(weightstr, out weight))
-                {
-                    throw new InvalidOperationException("Can't get data from the scales! Try to repeat operation!");
-                }
-                return weight;
+                Report.Notify(Codes.ERR_SCL_UNREG);
             }
-            finally
-            {
-                if (port != null && port.IsOpen) port.Close();
-            }
+            return weight;
         }
        
     } // public static class Scales 
-}    // namespace SamplesWeighting
-
+}     // namespace Regata.Core.Hardware

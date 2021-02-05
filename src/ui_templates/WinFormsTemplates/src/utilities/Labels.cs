@@ -14,8 +14,10 @@ using System.Linq;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Regata.Core.Settings;
+using System.Windows.Forms;
 
-namespace Regata.Core.Settings
+namespace Regata.Core.UI.WinForms.Utilities
 {
     public class UILabels
     {
@@ -83,7 +85,7 @@ namespace Regata.Core.Settings
                 }
                 catch
                 {
-                        Report.Notify(Codes.ERR_SET_CODE_FILE_UNREG);
+                    Report.Notify(Codes.ERR_SET_CODE_FILE_UNREG);
 
                 }
             }
@@ -129,7 +131,6 @@ namespace Regata.Core.Settings
 
             }
         }
-
 
     } // public static class Labels
 } // namespace Regata.Core.Settings

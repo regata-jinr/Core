@@ -12,9 +12,9 @@
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Drawing;
-using Regata.Core.WinForms;
+using Regata.Core.UI.WinForms.Controls;
 
-namespace Regata.Core.UI.WinForms
+namespace Regata.Core.UI.WinForms.Forms
 {
     partial class RegisterForm<MainTableModel>
         where MainTableModel : class
@@ -112,10 +112,6 @@ namespace Regata.Core.UI.WinForms
 
         }
 
-
-
-        #region Windows Form Designer generated code
-
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -188,5 +184,3 @@ namespace Regata.Core.UI.WinForms
 
     } // partial class RegisterForm<MainTableModel>
 }     // namespace Regata.Core.UI.WinForms
-
-

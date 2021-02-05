@@ -14,7 +14,7 @@ using System.Linq;
 using System.Windows.Forms;
 using static System.Windows.Forms.TabControl;
 
-namespace Regata.Core.UI.WinForms
+namespace Regata.Core.UI.WinForms.Controls
 {
     public partial class DGVTabPaneControl : UserControl
     {

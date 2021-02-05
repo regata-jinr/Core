@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2019-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -13,7 +13,9 @@ using System;
 using System.Windows.Forms;
 using Regata.Core.Settings;
 
-namespace Regata.Core.WinForms
+//TODO: move from exceptions to Regata.Core.Report
+
+namespace Regata.Core.UI.WinForms.Utilities
 {
     /// <summary>
     /// Utilities contain additional functions,e.g. for changing language of form controls based on <inheritdoc Labels/> class.
@@ -81,14 +83,13 @@ namespace Regata.Core.WinForms
                     break;
 
                 case null:
-                    throw new ArgumentNullException("Have trying to set language for null control");
+                    throw new ArgumentNullException("Attempt to set language for null control");
 
                 default:
                     act(component);
                     break;
             }
         }
-
 
         private static void SetTextLabel(object obj)
         {
@@ -118,8 +119,5 @@ namespace Regata.Core.WinForms
             }
         }
 
-
-
     } //public static class Utilities
 }     // namespace Regata.Core.WinForms
-

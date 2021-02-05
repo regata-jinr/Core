@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-namespace Regata.Core.UI.WinForms
+namespace Regata.Core.UI.WinForms.Controls
 {
     partial class DGVTabPaneControl
     {

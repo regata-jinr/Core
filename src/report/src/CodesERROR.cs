@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2020-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -27,6 +27,7 @@ namespace Regata.Core
     ///    -[3600-3699) - Export:GoogleSheet error codes
     ///    -[3700-3799) - Export:CSV         error codes
     ///    -[3800-3899) - UI:WinForms        error codes
+    ///    -[3900-3999) - UI:WinForms        error codes
     /// </summary>
     public partial struct Codes
     {
@@ -169,7 +170,7 @@ namespace Regata.Core
         #endregion
 
 
-        #region UI:Winforms
+        #region UI:Winforms Errors
 
         public const ushort ERR_UI_WF_RDGV_Null_Data                  = 3800;
         public const ushort ERR_UI_WF_LOGIN_UNREG                     = 3801;
@@ -197,5 +198,14 @@ namespace Regata.Core
 
         #endregion
 
-    }
-}
+        #region Scales Errors
+
+        public const ushort ERR_SCL_EMPT_COM = 3900;
+        public const ushort ERR_SCL_GET_WGHT = 3901;
+        public const ushort ERR_SCL_UNREG    = 3902;
+
+        #endregion
+
+
+    } // public partial struct Codes
+}     // namespace Regata.Core

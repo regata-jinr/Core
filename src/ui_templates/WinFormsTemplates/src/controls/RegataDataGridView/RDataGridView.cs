@@ -18,7 +18,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
-using Regata.Core.UI.WinForms.Settings;
+using Regata.Core.UI.WinForms.Controls.Settings;
 using Regata.Core.DB.MSSQL.Context;
 using Regata.Core.DB.MSSQL.Models;
 
@@ -33,7 +33,7 @@ using Regata.Core.DB.MSSQL.Models;
 // TODO: add incapsulation for bindinglist
 // TODO: add autoupdate based on github releases
 
-namespace Regata.Core.UI.WinForms
+namespace Regata.Core.UI.WinForms.Controls
 {
     /// <summary>
     /// RDataGridView is the class that represents widely used DataGridView functions.

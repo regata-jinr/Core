@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2019-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -9,26 +9,26 @@
  *                                                                         *
  ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-// TODO: here I can add also the size of each columns
-
-namespace Regata.Core.UI.WinForms.Settings
+namespace Regata.Core.UI.WinForms.Forms
 {
-
-
-    public class RDataGridViewSettings
+    public partial class RegisterForm<MainTableModel> : Form
+        where MainTableModel : class
     {
-        public List<string> HidedColumns = new List<string>();
-        public List<string> ReadOnlyColumns = new List<string>();
-        public DataGridViewAutoSizeColumnsMode ColumnSize = DataGridViewAutoSizeColumnsMode.Fill;
-        public ColorizeMode ColorMode;
         
-        
-    }
-}
+        public RegisterForm(string connectionString, uint tabsNum=2, uint dgvsNum=2, float BigDgvSizeCoeff = 0.66f)
+        {
+            InitializeComponent();
+            InitializeMainTable(connectionString);
+            InitializeTabControl(tabsNum, dgvsNum, BigDgvSizeCoeff);
+        }
+
+
+      
+
+
+
+    } //public partial class RegisterForm : Form
+}     // namespace Regata.Core.UI.WinForms
+

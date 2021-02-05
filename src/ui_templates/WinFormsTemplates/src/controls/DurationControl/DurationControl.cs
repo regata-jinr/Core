@@ -12,7 +12,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Regata.Core.UI.WinForms
+namespace Regata.Core.UI.WinForms.Controls
 {
     public partial class DurationControl : UserControl
     {

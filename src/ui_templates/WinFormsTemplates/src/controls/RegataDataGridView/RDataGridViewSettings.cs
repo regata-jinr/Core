@@ -11,25 +11,24 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Regata.Core.UI.WinForms
+// TODO: here I can add also the size of each columns
+
+namespace Regata.Core.UI.WinForms.Controls.Settings
 {
-    public enum ColorizeMode { None, Even, ByValue }
 
-    public partial class RDataGridView<Model> : DataGridView
+
+    public class RDataGridViewSettings
     {
-
-        public async Task ColorizeAsync(ColorizeMode mode, DataGridViewColumn dataGridViewColumn = null)
-        {
-            
-        }
-
-
-
+        public List<string> HidedColumns = new List<string>();
+        public List<string> ReadOnlyColumns = new List<string>();
+        public DataGridViewAutoSizeColumnsMode ColumnSize = DataGridViewAutoSizeColumnsMode.Fill;
+        public ColorizeMode ColorMode;
+        
+        
     }
 }

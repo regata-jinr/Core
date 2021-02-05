@@ -16,27 +16,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Regata.Core.UI.WinForms.Settings;
+using Regata.Core.UI.WinForms.Controls.Settings;
 
-namespace Regata.Core.UI.WinForms
+namespace Regata.Core.UI.WinForms.Controls
 {
 
     public partial class RDataGridView<Model> : DataGridView
     {
-        public void FillCellsByValue<T>(DataGridViewSelectedCellCollection cells, T value)
+
+        private  void CellValidating(object sender,
+       DataGridViewCellValidatingEventArgs e)
         {
-            foreach (DataGridViewCell c in cells)
+            
+            string headerText =
+                Columns[e.ColumnIndex].HeaderText;
+
+            // Abort validation if cell is not in the CompanyName column.
+            if (!headerText.Equals("CompanyName")) return;
+
+            // Confirm that the cell is not empty.
+            if (string.IsNullOrEmpty(e.FormattedValue.ToString()))
             {
-                if (c.ValueType != typeof(T))
-                {
-                    Report.Notify(Codes.WARN_UI_WF_RDGV_Wrong_Value_Type);
-                    continue;
-                }
-                c.Value = value;
+                Rows[e.RowIndex].ErrorText =
+                    "Company Name must not be empty";
+                e.Cancel = true;
             }
-
         }
-
 
 
     } // public abstract partial class RDataGridView<Model> : DataGridView

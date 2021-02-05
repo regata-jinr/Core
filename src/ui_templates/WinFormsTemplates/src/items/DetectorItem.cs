@@ -12,24 +12,29 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Regata.Core;
+using Regata.Core.Hardware;
 
-namespace Regata.Core.UI.WinForms
+namespace Regata.Core.UI.WinForms.Items
 {
     public class DetectorItem
     {
         public ToolStripMenuItem DetectorMenuItem;
         public ToolStripStatusLabel DetectorStatusLabel;
         public RadioButton DetectorRadioButton;
-        private readonly IDetector _det;
-        private readonly ISession _session;
+
+        public event Action<string> Checked;
+        public event Action<string> UnChecked;
+
+        public string DetectorName => _det.Name;
+
+
+        private readonly Detector _det;
         private readonly Dictionary<DetectorStatus, System.Drawing.Color> StatusColor;
 
-        public DetectorItem(ref ISession session, ref IDetector det)
+        public DetectorItem(ref Detector det)
         {
-            _session = session;
             _det = det;
-            DetectorMenuItem = new ToolStripMenuItem();
+            DetectorMenuItem    = new ToolStripMenuItem();
             DetectorStatusLabel = new ToolStripStatusLabel();
             DetectorRadioButton = new RadioButton();
 
@@ -56,17 +61,17 @@ namespace Regata.Core.UI.WinForms
         private void Det_StatusChanged(object sender, EventArgs e)
         {
             DetectorStatusLabel.Text = _det.Name;
-            DetectorStatusLabel.ToolTipText = $"Статус детектора - {_det.Status}";
+            DetectorStatusLabel.ToolTipText = _det.Status.ToString();
             DetectorStatusLabel.BackColor = StatusColor[_det.Status];
         }
 
         private void CheckHandler(object sender, EventArgs e)
         {
             if (DetectorMenuItem.Checked)
-                _session.AttachDetector(_det.Name);
+                Checked?.Invoke(_det.Name);
             else
-                _session.DetachDetector(_det.Name);
+                UnChecked?.Invoke(_det.Name);
         }
 
-    }
-}
+    } // public class DetectorItem
+}     // namespace Regata.Core.UI.WinForms.Items

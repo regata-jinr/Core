@@ -17,14 +17,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Regata.Core.UI.WinForms
+namespace Regata.Core.UI.WinForms.Controls
 {
+    public enum ColorizeMode { None, Even, ByValue }
 
     public partial class RDataGridView<Model> : DataGridView
     {
 
-
-        public async Task FilterAsync<T>(DataGridViewColumn dataGridViewColumn, List<T> filter_values)
+        public async Task ColorizeAsync(ColorizeMode mode, DataGridViewColumn dataGridViewColumn = null)
         {
             
         }

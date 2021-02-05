@@ -16,33 +16,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Regata.Core.UI.WinForms.Settings;
 
-namespace Regata.Core.UI.WinForms
+namespace Regata.Core.UI.WinForms.Controls
 {
 
     public partial class RDataGridView<Model> : DataGridView
     {
 
-        private  void CellValidating(object sender,
-       DataGridViewCellValidatingEventArgs e)
+        public async Task SortAsync(DataGridViewColumn dataGridViewColumn, ListSortDirection direction)
         {
+            base.Sort(dataGridViewColumn, direction);
             
-            string headerText =
-                Columns[e.ColumnIndex].HeaderText;
-
-            // Abort validation if cell is not in the CompanyName column.
-            if (!headerText.Equals("CompanyName")) return;
-
-            // Confirm that the cell is not empty.
-            if (string.IsNullOrEmpty(e.FormattedValue.ToString()))
-            {
-                Rows[e.RowIndex].ErrorText =
-                    "Company Name must not be empty";
-                e.Cancel = true;
-            }
         }
 
 
-    } // public abstract partial class RDataGridView<Model> : DataGridView
-}     // namespace Regata.Core.UI.WinForms
+    }
+}
