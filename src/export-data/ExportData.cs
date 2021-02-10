@@ -1,13 +1,26 @@
-﻿using System;
+﻿/***************************************************************************
+ *                                                                         *
+ *                                                                         *
+ * Copyright(c) 2019-2021, REGATA Experiment at FLNP|JINR                  *
+ * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
+ *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
+ *                                                                         *
+ ***************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.IO;
-using CsvHelper;
 using System.Net;
 using System.Threading.Tasks;
 using System.Threading;
-using Microsoft.Office.Interop.Excel;
+using CsvHelper;
+using CsvHelper.Configuration;
+using System.Globalization;
+//using Microsoft.Office.Interop.Excel;
 
-namespace Regata.Utilities
+namespace Regata.Core
 {
     public static class ExportData
     {
@@ -57,44 +70,44 @@ namespace Regata.Utilities
         /// <param name="path">Path to excel file with imported data</param>
         /// <param name="ct">CancellationToken</param>
         /// <returns>Array of the model type data contained in input Excel document</returns>
-        public static async Task<T[]> FromExcel<T>(string path, CancellationToken ct)
-        {
-            var toFile = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\Regata\\tmpSet.csv";
+        //public static async Task<T[]> FromExcel<T>(string path, CancellationToken ct)
+        //{
+        //    var toFile = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\Regata\\tmpSet.csv";
 
-            Application app = new Application();
-            Workbook wb = app.Workbooks.Open(path, 
-                                            Type.Missing, Type.Missing, Type.Missing,
-                                            Type.Missing, Type.Missing, Type.Missing,
-                                            Type.Missing, Type.Missing, Type.Missing,
-                                            Type.Missing, Type.Missing, Type.Missing,
-                                            Type.Missing, Type.Missing
-                                            );
+        //    Application app = new Application();
+        //    Workbook wb = app.Workbooks.Open(path, 
+        //                                    Type.Missing, Type.Missing, Type.Missing,
+        //                                    Type.Missing, Type.Missing, Type.Missing,
+        //                                    Type.Missing, Type.Missing, Type.Missing,
+        //                                    Type.Missing, Type.Missing, Type.Missing,
+        //                                    Type.Missing, Type.Missing
+        //                                    );
 
-            try
-            {
-                await Task.Run(() =>
-                {
-                    wb.SaveAs(toFile, XlFileFormat.xlCSVWindows, Type.Missing,
-                                      Type.Missing, false, false, 
-                                      XlSaveAsAccessMode.xlExclusive,
-                                      XlSaveConflictResolution.xlLocalSessionChanges,
-                                      false, Type.Missing, Type.Missing, Type.Missing
-                             );
+        //    try
+        //    {
+        //        await Task.Run(() =>
+        //        {
+        //            wb.SaveAs(toFile, XlFileFormat.xlCSVWindows, Type.Missing,
+        //                              Type.Missing, false, false, 
+        //                              XlSaveAsAccessMode.xlExclusive,
+        //                              XlSaveConflictResolution.xlLocalSessionChanges,
+        //                              false, Type.Missing, Type.Missing, Type.Missing
+        //                     );
 
-                }, ct);
+        //        }, ct);
 
-                return await Task.Run(() => FromCSVToArray<T>(toFile), ct);
-            }
-            catch (OperationCanceledException oce)
-            {
-                throw new OperationCanceledException("Operation was canceled");
-            }
-            finally
-            {
-                wb?.Close(false, Type.Missing, Type.Missing);
-                app?.Quit();
-            }
-        }
+        //        return await Task.Run(() => FromCSVToArray<T>(toFile), ct);
+        //    }
+        //    catch (OperationCanceledException oce)
+        //    {
+        //        throw new OperationCanceledException("Operation was canceled");
+        //    }
+        //    finally
+        //    {
+        //        wb?.Close(false, Type.Missing, Type.Missing);
+        //        app?.Quit();
+        //    }
+        //}
 
         /// <summary>
         /// This is simple wrap for CSVHelper package.
@@ -105,18 +118,21 @@ namespace Regata.Utilities
         /// <returns>Exported data array</returns>
         private static T[] FromCSVToArray<T>(string file)
         {
-            CsvReader csv = null;
-            StreamReader reader = null;
             try
             {
-                reader = new StreamReader(file);
+                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+                {
+                    HasHeaderRecord = true,
+                    Delimiter = ",",
+                    BadDataFound = null
 
-                csv = new CsvReader(reader, System.Globalization.CultureInfo.InvariantCulture);
-                csv.Configuration.HasHeaderRecord = true;
-                csv.Configuration.Delimiter = ",";
-                csv.Configuration.BadDataFound = null;
+                };
 
-                return new List<T>(csv.GetRecords<T>()).ToArray();
+                using (var reader = new StreamReader(file))
+                using (var csv = new CsvReader(reader, config))
+                {
+                    return new List<T>(csv.GetRecords<T>()).ToArray();
+                }
             }
             catch (CsvHelperException csvprocessing)
             {
@@ -124,11 +140,9 @@ namespace Regata.Utilities
             }
             finally
             {
-                reader?.Dispose();
-                csv?.Dispose();
                 File.Delete(file);
             }
         }
 
-    }
-}
+    } // public static class ExportData
+}     // namespace Regata.Core

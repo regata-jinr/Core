@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using Regata.Core.UI.WinForms;
+using Regata.Core.UI.WinForms.Controls;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 

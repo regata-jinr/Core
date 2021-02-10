@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 using System;
-using Regata.Core.UI.WinForms;
+using Regata.Core.UI.WinForms.Controls;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Regata.Tests.WinForms
@@ -33,7 +33,6 @@ namespace Regata.Tests.WinForms
             d.SecondsChanged += D_SecondsChanged; ;
 
             d.Duration = ts.Add(TimeSpan.FromMinutes(20));
-
         }
 
         private void D_SecondsChanged(object sender, EventArgs e)

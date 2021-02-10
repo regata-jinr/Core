@@ -14,11 +14,11 @@ using Regata.Core.UI.WinForms;
 using System.Linq;
 using System.Windows.Forms;
 using Regata.Core.DB.MSSQL.Models;
+using Regata.Core.UI.WinForms.Controls;
 using System;
 
 
 namespace Regata.Tests.WinForms
-
 {
     [TestClass]
     public class RDataGridViewTest
@@ -31,7 +31,7 @@ namespace Regata.Tests.WinForms
         public RDataGridViewTest()
         {
 
-            _rdgv = new RDataGridView<Irradiation>(CS);
+            _rdgv = new RDataGridView<Irradiation>();
 
             _rdgv.CurrentDbSet.Where(ir => ir.LoadNumber == 122).ToArray();
             _rdgv.DataSource = _rdgv.CurrentDbSet.Local.ToBindingList();
@@ -81,7 +81,7 @@ namespace Regata.Tests.WinForms
 
         public int GetDurationFromDb(int id)
         {
-            using (var r = new Core.DB.MSSQL.Context.RegataContext(CS))
+            using (var r = new Core.DB.MSSQL.Context.RegataContext())
             {
                 return r.Irradiations.First(i => i.Id == 20359).Duration.Value;
                 r.Database.CanConnect();

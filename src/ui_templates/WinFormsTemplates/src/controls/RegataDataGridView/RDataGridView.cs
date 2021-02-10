@@ -81,11 +81,8 @@ namespace Regata.Core.UI.WinForms.Controls
 
         // TODO:  exception or notification here?
 
-        public RDataGridView(string cs, RDataGridViewSettings rdgv_set = null) : base()
+        public RDataGridView(RDataGridViewSettings rdgv_set = null) : base()
         {
-            if (string.IsNullOrEmpty(cs))
-                throw new ArgumentNullException("RDataGridView requires connections string for correct initialization.");
-
             //if (!ModelInRegataModels()) throw new TypeAccessException($"This type {typeof(Model).Name} doesn't contains in Regata.Core.DB.MSSQL.Models");
 
             if (rdgv_set != null)
@@ -93,7 +90,7 @@ namespace Regata.Core.UI.WinForms.Controls
             else
                 RDGV_Set = new RDataGridViewSettings();
 
-            _rdbc = new RegataContext(cs);
+            _rdbc = new RegataContext();
 
             CurrentDbSet = _rdbc.Set<Model>();
 

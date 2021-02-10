@@ -45,9 +45,9 @@ namespace Regata.Core.UI.WinForms.Forms
             base.Dispose(disposing);
         }
 
-        private void InitializeMainTable(string cs)
+        private void InitializeMainTable()
         {
-            MainRDGV = new RDataGridView<MainTableModel>(cs);
+            MainRDGV = new RDataGridView<MainTableModel>();
 
             ((ISupportInitialize)MainRDGV).BeginInit();
 

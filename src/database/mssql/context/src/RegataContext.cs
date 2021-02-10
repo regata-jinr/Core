@@ -9,9 +9,9 @@
  *                                                                         *
  ***************************************************************************/
 
-
 using Microsoft.EntityFrameworkCore;
 using Regata.Core.DB.MSSQL.Models;
+using AdysTech.CredentialManager;
 
 namespace Regata.Core.DB.MSSQL.Context
 {
@@ -27,31 +27,23 @@ namespace Regata.Core.DB.MSSQL.Context
 
         public DbSet<Irradiation>        Irradiations    { get; set; }
         public DbSet<Measurement>        Measurements    { get; set; }
-        public DbSet<SharedSpectrum>      SharedSpectra  { get; set; }
-        public DbSet<SpectrumSLI>        SLISpectra     { get; set; }
-        public DbSet<SpectrumLLI>        LLISpectra     { get; set; }
+        public DbSet<SharedSpectrum>     SharedSpectra   { get; set; }
+        public DbSet<SpectrumSLI>        SLISpectra      { get; set; }
+        public DbSet<SpectrumLLI>        LLISpectra      { get; set; }
+        public DbSet<UILabel>            UILabels        { get; set; }
 
-        private readonly string _cs;
-
-        public RegataContext(string ConnectionString)
-        {
-            if (string.IsNullOrEmpty(ConnectionString))
-                Report.Notify(Codes.ERR_DB_EMPTY_CS);
-
-            _cs = ConnectionString;
-        }
+        private const string DBTarget = "RegataDB";
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_cs, 
+            optionsBuilder.UseSqlServer(CredentialManager.GetCredentials(DBTarget).Password, 
                                         options => 
                                             {
                                                 options.EnableRetryOnFailure(3);
-                                                options.CommandTimeout(60); 
+                                                options.CommandTimeout(60);
                                             }
                                        );
         }
-
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -119,29 +111,25 @@ namespace Regata.Core.DB.MSSQL.Context
             //});
 
             modelBuilder.Entity<Irradiation>()
-                            .HasKey(i => new
-                            {
-                                i.Id
-                            });
+                            .HasKey(i => i.Id);
 
             modelBuilder.Entity<Measurement>()
-                            .HasKey(m => new
-                            {
-                                m.Id
-                            });
+                            .HasKey(m => m.Id);
 
             modelBuilder.Entity<MeasurementsRegisterInfo>()
-                           .HasKey(mr => new
-                           {
-                               mr.Id
-                           });
+                           .HasKey(mr => mr.Id);
 
             modelBuilder.Entity<SpectrumLLI>()
                  .HasKey(slis => slis.SampleSpectra);
+
             modelBuilder.Entity<SpectrumSLI>()
                    .HasKey(llis => llis.SampleSpectra);
+
             modelBuilder.Entity<SharedSpectrum>()
                    .HasKey(ss => ss.fileS);
+
+            modelBuilder.Entity<UILabel>()
+                .HasKey(l => new { l.FormName, l.ComponentName });
 
         }
 

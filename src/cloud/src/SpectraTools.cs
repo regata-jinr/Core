@@ -54,7 +54,7 @@ namespace Regata.Core.Cloud
         public static async IAsyncEnumerable<SpectrumSLI> GetSLISpectraForSampleSetAsync(string SetKey, CancellationToken ct)
         {
             var sks = SetKey.Split('-');
-            using (var ssc = new RegataContext(DBTarget))
+            using (var ssc = new RegataContext())
             {
                 var sliSpectras = ssc.SLISpectra.FromSqlRaw("exec FormSLIFilesList @countryCode, @clientid, @year, @setnum, @setind",
                     new SqlParameter("countrycode", sks[0]),
@@ -71,7 +71,7 @@ namespace Regata.Core.Cloud
         public static async IAsyncEnumerable<SpectrumLLI> GetLLISpectraForSampleSetAsync(string SetKey, IrradiationType type, CancellationToken ct)
         {
             var sks = SetKey.Split('-');
-            using (var ssc = new RegataContext(DBTarget))
+            using (var ssc = new RegataContext())
             {
                 var lliSpectras = ssc.LLISpectra.FromSqlRaw("exec FormLLIFilesList @countryCode, @clientid, @year, @setnum, @setind, @type",
                     new SqlParameter("countrycode", sks[0]),
@@ -90,7 +90,7 @@ namespace Regata.Core.Cloud
         {
             try
             {
-                using (var ssc = new RegataContext(DBTarget))
+                using (var ssc = new RegataContext())
                 {
                     var sharedSpectra = ssc.SharedSpectra.Where(ss => ss.fileS == spectra).FirstOrDefault();
                     if (sharedSpectra == null)
@@ -136,7 +136,7 @@ namespace Regata.Core.Cloud
                     token = token
                 };
 
-                using (var ic = new RegataContext(DBTarget))
+                using (var ic = new RegataContext())
                 {
                     bool IsExists = await ic.SharedSpectra.Where(s => s.fileS == ss.fileS).AnyAsync();
 

@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2019-2021, REGATA Experiment at FLNP|JINR                  *
+ * Copyright(c) 2020-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -9,26 +9,19 @@
  *                                                                         *
  ***************************************************************************/
 
-using System.Windows.Forms;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Regata.Core.UI.WinForms.Forms
-{
-    public partial class RegisterForm<MainTableModel> : Form
-        where MainTableModel : class
+namespace Regata.Core.DB.MSSQL.Models
+{ 
+    [Table("UILabels")]
+    public class UILabel
     {
-        
-        public RegisterForm(uint tabsNum=2, uint dgvsNum=2, float BigDgvSizeCoeff = 0.66f)
-        {
-            InitializeComponent();
-            InitializeMainTable();
-            InitializeTabControl(tabsNum, dgvsNum, BigDgvSizeCoeff);
-        }
-
-
-      
-
-
-
-    } //public partial class RegisterForm : Form
-}     // namespace Regata.Core.UI.WinForms
+    
+        public string FormName      { get; set; }
+        public string ComponentName { get; set; }
+        public string RusText       { get; set; }
+        public string EngText       { get; set; }
+    
+    } // public class UILabels
+}     // namespace Regata.Core.DB.MSSQL.Models
 

@@ -9,26 +9,21 @@
  *                                                                         *
  ***************************************************************************/
 
-using System.Windows.Forms;
+using System;
+using Regata.Core.UI.WinForms;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Regata.Core.UI.WinForms.Forms
+namespace Regata.Tests.WinForms
 {
-    public partial class RegisterForm<MainTableModel> : Form
-        where MainTableModel : class
+    [TestClass]
+    public class LabelsTest
     {
-        
-        public RegisterForm(uint tabsNum=2, uint dgvsNum=2, float BigDgvSizeCoeff = 0.66f)
+
+        [TestMethod]
+        public void SwitchLanguageTest()
         {
-            InitializeComponent();
-            InitializeMainTable();
-            InitializeTabControl(tabsNum, dgvsNum, BigDgvSizeCoeff);
+            
         }
 
-
-      
-
-
-
-    } //public partial class RegisterForm : Form
-}     // namespace Regata.Core.UI.WinForms
-
+    } // class LabelsTest
+}     // namespace Regata.Tests.WinForms
