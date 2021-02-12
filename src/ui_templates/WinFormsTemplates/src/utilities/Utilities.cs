@@ -11,6 +11,7 @@
 
 using System;
 using System.Windows.Forms;
+using Regata.Core.UI.WinForms.Controls;
 
 namespace Regata.Core.UI.WinForms
 {
@@ -40,7 +41,6 @@ namespace Regata.Core.UI.WinForms
                     {
                         act(item);
                         ApplyActionToControl(item, act);
-
                     }
                     break;
 
@@ -50,14 +50,24 @@ namespace Regata.Core.UI.WinForms
                         ApplyActionToControl(innerTsi, act);
                     break;
 
+                case TabControl tab:
+                    foreach (TabPage page in tab.TabPages)
+                        ApplyActionToControl(page, act);
+                    break;
+
+                case DGVTabPaneControl dgv_tab:
+                    foreach (TabPage page in dgv_tab.Pages)
+                        ApplyActionToControl(page, act);
+                    
+                    break;
+
                 case Control nestedControl:
                     if (nestedControl.Controls.Count > 0)
                     {
                         foreach (Control nc in nestedControl.Controls)
                             ApplyActionToControl(nc, act);
                     }
-                    else
-                        act(nestedControl);
+                    act(nestedControl);
                     break;
 
                 case null:

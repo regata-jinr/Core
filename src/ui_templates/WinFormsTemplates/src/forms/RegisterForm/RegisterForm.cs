@@ -22,12 +22,26 @@ namespace Regata.Core.UI.WinForms.Forms
             InitializeComponent();
             InitializeMainTable();
             InitializeTabControl(tabsNum, dgvsNum, BigDgvSizeCoeff);
+           
+            LangItem.CheckedChanged += Labels_LanguageItemChanged;
+            Labels.LanguageChanged += Labels_LanguageChanged;
+
+            Labels.CurrentLanguage = Settings.Language.English;
+
         }
 
+        private void Labels_LanguageItemChanged()
+        {
+            Labels.CurrentLanguage = LangItem.CheckedItem;
+        }
 
-      
-
-
+        private void Labels_LanguageChanged()
+        {
+            Labels.SetControlsLabels(this.Controls);
+            LangItem.CheckedChanged -= Labels_LanguageItemChanged;
+            LangItem.CheckItem(Labels.CurrentLanguage);
+            LangItem.CheckedChanged += Labels_LanguageItemChanged;
+        }
 
     } //public partial class RegisterForm : Form
 }     // namespace Regata.Core.UI.WinForms

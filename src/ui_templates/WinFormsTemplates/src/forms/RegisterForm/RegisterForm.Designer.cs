@@ -13,6 +13,8 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Drawing;
 using Regata.Core.UI.WinForms.Controls;
+using Regata.Core.UI.WinForms.Items;
+using Regata.Core.Settings;
 
 namespace Regata.Core.UI.WinForms.Forms
 {
@@ -22,10 +24,12 @@ namespace Regata.Core.UI.WinForms.Forms
 
         public RDataGridView<MainTableModel> MainRDGV;
         public DGVTabPaneControl TabsPane;
-        public StatusStrip statusStrip1;
-        public MenuStrip menuStrip1;
-        public ToolStripStatusLabel toolStripStatusLabel1;
-        public ToolStripProgressBar toolStripProgressBar1;
+        public StatusStrip StatusStrip;
+        public MenuStrip MenuStrip;
+        public ToolStripProgressBar ProgressBar;
+        public EnumItem<Language> LangItem;
+        public TableLayoutPanel FunctionalLayoutPanel;
+
 
         /// <summary>
         /// Required designer variable.
@@ -120,63 +124,81 @@ namespace Regata.Core.UI.WinForms.Forms
         {
             
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegisterForm<MainTableModel>));
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-           
-            this.statusStrip1.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
+            this.StatusStrip = new System.Windows.Forms.StatusStrip();
+            this.ProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.MenuStrip = new System.Windows.Forms.MenuStrip();
+            LangItem = new EnumItem<Language>(Language.English);
+
+
+            this.StatusStrip.SuspendLayout();
+            this.MenuStrip.SuspendLayout();
             this.SuspendLayout();
             
             // 
-            // statusStrip1
+            // StatusStrip
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.toolStripProgressBar1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 944);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1687, 22);
-            this.statusStrip1.TabIndex = 23;
-            this.statusStrip1.Text = "statusStrip1";
+            this.StatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ProgressBar});
+            this.StatusStrip.Location = new System.Drawing.Point(0, 944);
+            this.StatusStrip.Name = "StatusStrip";
+            this.StatusStrip.Size = new System.Drawing.Size(1687, 22);
+            this.StatusStrip.TabIndex = 23;
+            this.StatusStrip.Text = "StatusStrip";
             // 
-            // toolStripStatusLabel1
+            // ProgressBar
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            this.ProgressBar.Name = "ProgressBar";
+            this.ProgressBar.Size = new System.Drawing.Size(100, 16);
             // 
-            // toolStripProgressBar1
+            // MenuStrip
             // 
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            this.MenuStrip.Location = new System.Drawing.Point(0, 0);
+            this.MenuStrip.Name = "MenuStrip";
+            this.MenuStrip.Size = new System.Drawing.Size(1687, 24);
+            this.MenuStrip.TabIndex = 24;
+            this.MenuStrip.Text = "MenuStrip";
+            MenuStrip.Items.Add(LangItem.EnumMenuItem);
+
+            //
+            // LangItem
+            //
+
             // 
-            // menuStrip1
+            // FunctionalLayoutPanel
             // 
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1687, 24);
-            this.menuStrip1.TabIndex = 24;
-            this.menuStrip1.Text = "menuStrip1";
+            FunctionalLayoutPanel = new TableLayoutPanel();
+            FunctionalLayoutPanel.Anchor = ((AnchorStyles)(((AnchorStyles.Bottom | AnchorStyles.Left)
+            | AnchorStyles.Right)));
+            FunctionalLayoutPanel.ColumnCount = 2;
+            FunctionalLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            FunctionalLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            FunctionalLayoutPanel.Location = new System.Drawing.Point(833, 674);
+            FunctionalLayoutPanel.Name = "FunctionalLayoutPanel";
+            FunctionalLayoutPanel.RowCount = 2;
+            FunctionalLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            FunctionalLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            FunctionalLayoutPanel.Size = new Size(837, 253);
+            FunctionalLayoutPanel.TabIndex = 25;
+
             // 
             // RegisterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1687, 966);
-            this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.menuStrip1);
-          
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.StatusStrip);
+            this.Controls.Add(this.MenuStrip);
+            this.Controls.Add(this.FunctionalLayoutPanel);
+
+            this.MainMenuStrip = this.MenuStrip;
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "RegisterForm";
             this.Text = "Form1";
           
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.StatusStrip.ResumeLayout(false);
+            this.StatusStrip.PerformLayout();
+            this.MenuStrip.ResumeLayout(false);
+            this.MenuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
