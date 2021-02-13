@@ -17,7 +17,7 @@ namespace Regata.Core.UI.WinForms.Forms
         where MainTableModel : class
     {
         
-        public RegisterForm(uint tabsNum=2, uint dgvsNum=2, float BigDgvSizeCoeff = 0.66f)
+        public RegisterForm(uint tabsNum=2, uint dgvsNum=2, float BigDgvSizeCoeff = 0.66f, Settings.Language lang = Settings.Language.English)
         {
             InitializeComponent();
             InitializeMainTable();
@@ -26,7 +26,7 @@ namespace Regata.Core.UI.WinForms.Forms
             LangItem.CheckedChanged += Labels_LanguageItemChanged;
             Labels.LanguageChanged += Labels_LanguageChanged;
 
-            Labels.CurrentLanguage = Settings.Language.English;
+            Labels.CurrentLanguage = lang;
 
         }
 
