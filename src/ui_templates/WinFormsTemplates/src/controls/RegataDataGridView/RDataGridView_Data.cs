@@ -9,12 +9,6 @@
  *                                                                         *
  ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms.Controls
@@ -28,7 +22,7 @@ namespace Regata.Core.UI.WinForms.Controls
             {
                 if (c.ValueType != typeof(T))
                 {
-                    Report.Notify(Codes.WARN_UI_WF_RDGV_Wrong_Value_Type);
+                    Report.Notify(new Message(Codes.WARN_UI_WF_RDGV_Wrong_Value_Type));
                     continue;
                 }
                 c.Value = value;

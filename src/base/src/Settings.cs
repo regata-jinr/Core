@@ -10,17 +10,18 @@
  ***************************************************************************/
 
 using System;
-using System.ComponentModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.IO;
 
 namespace Regata.Core.Settings
 {
-    public static class Settings<AppSettings> 
-        where AppSettings : ISettings
+
+    public static class GlobalSettings
     {
-        public static AppSettings CurrentSettings;
+        public static string User => Environment.UserName;
+
+        public static Status Verbosity { get; set; }
 
         private static Language _lang;
 
@@ -35,6 +36,12 @@ namespace Regata.Core.Settings
         }
 
         public static event Action LanguageChanged;
+    }
+
+    public static class Settings<AppSettings> 
+        where AppSettings : ISettings
+    {
+        public static AppSettings CurrentSettings;
 
         public static string FilePath
         {
@@ -89,6 +96,10 @@ namespace Regata.Core.Settings
                     Report.Notify(new Message(Codes.WARN_SET_FILE_NOT_EXST));
                     ResetToDefaults();
                 }
+
+                GlobalSettings.CurrentLanguage = CurrentSettings.CurrentLanguage;
+                GlobalSettings.Verbosity       = CurrentSettings.Verbosity;
+
             }
             catch
             {
@@ -137,8 +148,6 @@ namespace Regata.Core.Settings
                 Report.Notify(new Message(Codes.ERR_SET_SAVE_UNREG));
             }
         }
-
-      
 
     } // public static class Settings<AppSettings> 
 }     // namespace Regata.Core.Settings

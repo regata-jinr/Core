@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -13,4 +13,10 @@
     <PackageReference Include="Npgsql" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\database\mssql\context\mssql-context.csproj" />
+    <ProjectReference Include="..\database\mssql\models\mssql-models.csproj" />
+  </ItemGroup>
+
 </Project>
+

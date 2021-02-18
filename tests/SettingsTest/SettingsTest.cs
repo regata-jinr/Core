@@ -12,6 +12,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Regata.Core.Settings;
+using Regata.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,15 +32,17 @@ namespace Regata.Tests.Settings
         public List<int> iset6       { get; set; } = new List<int> { 1, 2, 3, 4, 5 };
     }
 
-    public class AppSettings : IEquatable<AppSettings>
+    public class AppSettings : IEquatable<AppSettings>, ISettings
     {
-        public float            width                { get; set; } = 0.1f;
-        public float            height               { get; set; } = 1;
-        public string           name                 { get; set; } = "TestApp";
-        public bool             showTitle            { get; set; } = true;
-        public TestEnum         iset5                { get; set; } = TestEnum.One;
-        public List<int>        iset6                { get; set; } = new List<int> { 1, 2, 3, 4, 5 };
-        public List<DetectorSettings> detectors      { get; set; } = new List<DetectorSettings>() { new DetectorSettings() };
+        public Language               CurrentLanguage      { get; set; }
+        public Status                 Verbosity            { get; set; }
+        public float                  width                { get; set; } = 0.1f;
+        public float                  height               { get; set; } = 1;
+        public string                 name                 { get; set; } = "TestApp";
+        public bool                   showTitle            { get; set; } = true;
+        public TestEnum               iset5                { get; set; } = TestEnum.One;
+        public List<int>              iset6                { get; set; } = new List<int> { 1, 2, 3, 4, 5 };
+        public List<DetectorSettings> detectors            { get; set; } = new List<DetectorSettings>() { new DetectorSettings() };
 
         public bool Equals(AppSettings rhv)
         {

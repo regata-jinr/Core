@@ -87,7 +87,7 @@ namespace Regata.Core.UI.WinForms
             }
             catch
             {
-                Report.Notify(Codes.ERR_SET_GET_LBL_UNREG);
+                Report.Notify(new Message(Codes.ERR_SET_GET_LBL_UNREG));
                 return string.Empty;
 
             }

@@ -21,7 +21,7 @@ namespace Regata.Core.Hardware
         public static float GetWeight(string comName)
         {
             if (string.IsNullOrEmpty(comName))
-                Report.Notify(Codes.ERR_SCL_EMPT_COM);
+                Report.Notify(new Message(Codes.ERR_SCL_EMPT_COM));
 
             float weight = -1.0f;
             try
@@ -34,13 +34,13 @@ namespace Regata.Core.Hardware
                     string weightstr = port.ReadLine().Replace("\r", "");
                     if (!float.TryParse(weightstr, out weight))
                     {
-                        Report.Notify(Codes.ERR_SCL_GET_WGHT);
+                        Report.Notify(new Message(Codes.ERR_SCL_GET_WGHT));
                     }
                 }
             }
             catch
             {
-                Report.Notify(Codes.ERR_SCL_UNREG);
+                Report.Notify(new Message(Codes.ERR_SCL_UNREG));
             }
             return weight;
         }

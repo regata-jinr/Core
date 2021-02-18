@@ -31,6 +31,8 @@ namespace Regata.Core.DB.MSSQL.Context
         public DbSet<SpectrumSLI>        SLISpectra      { get; set; }
         public DbSet<SpectrumLLI>        LLISpectra      { get; set; }
         public DbSet<UILabel>            UILabels        { get; set; }
+        public DbSet<MessageBase>        MessageBases    { get; set; }
+        public DbSet<MessageDefault>     MessageDefaults { get; set; }
 
         private const string DBTarget = "RegataDB";
 
@@ -48,6 +50,36 @@ namespace Regata.Core.DB.MSSQL.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+           
+            modelBuilder.Entity<Irradiation>()
+                            .HasKey(i => i.Id);
+
+            modelBuilder.Entity<Measurement>()
+                            .HasKey(m => m.Id);
+
+            modelBuilder.Entity<MeasurementsRegisterInfo>()
+                           .HasKey(mr => mr.Id);
+
+            modelBuilder.Entity<SpectrumLLI>()
+                 .HasKey(slis => slis.SampleSpectra);
+
+            modelBuilder.Entity<SpectrumSLI>()
+                   .HasKey(llis => llis.SampleSpectra);
+
+            modelBuilder.Entity<SharedSpectrum>()
+                   .HasKey(ss => ss.fileS);
+
+            modelBuilder.Entity<UILabel>()
+                .HasKey(l => new { l.FormName, l.ComponentName });
+
+            modelBuilder.Entity<MessageBase>()
+               .HasKey(m => new { m.Code, m.Language});
+
+            modelBuilder.Entity<MessageDefault>()
+              .HasKey(m => new { m.Language });
+
+            #region to be added
+
             //modelBuilder.Entity<Sample>()
             //                   .HasKey(s => new
             //                   {
@@ -110,44 +142,9 @@ namespace Regata.Core.DB.MSSQL.Context
             //    s.Sample_ID
             //});
 
-            modelBuilder.Entity<Irradiation>()
-                            .HasKey(i => i.Id);
+            #endregion
 
-            modelBuilder.Entity<Measurement>()
-                            .HasKey(m => m.Id);
-
-            modelBuilder.Entity<MeasurementsRegisterInfo>()
-                           .HasKey(mr => mr.Id);
-
-            modelBuilder.Entity<SpectrumLLI>()
-                 .HasKey(slis => slis.SampleSpectra);
-
-            modelBuilder.Entity<SpectrumSLI>()
-                   .HasKey(llis => llis.SampleSpectra);
-
-            modelBuilder.Entity<SharedSpectrum>()
-                   .HasKey(ss => ss.fileS);
-
-            modelBuilder.Entity<UILabel>()
-                .HasKey(l => new { l.FormName, l.ComponentName });
-
-        }
-
-
-        public bool CanConnect()
-        {
-            if (Database.CanConnect())
-            {
-                Report.Notify(Codes.SUCC_DB_CONN);
-                return true;
-            }
-            else
-            {
-                Report.Notify(Codes.ERR_DB_CON);
-                return false;
-            }    
         }
 
     } // public class WeightingContext : DbContext
 } // namespace SamplesWeighting
-

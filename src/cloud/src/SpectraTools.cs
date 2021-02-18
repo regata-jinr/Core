@@ -95,7 +95,7 @@ namespace Regata.Core.Cloud
                     var sharedSpectra = ssc.SharedSpectra.Where(ss => ss.fileS == spectra).FirstOrDefault();
                     if (sharedSpectra == null)
                     {
-                        Report.Notify(Codes.ERR_CLD_DWLD_FNFND);
+                        Report.Notify(new Message(Codes.ERR_CLD_DWLD_FNFND));
                         return;
                     }
                     await WebDavClientApi.DownloadFileAsync(sharedSpectra.token, $"{path}/{spectra}.cnf", ct);
@@ -103,7 +103,7 @@ namespace Regata.Core.Cloud
             }
             catch
             {
-                Report.Notify(Codes.ERR_CLD_DWLD_UNREG);
+                Report.Notify(new Message(Codes.ERR_CLD_DWLD_UNREG));
             }
         }
 
@@ -111,7 +111,7 @@ namespace Regata.Core.Cloud
         {
             try
             {
-                Report.Notify(Codes.INFO_CLD_UPL_FILE);
+                Report.Notify(new Message(Codes.INFO_CLD_UPL_FILE));
 
                 var result = false;
                 var token = "";
@@ -120,13 +120,13 @@ namespace Regata.Core.Cloud
                     token = await WebDavClientApi.MakeShareableAsync(file, Token);
                 else
                 {
-                    Report.Notify(Codes.ERR_CLD_UPL_FILE);
+                    Report.Notify(new Message(Codes.ERR_CLD_UPL_FILE));
                     return false;
                 }
 
                 if (string.IsNullOrEmpty(token))
                 {
-                    Report.Notify(Codes.ERR_CLD_GEN_TKN);
+                    Report.Notify(new Message(Codes.ERR_CLD_GEN_TKN));
                     return false;
                 }
 
@@ -153,12 +153,12 @@ namespace Regata.Core.Cloud
                     return result;
                 }
 
-                Report.Notify(Codes.SUCC_CLD_UPL_FILE);
+                Report.Notify(new Message(Codes.SUCC_CLD_UPL_FILE));
             }
 
             catch
             {
-                Report.Notify(Codes.ERR_CLD_UPL_UNREG);
+                Report.Notify(new Message(Codes.ERR_CLD_UPL_UNREG));
                 return false;
             }
         }

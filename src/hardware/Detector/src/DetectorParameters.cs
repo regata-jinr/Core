@@ -42,7 +42,7 @@ namespace Regata.Core.Hardware
             }
             catch
             {
-                Report.Notify(Codes.ERR_DET_GET_PARAM_UNREG);
+                Report.Notify(new Message(Codes.ERR_DET_GET_PARAM_UNREG));
                 return default(T);
             }
         }
@@ -53,7 +53,7 @@ namespace Regata.Core.Hardware
             {
                 if (val == null)
                 {
-                    Report.Notify(Codes.ERR_DET_SET_NULL_PARAM);
+                    Report.Notify(new Message(Codes.ERR_DET_SET_NULL_PARAM));
                     return;
                 }
 
@@ -62,7 +62,7 @@ namespace Regata.Core.Hardware
             }
             catch
             {
-                Report.Notify(Codes.ERR_DET_SET_PARAM_UNREG);
+                Report.Notify(new Message(Codes.ERR_DET_SET_PARAM_UNREG));
             }
         }
 
@@ -110,7 +110,7 @@ namespace Regata.Core.Hardware
                 }
                 catch
                 {
-                    Report.Notify(Codes.ERR_DET_GET_DEADT_UNREG);
+                    Report.Notify(new Message(Codes.ERR_DET_GET_DEADT_UNREG));
                     return -1.0f;
                 }
             }
@@ -129,12 +129,12 @@ namespace Regata.Core.Hardware
                 {
                     return (T)converter.ConvertFromString(input);
                 }
-                Report.Notify(Codes.ERR_DET_SMPL_CNVTR);
+                Report.Notify(new Message(Codes.ERR_DET_SMPL_CNVTR));
                 return default(T);
             }
             catch (NotSupportedException)
             {
-                Report.Notify(Codes.ERR_DET_SMPL_CNVTR_UNREG);
+                Report.Notify(new Message(Codes.ERR_DET_SMPL_CNVTR_UNREG));
                 return default(T);
             }
         }

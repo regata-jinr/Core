@@ -1,0 +1,49 @@
+/***************************************************************************
+ *                                                                         *
+ *                                                                         *
+ * Copyright(c) 2021, REGATA Experiment at FLNP|JINR                       *
+ * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
+ *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
+ *                                                                         *
+ ***************************************************************************/
+
+using Regata.Core.DB.MSSQL.Context;
+using Regata.Core.DB.MSSQL.Models;
+using Regata.Core.Settings;
+using System.Linq;
+
+namespace Regata.Core
+{
+    public class Message
+    {
+        public string Caption      { get; set; } // filled in report notify
+        public string Head         { get; set; }
+        public ushort Code         { get; set; }
+        public Status Status       { get; set; } 
+        public string Text         { get; set; }
+        public string DetailedText { get; set; } // filled in report notify
+        public string Sender       { get; set; } // filled in report notify
+
+        public Message(ushort code)
+        {
+            Code = code;
+            Status = code == 0 ? Status.Error : (Status)(code / 1000);
+
+            MessageBase mb;
+            using (var rdbc = new RegataContext())
+            {
+                mb = rdbc.MessageBases.Where(m => m.Code == Code && m.Language == GlobalSettings.CurrentLanguage.ToString()).FirstOrDefault();
+            }
+
+            if (mb == null)
+                mb = new MessageBase();
+
+            Head = mb.Head;
+            Text = mb.Text;
+        }
+
+    } // public class Message
+}     // namespace Regata.Core
+ 

@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2020-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -25,7 +25,6 @@ namespace Regata.Tests.Cloud.SpectraToolses
 
         public SpectraToolsTest()
         {
-            Report.LogConnectionStringTarget = "MeasurementsLogConnectionString";
             Report.LogDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test", "SpectraToolsTest");
             WebDavClientApi.DiskJinrTarget = "MeasurementsDiskJinr";
             SpectraTools.DBTarget = "MSSQL_TEST_DB_ConnetionString";

@@ -71,7 +71,7 @@ namespace Regata.Core.UI.WinForms
                     break;
 
                 case null:
-                    Report.Notify(Codes.WARN_UI_WF_UTLT_NULL_CONTRL);
+                    Report.Notify(new Message(Codes.WARN_UI_WF_UTLT_NULL_CONTRL));
                     break;
 
                 default:

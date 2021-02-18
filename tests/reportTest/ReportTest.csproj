@@ -16,7 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\database\postgres\postgres.csproj" />
-    <ProjectReference Include="..\..\src\report\report.csproj" />
+    <ProjectReference Include="..\..\src\base\base.csproj" />
   </ItemGroup>
 
 </Project>
+

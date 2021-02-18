@@ -52,15 +52,15 @@ namespace Regata.Core.Cloud
                     var cm = AdysTech.CredentialManager.CredentialManager.GetCredentials(DiskJinrTarget);
 
                     if (cm == null)
-                        Report.Notify(Codes.ERR_CLD_TRGT_NFND); //"Can't load cloud storage credential. Please add it to the windows credential manager");
+                        Report.Notify(new Message(Codes.ERR_CLD_TRGT_NFND)); //"Can't load cloud storage credential. Please add it to the windows credential manager"));
 
                     _httpClient = new HttpClient();
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{cm.UserName}:{cm.Password}")));
-                    Report.Notify(Codes.SUCC_CLD_TRGT);
+                    Report.Notify(new Message(Codes.SUCC_CLD_TRGT));
                 }
                 catch
                 {
-                    Report.Notify(Codes.ERR_CLD_CON_UNREG);
+                    Report.Notify(new Message(Codes.ERR_CLD_CON_UNREG));
                     _diskJinrTarget = value;
                 }
             }
@@ -78,10 +78,10 @@ namespace Regata.Core.Cloud
             {
                 if (_httpClient == null)
                 {
-                    Report.Notify(Codes.ERR_CLD_HC_NULL);
+                    Report.Notify(new Message(Codes.ERR_CLD_HC_NULL));
                     return false;
                 }
-                Report.Notify(Codes.INFO_CLD_RMV_FILE);
+                Report.Notify(new Message(Codes.INFO_CLD_RMV_FILE));
                 if (!await IsExistsAsync(path, ct)) return true;
                 var response = await _httpClient.DeleteAsync($"{_hostBase}{_hostWebDavAPI}/{path.Substring(Path.GetPathRoot(path).Length)}", ct).ConfigureAwait(false);
 
@@ -89,7 +89,7 @@ namespace Regata.Core.Cloud
             }
             catch
             {
-                Report.Notify(Codes.ERR_CLD_RMV_FILE_UNREG);
+                Report.Notify(new Message(Codes.ERR_CLD_RMV_FILE_UNREG));
                 return false;
             }
         }
@@ -100,15 +100,15 @@ namespace Regata.Core.Cloud
             {
                 if (_httpClient == null)
                 {
-                    Report.Notify(Codes.ERR_CLD_HC_NULL);
+                    Report.Notify(new Message(Codes.ERR_CLD_HC_NULL));
                     return false;
                 }
 
-                Report.Notify(Codes.INFO_CLD_UPL_FILE);
+                Report.Notify(new Message(Codes.INFO_CLD_UPL_FILE));
 
                 if (!File.Exists(path))
                 {
-                    Report.Notify(Codes.ERR_CLD_UPL_FILE_NFND); //($"File '{path}' doesn't exist");
+                    Report.Notify(new Message(Codes.ERR_CLD_UPL_FILE_NFND)); //($"File '{path}' doesn't exist"));
                     return false;
                 }
 
@@ -121,7 +121,7 @@ namespace Regata.Core.Cloud
             }
             catch
             {
-                Report.Notify(Codes.ERR_CLD_UPL_FILE_UNREG);
+                Report.Notify(new Message(Codes.ERR_CLD_UPL_FILE_UNREG));
                 return false;
             }
         }
@@ -132,11 +132,11 @@ namespace Regata.Core.Cloud
             {
                 if (_httpClient == null)
                 {
-                    Report.Notify(Codes.ERR_CLD_HC_NULL);
+                    Report.Notify(new Message(Codes.ERR_CLD_HC_NULL));
                     return string.Empty;
                 }
 
-                Report.Notify(Codes.INFO_CLD_FL_SHRNG);
+                Report.Notify(new Message(Codes.INFO_CLD_FL_SHRNG));
 
                 using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{_hostBase}{_hostOCSApi}?path={file.Substring(Path.GetPathRoot(file).Length)}&shareType=3&permissions=3&name={Path.GetFileNameWithoutExtension(file)}"))
                 {
@@ -146,7 +146,7 @@ namespace Regata.Core.Cloud
 
                     if (string.IsNullOrEmpty(content))
                     {
-                        Report.Notify(Codes.ERR_CLD_FL_SHRNG_FNFND); //$"File '{file.Substring(Path.GetPathRoot(file).Length)}' has not found in disk.");
+                        Report.Notify(new Message(Codes.ERR_CLD_FL_SHRNG_FNFND)); //$"File '{file.Substring(Path.GetPathRoot(file).Length)}' has not found in disk."));
                         return string.Empty;
                     }
 
@@ -158,7 +158,7 @@ namespace Regata.Core.Cloud
             }
             catch
             {
-                Report.Notify(Codes.ERR_CLD_FL_SHRNG_UNREG);
+                Report.Notify(new Message(Codes.ERR_CLD_FL_SHRNG_UNREG));
                 return string.Empty;
             }
         }
@@ -169,18 +169,18 @@ namespace Regata.Core.Cloud
             { 
             if (_httpClient == null)
             {
-                Report.Notify(Codes.ERR_CLD_HC_NULL);
+                Report.Notify(new Message(Codes.ERR_CLD_HC_NULL));
                 return false;
             }
 
-            Report.Notify(Codes.INFO_CLD_IS_EXST);
+            Report.Notify(new Message(Codes.INFO_CLD_IS_EXST));
 
             var response = await SendAsync(new Uri($"{_hostBase}{_hostWebDavAPI}/{path.Substring(Path.GetPathRoot(path).Length)}"), new HttpMethod("PROPFIND"), ct);
             return IsSuccessfull(await response.Content.ReadAsStringAsync());
             }
             catch
             {
-                Report.Notify(Codes.ERR_CLD_IS_EXST_UNREG);
+                Report.Notify(new Message(Codes.ERR_CLD_IS_EXST_UNREG));
                 return false;
             }
         }
@@ -191,11 +191,11 @@ namespace Regata.Core.Cloud
             {
                 if (_httpClient == null)
                 {
-                    Report.Notify(Codes.ERR_CLD_HC_NULL);
+                    Report.Notify(new Message(Codes.ERR_CLD_HC_NULL));
                     return;
                 }
 
-                Report.Notify(Codes.INFO_CLD_CRT_DIR);
+                Report.Notify(new Message(Codes.INFO_CLD_CRT_DIR));
 
                 var dir = path.Substring(Path.GetPathRoot(path).Length);
                 var subPath = "";
@@ -212,7 +212,7 @@ namespace Regata.Core.Cloud
 
             catch
             {
-                Report.Notify(Codes.ERR_CLD_CRT_DIR_UNREG);
+                Report.Notify(new Message(Codes.ERR_CLD_CRT_DIR_UNREG));
                 return;
             }
         }
@@ -223,21 +223,21 @@ namespace Regata.Core.Cloud
             {
                 if (_httpClient == null)
                 {
-                    Report.Notify(Codes.ERR_CLD_HC_NULL);
+                    Report.Notify(new Message(Codes.ERR_CLD_HC_NULL));
                     return false;
                 }
 
                 if (resp.Contains("exception") || resp.Contains("error"))
                 {
-                    Report.Notify(Codes.WRN_CLD_BAD_RSPN);
+                    Report.Notify(new Message(Codes.WRN_CLD_BAD_RSPN));
                     return false;
                 }
-                Report.Notify(Codes.SUCC_CLD_GOOD_RSPN);
+                Report.Notify(new Message(Codes.SUCC_CLD_GOOD_RSPN));
                 return true;
             }
             catch
             {
-                Report.Notify(Codes.ERR_CLD_BAD_RSPN_UNREG);
+                Report.Notify(new Message(Codes.ERR_CLD_BAD_RSPN_UNREG));
                 return false;
             }
 }
@@ -253,7 +253,7 @@ namespace Regata.Core.Cloud
             {
                 if (_httpClient == null)
                 {
-                    Report.Notify(Codes.ERR_CLD_HC_NULL);
+                    Report.Notify(new Message(Codes.ERR_CLD_HC_NULL));
                     return null;
                 }
 
@@ -266,7 +266,7 @@ namespace Regata.Core.Cloud
             }
             catch
             {
-                Report.Notify(Codes.ERR_CLD_SEND_REQ_UNREG);
+                Report.Notify(new Message(Codes.ERR_CLD_SEND_REQ_UNREG));
                 return null;
             }
         }
@@ -277,7 +277,7 @@ namespace Regata.Core.Cloud
             {
                 if (_httpClient == null)
                 {
-                    Report.Notify(Codes.ERR_CLD_HC_NULL);
+                    Report.Notify(new Message(Codes.ERR_CLD_HC_NULL));
                     return;
                 }
 
@@ -296,7 +296,7 @@ namespace Regata.Core.Cloud
             }
             catch
             {
-                Report.Notify(Codes.ERR_CLD_DWNLD_FILE_UNREG);
+                Report.Notify(new Message(Codes.ERR_CLD_DWNLD_FILE_UNREG));
                 return;
             }
         }

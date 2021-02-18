@@ -44,11 +44,11 @@ namespace Regata.Core.Hardware
 
                 if (!File.Exists(effFileName))
                 {
-                    Report.Notify(Codes.ERR_DET_EFF_H_FILE_NF);
+                    Report.Notify(new Message(Codes.ERR_DET_EFF_H_FILE_NF));
                     return;
                 }
 
-                Report.Notify(Codes.INFO_DET_EFF_H_FILE_ADD); 
+                Report.Notify(new Message(Codes.INFO_DET_EFF_H_FILE_ADD)); 
                 var effFile = new CanberraDataAccessLib.DataAccess();
                 effFile.Open(effFileName);
                 effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_GEOM);
@@ -57,7 +57,7 @@ namespace Regata.Core.Hardware
             }
             catch
             {
-                Report.Notify(Codes.ERR_DET_EFF_H_FILE_UNREG);
+                Report.Notify(new Message(Codes.ERR_DET_EFF_H_FILE_UNREG));
             }
         }
 
@@ -69,11 +69,11 @@ namespace Regata.Core.Hardware
 
                 if (!File.Exists(effFileName))
                 {
-                    Report.Notify(Codes.ERR_DET_EFF_ENG_FILE_NF);
+                    Report.Notify(new Message(Codes.ERR_DET_EFF_ENG_FILE_NF));
                     return;
                 }
 
-                Report.Notify(Codes.INFO_DET_EFF_ENG_FILE_ADD);
+                Report.Notify(new Message(Codes.INFO_DET_EFF_ENG_FILE_ADD));
                 var effFile = new CanberraDataAccessLib.DataAccess();
                 effFile.Open(effFileName);
                 effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_SHAPECALRES);
@@ -83,7 +83,7 @@ namespace Regata.Core.Hardware
             }
             catch
             {
-                Report.Notify(Codes.ERR_DET_EFF_ENG_FILE_UNREG);
+                Report.Notify(new Message(Codes.ERR_DET_EFF_ENG_FILE_UNREG));
             }
         }
 

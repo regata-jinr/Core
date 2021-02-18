@@ -24,32 +24,37 @@ namespace Regata.Tests.Reports
         [TestMethod]
         public void ReportInfoTest()
         {
-            Report.LogConnectionStringTarget = "MeasurementsLogConnectionString";
             Report.LogDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test", "ReportTest");
             Directory.CreateDirectory(Report.LogDir);
-            Report.User = "bdrum";
-            var msg = new Message()
+            var msg = new Message(0)
             {
-                Code     = 0,
-                BaseBody = "TestInform BaseBody",
-                Level    =  Status.Error,
-                Place    = "InformLevelTest",
-                Sender   = "ReportTest",
-                Title    = "InformLevelTest",
-                User     = "bdrum",
-                TechBody = "TestInform TechBody"
+
+                  Caption       = "",
+                  Head          = "",    
+                  Code          = 0,        
+                  Status        = Status.Error,      
+                  Text          = "",
+                  DetailedText  = "", 
+                  Sender        = "ReportTest"
+
+                //BaseBody = "TestInform BaseBody",
+                //Level    =  Status.Error,
+                //Place    = "InformLevelTest",
+                //Sender   = "ReportTest",
+                //Title    = "InformLevelTest",
+                //User     = "bdrum",
+                //TechBody = "TestInform TechBody"
             };
 
-            Report.Notify(0);
+            Report.Notify(new Message(0), WriteToLog: true);
 
-
-            using (var lc = new LogContext("MeasurementsLogConnectionString"))
+            using (var lc = new LogContext("RegataCoreLogCS"))
             {
                 var last_log = lc.Logs.OrderBy(l => l.date_time).Last();
 
-                Assert.AreEqual(msg.Level.ToString().ToUpper(), last_log.level);
+                Assert.AreEqual(msg.Status.ToString().ToUpper(), last_log.level);
                 Assert.IsTrue(10 > (DateTime.Now.AddHours(-2) - last_log.date_time).TotalSeconds);
-                Assert.AreEqual(msg.User, last_log.assistant);
+                Assert.AreEqual("bdrum", last_log.assistant);
                 Assert.AreEqual(msg.Sender, last_log.frominstance);
             }
         }

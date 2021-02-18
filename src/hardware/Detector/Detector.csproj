@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -8,8 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\database\mssql\models\mssql-models.csproj" />
-    <ProjectReference Include="..\..\report\report.csproj" />
-    <ProjectReference Include="..\..\settings\settings.csproj" />
+    <ProjectReference Include="..\..\base\base.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,3 +21,4 @@
   </ItemGroup>
 
 </Project>
+

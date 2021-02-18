@@ -54,12 +54,12 @@ namespace Regata.Core.UI.WinForms.Controls
                 if (value == null)
                 {
                     _data = new BindingList<Model>();
-                    Report.Notify(Codes.ERR_UI_WF_RDGV_Null_Data);
+                    Report.Notify(new Message(Codes.ERR_UI_WF_RDGV_Null_Data));
                     return;
                 }
 
                 if (value.Count == 0)
-                    Report.Notify(Codes.WARN_UI_WF_RDGV_Empty_Data);
+                    Report.Notify(new Message(Codes.WARN_UI_WF_RDGV_Empty_Data));
                 
                 _data = value;
 

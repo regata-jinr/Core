@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2020-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -9,13 +9,13 @@
  *                                                                         *
  ***************************************************************************/
 
-
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Net;
+using Regata.Core.Settings;
 using AdysTech.CredentialManager;
 
 namespace Regata.Core
@@ -40,7 +40,6 @@ namespace Regata.Core
         public static Status MailVerbosity = Status.Error;
 
         public static string MailHostTarget;
-        public static string User;
         public static string PathToMessages;
         private static string _logDir;
 
@@ -49,40 +48,20 @@ namespace Regata.Core
             get { return _logDir; }
             set
             {
-                if (string.IsNullOrEmpty(LogConnectionStringTarget))
-                    return;
-
-                if (_nLogger == null)
-                {
-                    NLog.GlobalDiagnosticsContext.Set("LogConnectionString", CredentialManager.GetCredentials(LogConnectionStringTarget).Password);
-                    _nLogger = NLog.LogManager.GetCurrentClassLogger();
-                }
-
                 _logDir = value;
                 NLog.GlobalDiagnosticsContext.Set("LogDir", _logDir);
-
             }
         }
 
-        private static string _logConnectionStringTarget = "MeasurementsLogConnectionString";
-
-        public static string LogConnectionStringTarget
-        {
-            get { return _logConnectionStringTarget; }
-            set
-            {
-                _logConnectionStringTarget = value;
-                if (string.IsNullOrEmpty(_logConnectionStringTarget))
-                {
-                    _nLogger = null;
-                    return;
-                }
-                NLog.GlobalDiagnosticsContext.Set("LogConnectionString", CredentialManager.GetCredentials(LogConnectionStringTarget).Password);
-                _nLogger = NLog.LogManager.GetCurrentClassLogger();
-            }
-        }
+        private const string _logConnectionStringTarget = "RegataCoreLogCS";
         private  static NLog.Logger _nLogger;
 
+        static Report()
+        {
+            NLog.GlobalDiagnosticsContext.Set("LogConnectionString", CredentialManager.GetCredentials(_logConnectionStringTarget).Password);
+            _nLogger = NLog.LogManager.GetCurrentClassLogger();
+
+        }
 
         private static readonly Dictionary<Status, NLog.LogLevel> ExceptionLevel_LogLevel = new Dictionary<Status, NLog.LogLevel> { { Status.Error, NLog.LogLevel.Error }, { Status.Warning, NLog.LogLevel.Warn }, { Status.Info, NLog.LogLevel.Info } };
 
@@ -94,34 +73,23 @@ namespace Regata.Core
         /// </summary>
         public  static event Action<Message> NotificationEvent;
 
-        public static void Notify(ushort code, bool callEvent=false, bool WriteToLog=false, bool NotifyByEmail = false) 
+        public static void Notify(Message msg, bool callEvent=false, bool WriteToLog=false, bool NotifyByEmail = false) 
         {
             try
             {
                 StackTrace st = new StackTrace();
                 StackFrame sf = st.GetFrame(1);
                 var method = sf.GetMethod();
-                Status status = code == 0 ? Status.Error : (Status)(code / 1000);
-                _nLogger.SetProperty("Sender", method.DeclaringType.Name);
-                _nLogger.SetProperty("Assistant", User);
+                var status = msg.Status;
 
-                var msg = new Message()
-                {
-                    User     = User,
-                    Code     = code,
-                    Level    = status,
-                    Sender   = method.DeclaringType.Name,
-                    Place    = method.Name,
-                    Title    = "",  // FIXME: form the list of linked messages(title, basebody, techbody) with                 code.
-                                    // it should depends from PathToMessages that lead to file with contents
-                                    // so as follow up I can change language
-                    BaseBody = "",
-                    TechBody = ""
-                };
+                msg.Sender = method.DeclaringType.Name;
+                msg.Caption = $"{method.Module}-[{status}]-[{DateTime.Now}]";
+                _nLogger.SetProperty("Sender", msg.Sender);
+                _nLogger.SetProperty("Assistant", GlobalSettings.User);
 
                 if ((int)LogVerbosity <= (int)status || WriteToLog)
                 {
-                    _nLogger?.Log(ExceptionLevel_LogLevel[status], msg.TechBody);
+                    _nLogger?.Log(ExceptionLevel_LogLevel[status], string.Concat(msg.Head, "---", msg.DetailedText));
                 }
                  
                 if ((int)MailVerbosity <= (int)status || NotifyByEmail)
@@ -142,7 +110,6 @@ namespace Regata.Core
                     _nLogger.Log(NLog.LogLevel.Error, e.ToString().Substring(0, 300));
             }
         }
-
 
         // FIXME in case of network error will this freeze the app despite of SendAsync?
         private static void SendMessageByEmail(Message msg)
@@ -168,11 +135,13 @@ namespace Regata.Core
                     {
                         Subject = msg.ToString(),
                         Body = string.Join(
-                          msg.BaseBody,
+                          msg.Text,
+                          Environment.NewLine,
                           Environment.NewLine,
                           "===*******TECH INFO*******==",
                           Environment.NewLine,
-                          msg.TechBody
+                          Environment.NewLine,
+                          msg.DetailedText
                           )
                     })
                     {
@@ -181,23 +150,11 @@ namespace Regata.Core
                     }
                 }
             }
-        }
-    }  // public  class Notify
+
+        } // private static void SendMessageByEmail(Message msg)
+
+    } // public  class Notify
 
     public enum Status { Info, Success, Warning, Error }
-
-
-    public class Message
-    {
-        public string BaseBody;
-        public string TechBody;
-        public string Place;
-        public string User;
-        public string Sender;
-        public ushort Code;
-        public Status Level;
-        public string Title;
-        public override string ToString() => $"[{Level}] {Title}";
-    }
 
 } // namespace Regata.Measurements.Managers

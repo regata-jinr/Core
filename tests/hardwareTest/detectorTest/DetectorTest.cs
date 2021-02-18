@@ -30,7 +30,6 @@ namespace Regata.Tests.Hardware.Detectors
 
         public DetectorsTest()
         {
-            Report.LogConnectionStringTarget = "MeasurementsLogConnectionString";
             Report.LogDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test", "DetectorTest");
             Directory.CreateDirectory(Report.LogDir);
 

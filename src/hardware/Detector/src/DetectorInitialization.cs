@@ -69,7 +69,7 @@ namespace Regata.Core.Hardware
                     DetSet.Name = name;
                 else
                 {
-                    Report.Notify(Codes.ERR_DET_NAME_N_EXST);
+                    Report.Notify(new Message(Codes.ERR_DET_NAME_N_EXST));
                     return;
                 }
 
@@ -84,13 +84,13 @@ namespace Regata.Core.Hardware
             }
             catch
             {
-                Report.Notify(Codes.ERR_DET_CTOR_UNREG);
+                Report.Notify(new Message(Codes.ERR_DET_CTOR_UNREG));
             }
         }
 
         private void CleanUp(bool isDisposing)
         {
-            Report.Notify(Codes.INFO_DET_CLN);
+            Report.Notify(new Message(Codes.INFO_DET_CLN));
 
             if (!_isDisposed)
             {
@@ -125,17 +125,17 @@ namespace Regata.Core.Hardware
             // FIXME: not tested
             try
             {
-                Report.Notify(Codes.INFO_DET_RST);
+                Report.Notify(new Message(Codes.INFO_DET_RST));
                 _device.SendCommand(DeviceCommands.aReset);
 
                 if (Status == DetectorStatus.ready)
-                    Report.Notify(Codes.SUCC_DET_RST);
+                    Report.Notify(new Message(Codes.SUCC_DET_RST));
                 else
-                    Report.Notify(Codes.WARN_DET_RST);
+                    Report.Notify(new Message(Codes.WARN_DET_RST));
             }
             catch
             {
-                Report.Notify(Codes.ERR_DET_RST_UNREG);
+                Report.Notify(new Message(Codes.ERR_DET_RST_UNREG));
             }
         }
 
@@ -153,7 +153,7 @@ namespace Regata.Core.Hardware
             }
             catch
             {
-                Report.Notify(Codes.ERR_DET_AVAIL_UNREG);
+                Report.Notify(new Message(Codes.ERR_DET_AVAIL_UNREG));
             }
             return false;
         }

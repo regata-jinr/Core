@@ -49,10 +49,10 @@ namespace Regata.Core.Hardware
                 if (e.Message.Contains("278e2a"))
                 {
                     Status = DetectorStatus.busy;
-                    Report.Notify(Codes.WARN_DET_BUSY);
+                    Report.Notify(new Message(Codes.WARN_DET_BUSY));
                 }
                 else
-                    Report.Notify(Codes.ERR_DET_INTR_CONN_UNREG);
+                    Report.Notify(new Message(Codes.ERR_DET_INTR_CONN_UNREG));
             }
         }
 
@@ -66,11 +66,11 @@ namespace Regata.Core.Hardware
             {
                 ConnectInternal();
                 if (_device.IsConnected)
-                    Report.Notify(Codes.SUCC_DET_CON);
+                    Report.Notify(new Message(Codes.SUCC_DET_CON));
             }
             catch
             {
-                Report.Notify(Codes.ERR_DET_CONN_UNREG);
+                Report.Notify(new Message(Codes.ERR_DET_CONN_UNREG));
             }
         }
 
@@ -82,7 +82,7 @@ namespace Regata.Core.Hardware
         /// In case status is busy, it will run recursively before 3 attempts with 5sec pausing.
         public async Task Reconnect()
         {
-            Report.Notify(Codes.INFO_DET_RECON);
+            Report.Notify(new Message(Codes.INFO_DET_RECON));
 
             var t1 = Task.Run(() => { while (!_device.IsConnected) { Disconnect(); } });
             var t2 = Task.Delay(DetSet.ConnectionTimeOut);
@@ -93,27 +93,27 @@ namespace Regata.Core.Hardware
                 Connect();
 
             if (t3 == t1 && _device.IsConnected)
-                Report.Notify(Codes.SUCC_DET_RECON);
+                Report.Notify(new Message(Codes.SUCC_DET_RECON));
 
             if (t3 == t2)
-                Report.Notify(Codes.WARN_DET_CONN_TIMEOUT);
+                Report.Notify(new Message(Codes.WARN_DET_CONN_TIMEOUT));
         }
 
         public void Disconnect()
         {
             try
             {
-                Report.Notify(Codes.INFO_DET_DCON);
+                Report.Notify(new Message(Codes.INFO_DET_DCON));
                 if (_device.IsConnected)
                     _device.Disconnect();
 
-                Report.Notify(Codes.SUCC_DET_DCON);
+                Report.Notify(new Message(Codes.SUCC_DET_DCON));
                 Status = DetectorStatus.off;
                 ErrorMessage = "";
             }
             catch
             {
-                Report.Notify(Codes.ERR_DET_DCON_UNREG);
+                Report.Notify(new Message(Codes.ERR_DET_DCON_UNREG));
             }
         }
 
