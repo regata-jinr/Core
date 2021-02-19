@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
+using Regata.Core.Settings;
 using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms.Forms
@@ -17,30 +18,30 @@ namespace Regata.Core.UI.WinForms.Forms
         where MainTableModel : class
     {
         
-        public RegisterForm(uint tabsNum=2, uint dgvsNum=2, float BigDgvSizeCoeff = 0.66f, Settings.Language lang = Settings.Language.English)
+        public RegisterForm(uint tabsNum=2, uint dgvsNum=2, float BigDgvSizeCoeff = 0.66f)
         {
             InitializeComponent();
             InitializeMainTable();
             InitializeTabControl(tabsNum, dgvsNum, BigDgvSizeCoeff);
            
-            LangItem.CheckedChanged += Labels_LanguageItemChanged;
-            Labels.LanguageChanged += Labels_LanguageChanged;
+            LangItem.CheckedChanged        += LabelsLanguageItemChanged;
+            GlobalSettings.LanguageChanged += LanguageChanged;
+            TabsPane.DataSourceChanged     += LanguageChanged; // it is possible to create form before filling the dgvs. It will lead to unlabeled dgvs columns
 
-            Labels.CurrentLanguage = lang;
-
+            LanguageChanged(); // init current language and set related checked items
         }
 
-        private void Labels_LanguageItemChanged()
+        private void LabelsLanguageItemChanged()
         {
-            Labels.CurrentLanguage = LangItem.CheckedItem;
+            GlobalSettings.CurrentLanguage = LangItem.CheckedItem;
         }
 
-        private void Labels_LanguageChanged()
+        private void LanguageChanged()
         {
-            Labels.SetControlsLabels(this.Controls);
-            LangItem.CheckedChanged -= Labels_LanguageItemChanged;
-            LangItem.CheckItem(Labels.CurrentLanguage);
-            LangItem.CheckedChanged += Labels_LanguageItemChanged;
+            Labels.SetControlsLabels(Controls);
+            LangItem.CheckedChanged -= LabelsLanguageItemChanged;
+            LangItem.CheckItem(GlobalSettings.CurrentLanguage);
+            LangItem.CheckedChanged += LabelsLanguageItemChanged;
         }
 
     } //public partial class RegisterForm : Form

@@ -20,20 +20,6 @@ namespace Regata.Core.UI.WinForms
     // TODO: how to call ChangeControlLabels for all opening forms? event?
     public static class Labels
     {
-        private static Language _lang;
-
-        public static Language CurrentLanguage 
-        {
-            get { return _lang; }
-            set
-            {
-                _lang = value;
-                LanguageChanged?.Invoke();
-            }
-        }
-
-        public static event Action LanguageChanged;
-
         public static void SetControlsLabels(Control.ControlCollection controls)
         {
             foreach (var cont in controls)
@@ -49,9 +35,8 @@ namespace Regata.Core.UI.WinForms
             switch (obj)
             {
                 case DataGridViewColumn dgvc:
-                    var headerTmp = Labels.GetLabel(dgvc.Name, CurrentLanguage);
-                    if (!string.IsNullOrEmpty(headerTmp))
-                        dgvc.HeaderText = Labels.GetLabel(dgvc.Name, CurrentLanguage);
+                    var headerTmp = GetLabel(dgvc.Name, GlobalSettings.CurrentLanguage);
+                    dgvc.HeaderText = !string.IsNullOrEmpty(headerTmp) ? headerTmp : dgvc.Name;
                     break;
                 default:
 
@@ -61,13 +46,12 @@ namespace Regata.Core.UI.WinForms
                     if (getNameMethod == null || setTextMethod == null) return;
 
                     var propertyName = getNameMethod.Invoke(obj, null).ToString();
-                    var NameFromLabels = Labels.GetLabel(propertyName, CurrentLanguage);
+                    var NameFromLabels = Labels.GetLabel(propertyName, GlobalSettings.CurrentLanguage);
 
                     if (!string.IsNullOrEmpty(NameFromLabels))
                         setTextMethod.Invoke(obj, new object[] { NameFromLabels });
                     else
                         setTextMethod.Invoke(obj, new object[] { propertyName });
-
                     break;
             }
         }

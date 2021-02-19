@@ -45,6 +45,9 @@ namespace Regata.Core.UI.WinForms.Forms
             if (disposing && (components != null))
             {
                 components.Dispose();
+                LangItem.CheckedChanged        -= LabelsLanguageItemChanged;
+                GlobalSettings.LanguageChanged -= LanguageChanged;
+                TabsPane.DataSourceChanged     -= LanguageChanged;
             }
             base.Dispose(disposing);
         }

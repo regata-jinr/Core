@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 using System.Drawing;
+using System;
 using System.Linq;
 using System.Windows.Forms;
 using static System.Windows.Forms.TabControl;
@@ -21,6 +22,8 @@ namespace Regata.Core.UI.WinForms.Controls
         public TabPage ActiveTabPage => tabControl.SelectedTab; 
 
         public TabPageCollection Pages => tabControl.TabPages;
+
+        public event Action DataSourceChanged;
 
         private float _bigDgvSizeCoeff;
         private uint _dgvsNumberOnPage;
@@ -61,6 +64,7 @@ namespace Regata.Core.UI.WinForms.Controls
                 var dgv = new DataGridView();
                 dgv.Name = $"dgv_{pageIndex+1}_{i + 1}";
                 InitDgv(ref dgv);
+                dgv.DataSourceChanged += Dgv_DataSourceChanged;
 
                 int y_margin = 40;
 
@@ -86,6 +90,11 @@ namespace Regata.Core.UI.WinForms.Controls
 
                 AddDgvLabel(pageIndex, $"label_dgv_{pageIndex+1}_{i + 1}", new Point(dgv.Location.X,  dgv.Location.Y - y_margin / 2));
             }
+        }
+
+        private void Dgv_DataSourceChanged(object sender, EventArgs e)
+        {
+            DataSourceChanged?.Invoke();
         }
 
         private void InitDgv(ref DataGridView dgv)

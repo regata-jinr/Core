@@ -17,25 +17,19 @@ using Regata.Core.DB.MSSQL.Models;
 using Regata.Core.UI.WinForms.Controls;
 using System;
 
-
 namespace Regata.Tests.WinForms
 {
     [TestClass]
     public class RDataGridViewTest
     {
 
-        public string CS = AdysTech.CredentialManager.CredentialManager.GetCredentials("MSSQL_TEST_DB_ConnectionString").Password;
-
         private RDataGridView<Irradiation> _rdgv;
-
         public RDataGridViewTest()
         {
-
             _rdgv = new RDataGridView<Irradiation>();
 
             _rdgv.CurrentDbSet.Where(ir => ir.LoadNumber == 122).ToArray();
             _rdgv.DataSource = _rdgv.CurrentDbSet.Local.ToBindingList();
-
 
             #region will_not_populate_dgv_wo_this
 
@@ -47,47 +41,35 @@ namespace Regata.Tests.WinForms
             }
 
             #endregion
-
-
         }
 
         [TestMethod]
         public void ConstructorInitTest()
         {
-            
             Assert.AreEqual(20, _rdgv.ColumnCount);
             Assert.AreEqual(119, _rdgv.RowCount);
-            Assert.AreEqual(20359, _rdgv[0, 0].Value);
+            Assert.AreEqual(21838, _rdgv[0, 0].Value);
             Assert.AreEqual("m", _rdgv[1, 0].Value);
             Assert.AreEqual(GetDurationFromDb(20359), _rdgv[9, 0].Value);
-            Assert.AreEqual(10,  _rdgv[9, 1].Value);
+            Assert.AreEqual(344340,  _rdgv[9, 1].Value);
             Assert.AreEqual("m",  _rdgv[1, 3].Value);
-
         }
 
         [TestMethod]
         public void IsDataBindedTest()
         {
-            Assert.AreEqual(GetDurationFromDb(20359), _rdgv[9, 0].Value);
+            Assert.AreEqual(GetDurationFromDb(21838), _rdgv[9, 0].Value);
             _rdgv[9, 0].Value = new Random().Next(10,3000);
-            Assert.AreNotEqual(GetDurationFromDb(20359), _rdgv[9, 0].Value);
+            Assert.AreNotEqual(GetDurationFromDb(21838), _rdgv[9, 0].Value);
             _rdgv.SaveChanges();
-            Assert.AreEqual(GetDurationFromDb(20359), _rdgv[9, 0].Value);
-
+            Assert.AreEqual(GetDurationFromDb(21838), _rdgv[9, 0].Value);
         }
-
-
-
 
         public int GetDurationFromDb(int id)
         {
             using (var r = new Core.DB.MSSQL.Context.RegataContext())
-            {
-                return r.Irradiations.First(i => i.Id == 20359).Duration.Value;
-                r.Database.CanConnect();
-            }
+                return r.Irradiations.First(i => i.Id == 21838).Duration.Value;
         }
 
-
-    }
-}
+    } // public class RDataGridViewTest
+}     // namespace Regata.Tests.WinForms
