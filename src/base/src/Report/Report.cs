@@ -16,12 +16,13 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using System.Net;
 using Regata.Core.Settings;
+using Regata.Core.Messages;
 using AdysTech.CredentialManager;
 
 namespace Regata.Core
 {
     /// <summary>
-    /// Implementation of the Report service. The service allows to user setting up reporting system:
+    /// Implementation of the Report service. The service allows to user set up reporting system:
     /// - logs
     /// - different levels messaging:
     ///     - info  
@@ -35,10 +36,6 @@ namespace Regata.Core
     /// </summary>
     public static class Report
     {
-        public static Status LogVerbosity = Status.Info;
-        public static Status ShowVerbosity = Status.Warning;
-        public static Status MailVerbosity = Status.Error;
-
         public static string MailHostTarget;
         public static string PathToMessages;
         private static string _logDir;
@@ -73,7 +70,7 @@ namespace Regata.Core
         /// </summary>
         public  static event Action<Message> NotificationEvent;
 
-        public static void Notify(Message msg, bool callEvent=false, bool WriteToLog=false, bool NotifyByEmail = false) 
+        public static void Notify(Message msg, bool callEvent=false, bool WriteToLog=true, bool NotifyByEmail = false) 
         {
             try
             {
@@ -82,20 +79,26 @@ namespace Regata.Core
                 var method = sf.GetMethod();
                 var status = msg.Status;
 
+                switch (msg)
+                {
+                    case DetectorMessage dmsg:
+                        break;
+                }
+
                 msg.Sender = method.DeclaringType.Name;
                 msg.Caption = $"{method.Module}-[{status}]-[{DateTime.Now}]";
                 _nLogger.SetProperty("Sender", msg.Sender);
                 _nLogger.SetProperty("Assistant", GlobalSettings.User);
 
-                if ((int)LogVerbosity <= (int)status || WriteToLog)
+                if (WriteToLog)
                 {
                     _nLogger?.Log(ExceptionLevel_LogLevel[status], string.Concat(msg.Head, "---", msg.DetailedText));
                 }
                  
-                if ((int)MailVerbosity <= (int)status || NotifyByEmail)
+                if (status == Status.Error || NotifyByEmail)
                      SendMessageByEmail(msg);
                 
-                if ((int)ShowVerbosity <= (int)status || callEvent)
+                if ((int)GlobalSettings.Verbosity <= (int)status || callEvent)
                     NotificationEvent?.Invoke(msg);
 
             }
@@ -110,6 +113,13 @@ namespace Regata.Core
                     _nLogger.Log(NLog.LogLevel.Error, e.ToString().Substring(0, 300));
             }
         }
+
+
+        public static void FillMessageByCode()
+        {
+            
+        }
+
 
         // FIXME in case of network error will this freeze the app despite of SendAsync?
         private static void SendMessageByEmail(Message msg)

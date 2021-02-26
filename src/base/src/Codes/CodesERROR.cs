@@ -72,7 +72,7 @@ namespace Regata.Core
         public const ushort ERR_CLD_DWNLD_FILE_UNREG = 3120;
         public const ushort ERR_CLD_DWLD_UNREG = 3121;
         public const ushort ERR_CLD_DWLD_FNFND = 3122;
-
+        public const ushort ERR_CLD_DEL_FIL_DIR_UNREG = 3123;
 
         #endregion
 

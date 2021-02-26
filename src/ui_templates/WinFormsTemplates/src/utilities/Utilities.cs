@@ -12,6 +12,7 @@
 using System;
 using System.Windows.Forms;
 using Regata.Core.UI.WinForms.Controls;
+using RCM=Regata.Core.Messages;
 
 namespace Regata.Core.UI.WinForms
 {
@@ -71,7 +72,7 @@ namespace Regata.Core.UI.WinForms
                     break;
 
                 case null:
-                    Report.Notify(new Message(Codes.WARN_UI_WF_UTLT_NULL_CONTRL));
+                    Report.Notify(new RCM.Message(Codes.WARN_UI_WF_UTLT_NULL_CONTRL));
                     break;
 
                 default:

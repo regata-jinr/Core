@@ -20,7 +20,7 @@ using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
 using Regata.Core.UI.WinForms.Controls.Settings;
 using Regata.Core.DB.MSSQL.Context;
-using Regata.Core.DB.MSSQL.Models;
+using RCM=Regata.Core.Messages;
 
 // TODO: add column filling by value
 // TODO: add data validation
@@ -54,12 +54,12 @@ namespace Regata.Core.UI.WinForms.Controls
                 if (value == null)
                 {
                     _data = new BindingList<Model>();
-                    Report.Notify(new Message(Codes.ERR_UI_WF_RDGV_Null_Data));
+                    Report.Notify(new RCM.Message(Codes.ERR_UI_WF_RDGV_Null_Data));
                     return;
                 }
 
                 if (value.Count == 0)
-                    Report.Notify(new Message(Codes.WARN_UI_WF_RDGV_Empty_Data));
+                    Report.Notify(new RCM.Message(Codes.WARN_UI_WF_RDGV_Empty_Data));
                 
                 _data = value;
 

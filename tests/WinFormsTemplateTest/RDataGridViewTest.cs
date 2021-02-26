@@ -10,7 +10,6 @@
  ***************************************************************************/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Regata.Core.UI.WinForms;
 using System.Linq;
 using System.Windows.Forms;
 using Regata.Core.DB.MSSQL.Models;

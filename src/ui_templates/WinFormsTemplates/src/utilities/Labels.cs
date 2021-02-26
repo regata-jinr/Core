@@ -10,10 +10,10 @@
  ***************************************************************************/
 
 using System.Linq;
-using System;
 using Regata.Core.Settings;
 using System.Windows.Forms;
 using Regata.Core.DB.MSSQL.Context;
+using RCM=Regata.Core.Messages;
 
 namespace Regata.Core.UI.WinForms
 { 
@@ -71,7 +71,7 @@ namespace Regata.Core.UI.WinForms
             }
             catch
             {
-                Report.Notify(new Message(Codes.ERR_SET_GET_LBL_UNREG));
+                Report.Notify(new RCM.Message(Codes.ERR_SET_GET_LBL_UNREG));
                 return string.Empty;
 
             }

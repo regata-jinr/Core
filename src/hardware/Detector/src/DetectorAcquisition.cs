@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2017-2020, REGATA Experiment at FLNP|JINR                  *
+ * Copyright(c) 2017-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -27,6 +27,7 @@
 // └── IDetector.cs                --> Interface of the Detector type
 
 using System;
+using Regata.Core.Messages;
 using CanberraDeviceAccessLib;
 
 namespace Regata.Core.Hardware
@@ -48,7 +49,7 @@ namespace Regata.Core.Hardware
 
                 if (Status != DetectorStatus.ready)
                 {
-                    Report.Notify(new Message(Codes.ERR_DET_NOT_READY));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_NOT_READY));
                     return;
                 }
 
@@ -60,7 +61,7 @@ namespace Regata.Core.Hardware
             }
             catch
             {
-                Report.Notify(new Message(Codes.ERR_DET_ACQ_START_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_START_UNREG));
             }
 
         }
@@ -75,15 +76,15 @@ namespace Regata.Core.Hardware
                 if (Status == DetectorStatus.ready)
                     return;
 
-                Report.Notify(new Message(Codes.INFO_DET_ACQ_PAUSE)); //$"Attempt to set pause for the acquiring"));
+                Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_PAUSE)); //$"Attempt to set pause for the acquiring"));
                 _device.AcquirePause();
                 IsPaused = true;
                 Status = DetectorStatus.ready;
-                Report.Notify(new Message(Codes.SUCC_DET_ACQ_PAUSE)); //$"Paused was successful. Detector ready to continue acquire process"));
+                Report.Notify(new DetectorMessage(Codes.SUCC_DET_ACQ_PAUSE)); //$"Paused was successful. Detector ready to continue acquire process"));
             }
             catch
             {
-                Report.Notify(new Message(Codes.ERR_DET_ACQ_PAUSE_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_PAUSE_UNREG));
             }
 
         }
@@ -97,16 +98,16 @@ namespace Regata.Core.Hardware
             {
                 if (Status == DetectorStatus.ready)
                     return;
-                Report.Notify(new Message(Codes.INFO_DET_ACQ_STOP)); //$"Attempt to stop the acquiring"));
+                Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_STOP)); //$"Attempt to stop the acquiring"));
                 _device.AcquireStop(StopOptions.aNormalStop);
                 //_device.SendCommand(DeviceCommands.aStop); // use command sending because in this case it will generate AcquireDone message
                 IsPaused = false;
                 Status = DetectorStatus.ready;
-                Report.Notify(new Message(Codes.SUCC_DET_ACQ_STOP)); //$"Stop was successful. Acquire done event will be generate. Detector ready to acquire again"));
+                Report.Notify(new DetectorMessage(Codes.SUCC_DET_ACQ_STOP)); //$"Stop was successful. Acquire done event will be generate. Detector ready to acquire again"));
             }
             catch
             {
-                Report.Notify(new Message(Codes.ERR_DET_ACQ_STOP_UNREG)); //e, NotificationLevel.Error, AppManager.Sender));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_STOP_UNREG)); //e, NotificationLevel.Error, AppManager.Sender));
             }
 
         }
@@ -118,12 +119,12 @@ namespace Regata.Core.Hardware
         {
             try
             {
-                Report.Notify(new Message(Codes.INFO_DET_ACQ_CLR)); //$"Clearing the detector"));
+                Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_CLR)); //$"Clearing the detector"));
                 _device.Clear();
             }
             catch
             {
-                Report.Notify(new Message(Codes.ERR_DET_ACQ_CLR_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_CLR_UNREG));
             }
         }
 
@@ -134,7 +135,7 @@ namespace Regata.Core.Hardware
             set
             {
                 _acquisitionModes = value;
-                Report.Notify(new Message(Codes.INFO_DET_ACQ_MODE_CHNG)); //$"Detector has got Acquisition mode - '{value}' and number of counts - '{Counts}'"));
+                Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_MODE_CHNG)); //$"Detector has got Acquisition mode - '{value}' and number of counts - '{Counts}'"));
                 _device.SpectroscopyAcquireSetup(value, Counts);
             }
         }
@@ -146,7 +147,7 @@ namespace Regata.Core.Hardware
             set
             {
                 _counts = value;
-                Report.Notify(new Message(Codes.INFO_DET_ACQ_COUNTS_CHNG)); //$"Detector has got Acquisition mode - '{AcquisitionMode}' and number of counts - '{value}'"));
+                Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_COUNTS_CHNG)); //$"Detector has got Acquisition mode - '{AcquisitionMode}' and number of counts - '{value}'"));
                 _device.SpectroscopyAcquireSetup(AcquisitionMode, value);
             }
         }
@@ -186,7 +187,7 @@ namespace Regata.Core.Hardware
             {
                 if ((int)AdviseMessageMasks.amAcquireDone == lParam && !IsPaused)
                 {
-                    Report.Notify(new Message(Codes.INFO_DET_ACQ_DONE)); //$"Has got message AcquireDone."));
+                    Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_DONE)); //$"Has got message AcquireDone."));
                     response = "Acquire has done";
                     Status = DetectorStatus.ready;
                     CurrentMeasurement.DateTimeFinish = DateTime.Now;
@@ -195,7 +196,7 @@ namespace Regata.Core.Hardware
 
                 if ((int)AdviseMessageMasks.amAcquireStart == lParam)
                 {
-                    Report.Notify(new Message(Codes.INFO_DET_ACQ_START)); //$"Has got message amAcquireStart."));
+                    Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_START)); //$"Has got message amAcquireStart."));
                     response = "Acquire has start";
                     Status = DetectorStatus.busy;
                     isForCalling = true;
@@ -207,7 +208,7 @@ namespace Regata.Core.Hardware
                     ErrorMessage = $"{_device.Message((MessageCodes)lParam)}";
                     response = ErrorMessage;
                     isForCalling = true;
-                    Report.Notify(new Message(Codes.ERR_DET_ACQ_HRDW));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_HRDW));
                 }
                 if ((int)AdviseMessageMasks.amAcquisitionParamChange == lParam)
                 {
@@ -219,7 +220,7 @@ namespace Regata.Core.Hardware
             }
             catch
             {
-                Report.Notify(new Message(Codes.ERR_DET_MSG_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_MSG_UNREG));
             }
         }
 

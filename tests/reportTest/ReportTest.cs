@@ -11,6 +11,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Regata.Core;
+using Regata.Core.Messages;
 using Regata.Core.DataBase.Postgres.Context;
 using System.Linq;
 using System;

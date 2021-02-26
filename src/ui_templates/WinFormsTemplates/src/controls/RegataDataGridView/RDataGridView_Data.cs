@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 using System.Windows.Forms;
+using RCM = Regata.Core.Messages;
 
 namespace Regata.Core.UI.WinForms.Controls
 {
@@ -22,7 +23,7 @@ namespace Regata.Core.UI.WinForms.Controls
             {
                 if (c.ValueType != typeof(T))
                 {
-                    Report.Notify(new Message(Codes.WARN_UI_WF_RDGV_Wrong_Value_Type));
+                    Report.Notify(new RCM.Message(Codes.WARN_UI_WF_RDGV_Wrong_Value_Type));
                     continue;
                 }
                 c.Value = value;

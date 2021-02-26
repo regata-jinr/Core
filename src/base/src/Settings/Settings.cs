@@ -13,12 +13,16 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.IO;
+using Regata.Core.Messages;
 
 namespace Regata.Core.Settings
 {
 
     public static class GlobalSettings
     {
+        public static string DiskJinrTarget { get; set; } = "disk.jinr.ru";
+        public static string DB_Target { get; set; } = "MSSQL_TEST_DB_ConnetionString";
+
         public static string User => Environment.UserName;
 
         public static Status Verbosity { get; set; }

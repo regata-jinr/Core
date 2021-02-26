@@ -11,6 +11,7 @@
 
 using System;
 using System.IO.Ports;
+using Regata.Core.Messages;
 
 // TODO: https://github.com/regata-jinr/Core/issues/37
 

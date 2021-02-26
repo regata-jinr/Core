@@ -73,6 +73,7 @@ namespace Regata.Core
         public const ushort INFO_CLD_IS_EXST  = 102;
         public const ushort INFO_CLD_FL_SHRNG = 103;
         public const ushort INFO_CLD_CRT_DIR  = 104;
+        public const ushort INFO_CLD_DEL_FL_DIR = 105;
 
         #endregion
 

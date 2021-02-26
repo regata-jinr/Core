@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2019-2020, REGATA Experiment at FLNP|JINR                  *
+ * Copyright(c) 2019-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -18,10 +18,8 @@ using System.IO;
 using Microsoft.Data.SqlClient;
 using Regata.Core.DB.MSSQL.Models;
 using Regata.Core.DB.MSSQL.Context;
+using Regata.Core.Messages;
 using Microsoft.EntityFrameworkCore;
-
-// TODO: add documentation
-// TODO: implement GetBackgroundSpectra
 
 /// <summary>
 /// 
@@ -35,8 +33,6 @@ namespace Regata.Core.Cloud
     /// </summary>
     public static class SpectraTools
     {
-        public static string DBTarget;
-
         public static IReadOnlyDictionary<IrradiationType, string> IrradiationTypeMap = 
             new Dictionary<IrradiationType, string>()
                 {

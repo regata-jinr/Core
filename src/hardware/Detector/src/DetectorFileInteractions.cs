@@ -31,6 +31,7 @@ using System.IO;
 using System.Linq;
 using CanberraDeviceAccessLib;
 using Regata.Core.DB.MSSQL.Models;
+using Regata.Core.Messages;
 
 namespace Regata.Core.Hardware
 {
@@ -44,7 +45,7 @@ namespace Regata.Core.Hardware
             try
             {
                 if (!_device.IsConnected || Status == DetectorStatus.off)
-                    Report.Notify(new Message(Codes.ERR_DET_FSAVE_DCON));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_FSAVE_DCON));
 
                 if (string.IsNullOrEmpty(fileName))
                 {
@@ -60,24 +61,24 @@ namespace Regata.Core.Hardware
 
                 if (File.Exists(FullFileSpectraName))
                 {
-                    Report.Notify(new Message(Codes.ERR_DET_FSAVE_DUPL));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_FSAVE_DUPL));
                     FullFileSpectraName = GetUniqueName(FullFileSpectraName);
                 }
 
                 _device.Save(FullFileSpectraName);
 
                 if (File.Exists(FullFileSpectraName))
-                    Report.Notify(new Message(Codes.SUCC_DET_FILE_SAVED));
+                    Report.Notify(new DetectorMessage(Codes.SUCC_DET_FILE_SAVED));
                 else
                 {
-                    Report.Notify(new Message(Codes.ERR_DET_FILE_NOT_SAVED));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_FILE_NOT_SAVED));
                     return;
                 }
 
             }
             catch
             {
-                Report.Notify(new Message(Codes.ERR_DET_FILE_SAVE_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_FILE_SAVE_UNREG));
             }
         }
 
@@ -91,7 +92,7 @@ namespace Regata.Core.Hardware
             if (!CheckIrradiation(irradiation) || !CheckMeasurement(measurement))
                 return;
 
-            Report.Notify(new Message(Codes.INFO_DET_LOAD_SMPL_INFO)); //$"Set sample {measurement} to detector"));
+            Report.Notify(new DetectorMessage(Codes.INFO_DET_LOAD_SMPL_INFO)); //$"Set sample {measurement} to detector"));
 
             try
             {
@@ -120,7 +121,7 @@ namespace Regata.Core.Hardware
             }
             catch
             {
-                Report.Notify(new Message(Codes.ERR_DET_LOAD_SMPL_INFO_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_LOAD_SMPL_INFO_UNREG));
             }
         }
 
@@ -135,7 +136,7 @@ namespace Regata.Core.Hardware
             {
                 if (irradiation == null)
                 {
-                    Report.Notify(new Message(Codes.ERR_DET_IRR_EMPTY));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_IRR_EMPTY));
                     return false;
                 }
 
@@ -146,7 +147,7 @@ namespace Regata.Core.Hardware
                 {
                     if (neededProps.Contains(pi.Name) && pi.GetValue(irradiation) == null)
                     {
-                        Report.Notify(new Message(Codes.ERR_DET_IRR_EMPTY_FLDS));
+                        Report.Notify(new DetectorMessage(Codes.ERR_DET_IRR_EMPTY_FLDS));
                         return false;
                     }
                 }
@@ -159,7 +160,7 @@ namespace Regata.Core.Hardware
             }
             catch
             {
-                Report.Notify(new Message(Codes.ERR_DET_CHCK_IRR_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_CHCK_IRR_UNREG));
                 return false;
             }
             return true;
@@ -171,7 +172,7 @@ namespace Regata.Core.Hardware
             {
                 if (measurement == null)
                 {
-                    Report.Notify(new Message(Codes.ERR_DET_MEAS_EMPTY));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_MEAS_EMPTY));
                     return false;
                 }
 
@@ -183,7 +184,7 @@ namespace Regata.Core.Hardware
                 {
                     if (neededProps.Contains(pi.Name) && pi.GetValue(measurement) == null)
                     {
-                        Report.Notify(new Message(Codes.ERR_DET_MEAS_EMPTY_FLDS));
+                        Report.Notify(new DetectorMessage(Codes.ERR_DET_MEAS_EMPTY_FLDS));
                         return false;
                     }
 
@@ -193,16 +194,16 @@ namespace Regata.Core.Hardware
                     measurement.Detector = Name;
 
                 if (measurement.Detector != Name)
-                    Report.Notify(new Message(Codes.ERR_DET_MEAS_WRONG_DET));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_MEAS_WRONG_DET));
 
 
                 if (measurement.Duration.Value == 0)
-                    Report.Notify(new Message(Codes.ERR_DET_MEAS_ZERO_DUR));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_MEAS_ZERO_DUR));
 
             }
             catch
             {
-                Report.Notify(new Message(Codes.ERR_DET_CHCK_MEAS_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_CHCK_MEAS_UNREG));
                 return false;
             }
             return true;

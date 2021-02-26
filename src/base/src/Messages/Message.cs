@@ -14,7 +14,7 @@ using Regata.Core.DB.MSSQL.Models;
 using Regata.Core.Settings;
 using System.Linq;
 
-namespace Regata.Core
+namespace Regata.Core.Messages
 {
     public class Message
     {
@@ -26,22 +26,23 @@ namespace Regata.Core
         public string DetailedText { get; set; } // filled in report notify
         public string Sender       { get; set; } // filled in report notify
 
+        private MessageBase _mb;
+
         public Message(ushort code)
         {
             Code = code;
             Status = code == 0 ? Status.Error : (Status)(code / 1000);
 
-            MessageBase mb;
             using (var rdbc = new RegataContext())
             {
-                mb = rdbc.MessageBases.Where(m => m.Code == Code && m.Language == GlobalSettings.CurrentLanguage.ToString()).FirstOrDefault();
+                _mb = rdbc.MessageBases.Where(m => m.Code == Code && m.Language == GlobalSettings.CurrentLanguage.ToString()).FirstOrDefault();
             }
 
-            if (mb == null)
-                mb = new MessageBase();
+            if (_mb == null)
+                _mb = new MessageBase();
 
-            Head = mb.Head;
-            Text = mb.Text;
+            Head = _mb.Head;
+            Text = _mb.Text;
         }
 
     } // public class Message

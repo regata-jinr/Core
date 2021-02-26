@@ -32,6 +32,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using CanberraDeviceAccessLib;
+using Regata.Core.Messages;
 using Regata.Core.DB.MSSQL.Models;
 
 namespace Regata.Core.Hardware
@@ -68,19 +69,19 @@ namespace Regata.Core.Hardware
                 var detsList = (IEnumerable<object>)_device.ListSpectroscopyDevices;
                 if (detsList.Contains(name))
                 {
-                    Report.Notify(new Message(Codes.INFO_DET_NAME_EXSTS));
+                    Report.Notify(new DetectorMessage(Codes.INFO_DET_NAME_EXSTS));
                     return true;
                 }
                 else
                 {
                     Status = DetectorStatus.error;
-                    Report.Notify(new Message(Codes.ERR_DET_NAME_EXSTS));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_NAME_EXSTS));
                     return false;
                 }
             }
             catch
             {
-                Report.Notify(new Message(Codes.ERR_DET_NAME_EXSTS_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_NAME_EXSTS_UNREG));
                 return false;
             }
         }
@@ -95,7 +96,7 @@ namespace Regata.Core.Hardware
             {
                 if (_status != value)
                 {
-                    Report.Notify(new Message(Codes.INFO_DET_CHNG_STATUS));
+                    Report.Notify(new DetectorMessage(Codes.INFO_DET_CHNG_STATUS));
                     _status = value;
                     StatusChanged?.Invoke(this, EventArgs.Empty);
                 }

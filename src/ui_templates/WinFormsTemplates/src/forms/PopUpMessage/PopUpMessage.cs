@@ -16,8 +16,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Regata.Core.DB.MSSQL.Context;
 using Regata.Core.DB.MSSQL.Models;
-using Regata.Core;
 using Regata.Core.Settings;
+using RegataCoreMessages = Regata.Core.Messages;
 
 namespace Regata.Core.UI.WinForms.Items
 {
@@ -44,12 +44,12 @@ namespace Regata.Core.UI.WinForms.Items
                 {Status.Error,   TaskDialogIcon.ShieldErrorRedBar}
             };
 
-        public static void Show(Message msg, ushort autoCloseIntervalSeconds = 15)
+        public static void Show(RegataCoreMessages.Message msg, ushort autoCloseIntervalSeconds = 15)
         {
             new PopUpMessage(msg, autoCloseIntervalSeconds);
         }
 
-        private PopUpMessage(Message msg, ushort autoCloseIntervalSeconds)
+        private PopUpMessage(RegataCoreMessages.Message msg, ushort autoCloseIntervalSeconds)
         {
             _tdp = new TaskDialogPage();
             _tdp.Icon = _statusIcon[msg.Status];
@@ -100,7 +100,7 @@ namespace Regata.Core.UI.WinForms.Items
 
         public override string ToString()
         {
-            return $"{Caption}-[{_status}]-[{DateTime.Now}]{Environment.NewLine}{Heading}{Environment.NewLine}{Text}{Environment.NewLine}{ExpandedText}";
+            return $"{Caption}{Environment.NewLine}{Heading}{Environment.NewLine}{Text}{Environment.NewLine}{ExpandedText}";
         }
 
         private static async IAsyncEnumerable<int> Ticker(TimeSpan ts)
