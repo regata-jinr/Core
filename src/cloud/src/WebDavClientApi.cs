@@ -205,12 +205,6 @@ namespace Regata.Core.Cloud
         {
             try
             {
-                if (_httpClient == null)
-                {
-                    Report.Notify(new Message(Codes.ERR_CLD_HC_NULL));
-                    return false;
-                }
-
                 if (resp.Contains("exception") || resp.Contains("error"))
                 {
                     Report.Notify(new Message(Codes.WRN_CLD_BAD_RSPN));
