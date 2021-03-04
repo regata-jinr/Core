@@ -33,7 +33,7 @@ namespace Regata.Tests.Hardware.Detectors
             Report.LogDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test", "DetectorTest");
             Directory.CreateDirectory(Report.LogDir);
 
-            _d1 = new Detector("D1");
+            _d1 = new Detector("D1", "bdrum");
         }
 
         [TestMethod]
@@ -100,9 +100,9 @@ namespace Regata.Tests.Hardware.Detectors
             m.Duration = 5;
             m.Detector = "D1";
             m.Height = 10;
-            m.Type = "SLI";
+            m.Type = 0;
             m.FileSpectra = "testD1";
-            m.Assistant = "bdrum";
+            m.Assistant = 150562;
             m.Note = "bdrum-test";
 
             _d1.LoadMeasurementInfoToDevice(m, sd);

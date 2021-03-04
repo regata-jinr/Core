@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2020-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -9,27 +9,23 @@
  *                                                                         *
  ***************************************************************************/
 
-
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Regata.Core.DB.MSSQL.Models
 {
-    public class MeasurementsRegisterInfo
+    public class MeasurementsRegister
     {
-        [Key]
-        public int       Id             { get; set; }
-        [Required]
-        public string    Name           { get; set; }
-        public int       LoadNumber     { get; set; }
-        [Required]
-        public string    Type           { get; set; }
-        public DateTime? DateTimeStart  { get; set; }
-        public DateTime? DateTimeFinish { get; set; }
-        public int       SamplesCnt     { get; set; }
-        public string    Detectors      { get; set; }
-        public string    Assistant      { get; set; }
-        public string    Note           { get; set; }
+        public int       Id              { get; set; }
+        public DateTime? IrradiationDate { get; set; }
+        public string    Name            { get; set; }
+        public int?      LoadNumber      { get; set; }
+        public int       Type            { get; set; }
+        public DateTime? DateTimeStart   { get; set; }
+        public DateTime? DateTimeFinish  { get; set; }
+        public int       SamplesCnt      { get; set; }
+        public string    Detectors       { get; set; }
+        public int?      Assistant       { get; set; }
+        public string    Note            { get; set; }
 
     }
 }

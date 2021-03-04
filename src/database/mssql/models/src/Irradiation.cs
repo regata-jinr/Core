@@ -9,13 +9,15 @@
  *                                                                         *
  ***************************************************************************/
 
-
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace Regata.Core.DB.MSSQL.Models
 {
+    public enum IrradiationType { sli, lli1, lli2, bckg };
+
     public class Irradiation
     {
         [Key]
@@ -26,8 +28,7 @@ namespace Regata.Core.DB.MSSQL.Models
         public string    SetNumber      { get; set; } // 55
         public string    SetIndex       { get; set; } // j
         public string    SampleNumber   { get; set; } // 1
-        public string    Type           { get; set; } // SLI
-        //public decimal?  Weight         { get; set; }
+        public int       Type           { get; set; }
         public DateTime? DateTimeStart  { get; set; }
         public int?      Duration       { get; set; }
         public DateTime? DateTimeFinish { get; set; }
@@ -35,8 +36,8 @@ namespace Regata.Core.DB.MSSQL.Models
         public short?    Position       { get; set; }
         public short?    Channel        { get; set; }
         public int?      LoadNumber     { get; set; }
-        public int?    Rehandler      { get; set; }
-        public int?    Assistant      { get; set; }
+        public int?      Rehandler      { get; set; }
+        public int?      Assistant      { get; set; }
         public string    Note           { get; set; }
 
         [NotMapped]
@@ -44,5 +45,9 @@ namespace Regata.Core.DB.MSSQL.Models
         [NotMapped]
         public string SampleKey => $"{SetIndex}-{SampleNumber}";
         public override string ToString() => $"{SetKey}-{SampleNumber}";
-    }
-}
+
+        public static readonly IReadOnlyDictionary<IrradiationType, string> TypeToString = new Dictionary<IrradiationType, string> { { IrradiationType.sli, "SLI" }, { IrradiationType.lli1, "LLI-1" }, { IrradiationType.lli2, "LLI-2" }, { IrradiationType.bckg, "BCKG" } };
+
+    } // public class Irradiation
+
+}     // namespace Regata.Core.DB.MSSQL.Models

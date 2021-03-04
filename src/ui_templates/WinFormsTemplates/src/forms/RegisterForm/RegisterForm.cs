@@ -24,9 +24,13 @@ namespace Regata.Core.UI.WinForms.Forms
             InitializeMainTable();
             InitializeTabControl(tabsNum, dgvsNum, BigDgvSizeCoeff);
            
-            LangItem.CheckedChanged        += LabelsLanguageItemChanged;
-            GlobalSettings.LanguageChanged += LanguageChanged;
-            TabsPane.DataSourceChanged     += LanguageChanged; // it is possible to create form before filling the dgvs. It will lead to unlabeled dgvs columns
+            LangItem.CheckedChanged            += LabelsLanguageItemChanged;
+            GlobalSettings.LanguageChanged     += LanguageChanged;
+            TabsPane.DataSourceChanged         += LanguageChanged; // it is possible to create form before filling the dgvs. It will lead to unlabeled dgvs columns
+            ControlAdded                       += (s, e) => LanguageChanged();
+            MenuStrip.ItemAdded                += (s, e) => LanguageChanged();
+            StatusStrip.ItemAdded              += (s, e) => LanguageChanged();
+            FunctionalLayoutPanel.ControlAdded += (s, e) => LanguageChanged();
 
             LanguageChanged(); // init current language and set related checked items
         }

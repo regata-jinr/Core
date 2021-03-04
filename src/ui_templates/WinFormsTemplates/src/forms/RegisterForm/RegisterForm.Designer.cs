@@ -21,7 +21,6 @@ namespace Regata.Core.UI.WinForms.Forms
     partial class RegisterForm<MainTableModel>
         where MainTableModel : class
     {
-
         public RDataGridView<MainTableModel> MainRDGV;
         public DGVTabPaneControl TabsPane;
         public StatusStrip StatusStrip;
@@ -29,7 +28,7 @@ namespace Regata.Core.UI.WinForms.Forms
         public ToolStripProgressBar ProgressBar;
         public EnumItem<Language> LangItem;
         public TableLayoutPanel FunctionalLayoutPanel;
-
+        public TableLayoutPanel BottomLayoutPanel;
 
         /// <summary>
         /// Required designer variable.
@@ -45,9 +44,13 @@ namespace Regata.Core.UI.WinForms.Forms
             if (disposing && (components != null))
             {
                 components.Dispose();
-                LangItem.CheckedChanged        -= LabelsLanguageItemChanged;
-                GlobalSettings.LanguageChanged -= LanguageChanged;
-                TabsPane.DataSourceChanged     -= LanguageChanged;
+                LangItem.CheckedChanged            -= LabelsLanguageItemChanged;
+                GlobalSettings.LanguageChanged     -= LanguageChanged;
+                TabsPane.DataSourceChanged         -= LanguageChanged;
+                ControlAdded                       -= (s, e) => LanguageChanged();
+                MenuStrip.ItemAdded                -= (s, e) => LanguageChanged();
+                StatusStrip.ItemAdded              -= (s, e) => LanguageChanged();
+                FunctionalLayoutPanel.ControlAdded -= (s, e) => LanguageChanged();
             }
             base.Dispose(disposing);
         }
@@ -102,7 +105,6 @@ namespace Regata.Core.UI.WinForms.Forms
             ((ISupportInitialize)MainRDGV).EndInit();
         }
 
-
         private void InitializeTabControl(uint tabsNum, uint dgvsNum, float BigDgvSizeCoeff)
         {
             TabsPane = new DGVTabPaneControl(tabsNum, dgvsNum, BigDgvSizeCoeff);
@@ -113,9 +115,10 @@ namespace Regata.Core.UI.WinForms.Forms
             TabsPane.Location = new System.Drawing.Point(11, 674);
             TabsPane.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             TabsPane.Name = "TabsPane";
-            TabsPane.Size = new System.Drawing.Size(918, 253);
+            TabsPane.Size = new System.Drawing.Size(815, 253);
             TabsPane.TabIndex = 1;
-            this.Controls.Add(TabsPane);
+            //this.Controls.Add(TabsPane);
+            BottomLayoutPanel.Controls.Add(this.TabsPane, 0, 0);
 
         }
 
@@ -147,6 +150,8 @@ namespace Regata.Core.UI.WinForms.Forms
             this.StatusStrip.Size = new System.Drawing.Size(1687, 22);
             this.StatusStrip.TabIndex = 23;
             this.StatusStrip.Text = "StatusStrip";
+            this.StatusStrip.Dock = DockStyle.Bottom;
+            //this.StatusStrip.Anchor = AnchorStyles.;
             // 
             // ProgressBar
             // 
@@ -160,6 +165,7 @@ namespace Regata.Core.UI.WinForms.Forms
             this.MenuStrip.Size = new System.Drawing.Size(1687, 24);
             this.MenuStrip.TabIndex = 24;
             this.MenuStrip.Text = "MenuStrip";
+            MenuStrip.Dock = DockStyle.Top;
             MenuStrip.Items.Add(LangItem.EnumMenuItem);
 
             //
@@ -170,8 +176,7 @@ namespace Regata.Core.UI.WinForms.Forms
             // FunctionalLayoutPanel
             // 
             FunctionalLayoutPanel = new TableLayoutPanel();
-            FunctionalLayoutPanel.Anchor = ((AnchorStyles)(((AnchorStyles.Bottom | AnchorStyles.Left)
-            | AnchorStyles.Right)));
+            FunctionalLayoutPanel.SuspendLayout();
             FunctionalLayoutPanel.ColumnCount = 2;
             FunctionalLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             FunctionalLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
@@ -182,6 +187,25 @@ namespace Regata.Core.UI.WinForms.Forms
             FunctionalLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             FunctionalLayoutPanel.Size = new Size(837, 253);
             FunctionalLayoutPanel.TabIndex = 25;
+            FunctionalLayoutPanel.Dock = DockStyle.Fill;
+
+            // 
+            // BottomLayoutPanel
+            // 
+            BottomLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            BottomLayoutPanel.SuspendLayout();
+            BottomLayoutPanel.ColumnCount = 2;
+            BottomLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            BottomLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            BottomLayoutPanel.Controls.Add(FunctionalLayoutPanel, 1, 0);
+            BottomLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            BottomLayoutPanel.Location = new System.Drawing.Point(0, 668);
+            BottomLayoutPanel.Name = "tableLayoutPanel4";
+            BottomLayoutPanel.RowCount = 1;
+            BottomLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50));
+            BottomLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50));
+            BottomLayoutPanel.Size = new System.Drawing.Size(1687, 276);
+            BottomLayoutPanel.TabIndex = 26;
 
             // 
             // RegisterForm
@@ -189,9 +213,10 @@ namespace Regata.Core.UI.WinForms.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1687, 966);
-            this.Controls.Add(this.StatusStrip);
             this.Controls.Add(this.MenuStrip);
-            this.Controls.Add(this.FunctionalLayoutPanel);
+            this.Controls.Add(BottomLayoutPanel);
+            this.Controls.Add(this.StatusStrip);
+            //this.Controls.Add(this.FunctionalLayoutPanel);
 
             this.MainMenuStrip = this.MenuStrip;
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -203,6 +228,8 @@ namespace Regata.Core.UI.WinForms.Forms
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
             this.ResumeLayout(false);
+            FunctionalLayoutPanel.ResumeLayout(false);
+            BottomLayoutPanel.ResumeLayout(false);
             this.PerformLayout();
 
         }

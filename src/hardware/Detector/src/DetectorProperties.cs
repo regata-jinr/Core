@@ -49,10 +49,11 @@ namespace Regata.Core.Hardware
     public partial class Detector : IDisposable
     {
         private readonly         DeviceAccessClass  _device;
-        public  static  DetectorSettings DetSet = new DetectorSettings();
+        public  static           DetectorSettings DetSet = new DetectorSettings();
         private bool             _isDisposed;
         private DetectorStatus   _status;
         public Measurement       CurrentMeasurement { get; private set; }
+        public string            CurrentUser { get; set; }
         public Irradiation       RelatedIrradiation { get; private set; }
         public event             EventHandler       StatusChanged;
         public SampleInfo Sample;
@@ -79,9 +80,9 @@ namespace Regata.Core.Hardware
                     return false;
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_NAME_EXSTS_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_NAME_EXSTS_UNREG) { DetailedText = ex.ToString() });
                 return false;
             }
         }

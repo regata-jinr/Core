@@ -36,9 +36,9 @@ namespace Regata.Tests.WinForms
             f.FunctionalLayoutPanel.Controls.Add(btn, 0, 0);
             using (var r = new RegataContext())
             {
-                f.TabsPane[0, 0].DataSource = r.Irradiations.Where(ir => ir.Type == "LLI-1" && ir.DateTimeStart != null).Select(ir => new { ir.LoadNumber, ir.DateTimeStart.Value.Date }).Distinct().Take(10).ToArray();
+                f.TabsPane[0, 0].DataSource = r.Irradiations.Where(ir => ir.Type == 1 && ir.DateTimeStart != null).Select(ir => new { ir.LoadNumber, ir.DateTimeStart.Value.Date }).Distinct().Take(10).ToArray();
 
-                f.TabsPane[1, 0].DataSource = r.Irradiations.Where(ir => ir.Type == "SLI" && ir.DateTimeStart != null).Select(ir => new { ir.DateTimeStart.Value.Date }).Distinct().Take(10).ToArray();
+                f.TabsPane[1, 0].DataSource = r.Irradiations.Where(ir => ir.Type == 0 && ir.DateTimeStart != null).Select(ir => new { ir.DateTimeStart.Value.Date }).Distinct().Take(10).ToArray();
             }
 
             return f;

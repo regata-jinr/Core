@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2017-2020, REGATA Experiment at FLNP|JINR                  *
+ * Copyright(c) 2017-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -52,7 +52,7 @@ namespace Regata.Core.Hardware
                     var _currentDir = Path.Combine(@"D:\Spectra", 
                                                     DateTime.Now.Year.ToString(),
                                                     DateTime.Now.Month.ToString("D2"),
-                                                    CurrentMeasurement.Type.ToLower()
+                                                    Measurement.TypeToString[(MeasurementsType)CurrentMeasurement.Type].ToLower()
                                                    );
 
                     Directory.CreateDirectory(_currentDir);
@@ -76,9 +76,9 @@ namespace Regata.Core.Hardware
                 }
 
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_FILE_SAVE_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_FILE_SAVE_UNREG) { DetailedText = ex.ToString() });
             }
         }
 
@@ -99,9 +99,8 @@ namespace Regata.Core.Hardware
                 CurrentMeasurement = measurement;
                 RelatedIrradiation = irradiation;
                 Sample.SampleKey   = measurement.SampleKey;                  // title
-                Sample.Assistant   = measurement.Assistant;                  // operator's name
+                Sample.Assistant   = CurrentUser; // operator's name. for operators we have separate logon system despite on windows login
                 Sample.SampleCode     = measurement.SetKey;                     // sample code
-                //_device.Param[ParamCodes.CAM_F_SQUANT]      = (double)irradiation.Weight.Value;       // weight
                 Sample.Error   = 0;                                      // err = 0
                 Sample.WeightUnits     = "gram";                                 // units = gram
                 Sample.BuildType = "IRRAD";
@@ -109,9 +108,8 @@ namespace Regata.Core.Hardware
                 Sample.DateTimeFinish    = irradiation.DateTimeFinish.Value;       // irr finish date time
                 Sample.StatError    = 0;                                      // Random sample error (%)
                 Sample.SysEror    = 0;                                      // Non-random sample error (%)
-                Sample.Type     = measurement.Type;
+                Sample.Type = Measurement.TypeToString[(MeasurementsType)measurement.Type];
                 Sample.Height   = measurement.Height.Value; // height
-
                 Sample.Note = CurrentMeasurement.Note; //filling description field in file
                 Counts = measurement.Duration.Value;
                 
@@ -119,9 +117,9 @@ namespace Regata.Core.Hardware
 
                 _device.Save("", true);
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_LOAD_SMPL_INFO_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_LOAD_SMPL_INFO_UNREG) { DetailedText = ex.ToString() });
             }
         }
 
@@ -158,9 +156,9 @@ namespace Regata.Core.Hardware
                 if (irradiation.DateTimeFinish.Value.TimeOfDay.TotalSeconds == 0)
                     irradiation.DateTimeFinish = irradiation.DateTimeStart.Value.AddSeconds(irradiation.Duration.Value);
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_CHCK_IRR_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_CHCK_IRR_UNREG) { DetailedText = ex.ToString() });
                 return false;
             }
             return true;
@@ -201,9 +199,9 @@ namespace Regata.Core.Hardware
                     Report.Notify(new DetectorMessage(Codes.ERR_DET_MEAS_ZERO_DUR));
 
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_CHCK_MEAS_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_CHCK_MEAS_UNREG) { DetailedText = ex.ToString() });
                 return false;
             }
             return true;

@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2017- 2020, REGATA Experiment at FLNP|JINR                 *
+ * Copyright(c) 2017-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -50,7 +50,7 @@ namespace Regata.Core.Hardware
         /// <summary>Constructor of Detector class.</summary>
         /// <param name="name">Name of detector. Without path.</param>
         /// <param name="option">CanberraDeviceAccessLib.ConnectOptions {aReadWrite, aContinue, aNoVerifyLicense, aReadOnly, aTakeControl, aTakeOver}.By default ConnectOptions is ReadWrite.</param>
-        public Detector(string name)
+        public Detector(string name, string currentUser = "")
         {
             try
             {
@@ -79,10 +79,16 @@ namespace Regata.Core.Hardware
 
                 AcquisitionMode = AcquisitionModes.aCountToRealTime;
                 Sample = new SampleInfo(this);
+
+                CurrentUser = currentUser;
+
+                if (string.IsNullOrEmpty(CurrentUser))
+                    CurrentUser = Settings.GlobalSettings.User;
+
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_CTOR_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_CTOR_UNREG) { DetailedText = ex.ToString() });
             }
         }
 
@@ -131,9 +137,9 @@ namespace Regata.Core.Hardware
                 else
                     Report.Notify(new DetectorMessage(Codes.WARN_DET_RST));
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_RST_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_RST_UNREG) { DetailedText = ex.ToString() });
             }
         }
 
@@ -149,9 +155,9 @@ namespace Regata.Core.Hardware
                     return true;
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_AVAIL_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_AVAIL_UNREG) { DetailedText = ex.ToString() });
             }
             return false;
         }

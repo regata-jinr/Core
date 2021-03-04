@@ -21,18 +21,20 @@ namespace Regata.Core.DB.MSSQL.Context
         //public DbSet<MonitorsSet>      MonitorsSets    { get; set; }
         //public DbSet<SRM>              SRMs            { get; set; }
         //public DbSet<SRMsSet>          SRMsSets        { get; set; }
-        //public DbSet<Sample>           Samples         { get; set; }
-        //public DbSet<SamplesSet>       SamplesSets     { get; set; }
         //public DbSet<reweightInfo>     Reweights       { get; set; }
 
-        public DbSet<Irradiation>        Irradiations    { get; set; }
-        public DbSet<Measurement>        Measurements    { get; set; }
-        public DbSet<SharedSpectrum>     SharedSpectra   { get; set; }
-        public DbSet<SpectrumSLI>        SLISpectra      { get; set; }
-        public DbSet<SpectrumLLI>        LLISpectra      { get; set; }
-        public DbSet<UILabel>            UILabels        { get; set; }
-        public DbSet<MessageBase>        MessageBases    { get; set; }
-        public DbSet<MessageDefault>     MessageDefaults { get; set; }
+        public DbSet<Sample>               Samples               { get; set; }
+        public DbSet<SamplesSet>           SamplesSets           { get; set; }
+        public DbSet<Irradiation>          Irradiations          { get; set; }
+        public DbSet<Measurement>          Measurements          { get; set; }
+        public DbSet<MeasurementsRegister> MeasurementsRegisters { get; set; }
+        public DbSet<SharedSpectrum>       SharedSpectra         { get; set; }
+        public DbSet<SpectrumSLI>          SLISpectra            { get; set; }
+        public DbSet<SpectrumLLI>          LLISpectra            { get; set; }
+        public DbSet<UILabel>              UILabels              { get; set; }
+        public DbSet<MessageBase>          MessageBases          { get; set; }
+        public DbSet<MessageDefault>       MessageDefaults       { get; set; }
+        public DbSet<User>                 Users                 { get; set; }
 
         private const string DBTarget = "RegataDB";
 
@@ -57,49 +59,52 @@ namespace Regata.Core.DB.MSSQL.Context
             modelBuilder.Entity<Measurement>()
                             .HasKey(m => m.Id);
 
-            modelBuilder.Entity<MeasurementsRegisterInfo>()
+            modelBuilder.Entity<MeasurementsRegister>()
                            .HasKey(mr => mr.Id);
 
             modelBuilder.Entity<SpectrumLLI>()
-                 .HasKey(slis => slis.SampleSpectra);
+                           .HasKey(slis => slis.SampleSpectra);
 
             modelBuilder.Entity<SpectrumSLI>()
-                   .HasKey(llis => llis.SampleSpectra);
+                           .HasKey(llis => llis.SampleSpectra);
 
             modelBuilder.Entity<SharedSpectrum>()
-                   .HasKey(ss => ss.fileS);
+                           .HasKey(ss => ss.fileS);
 
             modelBuilder.Entity<UILabel>()
-                .HasKey(l => new { l.FormName, l.ComponentName });
+                           .HasKey(l => new { l.FormName, l.ComponentName });
 
             modelBuilder.Entity<MessageBase>()
-               .HasKey(m => new { m.Code, m.Language});
+                           .HasKey(m => new { m.Code, m.Language});
 
             modelBuilder.Entity<MessageDefault>()
-              .HasKey(m => new { m.Language });
+                           .HasKey(m => new { m.Language });
+
+            modelBuilder.Entity<User>()
+                           .HasKey(u => new { u.Id });
+
+            modelBuilder.Entity<Sample>()
+                               .HasKey(s => new
+                               {
+                                   s.CountryCode,
+                                   s.ClientNumber,
+                                   s.Year,
+                                   s.SetNumber,
+                                   s.SetIndex,
+                                   s.SampleNumber
+                               });
+
+            modelBuilder.Entity<SamplesSet>()
+                               .HasKey(s => new
+                               {
+                                   s.Country_Code,
+                                   s.Client_Id,
+                                   s.Year,
+                                   s.Sample_Set_Id,
+                                   s.Sample_Set_Index
+                               });
 
             #region to be added
-
-            //modelBuilder.Entity<Sample>()
-            //                   .HasKey(s => new
-            //                   {
-            //                       s.Country_Code,
-            //                       s.Client_Id,
-            //                       s.Year,
-            //                       s.Sample_Set_Id,
-            //                       s.Sample_Set_Index,
-            //                       s.A_Sample_ID
-            //                   });
-
-            //modelBuilder.Entity<SamplesSet>()
-            //                   .HasKey(s => new
-            //                   {
-            //                       s.Country_Code,
-            //                       s.Client_Id,
-            //                       s.Year,
-            //                       s.Sample_Set_Id,
-            //                       s.Sample_Set_Index
-            //                   });
 
             //modelBuilder.Entity<Monitor>()
             //                   .HasKey(s => new

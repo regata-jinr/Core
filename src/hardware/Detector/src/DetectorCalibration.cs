@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2017-2020, REGATA Experiment at FLNP|JINR                  *
+ * Copyright(c) 2017-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  * All rights reserved                                                     *
  *                                                                         *
@@ -56,9 +56,9 @@ namespace Regata.Core.Hardware
                 effFile.Close();
                 _device.Save("", true);
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_EFF_H_FILE_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_EFF_H_FILE_UNREG) { DetailedText = ex.ToString() });
             }
         }
 
@@ -82,9 +82,9 @@ namespace Regata.Core.Hardware
                 effFile.Close();
                 _device.Save("", true);
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_EFF_ENG_FILE_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_EFF_ENG_FILE_UNREG) { DetailedText = ex.ToString() });
             }
         }
 

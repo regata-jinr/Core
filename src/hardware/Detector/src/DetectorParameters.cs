@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2017-2020, REGATA Experiment at FLNP|JINR                  *
+ * Copyright(c) 2017-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -41,9 +41,9 @@ namespace Regata.Core.Hardware
             {
                 return _device.Param[parCode].ToString().Convert<T>();
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_GET_PARAM_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_GET_PARAM_UNREG) { DetailedText = ex.ToString() });
                 return default(T);
             }
         }
@@ -61,9 +61,9 @@ namespace Regata.Core.Hardware
                 _device.Param[parCode] = val;
                 _device.Save("", true);
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_SET_PARAM_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_SET_PARAM_UNREG) { DetailedText = ex.ToString() });
             }
         }
 
@@ -109,9 +109,9 @@ namespace Regata.Core.Hardware
                     else
                         return (float)Math.Round(100 * (1 - (ElapsedLiveTime / ElapsedRealTime)), 2);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Report.Notify(new DetectorMessage(Codes.ERR_DET_GET_DEADT_UNREG));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_GET_DEADT_UNREG) { DetailedText = ex.ToString() });
                     return -1.0f;
                 }
             }
@@ -133,9 +133,9 @@ namespace Regata.Core.Hardware
                 Report.Notify(new DetectorMessage(Codes.ERR_DET_SMPL_CNVTR));
                 return default(T);
             }
-            catch (NotSupportedException)
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_SMPL_CNVTR_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_SMPL_CNVTR_UNREG) { DetailedText = ex.ToString() });
                 return default(T);
             }
         }

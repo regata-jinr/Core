@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2020-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -9,20 +9,19 @@
  *                                                                         *
  ***************************************************************************/
 
-
 using System;
 using System.Collections.Generic;
 using AutoMapper;
 using AutoMapper.Configuration.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace Regata.Core.DB.MSSQL.Models
 {
+    public enum MeasurementsType { sli, lli1, lli2, bckg };
+
     [AutoMap(typeof(Irradiation))]
-    public class Measurement : INotifyPropertyChanged
+    public class Measurement
     {
         [Key]
         [Ignore]
@@ -30,8 +29,7 @@ namespace Regata.Core.DB.MSSQL.Models
         [Required]
         [SourceMember(nameof(Irradiation.Id))]
         public int        IrradiationId        { get; set; }
-        [Ignore]
-        public int        MRegId               { get; set; }
+        public int        RegId               { get; set; }
         [Required]
         public string     CountryCode          { get; set; }
         [Required]
@@ -45,7 +43,7 @@ namespace Regata.Core.DB.MSSQL.Models
         [Required]
         public string     SampleNumber         { get; set; }
         [Required]
-        public string     Type                 { get; set; }
+        public int        Type                 { get; set; }
         [Ignore]
         public string     AcqMode              { get; set; }
         [Ignore]
@@ -65,25 +63,9 @@ namespace Regata.Core.DB.MSSQL.Models
         [Ignore]
         public string     Detector             { get; set; }
         [Ignore]
-        public string     Token                { get; set; }
+        public int        Assistant            { get; set; }
         [Ignore]
-        public string     Assistant            { get; set; }
-        [Ignore]
-        public string     Note 
-        {
-            get
-            {
-                return _note;
-            }
-            set
-            {
-                if (_note == value) return;
-                _note = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private string _note;
+        public string     Note                 { get; set; }
 
         [NotMapped]
         [Ignore]
@@ -94,21 +76,10 @@ namespace Regata.Core.DB.MSSQL.Models
         public string SampleKey => $"{SetIndex}-{SampleNumber}";
         public override string ToString() => $"{SetKey}-{SampleNumber}";
 
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-
         [NotMapped]
         [Ignore]
-        public static readonly IReadOnlyDictionary<MeasurementsType, string> SessionTypeMapStr = new Dictionary<MeasurementsType, string> { { MeasurementsType.sli, "SLI" }, { MeasurementsType.lli1,"LLI-1" }, { MeasurementsType.lli2, "LLI-2" }, { MeasurementsType.bckg, "BCKG" } };
+        public static readonly IReadOnlyDictionary<MeasurementsType, string> TypeToString = new Dictionary<MeasurementsType, string> { { MeasurementsType.sli, "SLI" }, { MeasurementsType.lli1,"LLI-1" }, { MeasurementsType.lli2, "LLI-2" }, { MeasurementsType.bckg, "BCKG" } };
 
-        [NotMapped]
-        [Ignore]
-        public static readonly IReadOnlyDictionary<MeasurementsType, int> SessionTypeMapInt = new Dictionary<MeasurementsType, int> { { MeasurementsType.sli, 0 }, { MeasurementsType.lli1, 1 }, { MeasurementsType.lli2, 2 }, { MeasurementsType.bckg, 3 } };
-    }
+    } // public class Measurement
 
-
-    public enum MeasurementsType { sli, lli1, lli2, bckg };
-}
+}     // namespace Regata.Core.DB.MSSQL.Models

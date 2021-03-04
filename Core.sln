@@ -53,7 +53,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "collections", "src\Collections\collections.csproj", "{A6210970-160F-40A5-A818-F058FA0A8338}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "collections", "src\collections\collections.csproj", "{A6210970-160F-40A5-A818-F058FA0A8338}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "collectionsTest", "tests\collectionsTest\collectionsTest.csproj", "{F2A07D25-9D47-464A-AE02-20C47F9E39C1}"
 EndProject

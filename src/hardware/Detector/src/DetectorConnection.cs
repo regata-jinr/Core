@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2017-2020, REGATA Experiment at FLNP|JINR                  *
+ * Copyright(c) 2017-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -44,15 +44,15 @@ namespace Regata.Core.Hardware
                 _device.Connect(Name, DetSet.ConnectOption);
                 Status = DetectorStatus.ready;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if (e.Message.Contains("278e2a"))
+                if (ex.Message.Contains("278e2a"))
                 {
                     Status = DetectorStatus.busy;
                     Report.Notify(new DetectorMessage(Codes.WARN_DET_BUSY));
                 }
                 else
-                    Report.Notify(new DetectorMessage(Codes.ERR_DET_INTR_CONN_UNREG));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_INTR_CONN_UNREG) { DetailedText = ex.ToString() });
             }
         }
 
@@ -68,9 +68,9 @@ namespace Regata.Core.Hardware
                 if (_device.IsConnected)
                     Report.Notify(new DetectorMessage(Codes.SUCC_DET_CON));
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_CONN_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_CONN_UNREG) { DetailedText = ex.ToString() });
             }
         }
 
@@ -111,9 +111,9 @@ namespace Regata.Core.Hardware
                 Status = DetectorStatus.off;
                 ErrorMessage = "";
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_DCON_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_DCON_UNREG) { DetailedText = ex.ToString() });
             }
         }
 

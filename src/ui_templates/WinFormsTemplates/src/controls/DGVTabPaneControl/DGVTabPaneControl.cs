@@ -23,6 +23,8 @@ namespace Regata.Core.UI.WinForms.Controls
 
         public TabPageCollection Pages => tabControl.TabPages;
 
+        public int DgvYMargin = 20;
+
         public event Action DataSourceChanged;
 
         private float _bigDgvSizeCoeff;
@@ -45,51 +47,52 @@ namespace Regata.Core.UI.WinForms.Controls
 
             for (int i = 0; i < tabsNumber; ++i)
             {
-                CreateTab($"tabPage{i+1}");
-                SetUpDGVs(i);
+                var pg = CreateTabPage(i);
+                pg.Controls.Add(CreateTableLayoutPanel(i));
+                Pages.Add(pg);
             }
 
-
         }
 
-        private void CreateTab(string name)
+        private TabPage CreateTabPage(int page_ind)
         {
-            Pages.Add(name,name);
+            var name = $"tabPage{page_ind + 1}";
+            var pg = new TabPage(name) { Name = name, AutoScroll = true };
+            return pg;
         }
 
-        private void SetUpDGVs(int pageIndex)
+        private TableLayoutPanel CreateTableLayoutPanel(int page_ind)
         {
-            for (var i = 0; i < _dgvsNumberOnPage; ++i)
+            var tlp = new TableLayoutPanel();
+            tlp.ColumnCount = (int)_dgvsNumberOnPage;
+            tlp.AutoSize = true;
+            tlp.Dock = DockStyle.Fill;
+
+            tlp.RowCount = 2;
+            tlp.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
+            tlp.RowStyles.Add(new RowStyle(SizeType.Percent, 90));
+
+            for (int i = 0; i < _dgvsNumberOnPage; ++i)
             {
-                var dgv = new DataGridView();
-                dgv.Name = $"dgv_{pageIndex+1}_{i + 1}";
-                InitDgv(ref dgv);
-                dgv.DataSourceChanged += Dgv_DataSourceChanged;
+                tlp.Controls.Add(new Label() { Name = $"label_dgv_{page_ind}_{i}", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter },i,0);
 
-                int y_margin = 40;
-
-                if (i == _dgvsNumberOnPage - 1)
-                {
-                    dgv.Size = new Size((int)(this.Size.Width * _bigDgvSizeCoeff) - 10, this.Size.Height - y_margin);
-                }
+                if (_dgvsNumberOnPage == 2)
+                    tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, Math.Abs(Math.Abs((i - 1) * 100) - 100 * _bigDgvSizeCoeff))); // first will have size 1 - BigDgvSizeCoeff, second BigDgvSizeCoeff
                 else
-                {
-                    dgv.Size = new Size((int)(this.Size.Width * (1 - _bigDgvSizeCoeff)) - 10, this.Size.Height - y_margin);
-                }
+                    tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100 / _dgvsNumberOnPage));
 
-                Pages[pageIndex].Controls.Add(dgv);
-
-                if (i != 0)
-                {
-                    dgv.Location = new Point(this[pageIndex, i - 1].Size.Width + 10, y_margin);
-                }
-                else
-                {
-                    dgv.Location = new Point(0, y_margin);
-                }
-
-                AddDgvLabel(pageIndex, $"label_dgv_{pageIndex+1}_{i + 1}", new Point(dgv.Location.X,  dgv.Location.Y - y_margin / 2));
+                tlp.Controls.Add(CreateDataGridView(page_ind, i), i, 1);
             }
+
+            return tlp;
+        }
+
+        private DataGridView CreateDataGridView(int pageIndex, int dgv_ind)
+        {
+            var dgv = new DataGridView();
+            dgv.Name = $"dgv_{pageIndex + 1}_{dgv_ind + 1}";
+            InitDgv(ref dgv);
+            return dgv;
         }
 
         private void Dgv_DataSourceChanged(object sender, EventArgs e)
@@ -107,6 +110,9 @@ namespace Regata.Core.UI.WinForms.Controls
             dgv.BorderStyle = BorderStyle.None;
             dgv.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
             dgv.ReadOnly = true;
+            dgv.Dock = DockStyle.Fill;
+            dgv.AutoSize = true;
+            dgv.DataSourceChanged += Dgv_DataSourceChanged;
 
             var dataGridViewCellStyle1 = new DataGridViewCellStyle();
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -130,28 +136,16 @@ namespace Regata.Core.UI.WinForms.Controls
 
             dgv.DefaultCellStyle = dataGridViewCellStyle2;
 
-            dgv.Margin = new Padding(4, 3, 4, 3);
+            dgv.Margin = new Padding(5);
             dgv.RowHeadersVisible = false;
             dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
-
-        private void AddDgvLabel(int pageIndex, string name, Point position)
-        {
-            var lbl = new Label();
-            lbl.Name = name;
-            lbl.Text = name;
-            lbl.Location = position;
-
-            Pages[pageIndex].Controls.Add(lbl);
-            
-        }
-
 
         public DataGridView this[int pageIngex, int dgvIndex]
         {
             get
             {
-                return Pages[pageIngex].Controls.OfType<DataGridView>().ToArray()[dgvIndex];
+                return Pages[pageIngex].Controls[0].Controls.OfType<DataGridView>().ToArray()[dgvIndex];
             }
         }
 
@@ -159,7 +153,7 @@ namespace Regata.Core.UI.WinForms.Controls
         {
             get
             {
-                return Pages[pageIngex].Controls.OfType<DataGridView>().ToArray().Where(d => d.Name == dgvName).FirstOrDefault();
+                return Pages[pageIngex].Controls[0].Controls.OfType<DataGridView>().ToArray().Where(d => d.Name == dgvName).FirstOrDefault();
             }
         }
 
@@ -171,7 +165,7 @@ namespace Regata.Core.UI.WinForms.Controls
             get
             {
                 var curPageIndex = Pages.IndexOf(ActiveTabPage);
-                return this[curPageIndex, Pages[curPageIndex].Controls.OfType<DataGridView>().Count() - 1].SelectedRows;
+                return this[curPageIndex, Pages[curPageIndex].Controls[0].Controls.OfType<DataGridView>().Count() - 1].SelectedRows;
             }
         }
 

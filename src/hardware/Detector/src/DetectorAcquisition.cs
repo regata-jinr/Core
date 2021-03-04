@@ -52,16 +52,16 @@ namespace Regata.Core.Hardware
                     Report.Notify(new DetectorMessage(Codes.ERR_DET_NOT_READY));
                     return;
                 }
-
+                
                 _device.SpectroscopyAcquireSetup(AcquisitionModes.aCountToRealTime, CurrentMeasurement.Duration.Value);
                 _device.AcquireStart(); // already async
                 Status = DetectorStatus.busy;
                 CurrentMeasurement.DateTimeStart = DateTime.Now;
                 CurrentMeasurement.Detector = Name;
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_START_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_START_UNREG) { DetailedText = ex.ToString() });
             }
 
         }
@@ -82,9 +82,9 @@ namespace Regata.Core.Hardware
                 Status = DetectorStatus.ready;
                 Report.Notify(new DetectorMessage(Codes.SUCC_DET_ACQ_PAUSE)); //$"Paused was successful. Detector ready to continue acquire process"));
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_PAUSE_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_PAUSE_UNREG) { DetailedText = ex.ToString() });
             }
 
         }
@@ -105,9 +105,9 @@ namespace Regata.Core.Hardware
                 Status = DetectorStatus.ready;
                 Report.Notify(new DetectorMessage(Codes.SUCC_DET_ACQ_STOP)); //$"Stop was successful. Acquire done event will be generate. Detector ready to acquire again"));
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_STOP_UNREG)); //e, NotificationLevel.Error, AppManager.Sender));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_STOP_UNREG) { DetailedText = ex.ToString() }); //e, NotificationLevel.Error, AppManager.Sender));
             }
 
         }
@@ -122,9 +122,9 @@ namespace Regata.Core.Hardware
                 Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_CLR)); //$"Clearing the detector"));
                 _device.Clear();
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_CLR_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_CLR_UNREG) { DetailedText = ex.ToString() });
             }
         }
 
@@ -218,9 +218,9 @@ namespace Regata.Core.Hardware
                 if (isForCalling)
                     AcquiringStatusChanged?.Invoke(this, new DetectorEventsArgs { Message = response, AcquireMessageParam = lParam, Name = this.Name, Status = this.Status });
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_MSG_UNREG));
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_MSG_UNREG) { DetailedText = ex.ToString() });
             }
         }
 
