@@ -14,6 +14,7 @@ using System;
 using System.Linq;
 using System.Windows.Forms;
 using static System.Windows.Forms.TabControl;
+using System.ComponentModel;
 
 namespace Regata.Core.UI.WinForms.Controls
 {
@@ -29,8 +30,6 @@ namespace Regata.Core.UI.WinForms.Controls
 
         private float _bigDgvSizeCoeff;
         private uint _dgvsNumberOnPage;
-
-        
 
         /// <summary>
         /// 
@@ -51,7 +50,7 @@ namespace Regata.Core.UI.WinForms.Controls
                 pg.Controls.Add(CreateTableLayoutPanel(i));
                 Pages.Add(pg);
             }
-
+            this.ResumeLayout(false);
         }
 
         private TabPage CreateTabPage(int page_ind)
@@ -67,6 +66,7 @@ namespace Regata.Core.UI.WinForms.Controls
             tlp.ColumnCount = (int)_dgvsNumberOnPage;
             tlp.AutoSize = true;
             tlp.Dock = DockStyle.Fill;
+            tlp.Name = $"tlp_{page_ind + 1}";
 
             tlp.RowCount = 2;
             tlp.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
@@ -74,7 +74,7 @@ namespace Regata.Core.UI.WinForms.Controls
 
             for (int i = 0; i < _dgvsNumberOnPage; ++i)
             {
-                tlp.Controls.Add(new Label() { Name = $"label_dgv_{page_ind}_{i}", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter },i,0);
+                tlp.Controls.Add(new Label() { Name = $"label_dgv_{page_ind+1}_{i}", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter },i,0);
 
                 if (_dgvsNumberOnPage == 2)
                     tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, Math.Abs(Math.Abs((i - 1) * 100) - 100 * _bigDgvSizeCoeff))); // first will have size 1 - BigDgvSizeCoeff, second BigDgvSizeCoeff
@@ -90,8 +90,10 @@ namespace Regata.Core.UI.WinForms.Controls
         private DataGridView CreateDataGridView(int pageIndex, int dgv_ind)
         {
             var dgv = new DataGridView();
+            ((ISupportInitialize)dgv).BeginInit();
             dgv.Name = $"dgv_{pageIndex + 1}_{dgv_ind + 1}";
             InitDgv(ref dgv);
+            ((ISupportInitialize)dgv).EndInit();
             return dgv;
         }
 

@@ -58,7 +58,7 @@ namespace Regata.Core.UI.WinForms.Controls
             this.Controls.Add(this.tabControl);
             this.Name = "DGVTabPaneControl";
             this.Size = new System.Drawing.Size(765, 305);
-            this.ResumeLayout(false);
+            //this.ResumeLayout(false);
 
         }
 

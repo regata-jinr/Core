@@ -58,7 +58,9 @@ namespace Regata.Core
         public const ushort WARN_UI_WF_WRONG_PIN_FORMAT = 2802;
         public const ushort WARN_UI_WF_EMPTY_FIELD = 2803;
         public const ushort WARN_UI_WF_UTLT_NULL_CONTRL = 2804;
+        public const ushort WARN_LBL_NOT_EXIST = 2805;
         
+
 
         #endregion
 

@@ -86,7 +86,7 @@ namespace Regata.Core
                 }
 
                 msg.Sender = method.DeclaringType.Name;
-                msg.Caption = $"{method.Module}-[{status}]-[{DateTime.Now}]";
+                msg.Caption = $"{method.Module}-[{status}]-[{msg.Code}]";
                 _nLogger.SetProperty("Sender", msg.Sender);
                 _nLogger.SetProperty("Assistant", GlobalSettings.User);
 

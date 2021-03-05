@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 using System.Linq;
+using System;
 using Regata.Core.Settings;
 using System.Windows.Forms;
 using Regata.Core.DB.MSSQL.Context;
@@ -17,11 +18,13 @@ using RCM=Regata.Core.Messages;
 
 namespace Regata.Core.UI.WinForms
 { 
-    // TODO: how to call ChangeControlLabels for all opening forms? event?
     public static class Labels
     {
+        private static string _formName = "";
+
         public static void SetControlsLabels(Control.ControlCollection controls)
         {
+            _formName = controls.Owner.TopLevelControl.Name;
             foreach (var cont in controls)
                 Utilities.ApplyActionToControl(cont, SetTextField);
         }
@@ -39,7 +42,7 @@ namespace Regata.Core.UI.WinForms
                     dgvc.HeaderText = !string.IsNullOrEmpty(headerTmp) ? headerTmp : dgvc.Name;
                     break;
                 default:
-
+                    
                     var getNameMethod = obj.GetType().GetProperty("Name").GetGetMethod();
                     var setTextMethod = obj.GetType().GetProperty("Text").GetSetMethod();
 
@@ -62,20 +65,24 @@ namespace Regata.Core.UI.WinForms
             {
                 using (var r = new RegataContext())
                 {
-                    if (!r.UILabels.Where(l => l.ComponentName == compt).Any()) return compt;
+                    if (!r.UILabels.Where(l => l.FormName == _formName && l.ComponentName == compt).Any())
+                    {
+                        Report.Notify(new RCM.Message(Codes.WARN_LBL_NOT_EXIST));
+                        return compt;
+                    }
+
                     if (cLang == Language.Russian)
-                        return r.UILabels.Where(f => f.ComponentName == compt).Select(f => f.RusText).First();
+                        return r.UILabels.Where(f => f.FormName == _formName && f.ComponentName == compt).Select(f => f.RusText).First();
                     else
-                        return r.UILabels.Where(f => f.ComponentName == compt).Select(f => f.EngText).First();
+                        return r.UILabels.Where(f => f.FormName == _formName && f.ComponentName == compt).Select(f => f.EngText).First();
                 }
             }
-            catch
+            catch (Exception  ex)
             {
-                Report.Notify(new RCM.Message(Codes.ERR_SET_GET_LBL_UNREG));
+                Report.Notify(new RCM.Message(Codes.ERR_SET_GET_LBL_UNREG) { DetailedText = ex.ToString() });
                 return string.Empty;
 
             }
-
         }
 
     } // public static class Labels
