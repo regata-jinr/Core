@@ -23,7 +23,7 @@ namespace Regata.Core.DB.MSSQL.Models
     [AutoMap(typeof(Irradiation))]
     public class Measurement
     {
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Ignore]
         public int        Id                   { get; set; }
         [Required]
@@ -45,25 +45,25 @@ namespace Regata.Core.DB.MSSQL.Models
         [Required]
         public int        Type                 { get; set; }
         [Ignore]
-        public string     AcqMode              { get; set; }
+        public int?        AcqMode             { get; set; }
         [Ignore]
-        public uint?      DiskPosition         { get; set; }
+        public int?      DiskPosition          { get; set; }
         [Ignore]
         public DateTime?  DateTimeStart        { get; set; }
         [Ignore]
-        public uint?      Duration             { get; set; }
+        public int?      Duration              { get; set; }
         [Ignore]
         public DateTime?  DateTimeFinish       { get; set; }
         [Ignore]
-        public float?     DeadTime             { get; set; }
-        [Ignore]
         public float?     Height               { get; set; }
+        [Ignore]
+        public float?     DeadTime             { get; set; }
         [Ignore]
         public string     FileSpectra          { get; set; }
         [Ignore]
         public string     Detector             { get; set; }
         [Ignore]
-        public int        Assistant            { get; set; }
+        public int?       Assistant            { get; set; }
         [Ignore]
         public string     Note                 { get; set; }
 

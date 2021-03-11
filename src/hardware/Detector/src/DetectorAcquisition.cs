@@ -140,8 +140,8 @@ namespace Regata.Core.Hardware
             }
         }
 
-        private uint _counts;
-        public uint Counts
+        private int _counts;
+        public int Counts
         {
             get { return _counts; }
             set

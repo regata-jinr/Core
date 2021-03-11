@@ -11,6 +11,7 @@
 
 using System;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Regata.Core.UI.WinForms.Controls
 {
@@ -26,14 +27,55 @@ namespace Regata.Core.UI.WinForms.Controls
                                     (int) DurationControlNumericUpDownSeconds.Value
                                     );
             }
-
             set
             {
+                if (value.Days >= 100) value = new TimeSpan();
                 DurationControlNumericUpDownDays.Value    = value.Days;
                 DurationControlNumericUpDownHours.Value   = value.Hours;
                 DurationControlNumericUpDownMinutes.Value = value.Minutes;
                 DurationControlNumericUpDownSeconds.Value = value.Seconds;
-                //DurationChanged?.Invoke(this, new EventArgs());
+            }
+        }
+
+        private const string _defFontFamily = "Segoe UI";
+        private const float _defFontSizeNumerics = 12F;
+        private const float _defFontSizeTitle = 14F;
+        private Font _titleFont = new Font(_defFontFamily, _defFontSizeTitle, FontStyle.Bold, GraphicsUnit.Point);
+
+        public Font TitlesFont
+        {
+            get
+            {
+                return _titleFont;
+            }
+
+            set
+            {
+                _titleFont = value;
+                DurationControlLabelDays.Font    = value;
+                DurationControlLabelMinutes.Font = value;
+                DurationControlLabelSeconds.Font = value;
+                DurationControlLabelHours.Font   = value;  
+
+            }
+        }
+
+        private Font _numericsFont;
+
+        public Font NumericsFont
+        {
+            get
+            {
+                return _numericsFont;
+            }
+
+            set
+            {
+                _numericsFont = value;
+                DurationControlNumericUpDownDays.Font = value;
+                DurationControlNumericUpDownMinutes.Font = value;
+                DurationControlNumericUpDownSeconds.Font = value;
+                DurationControlNumericUpDownHours.Font = value;
 
             }
         }
@@ -64,10 +106,26 @@ namespace Regata.Core.UI.WinForms.Controls
         {
             InitializeComponent();
 
-            DurationControlNumericUpDownDays.ValueChanged += DurationControlNumericUpDownDays_ValueChanged;
-            DurationControlNumericUpDownHours.ValueChanged += DurationControlNumericUpDownHours_ValueChanged;
+            NumericsFont =  new Font(_defFontFamily, _defFontSizeNumerics, FontStyle.Regular, GraphicsUnit.Point);
+            TitlesFont   = new Font(_defFontFamily, _defFontSizeTitle, FontStyle.Regular, GraphicsUnit.Point);
+
+            DurationControlNumericUpDownDays.ValueChanged    += DurationControlNumericUpDownDays_ValueChanged;
+            DurationControlNumericUpDownHours.ValueChanged   += DurationControlNumericUpDownHours_ValueChanged;
             DurationControlNumericUpDownMinutes.ValueChanged += DurationControlNumericUpDownMinutes_ValueChanged;
             DurationControlNumericUpDownSeconds.ValueChanged += DurationControlNumericUpDownSeconds_ValueChanged;
+
+            DurationChanged += (s, e) => 
+            {
+                DurationControlNumericUpDownDays.ValueChanged    -= DurationControlNumericUpDownDays_ValueChanged;
+                DurationControlNumericUpDownHours.ValueChanged   -= DurationControlNumericUpDownHours_ValueChanged;
+                DurationControlNumericUpDownMinutes.ValueChanged -= DurationControlNumericUpDownMinutes_ValueChanged;
+                DurationControlNumericUpDownSeconds.ValueChanged -= DurationControlNumericUpDownSeconds_ValueChanged;
+                Duration = Duration;
+                DurationControlNumericUpDownDays.ValueChanged    += DurationControlNumericUpDownDays_ValueChanged;
+                DurationControlNumericUpDownHours.ValueChanged   += DurationControlNumericUpDownHours_ValueChanged;
+                DurationControlNumericUpDownMinutes.ValueChanged += DurationControlNumericUpDownMinutes_ValueChanged;
+                DurationControlNumericUpDownSeconds.ValueChanged += DurationControlNumericUpDownSeconds_ValueChanged;
+            };
 
         }
 

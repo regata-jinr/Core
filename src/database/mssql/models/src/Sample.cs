@@ -30,7 +30,7 @@ namespace Regata.Core.DB.MSSQL.Models
         [Column("A_Sample_ID")]
         public string SampleNumber        { get; set; } // 1
         [Column("A_Client_Sample_ID")]
-        public string  ClientSampleId   { get; set; }
+        public string  ClientSampleId     { get; set; }
 
         public string  A_Sample_Type      { get; set; }
         public Single? P_Weighting_LLI    { get; set; }

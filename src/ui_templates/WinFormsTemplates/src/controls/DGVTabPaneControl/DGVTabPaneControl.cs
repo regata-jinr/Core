@@ -24,8 +24,6 @@ namespace Regata.Core.UI.WinForms.Controls
 
         public TabPageCollection Pages => tabControl.TabPages;
 
-        public int DgvYMargin = 20;
-
         public event Action DataSourceChanged;
 
         private float _bigDgvSizeCoeff;
@@ -162,12 +160,21 @@ namespace Regata.Core.UI.WinForms.Controls
         /// <summary>
         /// Returns selected rows from last dgv on active page
         /// </summary>
-        public DataGridViewSelectedRowCollection SelectedRows
+        public DataGridViewSelectedRowCollection SelectedRowsLastDGV
         {
             get
             {
                 var curPageIndex = Pages.IndexOf(ActiveTabPage);
                 return this[curPageIndex, Pages[curPageIndex].Controls[0].Controls.OfType<DataGridView>().Count() - 1].SelectedRows;
+            }
+        }
+
+        public DataGridViewSelectedRowCollection SelectedRowsFirstDGV
+        {
+            get
+            {
+                var curPageIndex = Pages.IndexOf(ActiveTabPage);
+                return this[curPageIndex, 0].SelectedRows;
             }
         }
 

@@ -24,7 +24,6 @@ namespace Regata.Core.UI.WinForms.Items
         public ToolStripMenuItem EnumMenuItem;
         public ToolStripStatusLabel EnumStatusLabel;
         public event Action CheckedChanged;
-        public string CheckedItemText { get; set; }
 
         public void CheckItem(T itm)
         {
@@ -33,8 +32,9 @@ namespace Regata.Core.UI.WinForms.Items
                 if (item.Name == itm.ToString())
                 {
                     item.Checked = true;
-                    EnumStatusLabel.Text = $"{itm}||";
-                    CheckedItemText = $"{_enumName}: {itm}||";
+                    EnumStatusLabel.Name = item.Name;
+                    //EnumStatusLabel.Text = item.Text;
+                    //EnumStatusLabel.Text = $"{itm}||";
                 }
                 else
                     item.Checked = false;
@@ -52,6 +52,7 @@ namespace Regata.Core.UI.WinForms.Items
             _enumName = typeof(T).Name;
             EnumMenuItem = new ToolStripMenuItem();
             EnumStatusLabel = new ToolStripStatusLabel();
+            EnumStatusLabel.Alignment = ToolStripItemAlignment.Left;
 
             EnumMenuItem.CheckOnClick = false;
 
@@ -62,10 +63,10 @@ namespace Regata.Core.UI.WinForms.Items
                 EnumMenuItem.DropDownItems[val_name].Click += CheckHandler;
 
                 //if (val_name == currentItem.ToString())
-                    //EnumMenuItem.DropDownItems[val_name].PerformClick();
+                //EnumMenuItem.DropDownItems[val_name].PerformClick();
             }
 
-            EnumStatusLabel.Name = $"{_enumName}StatusLabel";
+                //EnumStatusLabel.Name = $"{_enumName}StatusLabel";
             EnumMenuItem.Name = $"{_enumName}MenuItem";
 
         }

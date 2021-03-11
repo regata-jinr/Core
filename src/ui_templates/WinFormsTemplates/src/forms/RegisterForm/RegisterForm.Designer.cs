@@ -29,6 +29,15 @@ namespace Regata.Core.UI.WinForms.Forms
         public EnumItem<Language> LangItem;
         public TableLayoutPanel FunctionalLayoutPanel;
         public TableLayoutPanel BottomLayoutPanel;
+        public TableLayoutPanel MainTableLayoutPanel;
+        public GroupBox groupBoxMainRDGV;
+
+        public GroupBox groupBoxRegForm;
+        public TableLayoutPanel tableLayoutPanelRegForm;
+        public Button buttonRemoveSample;
+        public Button buttonAddAllSamples;
+        public Button buttonAddSampleToReg;
+        public Button buttonShowAcqQueue;
 
         /// <summary>
         /// Required designer variable.
@@ -57,6 +66,7 @@ namespace Regata.Core.UI.WinForms.Forms
 
         private void InitializeMainTable()
         {
+
             MainRDGV = new RDataGridView<MainTableModel>();
 
             ((ISupportInitialize)MainRDGV).BeginInit();
@@ -72,13 +82,11 @@ namespace Regata.Core.UI.WinForms.Forms
             MainRDGV.AllowUserToAddRows = false;
             MainRDGV.AllowUserToDeleteRows = false;
             MainRDGV.AllowUserToResizeRows = false;
-            MainRDGV.Anchor = (((((AnchorStyles.Top | AnchorStyles.Bottom)
-            | AnchorStyles.Left)
-            | AnchorStyles.Right)));
             MainRDGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             MainRDGV.BackgroundColor = Color.White;
             MainRDGV.BorderStyle = BorderStyle.None;
             MainRDGV.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+            MainRDGV.Dock = DockStyle.Fill;
 
             var rdgvCellStyle1 = new DataGridViewCellStyle();
             rdgvCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -101,7 +109,6 @@ namespace Regata.Core.UI.WinForms.Forms
             rdgvCellStyle2.WrapMode = DataGridViewTriState.False;
             MainRDGV.DefaultCellStyle = rdgvCellStyle2;
 
-            Controls.Add(MainRDGV);
             ((ISupportInitialize)MainRDGV).EndInit();
             MainRDGV.ResumeLayout(false);
 
@@ -115,12 +122,10 @@ namespace Regata.Core.UI.WinForms.Forms
             TabsPane.Anchor = ((AnchorStyles)(((AnchorStyles.Bottom | AnchorStyles.Left)
            | AnchorStyles.Right)));
             TabsPane.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            TabsPane.Location = new Point(11, 674);
             TabsPane.Margin = new Padding(4, 3, 4, 3);
             TabsPane.Name = "TabsPane";
-            TabsPane.Size = new Size(815, 253);
             TabsPane.TabIndex = 1;
-            //Controls.Add(TabsPane);
+            TabsPane.Dock = DockStyle.Fill;
             BottomLayoutPanel.Controls.Add(TabsPane, 0, 0);
             ResumeLayout(false);
         }
@@ -132,15 +137,60 @@ namespace Regata.Core.UI.WinForms.Forms
         private void InitializeComponent()
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(RegisterForm<MainTableModel>));
-            StatusStrip = new StatusStrip();
-            ProgressBar = new ToolStripProgressBar();
-            MenuStrip = new MenuStrip();
-            LangItem = new EnumItem<Language>(Language.English);
 
+            InitializeMainTable();
+
+
+            StatusStrip                        = new StatusStrip();
+            ProgressBar                        = new ToolStripProgressBar();
+            MenuStrip                          = new MenuStrip();
+            LangItem                           = new EnumItem<Language>(Language.English);
+            groupBoxRegForm                    = new GroupBox();
+            tableLayoutPanelRegForm            = new TableLayoutPanel();
+            buttonAddAllSamples                = new Button();
+            buttonAddSampleToReg               = new Button();
+            buttonRemoveSample                 = new Button();
+            buttonShowAcqQueue                 = new Button();
+            groupBoxMainRDGV                   = new GroupBox();
+            MainTableLayoutPanel               = new TableLayoutPanel();
+            FunctionalLayoutPanel              = new TableLayoutPanel();
+            BottomLayoutPanel                  = new TableLayoutPanel();
+
+            FunctionalLayoutPanel.SuspendLayout();
+            BottomLayoutPanel.SuspendLayout();
+            MainTableLayoutPanel.SuspendLayout();
+            groupBoxMainRDGV.SuspendLayout();
+            groupBoxRegForm.SuspendLayout();
+            tableLayoutPanelRegForm.SuspendLayout();
             StatusStrip.SuspendLayout();
             MenuStrip.SuspendLayout();
             SuspendLayout();
-            
+           
+            // 
+            // MainTableLayoutPanel
+            // 
+            MainTableLayoutPanel.ColumnCount = 1;
+            MainTableLayoutPanel.Name = "MainTableLayoutPanel";
+            MainTableLayoutPanel.RowCount = 2;
+            MainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70F));
+            MainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
+            MainTableLayoutPanel.TabIndex = 25;
+            MainTableLayoutPanel.Dock = DockStyle.Fill;
+            MainTableLayoutPanel.Controls.Add(groupBoxMainRDGV, 0, 0);
+            MainTableLayoutPanel.AutoScroll = true;
+
+
+            // 
+            // groupBoxMainRDGV
+            // 
+            groupBoxMainRDGV.Dock = DockStyle.Fill;
+            groupBoxMainRDGV.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            groupBoxMainRDGV.Name = "groupBoxMainRDGV";
+            groupBoxMainRDGV.TabIndex = 0;
+            groupBoxMainRDGV.TabStop = false;
+            groupBoxMainRDGV.Text = "groupBoxMainRDGV";
+            groupBoxMainRDGV.Controls.Add(MainRDGV);
+
             // 
             // StatusStrip
             // 
@@ -153,18 +203,20 @@ namespace Regata.Core.UI.WinForms.Forms
             StatusStrip.Text = "StatusStrip";
             StatusStrip.Dock = DockStyle.Bottom;
             StatusStrip.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            StatusStrip.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
             //StatusStrip.Anchor = AnchorStyles.;
             // 
             // ProgressBar
             // 
             ProgressBar.Name = "ProgressBar";
-            ProgressBar.Size = new Size(100, 32);
+            ProgressBar.Size = new Size(150, 22);
+            ProgressBar.Alignment = ToolStripItemAlignment.Right;
             // 
             // MenuStrip
             // 
             MenuStrip.Location = new Point(0, 0);
             MenuStrip.Name = "MenuStrip";
-            MenuStrip.Size = new Size(1687, 24);
+            MenuStrip.AutoSize = true;
             MenuStrip.TabIndex = 24;
             MenuStrip.Text = "MenuStrip";
             MenuStrip.Dock = DockStyle.Top;
@@ -173,61 +225,132 @@ namespace Regata.Core.UI.WinForms.Forms
             // 
             // FunctionalLayoutPanel
             // 
-            FunctionalLayoutPanel = new TableLayoutPanel();
-            FunctionalLayoutPanel.SuspendLayout();
-            FunctionalLayoutPanel.ColumnCount = 2;
-            FunctionalLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            FunctionalLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            FunctionalLayoutPanel.Location = new Point(833, 674);
+            FunctionalLayoutPanel.ColumnCount = 3;
+            FunctionalLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
+            FunctionalLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
+            FunctionalLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
             FunctionalLayoutPanel.Name = "FunctionalLayoutPanel";
-            FunctionalLayoutPanel.RowCount = 2;
-            FunctionalLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            FunctionalLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            FunctionalLayoutPanel.Size = new Size(837, 253);
+            FunctionalLayoutPanel.RowCount = 1;
+            //FunctionalLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            //FunctionalLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             FunctionalLayoutPanel.TabIndex = 25;
             FunctionalLayoutPanel.Dock = DockStyle.Fill;
+            FunctionalLayoutPanel.Controls.Add(groupBoxRegForm, 0, 0);
 
             // 
             // BottomLayoutPanel
             // 
-            BottomLayoutPanel = new TableLayoutPanel();
-            BottomLayoutPanel.SuspendLayout();
             BottomLayoutPanel.ColumnCount = 2;
             BottomLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             BottomLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             BottomLayoutPanel.Controls.Add(FunctionalLayoutPanel, 1, 0);
-            BottomLayoutPanel.Dock = DockStyle.Bottom;
-            BottomLayoutPanel.Location = new Point(0, 668);
+            BottomLayoutPanel.Dock = DockStyle.Fill;
             BottomLayoutPanel.Name = "BottomLayoutPanel";
             BottomLayoutPanel.RowCount = 1;
-            BottomLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-            BottomLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-            BottomLayoutPanel.Size = new Size(1687, 276);
+            BottomLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent));
             BottomLayoutPanel.TabIndex = 26;
+            MainTableLayoutPanel.Controls.Add(BottomLayoutPanel, 0, 1);
 
+            // 
+            // groupBoxRegForm
+            // 
+            groupBoxRegForm.Controls.Add(tableLayoutPanelRegForm);
+            groupBoxRegForm.Dock = DockStyle.Fill;
+            groupBoxRegForm.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            groupBoxRegForm.Name = "groupBoxRegForm";
+            groupBoxRegForm.TabIndex = 0;
+            groupBoxRegForm.TabStop = false;
+            groupBoxRegForm.Text = "Формирование журнала";
+            // 
+            // tableLayoutPanelRegForm
+            // 
+            tableLayoutPanelRegForm.ColumnCount = 1;
+            tableLayoutPanelRegForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanelRegForm.Controls.Add(buttonShowAcqQueue, 0, 3);
+            tableLayoutPanelRegForm.Controls.Add(buttonRemoveSample, 0, 2);
+            tableLayoutPanelRegForm.Controls.Add(buttonAddAllSamples, 0, 1);
+            tableLayoutPanelRegForm.Controls.Add(buttonAddSampleToReg, 0, 0);
+            tableLayoutPanelRegForm.Dock = DockStyle.Fill;
+            tableLayoutPanelRegForm.Location = new Point(3, 25);
+            tableLayoutPanelRegForm.Name = "tableLayoutPanelRegForm";
+            tableLayoutPanelRegForm.RowCount = 4;
+            tableLayoutPanelRegForm.RowStyles.Add(new RowStyle(SizeType.Percent, 100 / tableLayoutPanelRegForm.RowCount));
+            tableLayoutPanelRegForm.RowStyles.Add(new RowStyle(SizeType.Percent, 100 / tableLayoutPanelRegForm.RowCount));
+            tableLayoutPanelRegForm.RowStyles.Add(new RowStyle(SizeType.Percent, 100 / tableLayoutPanelRegForm.RowCount));
+            tableLayoutPanelRegForm.RowStyles.Add(new RowStyle(SizeType.Percent, 100 / tableLayoutPanelRegForm.RowCount));
+            tableLayoutPanelRegForm.Size = new Size(267, 236);
+            tableLayoutPanelRegForm.TabIndex = 0;
+            tableLayoutPanelRegForm.AutoScroll = true;
+
+            // 
+            // buttonAddSampleToReg
+            // 
+            buttonAddSampleToReg.Dock = DockStyle.Fill;
+            buttonAddSampleToReg.Location = new Point(3, 3);
+            buttonAddSampleToReg.Name = "buttonAddSampleToReg";
+            buttonAddSampleToReg.Size = new Size(261, 72);
+            buttonAddSampleToReg.TabIndex = 0;
+            buttonAddSampleToReg.UseVisualStyleBackColor = true;
+            // 
+            // buttonAddAllSamples
+            // 
+            buttonAddAllSamples.Dock = DockStyle.Fill;
+            buttonAddAllSamples.Location = new Point(3, 81);
+            buttonAddAllSamples.Name = "buttonAddAllSamples";
+            buttonAddAllSamples.Size = new Size(261, 72);
+            buttonAddAllSamples.TabIndex = 1;
+            buttonAddAllSamples.UseVisualStyleBackColor = true;
+            // 
+            // buttonRemoveSample
+            // 
+            buttonRemoveSample.Dock = DockStyle.Fill;
+            buttonRemoveSample.Location = new Point(3, 159);
+            buttonRemoveSample.Name = "buttonRemoveSample";
+            buttonRemoveSample.Size = new Size(261, 74);
+            buttonRemoveSample.TabIndex = 2;
+            buttonRemoveSample.UseVisualStyleBackColor = true;
+            // 
+            // buttonShowAcqQueue
+            // 
+            buttonShowAcqQueue.Dock = DockStyle.Fill;
+            buttonShowAcqQueue.Location = new Point(3, 159);
+            buttonShowAcqQueue.Name = "buttonShowAcqQueue";
+            buttonShowAcqQueue.Size = new Size(261, 74);
+            buttonShowAcqQueue.TabIndex = 3;
+            buttonShowAcqQueue.UseVisualStyleBackColor = true;
             // 
             // RegisterForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1687, 966);
-            Controls.Add(MenuStrip);
-            Controls.Add(BottomLayoutPanel);
+            ClientSize = new Size(1700, 900);
+            MinimumSize = new Size(1500,900);
+            Margin = new Padding(4, 3, 4, 3);
+            AutoScroll = true;
+
+            Controls.Add(MainTableLayoutPanel);
             Controls.Add(StatusStrip);
-            //Controls.Add(FunctionalLayoutPanel);
+            Controls.Add(MenuStrip);
 
             MainMenuStrip = MenuStrip;
             Margin = new Padding(4, 3, 4, 3);
             Name = "RegisterForm";
             Text = "RegisterForm";
-          
+
             StatusStrip.ResumeLayout(false);
             StatusStrip.PerformLayout();
+
             MenuStrip.ResumeLayout(false);
             MenuStrip.PerformLayout();
-            ResumeLayout(false);
+
+            groupBoxRegForm.ResumeLayout(false);
+            groupBoxMainRDGV.ResumeLayout(false);
+            tableLayoutPanelRegForm.ResumeLayout(false);
             FunctionalLayoutPanel.ResumeLayout(false);
             BottomLayoutPanel.ResumeLayout(false);
+            MainTableLayoutPanel.ResumeLayout(false);
+
+            ResumeLayout(false);
             PerformLayout();
 
         }
