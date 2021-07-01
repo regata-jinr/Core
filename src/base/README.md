@@ -1,105 +1,24 @@
-﻿# Report
+﻿# Base
 
-This assemly provides the way to combine all notifications into the one library.
+This assemly contains main level of abstraction
 
-Messaging of any level baised on the special code and could be shown with any GUI library.
+- report system (logging and notification)
+- database interaction
+- managing of settings for application
 
+The starting point of usage whole Core system is config file target.json.
 
-## Codes
-
-The main idea is usage of common way to all kind of reports.
-To solve this we will use unique code for each system state.
-Report could have few levels:
-
-### Info 
-
-Normal behavior like mail sent, user updated profile etc.
- 
-- [0-1000)  - Info codes
-  - [  0- 99) - DataBase          
-  - [100-199) - Cloud             
-  - [200-299) - Detector          
-  - [300-399) - Logger            
-  - [400-499) - Settings          
-  - [500-599) - Export:Excel      
-  - [600-699) - Export:GoogleSheet
-  - [700-799) - Export:CSV        
-
-### Success
-
-This class of status codes indicates the action requested by the client was received, understood, and accepted
-
-- [1000-2000) - Success codes
-   - [1000-1099) - DataBase           
-   - [1100-1199) - Cloud              
-   - [1200-1299) - Detector           
-   - [1300-1399) - Logger             
-   - [1400-1499) - Settings           
-   - [1500-1599) - Export:Excel       
-   - [1600-1699) - Export:GoogleSheet 
-   - [1700-1799) - Export:CSV         
-
-### Warning
-
-Something unexpected; application will continue
-
-- [2000-3000) - Warning codes
-    - [2000-2099) - DataBase          
-    - [2100-2199) - Cloud             
-    - [2200-2299) - Detector          
-    - [2300-2399) - Logger            
-    - [2400-2499) - Settings          
-    - [2500-2599) - Export:Excel      
-    - [2600-2699) - Export:GoogleSheet
-    - [2700-2799) - Export:CSV        
-
-### Error
-
-Something failed; application may or may not continue
-
-- [3000-4000) - Error codes
-   - [3000-3099) - DataBase          
-   - [3100-3199) - Cloud             
-   - [3200-3299) - Detector          
-   - [3300-3399) - Logger            
-   - [3400-3499) - Settings          
-   - [3500-3599) - Export:Excel      
-   - [3600-3699) - Export:GoogleSheet
-   - [3700-3799) - Export:CSV        
-
-## State handler
-
-Each code is correspond to some state. Any state has one way to report via using 
-
-~~~csharp
- Report.Notify(ushort code_number);
-~~~
-
-Such approach allows us to process events in common manner. Moreover it also allows to be free from localizations and naming.
-Based on code developer can be free and add description of states in any language and verbosity based on code.
-
-## Different UI wrappers
-
-Report class contains event which called 'NotificationEvent' such event can be used for adding different UI wrappers of notification, e.g. winforms, wpf or any other.
-
-## Logs
-
-By default core Report libs has a setting of NLog logging service. It writes logs to file and to db.
-
-## Email notification
-
-Also user can add his email to list and recieve notification by email.
-
+It contains names of windows credential manager target that keep connection string for cloud and database.
 
 # Settings
 
 > This assembly aims to implementation of common settings mechanic for different apps.
 
-Settings is a generic static class where specified type represents an application settings.
+Settings is a generic static class where input type represents an application settings.
 
-The class provided common mechanics for settings from an app.
+In order to implement global setting such as language and verbosity level we provide abstract class ASettings. Argument type of generic class have to be derived from this one.
 
-Entry point is specifying an settings class and assemply name:
+Entry point is specifying of assemply name:
 
 ~~~csharp
 
@@ -173,6 +92,102 @@ Settings<TestSettings>.CurrentSettings.height = 22f;
 Settings<TestSettings>.Save();
 ~~~
 
-Also use Load() method for update app settings. 
+Also use Load() method for update app settings.
+
+
+# Report 
+
+This class provides the way to combine all notifications into the one library.
+
+Messaging of any level baised on the special code and could be shown with any GUI library.
+
+
+## Codes
+
+The main idea is usage of common way to all kind of reports.
+To solve this we will use unique code for each system state.
+Report could have few levels:
+
+### Info 
+
+Normal behavior like mail sent, user updated profile etc.
+ 
+- [0-1000)  - Info codes
+  - [  0- 99) - DataBase          
+  - [100-199) - Cloud             
+  - [200-299) - Detector          
+  - [300-399) - Logger            
+  - [400-499) - Settings          
+  - [500-599) - Export:Excel      
+  - [600-699) - Export:GoogleSheet
+  - [700-799) - Export:CSV        
+
+### Success
+
+This class of status codes indicates the action requested by the client was received, understood, and accepted
+
+- [1000-2000) - Success codes
+   - [1000-1099) - DataBase           
+   - [1100-1199) - Cloud              
+   - [1200-1299) - Detector           
+   - [1300-1399) - Logger             
+   - [1400-1499) - Settings           
+   - [1500-1599) - Export:Excel       
+   - [1600-1699) - Export:GoogleSheet 
+   - [1700-1799) - Export:CSV         
+
+### Warning
+
+Something unexpected; application will continue
+
+- [2000-3000) - Warning codes
+    - [2000-2099) - DataBase          
+    - [2100-2199) - Cloud             
+    - [2200-2299) - Detector          
+    - [2300-2399) - Logger            
+    - [2400-2499) - Settings          
+    - [2500-2599) - Export:Excel      
+    - [2600-2699) - Export:GoogleSheet
+    - [2700-2799) - Export:CSV        
+
+### Error
+
+Something failed; application may or may not continue
+
+- [3000-4000) - Error codes
+   - [3000-3099) - DataBase          
+   - [3100-3199) - Cloud             
+   - [3200-3299) - Detector          
+   - [3300-3399) - Logger            
+   - [3400-3499) - Settings          
+   - [3500-3599) - Export:Excel      
+   - [3600-3699) - Export:GoogleSheet
+   - [3700-3799) - Export:CSV        
+
+## State handler
+
+Each code is correspond to some state. Any state has one way to report via using 
+
+~~~csharp
+ Report.Notify(new Message(ushort code_number));
+~~~
+
+Such approach allows us to process events in common manner. Moreover it also allows to be free from localizations and naming.
+Based on code developer can be free and add description of states in any language and verbosity based on code.
+
+## Different UI wrappers
+
+Report class contains event which called 'NotificationEvent' such event can be used for adding different UI wrappers of notification, e.g. winforms, wpf or any other.
+
+## Logs
+
+By default core Report libs has a setting of NLog logging service. It writes logs to file and to db.
+
+## Email notification
+
+Also user can add his email to list and recieve notification by email.
+
+
+ 
 
 

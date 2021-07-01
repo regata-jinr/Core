@@ -37,7 +37,7 @@ namespace Regata.Tests.Cloud
 
         public WebDavApiTest()
         {
-            Report.LogDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test", "WebDavApiTest");
+            //Report.LogDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test", "WebDavApiTest");
 
             if (Directory.Exists(mainDir))
                 Directory.Delete(mainDir, true);

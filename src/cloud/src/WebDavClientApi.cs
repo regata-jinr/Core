@@ -42,7 +42,7 @@ namespace Regata.Core.Cloud
         {
             try
             {
-                var cm = AdysTech.CredentialManager.CredentialManager.GetCredentials(GlobalSettings.DiskJinrTarget);
+                var cm = AdysTech.CredentialManager.CredentialManager.GetCredentials(GlobalSettings.Targets.DiskJinr);
                 _hostWebDavAPI += cm.UserName;
 
                 if (cm == null)

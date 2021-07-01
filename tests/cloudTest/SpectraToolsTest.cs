@@ -23,10 +23,10 @@ namespace Regata.Tests.Cloud
     public class SpectraToolsTest
     {
 
-        public SpectraToolsTest()
-        {
-            Report.LogDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test", "SpectraToolsTest");
-        }
+        //public SpectraToolsTest()
+        //{
+        //    Report.LogDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test", "SpectraToolsTest");
+        //}
 
         private static CancellationTokenSource _cts = new CancellationTokenSource();
 
