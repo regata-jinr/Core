@@ -1,0 +1,7 @@
+{
+  "Target": {
+    "DB": "MSSQL_TEST_DB_ConnetionString",
+    "LogPath": "D:\\GoogleDrive\\Job\\flnp\\dev\\logs",
+    "DiskJinr":  "disk.jinr.ru"
+  }
+}

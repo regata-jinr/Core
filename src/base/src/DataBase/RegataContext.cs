@@ -12,8 +12,9 @@
 using Microsoft.EntityFrameworkCore;
 using Regata.Core.DB.MSSQL.Models;
 using AdysTech.CredentialManager;
+using Regata.Core.Settings;
 
-namespace Regata.Core.DB.MSSQL.Context
+namespace Regata.Core.DataBase
 {
     public class RegataContext : DbContext
     {
@@ -36,11 +37,11 @@ namespace Regata.Core.DB.MSSQL.Context
         public DbSet<MessageDefault>       MessageDefaults       { get; set; }
         public DbSet<User>                 Users                 { get; set; }
 
-        private const string DBTarget = "MSSQL_TEST_DB_ConnetionString"; // "RegataDB";
+        //private const string DBTarget = "MSSQL_TEST_DB_ConnetionString"; // "RegataDB";
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)   
         {
-            optionsBuilder.UseSqlServer(CredentialManager.GetCredentials(DBTarget).Password, 
+            optionsBuilder.UseSqlServer(CredentialManager.GetCredentials(GlobalSettings.Targets.DB).Password, 
                                         options => 
                                             {
                                                 options.EnableRetryOnFailure(3);

@@ -93,7 +93,7 @@ Also user can add his email to list and recieve notification by email.
 
 # Settings
 
-> This assembly aims to implementation of common mechanic for settings of different apps.
+> This assembly aims to implementation of common settings mechanic for different apps.
 
 Settings is a generic static class where specified type represents an application settings.
 

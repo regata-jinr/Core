@@ -11,9 +11,11 @@
 
 using System.Linq;
 using System;
+using System.Collections.Generic;
 using Regata.Core.Settings;
 using System.Windows.Forms;
 using Regata.Core.DB.MSSQL.Context;
+using Regata.Core.DB.MSSQL.Models;
 using RCM=Regata.Core.Messages;
 
 namespace Regata.Core.UI.WinForms
@@ -21,6 +23,21 @@ namespace Regata.Core.UI.WinForms
     public static class Labels
     {
         private static string _formName = "";
+        private static readonly IReadOnlyList<UILabel> _labels;
+
+       static Labels()
+       {
+            using (var r = new RegataContext())
+            {
+                //if (!r.UILabels.Where(l => l.FormName == _formName).Any())
+                //{
+                //    Report.Notify(new RCM.Message(Codes.WARN_FORM_LBL_NOT_EXIST));
+                //    return;
+                //}
+
+                _labels = r.UILabels.ToList();
+            }
+        }
 
         public static void SetControlsLabels(Control.ControlCollection controls)
         {
@@ -63,19 +80,20 @@ namespace Regata.Core.UI.WinForms
         {
             try
             {
-                using (var r = new RegataContext())
+                if (_labels != null && _labels.Where(l => l.FormName == _formName && l.ComponentName == compt).Any())
                 {
-                    if (!r.UILabels.Where(l => l.FormName == _formName && l.ComponentName == compt).Any())
-                    {
-                        Report.Notify(new RCM.Message(Codes.WARN_LBL_NOT_EXIST));
-                        return compt;
-                    }
-
                     if (cLang == Language.Russian)
-                        return r.UILabels.Where(f => f.FormName == _formName && f.ComponentName == compt).Select(f => f.RusText).First();
+                        return _labels.Where(f => f.FormName == _formName && f.ComponentName == compt).Select(f => f.RusText).First();
                     else
-                        return r.UILabels.Where(f => f.FormName == _formName && f.ComponentName == compt).Select(f => f.EngText).First();
+                        return _labels.Where(f => f.FormName == _formName && f.ComponentName == compt).Select(f => f.EngText).First();
                 }
+                else
+                {
+                    Report.Notify(new RCM.Message(Codes.WARN_LBL_NOT_EXIST));
+                    return compt;
+                }
+
+                  
             }
             catch (Exception  ex)
             {

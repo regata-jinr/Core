@@ -124,6 +124,8 @@ namespace Regata.Core
 
         #region Logger Errors
         // 3300 - 3399
+        public const ushort ERR_REP_SEND_MAIL = 3300;
+
 
         #endregion
 

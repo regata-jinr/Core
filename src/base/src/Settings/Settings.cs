@@ -14,48 +14,74 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.IO;
 using Regata.Core.Messages;
+using Microsoft.Extensions.Configuration;
 
 namespace Regata.Core.Settings
 {
+    public enum Language { Russian, English};
 
-    public static class GlobalSettings
+    public abstract class ASettings
     {
-        public static string DiskJinrTarget { get; set; } = "disk.jinr.ru";
-        public static string DB_Target { get; set; } = "MSSQL_TEST_DB_ConnetionString";
-
-        public static string User => Environment.UserName;
-
-        public static Status Verbosity { get; set; }
-
-        private static Language _lang;
-
-        public static Language CurrentLanguage
+        private Language _lang;
+        public Language CurrentLanguage
         {
             get { return _lang; }
+
             set
             {
                 _lang = value;
+                GlobalSettings.CurrentLanguage = _lang;
                 LanguageChanged?.Invoke();
             }
         }
-
-        public static event Action LanguageChanged;
+        public Status Verbosity { get; set; }
+        public event Action LanguageChanged;
     }
 
-    public static class Settings<AppSettings> 
-        where AppSettings : ISettings
+    public class Target
     {
-        public static AppSettings CurrentSettings;
+        public string DiskJinr { get; set; }
+        public string DB { get; set; }
+        public string LogPath { get; set; }
+    }
+
+    public static class GlobalSettings
+    {
+        public static Target Targets;
+        static private IConfiguration Configuration { get; set; }
+
+        static GlobalSettings()
+        {
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("targets.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            Targets = new Target();
+
+            Configuration.GetSection(nameof(Target)).Bind(Targets);
+        }
+
+        public static string User => Environment.UserName;
+
+        public static string MailHostTarget;
+        public static string EmailRecipients;
+        
+        public static Status Verbosity { get; set; }
+
+        public static Language CurrentLanguage { get; internal set; }
+
+    }
+
+    public static class Settings<TSettings> 
+        where TSettings : ASettings
+    {
+        public static TSettings CurrentSettings;
 
         public static string FilePath
         {
             get
             {
-                if (string.IsNullOrEmpty(AssemblyName))
-                {
-                    Report.Notify(new Message(Codes.ERR_SET_GET_FILE_SET_EMPT_ASMBL));
-                    return string.Empty;
-                }
                 return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),"Regata",AssemblyName,"settings.json");
             }
         }
@@ -63,37 +89,32 @@ namespace Regata.Core.Settings
         private  static string _assmName;
 
         public  static string AssemblyName { 
-            get { return _assmName; }
+            get 
+            {
+                if (string.IsNullOrEmpty(_assmName))
+                {
+                    Report.Notify(new Message(Codes.ERR_SET_LOAD_EMPT_ASMBL));
+                    throw new ArgumentNullException("For the correct usage of settings system you have to provide AssemblyName");
+                }
+                return _assmName; 
+            }
             set
             {
                 _assmName = value;
                 Report.Notify(new Message(Codes.INFO_SET_SET_ASMBL_NAME));
-                if (string.IsNullOrEmpty(AssemblyName))
-                {
-                    Report.Notify(new Message(Codes.ERR_SET_SET_ASMBL_NAME_EMPTY));
-                    return;
-                }
-
                 Load();
             }
         }
 
         public static void Load()
         {
-
-            if (string.IsNullOrEmpty(AssemblyName))
-            {
-                Report.Notify(new Message(Codes.ERR_SET_LOAD_EMPT_ASMBL));
-                return;
-            }
-
             try
             {
                 if (File.Exists(FilePath))
                 {
                     var options = new JsonSerializerOptions();
                     options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-                    CurrentSettings = JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(FilePath), options);
+                    CurrentSettings = JsonSerializer.Deserialize<TSettings>(File.ReadAllText(FilePath), options);
                 }
                 else
                 {
@@ -102,7 +123,8 @@ namespace Regata.Core.Settings
                 }
 
                 GlobalSettings.CurrentLanguage = CurrentSettings.CurrentLanguage;
-                GlobalSettings.Verbosity       = CurrentSettings.Verbosity;
+                GlobalSettings.Verbosity = CurrentSettings.Verbosity;
+                //CurrentSettings.LanguageChanged += () => { GlobalSettings.CurrentLanguage = CurrentSettings.CurrentLanguage; };
 
             }
             catch
@@ -114,16 +136,10 @@ namespace Regata.Core.Settings
 
         public static void ResetToDefaults()
         {
-            if (string.IsNullOrEmpty(AssemblyName))
-            {
-                Report.Notify(new Message(Codes.ERR_SET_RST_EMPT_ASMBL));
-                return;
-            }
-
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
-                CurrentSettings = Activator.CreateInstance<AppSettings>();
+                CurrentSettings = Activator.CreateInstance<TSettings>();
                 Save();
             }
             catch
@@ -134,17 +150,12 @@ namespace Regata.Core.Settings
 
         public static void Save()
         {
-            if (string.IsNullOrEmpty(AssemblyName))
-            {
-                Report.Notify(new Message(Codes.ERR_SET_SAVE_EMPT_ASMBL));
-                return;
-            }
-
             try
             {
                 var options = new JsonSerializerOptions();
                 options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
                 options.WriteIndented = true;
+
                 File.WriteAllText(FilePath, JsonSerializer.Serialize(CurrentSettings, options));
             }
             catch

@@ -36,33 +36,17 @@ namespace Regata.Core
     /// </summary>
     public static class Report
     {
-        public static string MailHostTarget;
-        public static string PathToMessages;
-        private static string _logDir;
-
-        public static string LogDir
-        {
-            get { return _logDir; }
-            set
-            {
-                _logDir = value;
-                NLog.GlobalDiagnosticsContext.Set("LogDir", _logDir);
-            }
-        }
-
-        private const string _logConnectionStringTarget = "RegataCoreLogCS";
         private  static NLog.Logger _nLogger;
 
         static Report()
         {
-            NLog.GlobalDiagnosticsContext.Set("LogConnectionString", CredentialManager.GetCredentials(_logConnectionStringTarget).Password);
+            NLog.GlobalDiagnosticsContext.Set("LogDir", GlobalSettings.Targets.LogPath);
+            NLog.GlobalDiagnosticsContext.Set("LogConnectionString", CredentialManager.GetCredentials(GlobalSettings.Targets.DB).Password);
             _nLogger = NLog.LogManager.GetCurrentClassLogger();
-
         }
 
         private static readonly Dictionary<Status, NLog.LogLevel> ExceptionLevel_LogLevel = new Dictionary<Status, NLog.LogLevel> { { Status.Error, NLog.LogLevel.Error }, { Status.Warning, NLog.LogLevel.Warn }, { Status.Info, NLog.LogLevel.Info } };
 
-        public static MailAddressCollection Emails = new MailAddressCollection();
 
         // FIXME: in case of one of the available detector has already opened in not read-only mode (e.g. by hand) application will not run. The problem related with this  event!
         /// <summary>
@@ -120,45 +104,55 @@ namespace Regata.Core
             
         }
 
-
         // FIXME in case of network error will this freeze the app despite of SendAsync?
         private static void SendMessageByEmail(Message msg)
         {
-            if (Emails == null || !Emails.Any()) return;
-            var mail = CredentialManager.GetCredentials(MailHostTarget).UserName;
-            var mailPass = CredentialManager.GetCredentials(MailHostTarget).Password;
-            var fromMail = new MailAddress(mail, "REGATA Report Service");
+            try
+            {
 
-            using (var smtp = new SmtpClient
-            {
-                Host = "smtp.jinr.ru",
-                Port = 465,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(mail, mailPass)
-            })
-            {
-                foreach (var toAddress in Emails)
+                var Emails = new MailAddressCollection();
+                Emails.Add(GlobalSettings.EmailRecipients);
+
+                if (Emails == null || !Emails.Any()) return;
+                var mail = CredentialManager.GetCredentials(GlobalSettings.MailHostTarget).UserName;
+                var mailPass = CredentialManager.GetCredentials(GlobalSettings.MailHostTarget).Password;
+                var fromMail = new MailAddress(mail, "REGATA Report Service");
+
+                using (var smtp = new SmtpClient
                 {
-                    using (var message = new MailMessage(fromMail, toAddress)
+                    Host = "smtp.jinr.ru",
+                    Port = 465,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(mail, mailPass)
+                })
+                {
+                    foreach (var toAddress in Emails)
                     {
-                        Subject = msg.ToString(),
-                        Body = string.Join(
-                          msg.Text,
-                          Environment.NewLine,
-                          Environment.NewLine,
-                          "===*******TECH INFO*******==",
-                          Environment.NewLine,
-                          Environment.NewLine,
-                          msg.DetailedText
-                          )
-                    })
-                    {
-                        //var ct = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-                        smtp.Send(message);
+                        using (var message = new MailMessage(fromMail, toAddress)
+                        {
+                            Subject = msg.ToString(),
+                            Body = string.Join(
+                              msg.Text,
+                              Environment.NewLine,
+                              Environment.NewLine,
+                              "===*******TECH INFO*******==",
+                              Environment.NewLine,
+                              Environment.NewLine,
+                              msg.DetailedText
+                              )
+                        })
+                        {
+                            //var ct = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+                            smtp.Send(message);
+                        }
                     }
                 }
+            }
+            catch
+            {
+                Notify(new Message(Codes.ERR_REP_SEND_MAIL));
             }
 
         } // private static void SendMessageByEmail(Message msg)

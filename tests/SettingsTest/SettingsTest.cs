@@ -32,10 +32,9 @@ namespace Regata.Tests.Settings
         public List<int> iset6       { get; set; } = new List<int> { 1, 2, 3, 4, 5 };
     }
 
-    public class AppSettings : IEquatable<AppSettings>, ISettings
+    public class AppSettings : ASettings, IEquatable<AppSettings>
     {
-        public Language               CurrentLanguage      { get; set; }
-        public Status                 Verbosity            { get; set; }
+
         public float                  width                { get; set; } = 0.1f;
         public float                  height               { get; set; } = 1;
         public string                 name                 { get; set; } = "TestApp";
@@ -62,7 +61,6 @@ namespace Regata.Tests.Settings
             //comparisonList.Add(set7.iset6     == rhv.set7.iset6);
 
             return comparisonList.All(b => b);
-
 
         }
 
@@ -94,6 +92,8 @@ namespace Regata.Tests.Settings
 
             return !lhv.Equals(rhv);
         }
+
+       
     }
 
     [TestClass]
@@ -101,13 +101,21 @@ namespace Regata.Tests.Settings
     {
         public AppSettings dfltSettings = new AppSettings();
 
+        public SettingsTest()
+        {
+            Settings<AppSettings>.AssemblyName = "TestSettings";
+
+        }
+
         [TestMethod]
         public void CreateSettingsFromScratchTest()
         {
+
             if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Regata", "TestSettings", "settings.json")))
                 File.Delete(Settings<AppSettings>.FilePath);
-
+            
             Settings<AppSettings>.AssemblyName = "TestSettings";
+
             Assert.AreEqual(Settings<AppSettings>.CurrentSettings, dfltSettings);
             Assert.IsTrue(File.Exists(Settings<AppSettings>.FilePath));
         }
@@ -115,7 +123,6 @@ namespace Regata.Tests.Settings
         [TestMethod]
         public void ChangeAndSaveTest()
         {
-            Settings<AppSettings>.AssemblyName = "TestSettings";
             Settings<AppSettings>.CurrentSettings.height = 2.5f;
             Settings<AppSettings>.Save();
             Assert.IsTrue(File.Exists(Settings<AppSettings>.FilePath));
@@ -131,13 +138,38 @@ namespace Regata.Tests.Settings
         [TestMethod]
         public void ResetToDefaultsTest()
         {
-            Settings<AppSettings>.AssemblyName = "TestSettings";
             Settings<AppSettings>.CurrentSettings.height = 222f;
             Assert.AreNotEqual(Settings<AppSettings>.CurrentSettings, dfltSettings);
             Settings<AppSettings>.ResetToDefaults();
             Assert.AreEqual(Settings<AppSettings>.CurrentSettings, dfltSettings);
             Settings<AppSettings>.Load();
             Assert.AreEqual(Settings<AppSettings>.CurrentSettings, dfltSettings);
+        }
+
+        [TestMethod]
+        public void SyncWithGlobalSettingsTest()
+        {
+            Settings<AppSettings>.ResetToDefaults();
+
+            Assert.AreEqual(Settings<AppSettings>.CurrentSettings, dfltSettings);
+            Assert.AreEqual(Language.Russian, GlobalSettings.CurrentLanguage);
+
+            Settings<AppSettings>.CurrentSettings.CurrentLanguage = Language.English;
+            
+            Assert.AreNotEqual(Language.Russian, Settings<AppSettings>.CurrentSettings.CurrentLanguage);
+            Assert.AreNotEqual(Language.Russian, GlobalSettings.CurrentLanguage);
+
+            Settings<AppSettings>.Save();
+
+            Settings<AppSettings>.CurrentSettings.CurrentLanguage = Language.Russian;
+            Assert.AreEqual(Language.Russian, Settings<AppSettings>.CurrentSettings.CurrentLanguage);
+            Assert.AreEqual(Language.Russian, GlobalSettings.CurrentLanguage);
+
+            Settings<AppSettings>.Load();
+            Assert.AreEqual(Language.English, Settings<AppSettings>.CurrentSettings.CurrentLanguage);
+            Assert.AreEqual(Language.English, GlobalSettings.CurrentLanguage);
+
+
         }
 
     } // public class SettingsTest

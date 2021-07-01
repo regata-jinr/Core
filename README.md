@@ -1,9 +1,14 @@
 # R E G A T A &nbsp;&nbsp; C O R E
 
 Regata Core is the software framework of our experiment.
-It contains more than 20 DLLs and represents our base activities.
+It contains more than 20 DLLs and represents our basics activities.
 
 - [R E G A T A &nbsp;&nbsp; C O R E](#r-e-g-a-t-a--c-o-r-e)
+  - [Base](#base)
+    - [Codes](#codes)
+    - [Messages](#messages)
+    - [Report](#report)
+    - [Settings](#settings)
   - [Cloud](#cloud)
   - [Cnf](#cnf)
   - [Database](#database)
@@ -17,20 +22,28 @@ It contains more than 20 DLLs and represents our base activities.
     - [Detector](#detector)
     - [SampleChanger](#samplechanger)
     - [Scales](#scales)
-  - [Report](#report)
-  - [Settings](#settings)
   - [UI Templates](#ui-templates)
     - [WinForms](#winforms)
-  - [Updater](#updater)
-  - [Thoughts about future of regata software](#thoughts-about-future-of-regata-software)
+  - [Thoughts about future of the Regata software](#thoughts-about-future-of-the-regata-software)
+
+## [Base](https://github.com/regata-jinr/Core/tree/master/src/base)
+
+### [Codes](https://github.com/regata-jinr/Core/tree/master/src/base#report)
+
+### [Messages](https://github.com/regata-jinr/Core/tree/master/src/base#report)
+
+### [Report](https://github.com/regata-jinr/Core/tree/master/src/base#report)
+
+### [Settings](https://github.com/regata-jinr/Core/tree/master/src/base#settings)
 
 ## [Cloud](https://github.com/regata-jinr/Core/tree/master/src/cloud)
 
-## [Cnf](https://github.com/regata-jinr/Core/tree/master/src/cloud)
+## [Cnf](https://github.com/regata-jinr/Core/tree/master/src/cnf)
 
 ## [Database](https://github.com/regata-jinr/Core/tree/master/src/database)
 
 ### [MS-SQL](https://github.com/regata-jinr/Core/tree/master/src/database/mssql)
+
 ### [POSTGRES](https://github.com/regata-jinr/Core/tree/master/src/database/postgres)
 
 ## [Export](https://github.com/regata-jinr/Core/tree/master/src/export)
@@ -38,6 +51,7 @@ It contains more than 20 DLLs and represents our base activities.
 ### [Excel](https://github.com/regata-jinr/Core/tree/master/src/export/csv)
   
 ### [CSV](https://github.com/regata-jinr/Core/tree/master/src/export/excel)
+
 ### [GoogleSheets](https://github.com/regata-jinr/Core/tree/master/src/export/google_sheets)
 
 ## [Hardware](https://github.com/regata-jinr/Core/tree/master/src/hardware)
@@ -48,17 +62,11 @@ It contains more than 20 DLLs and represents our base activities.
 
 ### [Scales](https://github.com/regata-jinr/Core/tree/master/src/hardware/Scales)
 
-## [Report](https://github.com/regata-jinr/Core/tree/master/src/report)
-
-## [Settings](https://github.com/regata-jinr/Core/tree/master/src/settings)
-
 ## [UI Templates](https://github.com/regata-jinr/Core/tree/master/src/ui_templates)
 
 ### [WinForms](https://github.com/regata-jinr/Core/tree/master/src/ui_templates/WinFormsTemplates)
 
-## [Updater](https://github.com/regata-jinr/Core/tree/master/src/updater)
-
-## Thoughts about future of regata software
+## Thoughts about future of the Regata software
 
 Many of needed function already implemented in differences frameworks.
 

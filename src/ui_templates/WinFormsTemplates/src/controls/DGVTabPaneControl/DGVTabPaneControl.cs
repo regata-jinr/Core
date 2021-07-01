@@ -18,165 +18,165 @@ using System.ComponentModel;
 
 namespace Regata.Core.UI.WinForms.Controls
 {
-    public partial class DGVTabPaneControl : UserControl
+  public partial class DGVTabPaneControl : UserControl
+  {
+    public TabPage ActiveTabPage => tabControl.SelectedTab;
+
+    public TabPageCollection Pages => tabControl.TabPages;
+
+    public event Action DataSourceChanged;
+
+    private float _bigDgvSizeCoeff;
+    private uint _dgvsNumberOnPage;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tabsNumber">Number of tab pages</param>
+    /// <param name="dgvsNumberOnPage">Number of DGVs on each tab page</param>
+    /// <param name="BigDgvSizeCoeff">Specified what part from the tab page size should take biggest dgv. In case of 1 the equal parts for each dgv.</param>
+    public DGVTabPaneControl(uint tabsNumber = 1, uint dgvsNumberOnPage = 1, float BigDgvSizeCoeff = 1.0f)
     {
-        public TabPage ActiveTabPage => tabControl.SelectedTab; 
+      _bigDgvSizeCoeff = BigDgvSizeCoeff;
+      _dgvsNumberOnPage = dgvsNumberOnPage;
 
-        public TabPageCollection Pages => tabControl.TabPages;
+      InitializeComponent();
 
-        public event Action DataSourceChanged;
+      for (int i = 0; i < tabsNumber; ++i)
+      {
+        var pg = CreateTabPage(i);
+        pg.Controls.Add(CreateTableLayoutPanel(i));
+        Pages.Add(pg);
+      }
+      this.ResumeLayout(false);
+    }
 
-        private float _bigDgvSizeCoeff;
-        private uint _dgvsNumberOnPage;
+    private TabPage CreateTabPage(int page_ind)
+    {
+      var name = $"tabPage{page_ind + 1}";
+      var pg = new TabPage(name) { Name = name, AutoScroll = true };
+      return pg;
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="tabsNumber">Number of tab pages</param>
-        /// <param name="dgvsNumberOnPage">Number of DGVs on each tab page</param>
-        /// <param name="BigDgvSizeCoeff">Specified what part from the tab page size should take biggest dgv. In case of 1 the equal parts for each dgv.</param>
-        public DGVTabPaneControl(uint tabsNumber = 1, uint dgvsNumberOnPage = 1, float BigDgvSizeCoeff = 1.0f)
-        {
-            _bigDgvSizeCoeff = BigDgvSizeCoeff;
-            _dgvsNumberOnPage = dgvsNumberOnPage;
+    private TableLayoutPanel CreateTableLayoutPanel(int page_ind)
+    {
+      var tlp = new TableLayoutPanel();
+      tlp.ColumnCount = (int)_dgvsNumberOnPage;
+      tlp.AutoSize = true;
+      tlp.Dock = DockStyle.Fill;
+      tlp.Name = $"tlp_{page_ind + 1}";
 
-            InitializeComponent();
+      tlp.RowCount = 2;
+      tlp.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
+      tlp.RowStyles.Add(new RowStyle(SizeType.Percent, 90));
 
-            for (int i = 0; i < tabsNumber; ++i)
-            {
-                var pg = CreateTabPage(i);
-                pg.Controls.Add(CreateTableLayoutPanel(i));
-                Pages.Add(pg);
-            }
-            this.ResumeLayout(false);
-        }
+      for (int i = 0; i < _dgvsNumberOnPage; ++i)
+      {
+        tlp.Controls.Add(new Label() { Name = $"label_dgv_{page_ind + 1}_{i}", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter }, i, 0);
 
-        private TabPage CreateTabPage(int page_ind)
-        {
-            var name = $"tabPage{page_ind + 1}";
-            var pg = new TabPage(name) { Name = name, AutoScroll = true };
-            return pg;
-        }
+        if (_dgvsNumberOnPage == 2)
+          tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, Math.Abs(Math.Abs((i - 1) * 100) - 100 * _bigDgvSizeCoeff))); // first will have size 1 - BigDgvSizeCoeff, second BigDgvSizeCoeff
+        else
+          tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100 / _dgvsNumberOnPage));
 
-        private TableLayoutPanel CreateTableLayoutPanel(int page_ind)
-        {
-            var tlp = new TableLayoutPanel();
-            tlp.ColumnCount = (int)_dgvsNumberOnPage;
-            tlp.AutoSize = true;
-            tlp.Dock = DockStyle.Fill;
-            tlp.Name = $"tlp_{page_ind + 1}";
+        tlp.Controls.Add(CreateDataGridView(page_ind, i), i, 1);
+      }
 
-            tlp.RowCount = 2;
-            tlp.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
-            tlp.RowStyles.Add(new RowStyle(SizeType.Percent, 90));
+      return tlp;
+    }
 
-            for (int i = 0; i < _dgvsNumberOnPage; ++i)
-            {
-                tlp.Controls.Add(new Label() { Name = $"label_dgv_{page_ind+1}_{i}", Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter },i,0);
+    private DataGridView CreateDataGridView(int pageIndex, int dgv_ind)
+    {
+      var dgv = new DataGridView();
+      ((ISupportInitialize)dgv).BeginInit();
+      dgv.Name = $"dgv_{pageIndex + 1}_{dgv_ind + 1}";
+      InitDgv(ref dgv);
+      ((ISupportInitialize)dgv).EndInit();
+      return dgv;
+    }
 
-                if (_dgvsNumberOnPage == 2)
-                    tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, Math.Abs(Math.Abs((i - 1) * 100) - 100 * _bigDgvSizeCoeff))); // first will have size 1 - BigDgvSizeCoeff, second BigDgvSizeCoeff
-                else
-                    tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100 / _dgvsNumberOnPage));
+    private void Dgv_DataSourceChanged(object sender, EventArgs e)
+    {
+      DataSourceChanged?.Invoke();
+    }
 
-                tlp.Controls.Add(CreateDataGridView(page_ind, i), i, 1);
-            }
+    private void InitDgv(ref DataGridView dgv)
+    {
+      dgv.AllowUserToAddRows = false;
+      dgv.AllowUserToDeleteRows = false;
+      dgv.AllowUserToResizeRows = false;
+      dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+      dgv.BackgroundColor = Color.White;
+      dgv.BorderStyle = BorderStyle.None;
+      dgv.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+      dgv.ReadOnly = true;
+      dgv.Dock = DockStyle.Fill;
+      dgv.AutoSize = true;
+      dgv.DataSourceChanged += Dgv_DataSourceChanged;
 
-            return tlp;
-        }
+      var dataGridViewCellStyle1 = new DataGridViewCellStyle();
+      dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle1.BackColor = SystemColors.Control;
+      dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 10.25F, FontStyle.Bold, GraphicsUnit.Point);
+      dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+      dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+      dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+      dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+      dgv.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+      dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
-        private DataGridView CreateDataGridView(int pageIndex, int dgv_ind)
-        {
-            var dgv = new DataGridView();
-            ((ISupportInitialize)dgv).BeginInit();
-            dgv.Name = $"dgv_{pageIndex + 1}_{dgv_ind + 1}";
-            InitDgv(ref dgv);
-            ((ISupportInitialize)dgv).EndInit();
-            return dgv;
-        }
+      var dataGridViewCellStyle2 = new DataGridViewCellStyle();
+      dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle2.BackColor = SystemColors.Window;
+      dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+      dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+      dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+      dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+      dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
 
-        private void Dgv_DataSourceChanged(object sender, EventArgs e)
-        {
-            DataSourceChanged?.Invoke();
-        }
+      dgv.DefaultCellStyle = dataGridViewCellStyle2;
 
-        private void InitDgv(ref DataGridView dgv)
-        {
-            dgv.AllowUserToAddRows = false;
-            dgv.AllowUserToDeleteRows = false;
-            dgv.AllowUserToResizeRows = false;
-            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgv.BackgroundColor = Color.White;
-            dgv.BorderStyle = BorderStyle.None;
-            dgv.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
-            dgv.ReadOnly = true;
-            dgv.Dock = DockStyle.Fill;
-            dgv.AutoSize = true;
-            dgv.DataSourceChanged += Dgv_DataSourceChanged;
+      dgv.Margin = new Padding(5);
+      dgv.RowHeadersVisible = false;
+      dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+    }
 
-            var dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 10.25F, FontStyle.Bold, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgv.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            
-            var dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+    public DataGridView this[int pageIngex, int dgvIndex]
+    {
+      get
+      {
+        return Pages[pageIngex].Controls[0].Controls.OfType<DataGridView>().ToArray()[dgvIndex];
+      }
+    }
 
-            dgv.DefaultCellStyle = dataGridViewCellStyle2;
+    public DataGridView this[int pageIngex, string dgvName]
+    {
+      get
+      {
+        return Pages[pageIngex].Controls[0].Controls.OfType<DataGridView>().ToArray().Where(d => d.Name == dgvName).FirstOrDefault();
+      }
+    }
 
-            dgv.Margin = new Padding(5);
-            dgv.RowHeadersVisible = false;
-            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        }
+    /// <summary>
+    /// Returns selected rows from last dgv on active page
+    /// </summary>
+    public DataGridViewSelectedRowCollection SelectedRowsLastDGV
+    {
+      get
+      {
+        var curPageIndex = Pages.IndexOf(ActiveTabPage);
+        return this[curPageIndex, Pages[curPageIndex].Controls[0].Controls.OfType<DataGridView>().Count() - 1].SelectedRows;
+      }
+    }
 
-        public DataGridView this[int pageIngex, int dgvIndex]
-        {
-            get
-            {
-                return Pages[pageIngex].Controls[0].Controls.OfType<DataGridView>().ToArray()[dgvIndex];
-            }
-        }
+    public DataGridViewSelectedRowCollection SelectedRowsFirstDGV
+    {
+      get
+      {
+        var curPageIndex = Pages.IndexOf(ActiveTabPage);
+        return this[curPageIndex, 0].SelectedRows;
+      }
+    }
 
-        public DataGridView this[int pageIngex, string dgvName]
-        {
-            get
-            {
-                return Pages[pageIngex].Controls[0].Controls.OfType<DataGridView>().ToArray().Where(d => d.Name == dgvName).FirstOrDefault();
-            }
-        }
-
-        /// <summary>
-        /// Returns selected rows from last dgv on active page
-        /// </summary>
-        public DataGridViewSelectedRowCollection SelectedRowsLastDGV
-        {
-            get
-            {
-                var curPageIndex = Pages.IndexOf(ActiveTabPage);
-                return this[curPageIndex, Pages[curPageIndex].Controls[0].Controls.OfType<DataGridView>().Count() - 1].SelectedRows;
-            }
-        }
-
-        public DataGridViewSelectedRowCollection SelectedRowsFirstDGV
-        {
-            get
-            {
-                var curPageIndex = Pages.IndexOf(ActiveTabPage);
-                return this[curPageIndex, 0].SelectedRows;
-            }
-        }
-
-    } // public partial class DGVTabPaneControl : UserControl
+  }   // public partial class DGVTabPaneControl : UserControl
 }     // namespace WinFormsTemplates.src.RegataTabPaneControl

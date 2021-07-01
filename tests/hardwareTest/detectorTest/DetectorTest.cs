@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Regata.Core.Hardware;
 using Regata.Core.DB.MSSQL.Models;
 using Regata.Core;
+using Regata.Core.Settings;
 
 namespace Regata.Tests.Hardware.Detectors
 {
@@ -30,8 +31,7 @@ namespace Regata.Tests.Hardware.Detectors
 
         public DetectorsTest()
         {
-            Report.LogDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test", "DetectorTest");
-            Directory.CreateDirectory(Report.LogDir);
+            Directory.CreateDirectory(GlobalSettings.Targets.LogPath);
 
             _d1 = new Detector("D1", "bdrum");
         }
@@ -39,7 +39,7 @@ namespace Regata.Tests.Hardware.Detectors
         [TestMethod]
         public void Logs()
         {
-            Assert.IsTrue(File.Exists(Path.Combine(Report.LogDir, $"{DateTime.Now.ToString("yyyy-MM-dd")}.log")));
+            Assert.IsTrue(File.Exists(Path.Combine(GlobalSettings.Targets.LogPath, $"{DateTime.Now.ToString("yyyy-MM-dd")}.log")));
         }
 
         [TestMethod]
@@ -106,7 +106,7 @@ namespace Regata.Tests.Hardware.Detectors
             m.Note = "bdrum-test";
 
             _d1.LoadMeasurementInfoToDevice(m, sd);
-            Assert.AreEqual(m.Duration, _d1.PresetRealTime);
+            Assert.AreEqual(m.Duration, (int)_d1.PresetRealTime);
 
             _d1.Start();
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
@@ -124,7 +124,7 @@ namespace Regata.Tests.Hardware.Detectors
             Assert.AreNotEqual(2f, (float)_d1.ElapsedRealTime, 0.5f);
 
             _d1.Pause();
-            Assert.AreEqual(m.Duration, _d1.PresetRealTime);
+            Assert.AreEqual(m.Duration, (int)_d1.PresetRealTime);
 
             _d1.Save();
             Assert.IsTrue(File.Exists(_d1.FullFileSpectraName));
@@ -141,7 +141,7 @@ namespace Regata.Tests.Hardware.Detectors
             Assert.AreEqual(DetectorStatus.ready, _d1.Status);
 
             Assert.IsTrue(File.Exists(_d1.FullFileSpectraName));
-            Assert.AreEqual(m.Duration, _d1.PresetRealTime);
+            Assert.AreEqual(m.Duration, (int)_d1.PresetRealTime);
             _d1.Stop();
 
             f1.Open(_d1.FullFileSpectraName);
@@ -161,7 +161,7 @@ namespace Regata.Tests.Hardware.Detectors
             Assert.AreEqual(_d1.Sample.Height,                       float.Parse(f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SGEOMTRY].ToString()));
 
             Assert.AreEqual(_d1.PresetRealTime, uint.Parse(f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_PREAL].ToString())); // irr start date time
-            Assert.AreEqual(m.Duration, uint.Parse(f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_PREAL].ToString())); // irr start date time
+            Assert.AreEqual(m.Duration, int.Parse(f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_PREAL].ToString())); // irr start date time
 
             f1.Close();
 
@@ -169,7 +169,7 @@ namespace Regata.Tests.Hardware.Detectors
             File.Delete(Path.Combine(Path.GetDirectoryName(_d1.FullFileSpectraName), $"{m.FileSpectra}(1).cnf"));
             File.Delete(Path.Combine(Path.GetDirectoryName(_d1.FullFileSpectraName), $"{m.FileSpectra}.cnf"));
             
-            Assert.AreEqual(m.Duration, _d1.PresetRealTime);
+            Assert.AreEqual(m.Duration, (int)_d1.PresetRealTime);
 
             Assert.IsFalse(File.Exists(_d1.FullFileSpectraName));
             Assert.IsFalse(File.Exists(Path.Combine(Path.GetDirectoryName(_d1.FullFileSpectraName), $"{m.FileSpectra}.cnf")));
