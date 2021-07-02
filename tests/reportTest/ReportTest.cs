@@ -12,10 +12,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Regata.Core;
 using Regata.Core.Messages;
-using Regata.Core.DataBase.Postgres.Context;
+using Regata.Core.DataBase;
+using Regata.Core.DataBase.Models;
 using System.Linq;
 using System;
-using System.IO;
 
 namespace Regata.Tests.Reports
 {
@@ -25,8 +25,6 @@ namespace Regata.Tests.Reports
         [TestMethod]
         public void ReportInfoTest()
         {
-            Report.LogDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test", "ReportTest");
-            Directory.CreateDirectory(Report.LogDir);
             var msg = new Message(0)
             {
 
@@ -49,14 +47,15 @@ namespace Regata.Tests.Reports
 
             Report.Notify(new Message(0), WriteToLog: true);
 
-            using (var lc = new LogContext("RegataCoreLogCS"))
+            using (var lc = new RegataContext())
             {
-                var last_log = lc.Logs.OrderBy(l => l.date_time).Last();
+                var last_log = lc.Logs.OrderBy(l => l.DateTime).Last();
 
-                Assert.AreEqual(msg.Status.ToString().ToUpper(), last_log.level);
-                Assert.IsTrue(10 > (DateTime.Now.AddHours(-2) - last_log.date_time).TotalSeconds);
-                Assert.AreEqual("bdrum", last_log.assistant);
-                Assert.AreEqual(msg.Sender, last_log.frominstance);
+                Assert.AreEqual(msg.Status.ToString().ToUpper(), last_log.Level);
+                Assert.IsTrue(10 > (DateTime.Now.AddHours(-2) - last_log.DateTime).TotalSeconds);
+                Assert.AreEqual("bdrum", last_log.Assistant);
+                Assert.AreEqual(msg.Sender, last_log.Frominstance);
+                Assert.AreEqual(msg.Code, last_log.Code);
             }
         }
 

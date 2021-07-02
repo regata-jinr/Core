@@ -35,8 +35,9 @@
  */
 
 using System;
+using System.IO;
 using CanberraDeviceAccessLib;
-using Regata.Core.DB.MSSQL.Models;
+using Regata.Core.DataBase.Models;
 using Regata.Core.Messages;
 
 namespace Regata.Core.Hardware
@@ -49,6 +50,7 @@ namespace Regata.Core.Hardware
     {
         /// <summary>Constructor of Detector class.</summary>
         /// <param name="name">Name of detector. Without path.</param>
+        /// <param name="currentUser"> Name of current user of the program.</param>
         /// <param name="option">CanberraDeviceAccessLib.ConnectOptions {aReadWrite, aContinue, aNoVerifyLicense, aReadOnly, aTakeControl, aTakeOver}.By default ConnectOptions is ReadWrite.</param>
         public Detector(string name, string currentUser = "")
         {
@@ -62,6 +64,9 @@ namespace Regata.Core.Hardware
                 _device = new DeviceAccessClass();
                 CurrentMeasurement = new Measurement();
                 DetSet.EffCalFolder = @"C:\GENIE2K\CALFILES\Efficiency";
+
+                if (!Directory.Exists(DetSet.EffCalFolder) || Directory.GetFiles(DetSet.EffCalFolder).Length == 0)
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_EFF_DIR_EMPTY));
 
                 if (DetectorExists(name))
                     DetSet.Name = name;

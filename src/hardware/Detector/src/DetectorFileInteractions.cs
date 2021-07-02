@@ -30,7 +30,7 @@ using System;
 using System.IO;
 using System.Linq;
 using CanberraDeviceAccessLib;
-using Regata.Core.DB.MSSQL.Models;
+using Regata.Core.DataBase.Models;
 using Regata.Core.Messages;
 
 namespace Regata.Core.Hardware

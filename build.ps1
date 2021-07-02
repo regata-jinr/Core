@@ -54,10 +54,6 @@ function RunBuild
 
 }
  
-
-    
-
-
     if ($Release)
     {
          RunBuild -config Release

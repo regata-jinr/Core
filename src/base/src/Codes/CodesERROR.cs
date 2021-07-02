@@ -119,6 +119,7 @@ namespace Regata.Core
         public const ushort ERR_DET_SET_PARAM_UNREG = 3238;
         public const ushort ERR_DET_SMPL_CNVTR_UNREG = 3239;
         public const ushort ERR_DET_SMPL_CNVTR = 3240;
+        public const ushort ERR_DET_EFF_DIR_EMPTY = 3241;
 
         #endregion
 

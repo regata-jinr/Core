@@ -42,6 +42,7 @@ namespace Regata.Core
         {
             NLog.GlobalDiagnosticsContext.Set("LogDir", GlobalSettings.Targets.LogPath);
             NLog.GlobalDiagnosticsContext.Set("LogConnectionString", CredentialManager.GetCredentials(GlobalSettings.Targets.DB).Password);
+
             _nLogger = NLog.LogManager.GetCurrentClassLogger();
         }
 
@@ -72,6 +73,7 @@ namespace Regata.Core
                 msg.Sender = method.DeclaringType.Name;
                 msg.Caption = $"{method.Module}-[{status}]-[{msg.Code}]";
                 _nLogger.SetProperty("Sender", msg.Sender);
+                _nLogger.SetProperty("Code", msg.Code);
                 _nLogger.SetProperty("Assistant", GlobalSettings.User);
 
                 if (WriteToLog)
@@ -79,7 +81,7 @@ namespace Regata.Core
                     _nLogger?.Log(ExceptionLevel_LogLevel[status], string.Concat(msg.Head, "---", msg.DetailedText));
                 }
                  
-                if (status == Status.Error || NotifyByEmail)
+                if (status == Status.Error && NotifyByEmail)
                      SendMessageByEmail(msg);
                 
                 if ((int)GlobalSettings.Verbosity <= (int)status || callEvent)
@@ -109,7 +111,6 @@ namespace Regata.Core
         {
             try
             {
-
                 var Emails = new MailAddressCollection();
                 Emails.Add(GlobalSettings.EmailRecipients);
 

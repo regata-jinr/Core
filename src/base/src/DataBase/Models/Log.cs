@@ -16,11 +16,12 @@ namespace Regata.Core.DataBase.Models
     [Table("logs")]
     public class Log
     {
-        public int      id            { get; set; }
-        public DateTime date_time     { get; set; }
-        public string   level         { get; set; }
-        public string   assistant     { get; set; }
-        public string   frominstance  { get; set; }
-        public string   message       { get; set; }
+        public long      Id            { get; set; }
+        public DateTime  DateTime      { get; set; }
+        public string    Level         { get; set; }
+        public string    Assistant     { get; set; }
+        public string    Frominstance  { get; set; }
+        public int       Code          { get; set; }
+        public string    Message       { get; set; }
     }
 }

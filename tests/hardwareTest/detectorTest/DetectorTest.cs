@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2017-2020, REGATA Experiment at FLNP|JINR                  *
+ * Copyright(c) 2017-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -15,8 +15,7 @@ using System.IO;
 using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Regata.Core.Hardware;
-using Regata.Core.DB.MSSQL.Models;
-using Regata.Core;
+using Regata.Core.DataBase.Models;
 using Regata.Core.Settings;
 
 namespace Regata.Tests.Hardware.Detectors
@@ -27,13 +26,12 @@ namespace Regata.Tests.Hardware.Detectors
     public class DetectorsTest
     {
         public Detector _d1;
-        DataAccess f1 = new DataAccess();
+        DataAccess f1;
 
         public DetectorsTest()
         {
-            Directory.CreateDirectory(GlobalSettings.Targets.LogPath);
-
             _d1 = new Detector("D1", "bdrum");
+            f1 = new DataAccess();
         }
 
         [TestMethod]
@@ -94,7 +92,7 @@ namespace Regata.Tests.Hardware.Detectors
                 Duration = 3
             };
 
-            var configuration = new MapperConfiguration(cfg => cfg.AddMaps("mssql-models"));
+            var configuration = new MapperConfiguration(cfg => cfg.AddMaps("base"));
             var mapper = new Mapper(configuration);
             var m = mapper.Map<Measurement>(sd);
             m.Duration = 5;
@@ -158,6 +156,7 @@ namespace Regata.Tests.Hardware.Detectors
             Assert.AreEqual("0",                                                       f1.Param[CanberraDataAccessLib.ParamCodes.CAM_F_SSYSERR].ToString()); // Random sd error (%)
             Assert.AreEqual("0",                                                       f1.Param[CanberraDataAccessLib.ParamCodes.CAM_F_SSYSTERR].ToString()); // Non-random sd error 
             Assert.AreEqual(_d1.Sample.Type,                               f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_STYPE].ToString());
+            var s = f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SGEOMTRY].ToString();
             Assert.AreEqual(_d1.Sample.Height,                       float.Parse(f1.Param[CanberraDataAccessLib.ParamCodes.CAM_T_SGEOMTRY].ToString()));
 
             Assert.AreEqual(_d1.PresetRealTime, uint.Parse(f1.Param[CanberraDataAccessLib.ParamCodes.CAM_X_PREAL].ToString())); // irr start date time

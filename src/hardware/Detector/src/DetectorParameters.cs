@@ -58,7 +58,7 @@ namespace Regata.Core.Hardware
                     return;
                 }
 
-                _device.Param[parCode] = val;
+                _device.Param[parCode] = val.ToString();
                 _device.Save("", true);
             }
             catch (Exception ex)

@@ -33,7 +33,7 @@ using System.Linq;
 using System.Collections.Generic;
 using CanberraDeviceAccessLib;
 using Regata.Core.Messages;
-using Regata.Core.DB.MSSQL.Models;
+using Regata.Core.DataBase.Models;
 
 namespace Regata.Core.Hardware
 {
@@ -108,10 +108,6 @@ namespace Regata.Core.Hardware
         /// Returns error message.
         /// </summary>
         public string ErrorMessage { get; private set; }
-
-
-
-
 
     } //  public partial class Detector : IDisposable
 

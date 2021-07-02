@@ -2,12 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <PlatformTarget>x86</PlatformTarget>
+	<PlatformTarget>x86</PlatformTarget>
 
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\database\mssql\models\mssql-models.csproj" />
     <ProjectReference Include="..\..\base\base.csproj" />
   </ItemGroup>
 

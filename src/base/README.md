@@ -18,6 +18,8 @@ Settings is a generic static class where input type represents an application se
 
 In order to implement global setting such as language and verbosity level we provide abstract class ASettings. Argument type of generic class have to be derived from this one.
 
+> **Global settings are read only and it synchronized with Current Settings. Don't create the same properties explicitly it will overwrite base behaviour and break synchronization.**
+
 Entry point is specifying of assemply name:
 
 ~~~csharp

@@ -9,16 +9,18 @@
     <None Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+	<Content Update="NLog.config">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+	<PackageReference Include="AutoMapper" Version="10.1.1" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="NLog" Version="4.7.6" />
 	<None Include="targets.json" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\database\mssql\context\mssql-context.csproj" />
-    <ProjectReference Include="..\database\mssql\models\mssql-models.csproj" />
+	<PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>

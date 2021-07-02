@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 using Microsoft.EntityFrameworkCore;
-using Regata.Core.DB.MSSQL.Models;
+using Regata.Core.DataBase.Models;
 using AdysTech.CredentialManager;
 using Regata.Core.Settings;
 
@@ -36,6 +36,7 @@ namespace Regata.Core.DataBase
         public DbSet<MessageBase>          MessageBases          { get; set; }
         public DbSet<MessageDefault>       MessageDefaults       { get; set; }
         public DbSet<User>                 Users                 { get; set; }
+        public DbSet<Log>                  Logs                  { get; set; }
 
         //private const string DBTarget = "MSSQL_TEST_DB_ConnetionString"; // "RegataDB";
 
@@ -82,6 +83,9 @@ namespace Regata.Core.DataBase
 
             modelBuilder.Entity<User>()
                            .HasKey(u => new { u.Id });
+
+            modelBuilder.Entity<Log>()
+                           .HasKey(l => new { l.Id });
 
             modelBuilder.Entity<Sample>()
                                .HasKey(s => new
