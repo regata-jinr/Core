@@ -14,8 +14,8 @@ using System;
 using System.Collections.Generic;
 using Regata.Core.Settings;
 using System.Windows.Forms;
-using Regata.Core.DB.MSSQL.Context;
-using Regata.Core.DB.MSSQL.Models;
+using Regata.Core.DataBase;
+using Regata.Core.DataBase.Models;
 using RCM=Regata.Core.Messages;
 
 namespace Regata.Core.UI.WinForms

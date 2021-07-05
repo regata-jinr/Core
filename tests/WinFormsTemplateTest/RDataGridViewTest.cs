@@ -12,7 +12,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Windows.Forms;
-using Regata.Core.DB.MSSQL.Models;
+using Regata.Core.DataBase.Models;
 using Regata.Core.UI.WinForms.Controls;
 using System;
 
@@ -66,7 +66,7 @@ namespace Regata.Tests.WinForms
 
         public int GetDurationFromDb(int id)
         {
-            using (var r = new Core.DB.MSSQL.Context.RegataContext())
+            using (var r = new Core.DataBase.RegataContext())
                 return r.Irradiations.First(i => i.Id == 21838).Duration.Value;
         }
 

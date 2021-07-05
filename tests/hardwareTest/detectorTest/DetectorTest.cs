@@ -35,12 +35,6 @@ namespace Regata.Tests.Hardware.Detectors
         }
 
         [TestMethod]
-        public void Logs()
-        {
-            Assert.IsTrue(File.Exists(Path.Combine(GlobalSettings.Targets.LogPath, $"{DateTime.Now.ToString("yyyy-MM-dd")}.log")));
-        }
-
-        [TestMethod]
         public void Names()
         {
             Assert.AreEqual("D1", _d1.Name);

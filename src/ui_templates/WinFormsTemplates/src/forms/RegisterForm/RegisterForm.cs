@@ -24,15 +24,15 @@ namespace Regata.Core.UI.WinForms.Forms
             InitializeComponent();
             InitializeTabControl(tabsNum, dgvsNum, BigDgvSizeCoeff);
            
-            LangItem.CheckedChanged              += LabelsLanguageItemChanged;
-            GlobalSettings.LanguageChanged       += LanguageChanged;
+            //LangItem.CheckedChanged              += LabelsLanguageItemChanged;
+            //GlobalSettings.LanguageChanged       += LanguageChanged;
             //TabsPane.DataSourceChanged           += LanguageChanged; // it is possible to create form before filling the dgvs. It will lead to unlabeled dgvs columns
-            ControlAdded                         += (s, e) => LanguageChanged();
-            MenuStrip.ItemAdded                  += (s, e) => LanguageChanged();
-            StatusStrip.ItemAdded                += (s, e) => LanguageChanged();
-            FunctionalLayoutPanel.ControlAdded   += (s, e) => LanguageChanged();
-            tableLayoutPanelRegForm.ControlAdded += (s, e) => LanguageChanged();
-            LanguageChanged(); // init current language and set related checked items
+            //ControlAdded                         += (s, e) => LanguageChanged();
+            //MenuStrip.ItemAdded                  += (s, e) => LanguageChanged();
+            //StatusStrip.ItemAdded                += (s, e) => LanguageChanged();
+            //FunctionalLayoutPanel.ControlAdded   += (s, e) => LanguageChanged();
+            //tableLayoutPanelRegForm.ControlAdded += (s, e) => LanguageChanged();
+            //LanguageChanged(); // init current language and set related checked items
 
             // TODO: add warning message as dialog result
             // https://github.com/regata-jinr/Core/issues/11
@@ -40,18 +40,18 @@ namespace Regata.Core.UI.WinForms.Forms
 
         }
 
-        private void LabelsLanguageItemChanged()
-        {
-            GlobalSettings.CurrentLanguage = LangItem.CheckedItem;
-        }
+        //private void LabelsLanguageItemChanged()
+        //{
+        //    GlobalSettings.CurrentLanguage = LangItem.CheckedItem;
+        //}
 
-        private void LanguageChanged()
-        {
-            Labels.SetControlsLabels(Controls);
-            LangItem.CheckedChanged -= LabelsLanguageItemChanged;
-            LangItem.CheckItem(GlobalSettings.CurrentLanguage);
-            LangItem.CheckedChanged += LabelsLanguageItemChanged;
-        }
+        //private void LanguageChanged()
+        //{
+        //    Labels.SetControlsLabels(Controls);
+        //    LangItem.CheckedChanged -= LabelsLanguageItemChanged;
+        //    LangItem.CheckItem(GlobalSettings.CurrentLanguage);
+        //    LangItem.CheckedChanged += LabelsLanguageItemChanged;
+        //}
 
     } //public partial class RegisterForm : Form
 }     // namespace Regata.Core.UI.WinForms

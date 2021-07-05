@@ -14,8 +14,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Regata.Core.DB.MSSQL.Context;
-using Regata.Core.DB.MSSQL.Models;
+using Regata.Core.DataBase;
+using Regata.Core.DataBase.Models;
 using Regata.Core.Settings;
 using RegataCoreMessages = Regata.Core.Messages;
 

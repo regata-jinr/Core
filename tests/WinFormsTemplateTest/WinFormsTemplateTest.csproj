@@ -16,8 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\database\mssql\context\mssql-context.csproj" />
-    <ProjectReference Include="..\..\src\database\mssql\models\mssql-models.csproj" />
     <ProjectReference Include="..\..\src\ui_templates\WinFormsTemplates\WinFormsTemplates.csproj" />
   </ItemGroup>
 

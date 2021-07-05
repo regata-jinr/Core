@@ -13,8 +13,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Regata.Core.UI.WinForms.Forms;
-using Regata.Core.DB.MSSQL.Models;
-using Regata.Core.DB.MSSQL.Context;
+using Regata.Core.DataBase.Models;
+using Regata.Core.DataBase;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Regata.Tests.WinForms
@@ -22,7 +22,6 @@ namespace Regata.Tests.WinForms
     [TestClass]
     public class LabelsTest
     {
-
         private string[] russianLabels1 = { "Журнал облучений1", "Журнал облучений2", "Список11", "Список12", "Список21", "Список22", "Загрузка", "Дата", "Дата" };
         private string[] englishLabels1 = { "Irradiation Register", "Irradiation Register2", "List11", "List12", "List21", "List22", "LoadNumber", "Date", "Date" };
         
@@ -113,7 +112,7 @@ namespace Regata.Tests.WinForms
             Assert.IsFalse(IsLang(l2, ref russianLabels2));
 
 
-            Regata.Core.Settings.GlobalSettings.CurrentLanguage = Core.Settings.Language.Russian;
+            //Regata.Core.Settings.GlobalSettings.CurrentLanguage = Core.Settings.Language.Russian;
 
             Assert.AreEqual(Core.Settings.Language.Russian, f1.LangItem.CheckedItem);
 

@@ -5,8 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\database\mssql\context\mssql-context.csproj" />
-    <ProjectReference Include="..\database\mssql\models\mssql-models.csproj" />
     <ProjectReference Include="..\base\base.csproj" />
   </ItemGroup>
 

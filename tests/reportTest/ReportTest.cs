@@ -1,7 +1,7 @@
 /***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2020-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -13,7 +13,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Regata.Core;
 using Regata.Core.Messages;
 using Regata.Core.DataBase;
-using Regata.Core.DataBase.Models;
 using System.Linq;
 using System;
 

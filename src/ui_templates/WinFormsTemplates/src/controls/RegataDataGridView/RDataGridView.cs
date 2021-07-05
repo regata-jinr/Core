@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
 using Regata.Core.UI.WinForms.Controls.Settings;
-using Regata.Core.DB.MSSQL.Context;
+using Regata.Core.DataBase;
 using RCM=Regata.Core.Messages;
 
 // TODO: add column filling by value
@@ -72,7 +72,7 @@ namespace Regata.Core.UI.WinForms.Controls
         private DbContext _rdbc;
 
         //private bool ModelInRegataModels() => Assembly.GetExecutingAssembly().GetTypes()
-        //              .Where(t => t.Namespace == "Regata.Core.DB.MSSQL.Models")
+        //              .Where(t => t.Namespace == "Regata.Core.DataBase.Models")
         //              .ToList().Contains(typeof(Model));
         
         // FIXME: not mapped fields from model still visible in binding context.
@@ -83,7 +83,7 @@ namespace Regata.Core.UI.WinForms.Controls
 
         public RDataGridView(RDataGridViewSettings rdgv_set = null) : base()
         {
-            //if (!ModelInRegataModels()) throw new TypeAccessException($"This type {typeof(Model).Name} doesn't contains in Regata.Core.DB.MSSQL.Models");
+            //if (!ModelInRegataModels()) throw new TypeAccessException($"This type {typeof(Model).Name} doesn't contains in Regata.Core.DataBase.Models");
 
             if (rdgv_set != null)
                 RDGV_Set = rdgv_set;

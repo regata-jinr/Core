@@ -47,4 +47,3 @@ namespace Regata.Core.Messages
 
     } // public class Message
 }     // namespace Regata.Core
- 
