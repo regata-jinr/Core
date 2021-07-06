@@ -13,24 +13,31 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Regata.Core.UI.WinForms.Forms;
+using Regata.Core.UI.WinForms;
 using Regata.Core.DataBase.Models;
 using Regata.Core.DataBase;
+using Regata.Core.Settings;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Regata.Tests.WinForms
 {
+
+    public class LabelsSettings : ASettings
+    { }
+
     [TestClass]
     public class LabelsTest
     {
         private string[] russianLabels1 = { "Журнал облучений1", "Журнал облучений2", "Список11", "Список12", "Список21", "Список22", "Загрузка", "Дата", "Дата" };
-        private string[] englishLabels1 = { "Irradiation Register", "Irradiation Register2", "List11", "List12", "List21", "List22", "LoadNumber", "Date", "Date" };
+        private string[] englishLabels1 = { "Irradiation Register1", "Irradiation Register2", "List11", "List12", "List21", "List22", "LoadNumber", "Date", "Date" };
         
-        private string[] russianLabels2 = { "Журналы облучений", "Журналы измерений", "Образцы из выбранного журнала", "Список12", "Список21", "Список22", "Загрузка", "Дата", "Дата" };
+        private string[] russianLabels2 = { "Журналы облучений", "Журналы измерений", "Образцы из выбранного журнала", "Список11", "Список12", "Список21", "Список22", "Загрузка", "Дата", "Дата" };
         private string[] englishLabels2 = { "Irradiation Registers", "Measurement Registers", "Samples from selected register", "List12", "List21", "List22", "LoadNumber", "Date", "Date" };
 
         private RegisterForm<Irradiation> Create_Form(string name)
         {
-            var f = new RegisterForm<Irradiation>();
+            Settings<LabelsSettings>.AssemblyName = "LabelsTest";
+            var f = new RegisterForm<Irradiation>(Settings<LabelsSettings>.CurrentSettings.CurrentLanguage);
             f.Name = name;
 
             var btn = new Button();
@@ -42,7 +49,7 @@ namespace Regata.Tests.WinForms
 
                 f.TabsPane[1, 0].DataSource = r.Irradiations.Where(ir => ir.Type == 0 && ir.DateTimeStart != null).Select(ir => new { ir.DateTimeStart.Value.Date }).Distinct().Take(10).ToArray();
             }
-
+            Labels.SetControlsLabels(f.Controls);
             return f;
         }
 

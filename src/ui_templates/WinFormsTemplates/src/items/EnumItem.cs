@@ -45,7 +45,7 @@ namespace Regata.Core.UI.WinForms.Items
 
 
         private string _enumName;
-        
+
         public EnumItem() // (T currentItem)
         {
             var values = Enum.GetValues(typeof(T));
@@ -66,7 +66,7 @@ namespace Regata.Core.UI.WinForms.Items
                 //EnumMenuItem.DropDownItems[val_name].PerformClick();
             }
 
-                //EnumStatusLabel.Name = $"{_enumName}StatusLabel";
+            //EnumStatusLabel.Name = $"{_enumName}StatusLabel";
             EnumMenuItem.Name = $"{_enumName}MenuItem";
 
         }
@@ -76,7 +76,7 @@ namespace Regata.Core.UI.WinForms.Items
             CheckItem(currentItem);
         }
 
-            private void CheckHandler(object sender, EventArgs e)
+        private void CheckHandler(object sender, EventArgs e)
         {
             var currentItem = sender as ToolStripMenuItem;
             CheckItem((T)Enum.Parse(typeof(T), currentItem.Name));

@@ -47,27 +47,27 @@ namespace Regata.Tests.WinForms
         {
             Assert.AreEqual(20, _rdgv.ColumnCount);
             Assert.AreEqual(119, _rdgv.RowCount);
-            Assert.AreEqual(21838, _rdgv[0, 0].Value);
+            Assert.AreEqual(22122, _rdgv[0, 0].Value);
             Assert.AreEqual("m", _rdgv[1, 0].Value);
-            Assert.AreEqual(GetDurationFromDb(20359), _rdgv[9, 0].Value);
+            Assert.AreEqual(GetDurationFromDb(22122), _rdgv[9, 0].Value);
             Assert.AreEqual(344340,  _rdgv[9, 1].Value);
-            Assert.AreEqual("m",  _rdgv[1, 3].Value);
+            Assert.AreEqual("m",  _rdgv[1, 0].Value);
         }
 
         [TestMethod]
         public void IsDataBindedTest()
         {
-            Assert.AreEqual(GetDurationFromDb(21838), _rdgv[9, 0].Value);
+            Assert.AreEqual(GetDurationFromDb(22122), _rdgv[9, 0].Value);
             _rdgv[9, 0].Value = new Random().Next(10,3000);
-            Assert.AreNotEqual(GetDurationFromDb(21838), _rdgv[9, 0].Value);
+            Assert.AreNotEqual(GetDurationFromDb(22122), _rdgv[9, 0].Value);
             _rdgv.SaveChanges();
-            Assert.AreEqual(GetDurationFromDb(21838), _rdgv[9, 0].Value);
+            Assert.AreEqual(GetDurationFromDb(22122), _rdgv[9, 0].Value);
         }
 
         public int GetDurationFromDb(int id)
         {
             using (var r = new Core.DataBase.RegataContext())
-                return r.Irradiations.First(i => i.Id == 21838).Duration.Value;
+                return r.Irradiations.First(i => i.Id == id).Duration.Value;
         }
 
     } // public class RDataGridViewTest

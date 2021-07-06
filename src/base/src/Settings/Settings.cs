@@ -124,7 +124,8 @@ namespace Regata.Core.Settings
 
                 GlobalSettings.CurrentLanguage = CurrentSettings.CurrentLanguage;
                 GlobalSettings.Verbosity = CurrentSettings.Verbosity;
-                //CurrentSettings.LanguageChanged += () => { GlobalSettings.CurrentLanguage = CurrentSettings.CurrentLanguage; };
+                // FIXME: where to remove subscription? IDisposable?
+                CurrentSettings.LanguageChanged += () => { Save(); };
 
             }
             catch
