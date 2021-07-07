@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 using System.Linq;
+using System.IO;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Regata.Core.UI.WinForms.Forms;
@@ -28,16 +29,23 @@ namespace Regata.Tests.WinForms
     [TestClass]
     public class LabelsTest
     {
-        private string[] russianLabels1 = { "Журнал облучений1", "Журнал облучений2", "Список11", "Список12", "Список21", "Список22", "Загрузка", "Дата", "Дата" };
-        private string[] englishLabels1 = { "Irradiation Register1", "Irradiation Register2", "List11", "List12", "List21", "List22", "LoadNumber", "Date", "Date" };
+
+        public LabelsTest()
+        {
+            Settings<LabelsSettings>.AssemblyName = "LabelsTest";
+        }
+
+        private string[] russianLabels1 = { "Журналы облучений1", "Журналы измерений1", "Список111", "Список121", "Список211", "Список221", "Загрузка1", "Дата1", "Дата1" };
+        private string[] englishLabels1 = { "Irradiation Registers1", "Measurement Registers1", "List111", "List121", "List211", "List221", "LoadNumber1", "Date1", "Date1" };
         
-        private string[] russianLabels2 = { "Журналы облучений", "Журналы измерений", "Образцы из выбранного журнала", "Список11", "Список12", "Список21", "Список22", "Загрузка", "Дата", "Дата" };
-        private string[] englishLabels2 = { "Irradiation Registers", "Measurement Registers", "Samples from selected register", "List12", "List21", "List22", "LoadNumber", "Date", "Date" };
+        private string[] russianLabels = { "Журналы облучений", "Журналы измерений", "Список11", "Список12", "Список21", "Список22", "Загрузка", "Дата", "Дата" };
+        private string[] englishLabels = { "Irradiation Registers", "Measurement Registers", "List11", "List12", "List21", "List22", "LoadNumber", "Date", "Date" };
 
         private RegisterForm<Irradiation> Create_Form(string name)
         {
-            Settings<LabelsSettings>.AssemblyName = "LabelsTest";
             var f = new RegisterForm<Irradiation>(Settings<LabelsSettings>.CurrentSettings.CurrentLanguage);
+            f.LangItem.CheckItem(Settings<LabelsSettings>.CurrentSettings.CurrentLanguage);
+            f.LangItem.CheckedChanged += () => { Settings<LabelsSettings>.CurrentSettings.CurrentLanguage = f.LangItem.CheckedItem; Labels.SetControlsLabels(f.Controls); };
             f.Name = name;
 
             var btn = new Button();
@@ -53,7 +61,7 @@ namespace Regata.Tests.WinForms
             return f;
         }
 
-        private List<string> FillList(ref RegisterForm<Irradiation> f)
+        private List<string> GetSomeTextFromForm(ref RegisterForm<Irradiation> f)
         {
             var labels = new List<string>();
 
@@ -68,82 +76,93 @@ namespace Regata.Tests.WinForms
 
         }
 
-        public bool IsLang(List<string> l, ref string[] langLabls)
+        public bool IsListsMatched(List<string> l, ref string[] langLabls)
         {
             bool isLang = true;
 
             if (langLabls.Length != l.Count) return false;
 
             for (var i = 0; i < langLabls.Length; ++i)
+            {
+                if (!isLang) return false;
                 isLang = isLang && langLabls.Contains(l[i]);
+            }
 
             return isLang;
+        }
+
+        [TestMethod]
+        public void LanguageLoadedFromSettingsFileTest()
+        {
+
+            var set = File.ReadAllText(@"C:\Users\bdrum\AppData\Roaming\Regata\LabelsTest\settings.json");
+
+            if (set.Contains("russian"))
+                Assert.AreEqual(Language.Russian, Settings<LabelsSettings>.CurrentSettings.CurrentLanguage);
+            else
+                Assert.AreEqual(Language.English, Settings<LabelsSettings>.CurrentSettings.CurrentLanguage);
+
+
+        }
+
+        [TestMethod]
+        public void GlobalSettingsLanguageLoadedFromSettingsFileTest()
+        {
+
+            var set = File.ReadAllText(@"C:\Users\bdrum\AppData\Roaming\Regata\LabelsTest\settings.json");
+
+            if (set.Contains("russian"))
+                Assert.AreEqual(Language.Russian, GlobalSettings.CurrentLanguage);
+            else
+                Assert.AreEqual(Language.English, GlobalSettings.CurrentLanguage);
+
         }
 
         [TestMethod]
         public void SwitchingLanguageMultiFormTest()
         {
             // two forms here to check that switching on a one form lead to switching on another
-            var f1 = Create_Form("TestRegisterForm");
-            var f2 = Create_Form("RegisterForm");
+            var f = Create_Form("TestRegisterForm");
+            var f1 = Create_Form("TestRegisterForm1");
 
-            var l1 = FillList(ref f1);
-            var l2 = FillList(ref f2);
+            // switch to russian 
 
-            Assert.AreEqual(l1.Count, l2.Count);
+            f1.LangItem.EnumMenuItem.DropDownItems[0].PerformClick();
+            f.LangItem.EnumMenuItem.DropDownItems[0].PerformClick();
 
-            //for (var i = 0; i < l1.Count; ++i)
-            //    Assert.AreEqual(l1[i], l2[i]);
+            var l = GetSomeTextFromForm(ref f);
+            var l1 = GetSomeTextFromForm(ref f1);
 
-            Assert.IsTrue(IsLang(l1, ref russianLabels1));
-            Assert.IsTrue(IsLang(l2, ref russianLabels2));
+            Assert.AreEqual(l.Count, l1.Count);
 
-            // for case when language didn't switch
-            Assert.IsFalse(IsLang(l1, ref englishLabels1));
-            Assert.IsFalse(IsLang(l2, ref englishLabels2));
+            Assert.AreEqual(Language.Russian, GlobalSettings.CurrentLanguage);
+            Assert.AreNotEqual(Language.English, GlobalSettings.CurrentLanguage);
+            Assert.AreEqual(Language.Russian, f1.LangItem.CheckedItem);
+            Assert.AreNotEqual(Language.English, f1.LangItem.CheckedItem);
 
-            Assert.AreEqual(Core.Settings.Language.Russian, f1.LangItem.CheckedItem);
+
+            Assert.IsTrue(IsListsMatched(l, ref russianLabels));
+            Assert.IsTrue(IsListsMatched(l1, ref russianLabels1));
+
+            // switch to english
 
             f1.LangItem.EnumMenuItem.DropDownItems[1].PerformClick();
+            f.LangItem.EnumMenuItem.DropDownItems[1].PerformClick();
 
+            Assert.AreEqual(Language.English, GlobalSettings.CurrentLanguage);
+            Assert.AreNotEqual(Language.Russian, GlobalSettings.CurrentLanguage);
 
-            Assert.AreEqual(Core.Settings.Language.English, f1.LangItem.CheckedItem);
+            l = GetSomeTextFromForm(ref f);
+            l1 = GetSomeTextFromForm(ref f1);
 
-            l1 = FillList(ref f1);
-            l2 = FillList(ref f2);
+            Assert.AreEqual(l.Count, l1.Count);
 
-            Assert.IsTrue(IsLang(l1, ref englishLabels1));
-            Assert.IsTrue(IsLang(l2, ref englishLabels2));
+            Assert.IsTrue(IsListsMatched(l, ref englishLabels));
+            Assert.IsTrue(IsListsMatched(l1, ref englishLabels1));
 
-            Assert.IsFalse(IsLang(l1, ref russianLabels1));
-            Assert.IsFalse(IsLang(l2, ref russianLabels2));
+            Assert.AreEqual(Language.English, f1.LangItem.CheckedItem);
+            Assert.AreNotEqual(Language.Russian, f1.LangItem.CheckedItem);
 
-
-            //Regata.Core.Settings.GlobalSettings.CurrentLanguage = Core.Settings.Language.Russian;
-
-            Assert.AreEqual(Core.Settings.Language.Russian, f1.LangItem.CheckedItem);
-
-            l1 = FillList(ref f1);
-            l2 = FillList(ref f2);
-
-            Assert.IsTrue(IsLang(l1, ref russianLabels1));
-            Assert.IsTrue(IsLang(l2, ref russianLabels2));
-
-            Assert.IsFalse(IsLang(l1, ref englishLabels1));
-            Assert.IsFalse(IsLang(l2, ref englishLabels2));
-
-            f2.LangItem.EnumMenuItem.DropDownItems[0].PerformClick();
-
-            Assert.AreEqual(Core.Settings.Language.Russian, f1.LangItem.CheckedItem);
-
-            l1 = FillList(ref f1);
-            l2 = FillList(ref f2);
-
-            Assert.IsTrue(IsLang(l1, ref russianLabels1));
-            Assert.IsTrue(IsLang(l2, ref russianLabels2));
-
-            Assert.IsFalse(IsLang(l1, ref englishLabels1));
-            Assert.IsFalse(IsLang(l2, ref englishLabels2));
         }
 
     } // class LabelsTest

@@ -40,3 +40,21 @@ Let's start form winform messagebox. We have to prepare message boxes for each l
 - [ ] Info    message
 - [ ] Success message
 
+## Switching language
+
+Applications based on Regata.Core libs have common mechanics for switching language.
+
+In order to switch language we have to add such instructions for each form based on RegisterForm:
+
+~~~csharp
+ var rf = new RegisterForm<Measurement>(Settings<MeasurementsSettings>.CurrentSettings.CurrentLanguage);
+ rf.LangItem.CheckItem(Settings<MeasurementsSettings>.CurrentSettings.CurrentLanguage);
+ rf.LangItem.CheckedChanged += () => { Settings<MeasurementsSettings>.CurrentSettings.CurrentLanguage = rf.LangItem.CheckedItem; Labels.SetControlsLabels(rf.Controls); };
+
+// in the end of constructor
+Labels.SetControlsLabels(rf.Controls); 
+~~~
+
+Actually we have a plan to support multiswitching in meaning that switch language in any form of one application lead to automatically switching a language of rest forms. 
+
+> Multiswitching does not work now

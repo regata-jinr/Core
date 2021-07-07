@@ -17,6 +17,8 @@ using System.Windows.Forms;
 using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
 using RCM=Regata.Core.Messages;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Regata.Core.UI.WinForms
 { 
@@ -29,13 +31,7 @@ namespace Regata.Core.UI.WinForms
        {
             using (var r = new RegataContext())
             {
-                //if (!r.UILabels.Where(l => l.FormName == _formName).Any())
-                //{
-                //    Report.Notify(new RCM.Message(Codes.WARN_FORM_LBL_NOT_EXIST));
-                //    return;
-                //}
-
-                _labels = r.UILabels.ToList();
+                _labels = r.UILabels.AsNoTracking().ToList();
             }
         }
 

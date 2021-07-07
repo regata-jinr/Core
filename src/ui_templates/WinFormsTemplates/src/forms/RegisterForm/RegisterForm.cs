@@ -28,7 +28,7 @@ namespace Regata.Core.UI.WinForms.Forms
         {
             InitializeComponent();
             InitializeTabControl(tabsNum, dgvsNum, BigDgvSizeCoeff);
-            LangItem.CheckedChanged += ChangeLanguage;
+            //LangItem.CheckedChanged += ChangeLanguage;
             //LangItem.CheckItem(lang);
             //LanguageChanged += LanguageChanged;
             //TabsPane.DataSourceChanged += ChangeLanguage; // it is possible to create form before filling the dgvs. It will lead to unlabeled dgvs columns
@@ -46,13 +46,13 @@ namespace Regata.Core.UI.WinForms.Forms
         }
 
 
-        public void ChangeLanguage()
-        {
-            Labels.SetControlsLabels(Controls);
-            //LangItem.CheckedChanged -= ChangeLanguage;
-            //LangItem.CheckItem(GlobalSettings.CurrentLanguage);
-            //LangItem.CheckedChanged += ChangeLanguage;
-        }
+        //public void ChangeLanguage()
+        //{
+        //    Labels.SetControlsLabels(Controls);
+        //    //LangItem.CheckedChanged -= ChangeLanguage;
+        //    //LangItem.CheckItem(GlobalSettings.CurrentLanguage);
+        //    //LangItem.CheckedChanged += ChangeLanguage;
+        //}
 
     } //public partial class RegisterForm : Form
 }     // namespace Regata.Core.UI.WinForms
