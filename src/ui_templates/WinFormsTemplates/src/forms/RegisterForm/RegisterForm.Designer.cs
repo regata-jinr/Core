@@ -155,9 +155,9 @@ namespace Regata.Core.UI.WinForms.Forms
             FunctionalLayoutPanel              = new TableLayoutPanel();
             BottomLayoutPanel                  = new TableLayoutPanel();
 
-            FunctionalLayoutPanel.SuspendLayout();
-            BottomLayoutPanel.SuspendLayout();
             MainTableLayoutPanel.SuspendLayout();
+            BottomLayoutPanel.SuspendLayout();
+            FunctionalLayoutPanel.SuspendLayout();
             groupBoxMainRDGV.SuspendLayout();
             groupBoxRegForm.SuspendLayout();
             tableLayoutPanelRegForm.SuspendLayout();
@@ -285,36 +285,36 @@ namespace Regata.Core.UI.WinForms.Forms
             // buttonAddSampleToReg
             // 
             buttonAddSampleToReg.Dock = DockStyle.Fill;
-            buttonAddSampleToReg.Location = new Point(3, 3);
             buttonAddSampleToReg.Name = "buttonAddSampleToReg";
-            buttonAddSampleToReg.Size = new Size(261, 72);
+            //buttonAddSampleToReg.Location = new Point(3, 3);
+            //buttonAddSampleToReg.Size = new Size(261, 72);
             buttonAddSampleToReg.TabIndex = 0;
             buttonAddSampleToReg.UseVisualStyleBackColor = true;
             // 
             // buttonAddAllSamples
             // 
             buttonAddAllSamples.Dock = DockStyle.Fill;
-            buttonAddAllSamples.Location = new Point(3, 81);
             buttonAddAllSamples.Name = "buttonAddAllSamples";
-            buttonAddAllSamples.Size = new Size(261, 72);
+            //buttonAddAllSamples.Location = new Point(3, 81);
+            //buttonAddAllSamples.Size = new Size(261, 72);
             buttonAddAllSamples.TabIndex = 1;
             buttonAddAllSamples.UseVisualStyleBackColor = true;
             // 
             // buttonRemoveSample
             // 
             buttonRemoveSample.Dock = DockStyle.Fill;
-            buttonRemoveSample.Location = new Point(3, 159);
             buttonRemoveSample.Name = "buttonRemoveSample";
-            buttonRemoveSample.Size = new Size(261, 74);
+            //buttonRemoveSample.Location = new Point(3, 159);
+            //buttonRemoveSample.Size = new Size(261, 74);
             buttonRemoveSample.TabIndex = 2;
             buttonRemoveSample.UseVisualStyleBackColor = true;
             // 
             // buttonShowAcqQueue
             // 
             buttonShowAcqQueue.Dock = DockStyle.Fill;
-            buttonShowAcqQueue.Location = new Point(3, 159);
             buttonShowAcqQueue.Name = "buttonShowAcqQueue";
-            buttonShowAcqQueue.Size = new Size(261, 74);
+            //buttonShowAcqQueue.Location = new Point(3, 159);
+            //buttonShowAcqQueue.Size = new Size(261, 74);
             buttonShowAcqQueue.TabIndex = 3;
             buttonShowAcqQueue.UseVisualStyleBackColor = true;
             // 

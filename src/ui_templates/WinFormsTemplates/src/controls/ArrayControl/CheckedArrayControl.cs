@@ -72,6 +72,7 @@ namespace Regata.Core.UI.WinForms.Controls
             _checkBoxes = new CheckBox[array.Length];
             for (var i = 0; i < array.Length; ++i)
             {
+                _checkBoxes[i] = new CheckBox();
                 _checkBoxes[i].Name = $"rb_{typeof(T).Name}_{i}";
                 _checkBoxes[i].Dock = DockStyle.Fill;
                 _checkBoxes[i].Text = array[i].ToString();
