@@ -42,13 +42,25 @@ namespace Regata.Core.UI.WinForms.Controls
         private void InitializeComponent()
         {
             this.RBV_groupBoxTitle = new System.Windows.Forms.GroupBox();
-            flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.RBV_groupBoxTitle.SuspendLayout();
+            flowLayoutPanel.SuspendLayout();
             this.SuspendLayout();
+
+            // 
+            // flowLayoutPanel
+            // 
+            this.flowLayoutPanel.AutoScroll = true;
+            this.flowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel.Location = new System.Drawing.Point(3, 19);
+            this.flowLayoutPanel.Name = "flowLayoutPanel";
+            this.flowLayoutPanel.Size = new System.Drawing.Size(337, 80);
+            this.flowLayoutPanel.TabIndex = 0;
+
             // 
             // RBV_groupBoxTitle
             // 
-            this.RBV_groupBoxTitle.Controls.Add(flowLayoutPanel);
+            this.RBV_groupBoxTitle.Controls.Add(this.flowLayoutPanel);
             this.RBV_groupBoxTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RBV_groupBoxTitle.Location = new System.Drawing.Point(0, 0);
             this.RBV_groupBoxTitle.Name = "RBV_groupBoxTitle";
@@ -56,14 +68,7 @@ namespace Regata.Core.UI.WinForms.Controls
             this.RBV_groupBoxTitle.TabIndex = 0;
             this.RBV_groupBoxTitle.TabStop = false;
             this.RBV_groupBoxTitle.Text = "RBV_groupBoxTitle";
-            // 
-            // flowLayoutPanel
-            // 
-            flowLayoutPanel.Dock = DockStyle.Fill;
-            flowLayoutPanel.Location = new Point(3, 19);
-            flowLayoutPanel.Name = "flowLayoutPanel1";
-            flowLayoutPanel.TabIndex = 0;
-            flowLayoutPanel.AutoScroll = true;
+           
             // 
             // CheckedArrayControl
             // 
@@ -72,8 +77,6 @@ namespace Regata.Core.UI.WinForms.Controls
             this.Controls.Add(this.RBV_groupBoxTitle);
             this.Name = "CheckedArrayControl";
             this.Size = new System.Drawing.Size(343, 102);
-            this.RBV_groupBoxTitle.ResumeLayout(false);
-            this.ResumeLayout(false);
 
         }
 

@@ -38,8 +38,8 @@ namespace Regata.Core.UI.WinForms.Controls
         }
 
         private const string _defFontFamily = "Segoe UI";
-        private const float _defFontSizeNumerics = 12F;
-        private const float _defFontSizeTitle = 14F;
+        private const float _defFontSizeNumerics = 10F;
+        private const float _defFontSizeTitle = 10F;
         private Font _titleFont = new Font(_defFontFamily, _defFontSizeTitle, FontStyle.Bold, GraphicsUnit.Point);
 
         public Font TitlesFont

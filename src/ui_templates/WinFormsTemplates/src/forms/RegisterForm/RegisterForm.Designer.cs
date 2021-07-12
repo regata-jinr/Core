@@ -27,9 +27,11 @@ namespace Regata.Core.UI.WinForms.Forms
         public MenuStrip MenuStrip;
         public ToolStripProgressBar ProgressBar;
         public EnumItem<Language> LangItem;
-        public TableLayoutPanel FunctionalLayoutPanel;
-        public TableLayoutPanel BottomLayoutPanel;
         public TableLayoutPanel MainTableLayoutPanel;
+        public TableLayoutPanel BottomLayoutPanel;
+        public TableLayoutPanel FunctionalLayoutPanel;
+        public TableLayoutPanel MeasurementsControlPanel;
+
         public GroupBox groupBoxMainRDGV;
 
         public GroupBox groupBoxRegForm;
@@ -53,12 +55,6 @@ namespace Regata.Core.UI.WinForms.Forms
             if (disposing && (components != null))
             {
                 components.Dispose();
-                //LangItem.CheckedChanged            -= ChangeLanguage;
-                //TabsPane.DataSourceChanged         -= ChangeLanguage;
-                //ControlAdded                       -= (s, e) => ChangeLanguage();
-                //MenuStrip.ItemAdded                -= (s, e) => ChangeLanguage();
-                //StatusStrip.ItemAdded              -= (s, e) => ChangeLanguage();
-                //FunctionalLayoutPanel.ControlAdded -= (s, e) => ChangeLanguage();
             }
             base.Dispose(disposing);
         }
@@ -152,8 +148,9 @@ namespace Regata.Core.UI.WinForms.Forms
             buttonShowAcqQueue                 = new Button();
             groupBoxMainRDGV                   = new GroupBox();
             MainTableLayoutPanel               = new TableLayoutPanel();
-            FunctionalLayoutPanel              = new TableLayoutPanel();
             BottomLayoutPanel                  = new TableLayoutPanel();
+            FunctionalLayoutPanel              = new TableLayoutPanel();
+            MeasurementsControlPanel           = new TableLayoutPanel();
 
             MainTableLayoutPanel.SuspendLayout();
             BottomLayoutPanel.SuspendLayout();
@@ -222,21 +219,6 @@ namespace Regata.Core.UI.WinForms.Forms
             MenuStrip.Items.Add(LangItem.EnumMenuItem);
 
             // 
-            // FunctionalLayoutPanel
-            // 
-            FunctionalLayoutPanel.ColumnCount = 3;
-            FunctionalLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
-            FunctionalLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
-            FunctionalLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
-            FunctionalLayoutPanel.Name = "FunctionalLayoutPanel";
-            FunctionalLayoutPanel.RowCount = 1;
-            //FunctionalLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            //FunctionalLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            FunctionalLayoutPanel.TabIndex = 25;
-            FunctionalLayoutPanel.Dock = DockStyle.Fill;
-            FunctionalLayoutPanel.Controls.Add(groupBoxRegForm, 0, 0);
-
-            // 
             // BottomLayoutPanel
             // 
             BottomLayoutPanel.ColumnCount = 2;
@@ -249,6 +231,35 @@ namespace Regata.Core.UI.WinForms.Forms
             BottomLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent));
             BottomLayoutPanel.TabIndex = 26;
             MainTableLayoutPanel.Controls.Add(BottomLayoutPanel, 0, 1);
+
+            // 
+            // FunctionalLayoutPanel
+            // 
+            FunctionalLayoutPanel.ColumnCount = 2;
+            FunctionalLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            FunctionalLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            FunctionalLayoutPanel.Name = "FunctionalLayoutPanel";
+            FunctionalLayoutPanel.RowCount = 1;
+            FunctionalLayoutPanel.TabIndex = 25;
+            FunctionalLayoutPanel.Dock = DockStyle.Fill;
+            FunctionalLayoutPanel.Controls.Add(groupBoxRegForm, 0, 0);
+
+            // 
+            // MeasurementsControlPanel
+            // 
+            this.MeasurementsControlPanel.ColumnCount = 2;
+            this.MeasurementsControlPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.MeasurementsControlPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.MeasurementsControlPanel.Name = "MeasurementsControlPanel";
+            this.MeasurementsControlPanel.RowCount = 2;
+            this.MeasurementsControlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.MeasurementsControlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.MeasurementsControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MeasurementsControlPanel.TabIndex = 25;
+            //this.MeasurementsControlPanel.Controls.Add(this.DurationControl, 0, 1);
+            //this.MeasurementsControlPanel.Controls.Add(this.DurationControl, 1, 0);
+            //this.MeasurementsControlPanel.Controls.Add(this.CheckedDetectorArrayControl, 1, 0);
+            //this.MeasurementsControlPanel.Controls.Add(this.CheckedDetectorArrayControl, 1, 1);
 
             // 
             // groupBoxRegForm
@@ -345,9 +356,10 @@ namespace Regata.Core.UI.WinForms.Forms
             groupBoxRegForm.ResumeLayout(false);
             groupBoxMainRDGV.ResumeLayout(false);
             tableLayoutPanelRegForm.ResumeLayout(false);
-            FunctionalLayoutPanel.ResumeLayout(false);
-            BottomLayoutPanel.ResumeLayout(false);
             MainTableLayoutPanel.ResumeLayout(false);
+            BottomLayoutPanel.ResumeLayout(false);
+            FunctionalLayoutPanel.ResumeLayout(false);
+            MeasurementsControlPanel.ResumeLayout(false);
 
             ResumeLayout(false);
             PerformLayout();

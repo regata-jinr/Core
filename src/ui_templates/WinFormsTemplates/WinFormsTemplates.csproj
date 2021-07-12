@@ -15,5 +15,23 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="src\controls\ArrayControl\ButtonsArrayControl - Copy - Copy.Designer.cs">
+      <DependentUpon>ButtonsArrayControl - Copy.Designer.cs</DependentUpon>
+    </Compile>
+    <Compile Update="src\controls\ArrayControl\ControlsGroupBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="src\controls\ArrayControl\ButtonsArrayControl - Copy.Designer.cs">
+      <DependentUpon>ButtonsArrayControl.Designer.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="src\controls\ArrayControl\ButtonsArrayControl - Copy.resx">
+      <DependentUpon>ButtonsArrayControl.resx</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
 

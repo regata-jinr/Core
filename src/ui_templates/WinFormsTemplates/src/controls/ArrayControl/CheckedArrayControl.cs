@@ -74,16 +74,34 @@ namespace Regata.Core.UI.WinForms.Controls
             {
                 _checkBoxes[i] = new CheckBox();
                 _checkBoxes[i].Name = $"rb_{typeof(T).Name}_{i}";
+                _checkBoxes[i].AutoSize = true;
+                _checkBoxes[i].UseVisualStyleBackColor = true;
                 _checkBoxes[i].Dock = DockStyle.Fill;
+                _checkBoxes[i].Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
                 _checkBoxes[i].Text = array[i].ToString();
                 _checkBoxes[i].TabIndex = i;
                 _checkBoxes[i].CheckedChanged += CheckBox_CheckedChanged;
+                SetTooltip(ref _checkBoxes[i]);
+                flowLayoutPanel.Controls.Add(_checkBoxes[i]);
             }
 
-            flowLayoutPanel.Controls.AddRange(_checkBoxes);
 
             RBV_groupBoxTitle.ResumeLayout(false);
+            flowLayoutPanel.ResumeLayout(false);
             ResumeLayout(false);
+
+        }
+
+
+        private void SetTooltip(ref CheckBox cb)
+        {
+            var toolTip1 = new ToolTip();
+
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 1000;
+            toolTip1.ReshowDelay = 500;
+            toolTip1.ShowAlways = true;
+            toolTip1.SetToolTip(cb, cb.Text);
         }
 
         public void ClearSelection()
