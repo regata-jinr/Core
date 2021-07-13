@@ -80,7 +80,7 @@ namespace Regata.Core.UI.WinForms.Controls
 
         }
 
-        private GroupBox RBV_groupBoxTitle;
-        private FlowLayoutPanel flowLayoutPanel;
+        public GroupBox RBV_groupBoxTitle;
+        public FlowLayoutPanel flowLayoutPanel;
     } // partial class RadioButtonsView
 }     // namespace Regata.Core.UI.WinForms.Controls

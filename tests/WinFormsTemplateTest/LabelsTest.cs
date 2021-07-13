@@ -43,14 +43,14 @@ namespace Regata.Tests.WinForms
 
         private RegisterForm<Irradiation> Create_Form(string name)
         {
-            var f = new RegisterForm<Irradiation>(Settings<LabelsSettings>.CurrentSettings.CurrentLanguage);
+            var f = new RegisterForm<Irradiation>();
             f.LangItem.CheckItem(Settings<LabelsSettings>.CurrentSettings.CurrentLanguage);
             f.LangItem.CheckedChanged += () => { Settings<LabelsSettings>.CurrentSettings.CurrentLanguage = f.LangItem.CheckedItem; Labels.SetControlsLabels(f.Controls); };
             f.Name = name;
 
             var btn = new Button();
 
-            f.FunctionalLayoutPanel.Controls.Add(btn, 0, 0);
+            f.BottomLayoutPanel.Controls.Add(btn, 1, 0);
             using (var r = new RegataContext())
             {
                 f.TabsPane[0, 0].DataSource = r.Irradiations.Where(ir => ir.Type == 1 && ir.DateTimeStart != null).Select(ir => new { ir.LoadNumber, ir.DateTimeStart.Value.Date }).Distinct().Take(10).ToArray();

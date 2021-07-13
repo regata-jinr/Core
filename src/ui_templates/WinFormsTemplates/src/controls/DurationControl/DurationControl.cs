@@ -60,7 +60,7 @@ namespace Regata.Core.UI.WinForms.Controls
             }
         }
 
-        private Font _numericsFont;
+        private Font _numericsFont = new Font(_defFontFamily, _defFontSizeTitle, FontStyle.Bold, GraphicsUnit.Point);
 
         public Font NumericsFont
         {
@@ -77,6 +77,25 @@ namespace Regata.Core.UI.WinForms.Controls
                 DurationControlNumericUpDownSeconds.Font = value;
                 DurationControlNumericUpDownHours.Font = value;
 
+            }
+        }
+
+        private Font _labelsFont = new Font(_defFontFamily, _defFontSizeTitle, FontStyle.Bold, GraphicsUnit.Point);
+
+        public Font LabelsFont
+        {
+            get
+            {
+                return _labelsFont;
+            }
+
+            set
+            {
+                _labelsFont = value;
+                DurationControlLabelDays.Font = value;
+                DurationControlLabelMinutes.Font = value;
+                DurationControlLabelSeconds.Font = value;
+                DurationControlLabelHours.Font = value;
             }
         }
 

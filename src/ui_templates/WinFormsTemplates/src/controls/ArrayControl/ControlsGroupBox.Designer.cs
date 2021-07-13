@@ -69,7 +69,7 @@ namespace Regata.Core.UI.WinForms.Controls
 
         #endregion
 
-        private GroupBox groupBoxTitle;
-        private TableLayoutPanel _tableLayoutPanel;
+        public GroupBox groupBoxTitle;
+        public TableLayoutPanel _tableLayoutPanel;
     }
 }

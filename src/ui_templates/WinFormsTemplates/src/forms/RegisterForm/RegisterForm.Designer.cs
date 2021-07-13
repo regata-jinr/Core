@@ -29,17 +29,8 @@ namespace Regata.Core.UI.WinForms.Forms
         public EnumItem<Language> LangItem;
         public TableLayoutPanel MainTableLayoutPanel;
         public TableLayoutPanel BottomLayoutPanel;
-        public TableLayoutPanel FunctionalLayoutPanel;
-        public TableLayoutPanel MeasurementsControlPanel;
 
         public GroupBox groupBoxMainRDGV;
-
-        public GroupBox groupBoxRegForm;
-        public TableLayoutPanel tableLayoutPanelRegForm;
-        public Button buttonRemoveSample;
-        public Button buttonAddAllSamples;
-        public Button buttonAddSampleToReg;
-        public Button buttonShowAcqQueue;
 
         /// <summary>
         /// Required designer variable.
@@ -140,24 +131,13 @@ namespace Regata.Core.UI.WinForms.Forms
             ProgressBar                        = new ToolStripProgressBar();
             MenuStrip                          = new MenuStrip();
             LangItem                           = new EnumItem<Language>(Language.English);
-            groupBoxRegForm                    = new GroupBox();
-            tableLayoutPanelRegForm            = new TableLayoutPanel();
-            buttonAddAllSamples                = new Button();
-            buttonAddSampleToReg               = new Button();
-            buttonRemoveSample                 = new Button();
-            buttonShowAcqQueue                 = new Button();
             groupBoxMainRDGV                   = new GroupBox();
             MainTableLayoutPanel               = new TableLayoutPanel();
             BottomLayoutPanel                  = new TableLayoutPanel();
-            FunctionalLayoutPanel              = new TableLayoutPanel();
-            MeasurementsControlPanel           = new TableLayoutPanel();
 
             MainTableLayoutPanel.SuspendLayout();
             BottomLayoutPanel.SuspendLayout();
-            FunctionalLayoutPanel.SuspendLayout();
             groupBoxMainRDGV.SuspendLayout();
-            groupBoxRegForm.SuspendLayout();
-            tableLayoutPanelRegForm.SuspendLayout();
             StatusStrip.SuspendLayout();
             MenuStrip.SuspendLayout();
             SuspendLayout();
@@ -224,7 +204,6 @@ namespace Regata.Core.UI.WinForms.Forms
             BottomLayoutPanel.ColumnCount = 2;
             BottomLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             BottomLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            BottomLayoutPanel.Controls.Add(FunctionalLayoutPanel, 1, 0);
             BottomLayoutPanel.Dock = DockStyle.Fill;
             BottomLayoutPanel.Name = "BottomLayoutPanel";
             BottomLayoutPanel.RowCount = 1;
@@ -232,102 +211,7 @@ namespace Regata.Core.UI.WinForms.Forms
             BottomLayoutPanel.TabIndex = 26;
             MainTableLayoutPanel.Controls.Add(BottomLayoutPanel, 0, 1);
 
-            // 
-            // FunctionalLayoutPanel
-            // 
-            FunctionalLayoutPanel.ColumnCount = 2;
-            FunctionalLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            FunctionalLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            FunctionalLayoutPanel.Name = "FunctionalLayoutPanel";
-            FunctionalLayoutPanel.RowCount = 1;
-            FunctionalLayoutPanel.TabIndex = 25;
-            FunctionalLayoutPanel.Dock = DockStyle.Fill;
-            FunctionalLayoutPanel.Controls.Add(groupBoxRegForm, 0, 0);
-
-            // 
-            // MeasurementsControlPanel
-            // 
-            this.MeasurementsControlPanel.ColumnCount = 2;
-            this.MeasurementsControlPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.MeasurementsControlPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.MeasurementsControlPanel.Name = "MeasurementsControlPanel";
-            this.MeasurementsControlPanel.RowCount = 2;
-            this.MeasurementsControlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.MeasurementsControlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.MeasurementsControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MeasurementsControlPanel.TabIndex = 25;
-            //this.MeasurementsControlPanel.Controls.Add(this.DurationControl, 0, 1);
-            //this.MeasurementsControlPanel.Controls.Add(this.DurationControl, 1, 0);
-            //this.MeasurementsControlPanel.Controls.Add(this.CheckedDetectorArrayControl, 1, 0);
-            //this.MeasurementsControlPanel.Controls.Add(this.CheckedDetectorArrayControl, 1, 1);
-
-            // 
-            // groupBoxRegForm
-            // 
-            groupBoxRegForm.Controls.Add(tableLayoutPanelRegForm);
-            groupBoxRegForm.Dock = DockStyle.Fill;
-            groupBoxRegForm.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            groupBoxRegForm.Name = "groupBoxRegForm";
-            groupBoxRegForm.TabIndex = 0;
-            groupBoxRegForm.TabStop = false;
-            groupBoxRegForm.Text = "Формирование журнала";
-            // 
-            // tableLayoutPanelRegForm
-            // 
-            tableLayoutPanelRegForm.ColumnCount = 1;
-            tableLayoutPanelRegForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanelRegForm.Controls.Add(buttonShowAcqQueue, 0, 3);
-            tableLayoutPanelRegForm.Controls.Add(buttonRemoveSample, 0, 2);
-            tableLayoutPanelRegForm.Controls.Add(buttonAddAllSamples, 0, 1);
-            tableLayoutPanelRegForm.Controls.Add(buttonAddSampleToReg, 0, 0);
-            tableLayoutPanelRegForm.Dock = DockStyle.Fill;
-            tableLayoutPanelRegForm.Location = new Point(3, 25);
-            tableLayoutPanelRegForm.Name = "tableLayoutPanelRegForm";
-            tableLayoutPanelRegForm.RowCount = 4;
-            tableLayoutPanelRegForm.RowStyles.Add(new RowStyle(SizeType.Percent, 100 / tableLayoutPanelRegForm.RowCount));
-            tableLayoutPanelRegForm.RowStyles.Add(new RowStyle(SizeType.Percent, 100 / tableLayoutPanelRegForm.RowCount));
-            tableLayoutPanelRegForm.RowStyles.Add(new RowStyle(SizeType.Percent, 100 / tableLayoutPanelRegForm.RowCount));
-            tableLayoutPanelRegForm.RowStyles.Add(new RowStyle(SizeType.Percent, 100 / tableLayoutPanelRegForm.RowCount));
-            tableLayoutPanelRegForm.Size = new Size(267, 236);
-            tableLayoutPanelRegForm.TabIndex = 0;
-            tableLayoutPanelRegForm.AutoScroll = true;
-
-            // 
-            // buttonAddSampleToReg
-            // 
-            buttonAddSampleToReg.Dock = DockStyle.Fill;
-            buttonAddSampleToReg.Name = "buttonAddSampleToReg";
-            //buttonAddSampleToReg.Location = new Point(3, 3);
-            //buttonAddSampleToReg.Size = new Size(261, 72);
-            buttonAddSampleToReg.TabIndex = 0;
-            buttonAddSampleToReg.UseVisualStyleBackColor = true;
-            // 
-            // buttonAddAllSamples
-            // 
-            buttonAddAllSamples.Dock = DockStyle.Fill;
-            buttonAddAllSamples.Name = "buttonAddAllSamples";
-            //buttonAddAllSamples.Location = new Point(3, 81);
-            //buttonAddAllSamples.Size = new Size(261, 72);
-            buttonAddAllSamples.TabIndex = 1;
-            buttonAddAllSamples.UseVisualStyleBackColor = true;
-            // 
-            // buttonRemoveSample
-            // 
-            buttonRemoveSample.Dock = DockStyle.Fill;
-            buttonRemoveSample.Name = "buttonRemoveSample";
-            //buttonRemoveSample.Location = new Point(3, 159);
-            //buttonRemoveSample.Size = new Size(261, 74);
-            buttonRemoveSample.TabIndex = 2;
-            buttonRemoveSample.UseVisualStyleBackColor = true;
-            // 
-            // buttonShowAcqQueue
-            // 
-            buttonShowAcqQueue.Dock = DockStyle.Fill;
-            buttonShowAcqQueue.Name = "buttonShowAcqQueue";
-            //buttonShowAcqQueue.Location = new Point(3, 159);
-            //buttonShowAcqQueue.Size = new Size(261, 74);
-            buttonShowAcqQueue.TabIndex = 3;
-            buttonShowAcqQueue.UseVisualStyleBackColor = true;
+          
             // 
             // RegisterForm
             // 
@@ -353,13 +237,9 @@ namespace Regata.Core.UI.WinForms.Forms
             MenuStrip.ResumeLayout(false);
             MenuStrip.PerformLayout();
 
-            groupBoxRegForm.ResumeLayout(false);
             groupBoxMainRDGV.ResumeLayout(false);
-            tableLayoutPanelRegForm.ResumeLayout(false);
             MainTableLayoutPanel.ResumeLayout(false);
             BottomLayoutPanel.ResumeLayout(false);
-            FunctionalLayoutPanel.ResumeLayout(false);
-            MeasurementsControlPanel.ResumeLayout(false);
 
             ResumeLayout(false);
             PerformLayout();
