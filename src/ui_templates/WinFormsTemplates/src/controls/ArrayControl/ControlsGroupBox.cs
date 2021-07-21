@@ -37,6 +37,21 @@ namespace Regata.Core.UI.WinForms.Controls
 
         }
 
+        private Font _font = new Font("Segoe UI", 12, FontStyle.Regular, GraphicsUnit.Point);
+
+        public override Font Font
+        {
+            get => _font;
+            set
+            {
+                _font = value;
+                foreach (var c in _controls)
+                {
+                    c.Font = _font;
+                }
+            }
+        }
+
         public override string Text
         {
             get

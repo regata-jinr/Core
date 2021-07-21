@@ -11,8 +11,6 @@
 
 using System;
 using System.Collections.Generic;
-using AutoMapper;
-using AutoMapper.Configuration.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,16 +18,13 @@ namespace Regata.Core.DataBase.Models
 {
     public enum MeasurementsType { sli, lli1, lli2, bckg };
 
-    [AutoMap(typeof(Irradiation))]
     public class Measurement
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Ignore]
         public int        Id                   { get; set; }
         [Required]
-        [SourceMember(nameof(Irradiation.Id))]
         public int        IrradiationId        { get; set; }
-        public int        RegId               { get; set; }
+        public int        RegId                { get; set; }
         [Required]
         public string     CountryCode          { get; set; }
         [Required]
@@ -44,41 +39,42 @@ namespace Regata.Core.DataBase.Models
         public string     SampleNumber         { get; set; }
         [Required]
         public int        Type                 { get; set; }
-        [Ignore]
         public int?        AcqMode             { get; set; }
-        [Ignore]
         public int?      DiskPosition          { get; set; }
-        [Ignore]
         public DateTime?  DateTimeStart        { get; set; }
-        [Ignore]
         public int?      Duration              { get; set; }
-        [Ignore]
         public DateTime?  DateTimeFinish       { get; set; }
-        [Ignore]
         public float?     Height               { get; set; }
-        [Ignore]
         public float?     DeadTime             { get; set; }
-        [Ignore]
         public string     FileSpectra          { get; set; }
-        [Ignore]
         public string     Detector             { get; set; }
-        [Ignore]
         public int?       Assistant            { get; set; }
-        [Ignore]
         public string     Note                 { get; set; }
 
         [NotMapped]
-        [Ignore]
         public string SetKey => $"{CountryCode}-{ClientNumber}-{Year}-{SetNumber}-{SetIndex}";
 
         [NotMapped]
-        [Ignore]
         public string SampleKey => $"{SetIndex}-{SampleNumber}";
         public override string ToString() => $"{SetKey}-{SampleNumber}";
 
         [NotMapped]
-        [Ignore]
         public static readonly IReadOnlyDictionary<MeasurementsType, string> TypeToString = new Dictionary<MeasurementsType, string> { { MeasurementsType.sli, "SLI" }, { MeasurementsType.lli1,"LLI-1" }, { MeasurementsType.lli2, "LLI-2" }, { MeasurementsType.bckg, "BCKG" } };
+
+        public Measurement()
+        { }
+        public Measurement(Irradiation ir)
+        {
+            Type          = ir.Type;
+            Year          = ir.Year;
+            SetIndex      = ir.SetIndex;
+            SetNumber     = ir.SetNumber;
+            CountryCode   = ir.CountryCode;
+            ClientNumber  = ir.ClientNumber;
+            SampleNumber  = ir.SetNumber;
+            IrradiationId = ir.Id;
+        }
+    
 
     } // public class Measurement
 

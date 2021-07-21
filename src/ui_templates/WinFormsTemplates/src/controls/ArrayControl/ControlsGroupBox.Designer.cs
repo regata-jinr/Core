@@ -40,9 +40,9 @@ namespace Regata.Core.UI.WinForms.Controls
             // 
             this.groupBoxTitle.Controls.Add(this._tableLayoutPanel);
             this.groupBoxTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxTitle.Location = new System.Drawing.Point(0, 0);
+            //this.groupBoxTitle.Location = new System.Drawing.Point(0, 0);
             this.groupBoxTitle.Name = "groupBoxTitle";
-            this.groupBoxTitle.Size = new System.Drawing.Size(283, 229);
+            //this.groupBoxTitle.Size = new System.Drawing.Size(283, 229);
             this.groupBoxTitle.TabIndex = 0;
             this.groupBoxTitle.TabStop = false;
             this.groupBoxTitle.Text = "groupBoxTitle";
@@ -51,9 +51,9 @@ namespace Regata.Core.UI.WinForms.Controls
             // 
             this._tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this._tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            //this._tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this._tableLayoutPanel.Name = "_tableLayoutPanel";
-            this._tableLayoutPanel.Size = new System.Drawing.Size(200, 100);
+            //this._tableLayoutPanel.Size = new System.Drawing.Size(200, 100);
             this._tableLayoutPanel.TabIndex = 1;
             // 
             // ButtonsArrayControl
@@ -62,7 +62,7 @@ namespace Regata.Core.UI.WinForms.Controls
             //this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBoxTitle);
             this.Name = "ButtonsArrayControl";
-            this.Size = new System.Drawing.Size(283, 229);
+            //this.Size = new System.Drawing.Size(283, 229);
             Dock = DockStyle.Fill;
 
         }
