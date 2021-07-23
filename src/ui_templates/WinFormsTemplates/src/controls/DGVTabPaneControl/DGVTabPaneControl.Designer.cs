@@ -48,7 +48,7 @@ namespace Regata.Core.UI.WinForms.Controls
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(765, 305);
+            this.tabControl.Size = new System.Drawing.Size(200, 100);
             this.tabControl.TabIndex = 0;
             // 
             // DGVTabPaneControl
@@ -57,8 +57,8 @@ namespace Regata.Core.UI.WinForms.Controls
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl);
             this.Name = "DGVTabPaneControl";
-            this.Size = new System.Drawing.Size(765, 305);
-            //this.ResumeLayout(false);
+            this.Size = new System.Drawing.Size(2396, 1249);
+            this.ResumeLayout(false);
 
         }
 
