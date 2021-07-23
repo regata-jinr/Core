@@ -20,7 +20,7 @@ namespace Regata.Core.DataBase.Models
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int       Id              { get; set; }
-        public DateTime  IrradiationDate { get; set; }
+        public DateTime?  IrradiationDate { get; set; }
         public string    Name            { get; set; }
         public int?      LoadNumber      { get; set; }
         public int       Type            { get; set; }

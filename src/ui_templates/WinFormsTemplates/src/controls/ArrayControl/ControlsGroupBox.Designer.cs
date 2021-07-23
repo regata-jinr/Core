@@ -54,14 +54,14 @@ namespace Regata.Core.UI.WinForms.Controls
             //this._tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this._tableLayoutPanel.Name = "_tableLayoutPanel";
             //this._tableLayoutPanel.Size = new System.Drawing.Size(200, 100);
-            this._tableLayoutPanel.TabIndex = 1;
+            //this._tableLayoutPanel.TabIndex = 1;
             // 
             // ButtonsArrayControl
             // 
             //this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             //this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBoxTitle);
-            this.Name = "ButtonsArrayControl";
+            Name = $"ControlsGroupBox_{TabIndex}";
             //this.Size = new System.Drawing.Size(283, 229);
             Dock = DockStyle.Fill;
 

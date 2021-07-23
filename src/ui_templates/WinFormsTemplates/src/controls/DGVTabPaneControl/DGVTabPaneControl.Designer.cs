@@ -57,7 +57,7 @@ namespace Regata.Core.UI.WinForms.Controls
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl);
             this.Name = "DGVTabPaneControl";
-            this.Size = new System.Drawing.Size(2396, 1249);
+            //this.Size = new System.Drawing.Size(2396, 1249);
             this.ResumeLayout(false);
 
         }
