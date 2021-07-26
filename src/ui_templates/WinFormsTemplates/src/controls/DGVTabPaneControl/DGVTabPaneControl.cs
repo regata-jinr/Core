@@ -115,27 +115,29 @@ namespace Regata.Core.UI.WinForms.Controls
             dgv.AutoSize = true;
             dgv.DataSourceChanged += Dgv_DataSourceChanged;
 
-            var dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 10.25F, FontStyle.Bold, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgv.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            var dataGridViewHeaderStyle = new DataGridViewCellStyle();
+            dataGridViewHeaderStyle.BackColor = SystemColors.Control;
+            dataGridViewHeaderStyle.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewHeaderStyle.ForeColor = SystemColors.WindowText;
+            dataGridViewHeaderStyle.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewHeaderStyle.SelectionForeColor = SystemColors.HighlightText;
+            //dataGridViewHeaderStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+            //dataGridViewHeaderStyle.WrapMode = DataGridViewTriState.True;
 
-            var dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgv.ColumnHeadersDefaultCellStyle = dataGridViewHeaderStyle;
+            dgv.ColumnHeadersHeight = 40;
+            dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 
-            dgv.DefaultCellStyle = dataGridViewCellStyle2;
+            var dataGridViewCellStyle = new DataGridViewCellStyle();
+            dataGridViewCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle.BackColor = SystemColors.Window;
+            dataGridViewCellStyle.Font = new Font("Microsoft Sans Serif", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle.WrapMode = DataGridViewTriState.False;
+
+            dgv.DefaultCellStyle = dataGridViewCellStyle;
 
             dgv.Margin = new Padding(5);
             dgv.RowHeadersVisible = false;
@@ -178,6 +180,8 @@ namespace Regata.Core.UI.WinForms.Controls
                 return this[curPageIndex, 0].SelectedRows;
             }
         }
+
+        public int SelectedTabIndex => tabControl.SelectedIndex;
 
     }   // public partial class DGVTabPaneControl : UserControl
 }     // namespace WinFormsTemplates.src.RegataTabPaneControl

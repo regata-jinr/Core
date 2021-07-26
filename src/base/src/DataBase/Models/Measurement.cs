@@ -20,7 +20,8 @@ namespace Regata.Core.DataBase.Models
 
     public class Measurement
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        // DatabaseGenerated(DatabaseGeneratedOption.Identity)
+        [Key]
         public int        Id                   { get; set; }
         [Required]
         public int        IrradiationId        { get; set; }
@@ -71,11 +72,9 @@ namespace Regata.Core.DataBase.Models
             SetNumber     = ir.SetNumber;
             CountryCode   = ir.CountryCode;
             ClientNumber  = ir.ClientNumber;
-            SampleNumber  = ir.SetNumber;
+            SampleNumber  = ir.SampleNumber;
             IrradiationId = ir.Id;
         }
     
-
     } // public class Measurement
-
 }     // namespace Regata.Core.DataBase.Models

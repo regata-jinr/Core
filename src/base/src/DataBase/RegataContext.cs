@@ -38,8 +38,6 @@ namespace Regata.Core.DataBase
         public DbSet<User>                 Users                 { get; set; }
         public DbSet<Log>                  Logs                  { get; set; }
 
-        //private const string DBTarget = "MSSQL_TEST_DB_ConnetionString"; // "RegataDB";
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)   
         {
             optionsBuilder.UseSqlServer(CredentialManager.GetCredentials(GlobalSettings.Targets.DB).Password, 
@@ -59,7 +57,7 @@ namespace Regata.Core.DataBase
 
             modelBuilder.Entity<Measurement>()
                             .HasKey(m => m.Id);
-
+            
             modelBuilder.Entity<MeasurementsRegister>()
                            .HasKey(mr => mr.Id);
 
