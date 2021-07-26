@@ -137,10 +137,11 @@ namespace Regata.Core.UI.WinForms.Controls
                 ClearOtherSelection(r.Name);
             }
 
-            SelectionChanged?.Invoke();
 
             _seletedItem = _array[r.TabIndex];
             _seletedItems.Add(_array[r.TabIndex]);
+            
+            SelectionChanged?.Invoke();
         }
 
     } // public partial class RadioButtonsView<T> : UserControl, IArrayControlSingleSelection<T>

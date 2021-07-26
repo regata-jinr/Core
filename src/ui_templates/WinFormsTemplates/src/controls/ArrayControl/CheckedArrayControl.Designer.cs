@@ -11,7 +11,6 @@
 
 using System.Windows.Forms;
 using System.ComponentModel;
-using System.Drawing;
 
 namespace Regata.Core.UI.WinForms.Controls
 {
@@ -82,5 +81,6 @@ namespace Regata.Core.UI.WinForms.Controls
 
         public GroupBox RBV_groupBoxTitle;
         public FlowLayoutPanel flowLayoutPanel;
-    } // partial class RadioButtonsView
+
+    } // partial class CheckedArrayControl<T> : UserControl
 }     // namespace Regata.Core.UI.WinForms.Controls
