@@ -26,8 +26,8 @@ namespace Regata.Core.UI.WinForms.Controls
         {
             if (disposing && (components != null))
             {
-                DurationControlNumericUpDownDays.ValueChanged -= DurationControlNumericUpDownDays_ValueChanged;
-                DurationControlNumericUpDownHours.ValueChanged -= DurationControlNumericUpDownHours_ValueChanged;
+                DurationControlNumericUpDownDays.ValueChanged    -= DurationControlNumericUpDownDays_ValueChanged;
+                DurationControlNumericUpDownHours.ValueChanged   -= DurationControlNumericUpDownHours_ValueChanged;
                 DurationControlNumericUpDownMinutes.ValueChanged -= DurationControlNumericUpDownMinutes_ValueChanged;
                 DurationControlNumericUpDownSeconds.ValueChanged -= DurationControlNumericUpDownSeconds_ValueChanged;
                 components.Dispose();
@@ -65,8 +65,7 @@ namespace Regata.Core.UI.WinForms.Controls
             // DurationControlLabelDays
             // 
             this.DurationControlLabelDays.AutoSize = true;
-            this.DurationControlLabelDays.Dock = System.Windows.Forms.DockStyle.Top;
-            this.DurationControlLabelDays.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.DurationControlLabelDays.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DurationControlLabelDays.Name = "DurationControlLabelDays";
             this.DurationControlLabelDays.TabIndex = 24;
             this.DurationControlLabelDays.Text = "Дни";
@@ -75,7 +74,6 @@ namespace Regata.Core.UI.WinForms.Controls
             // DurationControlNumericUpDownDays
             // 
             this.DurationControlNumericUpDownDays.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DurationControlNumericUpDownDays.Margin = new System.Windows.Forms.Padding(1);
             this.DurationControlNumericUpDownDays.Name = "DurationControlNumericUpDownDays";
             this.DurationControlNumericUpDownDays.TabIndex = 23;
             this.DurationControlNumericUpDownDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;

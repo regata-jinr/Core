@@ -30,6 +30,7 @@
  * |                                   special code.
  * |                                    See codes here CanberraDeviceAccessLib.ParamCodes. 
  * |                                    Also some of important parameters wrapped into properties
+ * ├── G2KUtilities.cs             --> Contains aliases for running utilities from GENIE2K/EXEFILES.
  * └── DetectorProperties.cs       --> Contains description of basics properties, events, 
  *                                     enumerations and additional classes
  */
@@ -61,7 +62,7 @@ namespace Regata.Core.Hardware
                 _isDisposed = false;
                 Status = DetectorStatus.off;
                 ErrorMessage = "";
-                _device = new DeviceAccessClass();
+                _device = new DeviceAccess();
                 CurrentMeasurement = new Measurement();
                 DetSet.EffCalFolder = @"C:\GENIE2K\CALFILES\Efficiency";
 
@@ -73,7 +74,7 @@ namespace Regata.Core.Hardware
                 else
                 {
                     Report.Notify(new DetectorMessage(Codes.ERR_DET_NAME_N_EXST));
-                    return;
+                    throw new ArgumentException("Detector with such name doesn't exist.");
                 }
 
                 _device.DeviceMessages += DeviceMessagesHandler;
@@ -146,25 +147,6 @@ namespace Regata.Core.Hardware
             {
                 Report.Notify(new DetectorMessage(Codes.ERR_DET_RST_UNREG) { DetailedText = ex.ToString() });
             }
-        }
-
-        public static bool IsDetectorAvailable(string name)
-        {
-            try
-            {
-                var dev = new DeviceAccess();
-                dev.Connect(name);
-                if (dev.IsConnected)
-                {
-                    dev.Disconnect();
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_AVAIL_UNREG) { DetailedText = ex.ToString() });
-            }
-            return false;
         }
 
     } //  public partial class Detector : IDisposable

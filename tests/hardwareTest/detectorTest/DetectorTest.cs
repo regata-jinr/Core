@@ -10,13 +10,15 @@
  ***************************************************************************/
 
 using CanberraDataAccessLib;
-using System;
-using System.IO;
-using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Regata.Core.Hardware;
 using Regata.Core.DataBase.Models;
+using Regata.Core.Hardware;
 using Regata.Core.Settings;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Regata.Tests.Hardware.Detectors
 {
@@ -49,7 +51,7 @@ namespace Regata.Tests.Hardware.Detectors
         [TestMethod]
         public void Connections()
         {
-            Assert.IsTrue(_d1.IsConnected);
+                Assert.IsTrue(_d1.IsConnected);
         }
 
         [TestMethod]
@@ -86,9 +88,7 @@ namespace Regata.Tests.Hardware.Detectors
                 Duration = 3
             };
 
-            var configuration = new MapperConfiguration(cfg => cfg.AddMaps("base"));
-            var mapper = new Mapper(configuration);
-            var m = mapper.Map<Measurement>(sd);
+            var m = new Measurement(sd);
             m.Duration = 5;
             m.Detector = "D1";
             m.Height = 10;
@@ -167,6 +167,23 @@ namespace Regata.Tests.Hardware.Detectors
             Assert.IsFalse(File.Exists(_d1.FullFileSpectraName));
             Assert.IsFalse(File.Exists(Path.Combine(Path.GetDirectoryName(_d1.FullFileSpectraName), $"{m.FileSpectra}.cnf")));
             Assert.IsFalse(File.Exists(Path.Combine(Path.GetDirectoryName(_d1.FullFileSpectraName), $"{m.FileSpectra}(1).cnf")));
+        }
+
+        [TestMethod]
+        public async Task GetAvailableDetectorsTestAsync()
+        {
+            CollectionAssert.AreEqual(new string[] { "D1", "D2", "D3", "D4" }, await Detector.GetAvailableDetectorsAsync());
+            Assert.IsTrue(Detector.IsDetectorAvailable("D1"));
+            Detector.Run("putview.exe", $"DET:D1");
+            Thread.Sleep(TimeSpan.FromSeconds(5));
+            using (var d = new Detector("D1"))
+            {
+                Assert.IsFalse(Detector.IsDetectorAvailable("D1"));
+
+                CollectionAssert.AreNotEqual(new string[] { "D1", "D2", "D3", "D4" }, await Detector.GetAvailableDetectorsAsync());
+                CollectionAssert.AreEqual(new string[] { "D2", "D3", "D4" }, await Detector.GetAvailableDetectorsAsync());
+                Detector.CloseDetector("D1");
+            }
         }
 
     } // public class DetectorsTest

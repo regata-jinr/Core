@@ -32,33 +32,33 @@ namespace Regata.Core
     {
         #region DataBase
         
-        public const ushort SUCC_DB_CONN = 1000;
+        public const int SUCC_DB_CONN = 1000;
 
         #endregion
 
         #region Cloud
 
-        public const ushort SUCC_CLD_TRGT      = 1100;
-        public const ushort SUCC_CLD_GOOD_RSPN = 1101;
-        public const ushort SUCC_CLD_UPL_FILE  = 1102;
+        public const int SUCC_CLD_TRGT      = 1100;
+        public const int SUCC_CLD_GOOD_RSPN = 1101;
+        public const int SUCC_CLD_UPL_FILE  = 1102;
 
         #endregion
 
         #region Detector
 
-        public const ushort SUCC_DET_RST        = 1200; //$"Success reseting of the detector"
-        public const ushort SUCC_DET_CON        = 1201; //$"Successful connection to the detector"
-        public const ushort SUCC_DET_RECON      = 1202; //$"Reconnection successful"
-        public const ushort SUCC_DET_DCON       = 1203; //$"Disconnection successful"
-        public const ushort SUCC_DET_ACQ_STOP   = 1204;
-        public const ushort SUCC_DET_ACQ_PAUSE  = 1205;
-        public const ushort SUCC_DET_FILE_SAVED = 1206;
+        public const int SUCC_DET_RST        = 1200; //$"Success reseting of the detector"
+        public const int SUCC_DET_CON        = 1201; //$"Successful connection to the detector"
+        public const int SUCC_DET_RECON      = 1202; //$"Reconnection successful"
+        public const int SUCC_DET_DCON       = 1203; //$"Disconnection successful"
+        public const int SUCC_DET_ACQ_STOP   = 1204;
+        public const int SUCC_DET_ACQ_PAUSE  = 1205;
+        public const int SUCC_DET_FILE_SAVED = 1206;
 
         #endregion
 
 
         #region UI:Winforms
-        public const ushort SUCC_UI_WF_PIN_SAVED = 1800;
+        public const int SUCC_UI_WF_PIN_SAVED = 1800;
         #endregion
 
     }

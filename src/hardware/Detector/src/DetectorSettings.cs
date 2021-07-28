@@ -18,10 +18,10 @@ namespace Regata.Core.Hardware
    public class DetectorSettings
     {
         public string           Name                  { get; set; }
-        public ConnectOptions   ConnectOption         { get; set; }
+        public ConnectOptions   ConnectOption         { get; set; } = ConnectOptions.aReadWrite;
         public uint             CountNumber           { get; set; }
-        public TimeSpan         ConnectionTimeOut     { get; set; }
-        public AcquisitionModes AcquisitionMode       { get; set; }
+        public TimeSpan         ConnectionTimeOut     { get; set; } = new TimeSpan(0, 0, 5);
+        public AcquisitionModes AcquisitionMode       { get; set; } = AcquisitionModes.aCountToRealTime;
         public string           EffCalFolder          { get; set; }
     }
 }

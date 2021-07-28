@@ -25,11 +25,15 @@
 // |                                    See codes here CanberraDeviceAccessLib.ParamCodes 
 // |                                    Also some of important parameters wrapped into properties
 // ├── DetectorProperties.cs       --> Contains description of basics properties, events, enumerations and additional classes
+// ├── G2KUtilities.cs             --> Contains aliases for running utilities from GENIE2K/EXEFILES.
 // └── IDetector.cs                --> Interface of the Detector type
 
-using System;
-using System.Threading.Tasks;
+using CanberraDeviceAccessLib;
 using Regata.Core.Messages;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Regata.Core.Hardware
 {
@@ -59,7 +63,6 @@ namespace Regata.Core.Hardware
         /// <summary>
         /// 
         /// </summary>
-        /// TODO: find out what happenes in case of long connection. How to add timeoutlimit, because device.Connect already async. 
         public void Connect()
         {
             try
@@ -67,6 +70,29 @@ namespace Regata.Core.Hardware
                 ConnectInternal();
                 if (_device.IsConnected)
                     Report.Notify(new DetectorMessage(Codes.SUCC_DET_CON));
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_CONN_UNREG) { DetailedText = ex.ToString() });
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task ConnectAsync()
+        {
+            try
+            {
+                var ct = new CancellationTokenSource(DetSet.ConnectionTimeOut);
+                await Task.Run(ConnectInternal, ct.Token);
+                if (_device.IsConnected)
+                    Report.Notify(new DetectorMessage(Codes.SUCC_DET_CON));
+            }
+            catch (TaskCanceledException)
+            {
+                Report.Notify(new DetectorMessage(Codes.WARN_DET_CONN_TIMEOUT));
             }
             catch (Exception ex)
             {
@@ -83,7 +109,7 @@ namespace Regata.Core.Hardware
         public async Task Reconnect()
         {
             Report.Notify(new DetectorMessage(Codes.INFO_DET_RECON));
-
+            // fixme: I think here is better to don't use _device object in other thread. It's better to use static functions
             var t1 = Task.Run(() => { while (!_device.IsConnected) { Disconnect(); } });
             var t2 = Task.Delay(DetSet.ConnectionTimeOut);
 
@@ -117,9 +143,81 @@ namespace Regata.Core.Hardware
             }
         }
 
-        public bool IsConnected => _device.IsConnected;
+        public static bool IsDetectorAvailable(string name)
+        {
+            DeviceAccess dev = null;
+            try
+            {
+                dev = new DeviceAccess();
+                dev.Connect(name);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_CONN_UNREG) { DetailedText = ex.ToString() });
+                return false;
+            }
+            finally
+            {
+                if (dev != null && dev.IsConnected)
+                    dev.Disconnect();
 
+            }
+        }
 
+        public static async Task<bool> IsDetectorAvailableAsync(string name)
+        {
+            var ct = new CancellationTokenSource(DetSet.ConnectionTimeOut);
+            try
+            {
+                return await Task.Run(() => IsDetectorAvailable(name), ct.Token);
+            }
+            catch (TaskCanceledException)
+            {
+                Report.Notify(new DetectorMessage(Codes.WARN_DET_CONN_TIMEOUT));
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_CONN_UNREG) { DetailedText = ex.ToString() });
+                return false;
+            }
+        }
 
-    } //  public partial class Detector : IDisposable
-} // namespace Regata.Measurements.Devices
+        public static async Task<string[]> GetAvailableDetectorsAsync()
+        {
+            var devs = new List<string>(8);
+
+            try
+            {
+                var _device = new DeviceAccess();
+                var detNames = (object[])_device.ListSpectroscopyDevices;
+                foreach (var n in detNames)
+                {
+                    if (await IsDetectorAvailableAsync(n.ToString()))
+                        devs.Add(n.ToString());
+                }
+                return devs.ToArray();
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_CONN_UNREG) { DetailedText = ex.ToString() });
+                return devs.ToArray();
+            }
+        }
+
+        public static async IAsyncEnumerable<string> GetAvailableDetectorsAsyncStream()
+        {
+                var _device = new DeviceAccess();
+                var detNames = (object[])_device.ListSpectroscopyDevices;
+                foreach (var n in detNames)
+                {
+                    if (await IsDetectorAvailableAsync(n.ToString()))
+                        yield return n.ToString();
+                    else
+                        yield return "";
+                }
+        }
+
+    } // public partial class Detector : IDisposable
+}     // namespace Regata.Measurements.Devices

@@ -20,7 +20,7 @@ namespace Regata.Core.Messages
     {
         public string Caption      { get; set; } // filled in report notify
         public string Head         { get; set; }
-        public ushort Code         { get; set; }
+        public int    Code         { get; set; }
         public Status Status       { get; set; } 
         public string Text         { get; set; }
         public string DetailedText { get; set; } // filled in report notify

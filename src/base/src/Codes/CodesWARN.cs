@@ -33,33 +33,33 @@ namespace Regata.Core
 
         #region Cloud
 
-        public const ushort WRN_CLD_BAD_RSPN = 2100;
+        public const int WRN_CLD_BAD_RSPN = 2100;
 
         #endregion
 
         #region Detector
 
-        public const ushort WARN_DET_BUSY = 2200; // Un
-        public const ushort WARN_DET_CONN_TIMEOUT = 2201;  // "Can not to disconnect from detector {_name}. Exceeded timeout limit.");
-        public const ushort WARN_DET_RST = 2202;
+        public const int WARN_DET_BUSY = 2200; // Un
+        public const int WARN_DET_CONN_TIMEOUT = 2201;  // "Can not to disconnect from detector {_name}. Exceeded timeout limit.");
+        public const int WARN_DET_RST = 2202;
 
         #endregion
 
         #region
 
-        public const ushort WARN_SET_FILE_NOT_EXST = 2400;
+        public const int WARN_SET_FILE_NOT_EXST = 2400;
 
         #endregion
 
 
         #region UI:WinForms
-        public const ushort WARN_UI_WF_RDGV_Empty_Data = 2800;
-        public const ushort WARN_UI_WF_RDGV_Wrong_Value_Type = 2801;
-        public const ushort WARN_UI_WF_WRONG_PIN_FORMAT = 2802;
-        public const ushort WARN_UI_WF_EMPTY_FIELD = 2803;
-        public const ushort WARN_UI_WF_UTLT_NULL_CONTRL = 2804;
-        public const ushort WARN_LBL_NOT_EXIST = 2805;
-        public const ushort WARN_FORM_LBL_NOT_EXIST = 2806;
+        public const int WARN_UI_WF_RDGV_Empty_Data = 2800;
+        public const int WARN_UI_WF_RDGV_Wrong_Value_Type = 2801;
+        public const int WARN_UI_WF_WRONG_PIN_FORMAT = 2802;
+        public const int WARN_UI_WF_EMPTY_FIELD = 2803;
+        public const int WARN_UI_WF_UTLT_NULL_CONTRL = 2804;
+        public const int WARN_LBL_NOT_EXIST = 2805;
+        public const int WARN_FORM_LBL_NOT_EXIST = 2806;
 
         #endregion
 

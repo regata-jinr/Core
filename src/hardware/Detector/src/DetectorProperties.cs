@@ -25,6 +25,7 @@
 // |                                    See codes here CanberraDeviceAccessLib.ParamCodes. 
 // |                                    Also some of important parameters wrapped into properties
 // ├── DetectorProperties.cs       --> opened
+// ├── G2KUtilities.cs             --> Contains aliases for running utilities from GENIE2K/EXEFILES.
 // └── IDetector.cs                --> Interface of the Detector type
 
 
@@ -48,7 +49,7 @@ namespace Regata.Core.Hardware
 
     public partial class Detector : IDisposable
     {
-        private readonly         DeviceAccessClass  _device;
+        private readonly         DeviceAccess  _device;
         public  static           DetectorSettings DetSet = new DetectorSettings();
         private bool             _isDisposed;
         private DetectorStatus   _status;
@@ -57,6 +58,7 @@ namespace Regata.Core.Hardware
         public Irradiation       RelatedIrradiation { get; private set; }
         public event             EventHandler       StatusChanged;
         public SampleInfo Sample;
+        public bool IsConnected => _device.IsConnected;
 
         public string Name { get { return DetSet.Name; } }
 

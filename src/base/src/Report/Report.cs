@@ -61,14 +61,15 @@ namespace Regata.Core
             {
                 StackTrace st = new StackTrace();
                 StackFrame sf = st.GetFrame(1);
-                var method = sf.GetMethod();
+            var method = sf.GetMethod();
                 var status = msg.Status;
 
-                switch (msg)
-                {
-                    case DetectorMessage dmsg:
-                        break;
-                }
+                //switch (msg)
+                //{
+                //    case DetectorMessage dmsg:
+                //        break;
+                //    default Message 
+                //}
 
                 msg.Sender = method.DeclaringType.Name;
                 msg.Caption = $"{method.Module}-[{status}]-[{msg.Code}]";

@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AdysTech.CredentialManager" Version="2.2.0" />
+    <PackageReference Include="AdysTech.CredentialManager" Version="2.3.0" />
     <None Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
