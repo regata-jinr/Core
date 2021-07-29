@@ -9,18 +9,20 @@
  *                                                                         *
  ***************************************************************************/
 
-using System.Windows.Forms;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms.Controls
 {
     public partial class CheckedArrayControl<T> : UserControl, ISingleCheckedArrayControl<T>, IMultiCheckedArrayControl<T>
     {
-        private readonly CheckBox[] _checkBoxes;
+        private readonly List<CheckBox> _checkBoxes;
         private T _seletedItem;
         private List<T> _seletedItems;
-        private T[] _array;
+        private List<T> _array;
 
         /// <summary>
         /// Return one and only selected element in case of MultiSelection is false and last selected element in case of MultiSelection is true.
@@ -63,28 +65,18 @@ namespace Regata.Core.UI.WinForms.Controls
         public CheckedArrayControl(T[] array, bool multiSelection = false)
         {
             _seletedItem = default;
-            _array = array;
+            _array = new List<T>(array.Length);
+            _array.AddRange(array);
             _seletedItems = new List<T>();
             InitializeComponent();
 
             MultiSelection = multiSelection;
 
-            _checkBoxes = new CheckBox[array.Length];
+            _checkBoxes = new List<CheckBox>(array.Length);
             for (var i = 0; i < array.Length; ++i)
             {
-                _checkBoxes[i] = new CheckBox();
-                _checkBoxes[i].Name = $"rb_{typeof(T).Name}_{i}";
-                _checkBoxes[i].AutoSize = true;
-                _checkBoxes[i].UseVisualStyleBackColor = true;
-                _checkBoxes[i].Dock = DockStyle.Fill;
-                _checkBoxes[i].Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-                _checkBoxes[i].Text = array[i].ToString();
-                _checkBoxes[i].TabIndex = i;
-                _checkBoxes[i].CheckedChanged += CheckBox_CheckedChanged;
-                SetTooltip(ref _checkBoxes[i]);
-                flowLayoutPanel.Controls.Add(_checkBoxes[i]);
+                _checkBoxes.Add(CreateCheckBox(array[i]?.ToString()));
             }
-
 
             RBV_groupBoxTitle.ResumeLayout(false);
             flowLayoutPanel.ResumeLayout(false);
@@ -92,6 +84,21 @@ namespace Regata.Core.UI.WinForms.Controls
 
         }
 
+        private CheckBox CreateCheckBox(string text)
+        {
+            var cb = new CheckBox();
+            cb.Name = text;
+            cb.AutoSize = true;
+            cb.UseVisualStyleBackColor = true;
+            cb.Dock = DockStyle.Fill;
+            cb.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            cb.Text = text;
+            cb.CheckedChanged += CheckBox_CheckedChanged;
+            SetTooltip(ref cb);
+            flowLayoutPanel.Controls.Add(cb);
+
+            return cb;
+        }
 
         private void SetTooltip(ref CheckBox cb)
         {
@@ -137,11 +144,23 @@ namespace Regata.Core.UI.WinForms.Controls
                 ClearOtherSelection(r.Name);
             }
 
-
             _seletedItem = _array[r.TabIndex];
             _seletedItems.Add(_array[r.TabIndex]);
             
             SelectionChanged?.Invoke();
+        }
+
+        public void Add(T elem)
+        {
+            _checkBoxes.Add(CreateCheckBox(elem?.ToString()));
+        }
+
+        public void Remove(T elem)
+        {
+            var i = _checkBoxes.IndexOf(_checkBoxes.Where(c => c.Text == elem.ToString()).First());
+            _checkBoxes[i].CheckedChanged -= CheckBox_CheckedChanged;
+            _checkBoxes.RemoveAt(i);
+            _array.RemoveAt(i);
         }
 
     } // public partial class RadioButtonsView<T> : UserControl, IArrayControlSingleSelection<T>
