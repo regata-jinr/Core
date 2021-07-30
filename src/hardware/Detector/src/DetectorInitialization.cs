@@ -57,7 +57,6 @@ namespace Regata.Core.Hardware
         {
             try
             {
-                DetSet = new DetectorSettings();
                 DetSet.ConnectOption = ConnectOptions.aReadWrite;
                 _isDisposed = false;
                 Status = DetectorStatus.off;
@@ -66,7 +65,7 @@ namespace Regata.Core.Hardware
                 CurrentMeasurement = new Measurement();
                 DetSet.EffCalFolder = @"C:\GENIE2K\CALFILES\Efficiency";
 
-                if (!Directory.Exists(DetSet.EffCalFolder) || Directory.GetFiles(DetSet.EffCalFolder).Length == 0)
+                if (!Directory.Exists(DetSet.EffCalFolder) || Directory.GetFiles(DetSet.EffCalFolder, "*", SearchOption.AllDirectories).Length == 0)
                     Report.Notify(new DetectorMessage(Codes.ERR_DET_EFF_DIR_EMPTY));
 
                 if (DetectorExists(name))

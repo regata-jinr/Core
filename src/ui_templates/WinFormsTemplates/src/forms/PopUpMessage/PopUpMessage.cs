@@ -44,12 +44,12 @@ namespace Regata.Core.UI.WinForms.Items
                 {Status.Error,   TaskDialogIcon.ShieldErrorRedBar}
             };
 
-        public static void Show(RegataCoreMessages.Message msg, ushort autoCloseIntervalSeconds = 15)
+        public static void Show(RegataCoreMessages.Message msg, int autoCloseIntervalSeconds = 15)
         {
             new PopUpMessage(msg, autoCloseIntervalSeconds);
         }
 
-        private PopUpMessage(RegataCoreMessages.Message msg, ushort autoCloseIntervalSeconds)
+        private PopUpMessage(RegataCoreMessages.Message msg, int autoCloseIntervalSeconds)
         {
             _tdp = new TaskDialogPage();
             _tdp.Icon = _statusIcon[msg.Status];

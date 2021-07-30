@@ -17,7 +17,7 @@ namespace Regata.Core.Messages
     {
         public string Name { get; set; }
 
-        public DetectorMessage(ushort code) : base(code)
+        public DetectorMessage(int code) : base(code)
         {
             base.Head += Name;
         }

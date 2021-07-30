@@ -16,7 +16,7 @@ namespace Regata.Core.DataBase.Models
     [Table("MessageBases")]
     public class MessageBase
     {
-        public ushort Code          { get; set; }
+        public int    Code          { get; set; }
         public string Language      { get; set; }
         public string Head          { get; set; }
         public string Text          { get; set; }

@@ -74,6 +74,7 @@ namespace Regata.Core.DataBase.Models
             ClientNumber  = ir.ClientNumber;
             SampleNumber  = ir.SampleNumber;
             IrradiationId = ir.Id;
+            
         }
     
     } // public class Measurement

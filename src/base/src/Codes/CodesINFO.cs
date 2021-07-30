@@ -35,73 +35,73 @@ namespace Regata.Core
     public partial struct Codes
     {
 
-        public static bool Contains(ushort v)
+        public static bool Contains(int v)
         {
-            var codes = new List<ushort>();
+            var codes = new List<int>();
             foreach (var f in typeof(Codes).GetFields())
             {
                 var c = f.GetRawConstantValue();
-                if (!(c is ushort)) throw new InvalidOperationException("The type of code properties should be ushort");
-                if (codes.Contains((ushort)c)) throw new InvalidOperationException($"The code {(ushort)c} already exist. Give the new code for the property {f.Name}");
-                codes.Add((ushort)f.GetValue(null));
+                if (!(c is int)) throw new InvalidOperationException("The type of code properties should be int");
+                if (codes.Contains((int)c)) throw new InvalidOperationException($"The code {(int)c} already exist. Give the new code for the property {f.Name}");
+                codes.Add((int)f.GetValue(null));
             }
 
             return codes.Contains(v);
         }
 
 
-        public const ushort UNREG = 0;
+        public const int UNREG = 0;
 
 
         #region DataBase
 
-        public const ushort INFO_DB_CON    = 1;
-        public const ushort INFO_DB_INS    = 2;
-        public const ushort INFO_DB_UPD    = 3;
-        public const ushort INFO_DB_EXEC   = 4;
-        public const ushort INFO_DB_REMOVE = 5;
-        public const ushort INFO_DB_PRIV   = 6;
-        public const ushort INFO_DB_TEST   = 7;
+        public const int INFO_DB_CON    = 1;
+        public const int INFO_DB_INS    = 2;
+        public const int INFO_DB_UPD    = 3;
+        public const int INFO_DB_EXEC   = 4;
+        public const int INFO_DB_REMOVE = 5;
+        public const int INFO_DB_PRIV   = 6;
+        public const int INFO_DB_TEST   = 7;
 
         #endregion
 
 
         #region Cloud
 
-        public const ushort INFO_CLD_UPL_FILE = 100;
-        public const ushort INFO_CLD_RMV_FILE = 101;
-        public const ushort INFO_CLD_IS_EXST  = 102;
-        public const ushort INFO_CLD_FL_SHRNG = 103;
-        public const ushort INFO_CLD_CRT_DIR  = 104;
-        public const ushort INFO_CLD_DEL_FL_DIR = 105;
+        public const int INFO_CLD_UPL_FILE = 100;
+        public const int INFO_CLD_RMV_FILE = 101;
+        public const int INFO_CLD_IS_EXST  = 102;
+        public const int INFO_CLD_FL_SHRNG = 103;
+        public const int INFO_CLD_CRT_DIR  = 104;
+        public const int INFO_CLD_DEL_FL_DIR = 105;
 
         #endregion
 
         #region Detector
 
-        public const ushort INFO_DET_NAME_EXSTS       = 200;  //.Info($"Detector with name '{name}' was found in the MID wizard
-        public const ushort INFO_DET_CHNG_STATUS      = 201; // detector status has changed
-        public const ushort INFO_DET_CLN              = 202; //$"Cleaning of the detector {Name}"
-        public const ushort INFO_DET_RST              = 203; //$"Reseting of the detector {Name}"
-        public const ushort INFO_DET_RECON            = 204; //        $"Attempt to reconnect to the detector."
-        public const ushort INFO_DET_DCON             = 205; // $"Disconnecting from the detector.");
-        public const ushort INFO_DET_ACQ_START        = 206; // acqusition has started
-        public const ushort INFO_DET_ACQ_STOP         = 207;
-        public const ushort INFO_DET_ACQ_PAUSE        = 208;
-        public const ushort INFO_DET_ACQ_CLR          = 209;
-        public const ushort INFO_DET_ACQ_DONE         = 210;
-        public const ushort INFO_DET_ACQ_COUNTS_CHNG  = 211;
-        public const ushort INFO_DET_ACQ_MODE_CHNG    = 212;
-        public const ushort INFO_DET_EFF_H_FILE_ADD   = 213; //$"Efficiency file {effFileName} will add to the detector");
-        public const ushort INFO_DET_EFF_ENG_FILE_ADD = 214; //$"Efficiency file {effFileName} will add to the detector");
-        public const ushort INFO_DET_SAVED            = 215;
-        public const ushort INFO_DET_LOAD_SMPL_INFO   = 216;
+        public const int INFO_DET_NAME_EXSTS       = 200;  //.Info($"Detector with name '{name}' was found in the MID wizard
+        public const int INFO_DET_CHNG_STATUS      = 201; // detector status has changed
+        public const int INFO_DET_CLN              = 202; //$"Cleaning of the detector {Name}"
+        public const int INFO_DET_RST              = 203; //$"Reseting of the detector {Name}"
+        public const int INFO_DET_RECON            = 204; //        $"Attempt to reconnect to the detector."
+        public const int INFO_DET_DCON             = 205; // $"Disconnecting from the detector.");
+        public const int INFO_DET_ACQ_START        = 206; // acqusition has started
+        public const int INFO_DET_ACQ_STOP         = 207;
+        public const int INFO_DET_ACQ_PAUSE        = 208;
+        public const int INFO_DET_ACQ_CLR          = 209;
+        public const int INFO_DET_ACQ_DONE         = 210;
+        public const int INFO_DET_ACQ_COUNTS_CHNG  = 211;
+        public const int INFO_DET_ACQ_MODE_CHNG    = 212;
+        public const int INFO_DET_EFF_H_FILE_ADD   = 213; //$"Efficiency file {effFileName} will add to the detector");
+        public const int INFO_DET_EFF_ENG_FILE_ADD = 214; //$"Efficiency file {effFileName} will add to the detector");
+        public const int INFO_DET_SAVED            = 215;
+        public const int INFO_DET_LOAD_SMPL_INFO   = 216;
 
         #endregion
 
         #region Settings
 
-        public const ushort INFO_SET_SET_ASMBL_NAME = 400;
+        public const int INFO_SET_SET_ASMBL_NAME = 400;
 
         #endregion
 

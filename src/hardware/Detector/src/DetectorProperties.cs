@@ -58,7 +58,7 @@ namespace Regata.Core.Hardware
         public Irradiation RelatedIrradiation   { get; private set; }
         public string      FullFileSpectraName  { get; private set; }
 
-        public static DetectorSettings DetSet;
+        public static DetectorSettings DetSet = new DetectorSettings();
         public SampleInfo Sample;
         public bool   IsConnected => _device.IsConnected;
         public string Name => DetSet.Name;

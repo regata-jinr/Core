@@ -46,7 +46,7 @@ namespace Regata.Core
             _nLogger = NLog.LogManager.GetCurrentClassLogger();
         }
 
-        private static readonly Dictionary<Status, NLog.LogLevel> ExceptionLevel_LogLevel = new Dictionary<Status, NLog.LogLevel> { { Status.Error, NLog.LogLevel.Error }, { Status.Warning, NLog.LogLevel.Warn }, { Status.Info, NLog.LogLevel.Info } };
+        private static readonly Dictionary<Status, NLog.LogLevel> ExceptionLevel_LogLevel = new Dictionary<Status, NLog.LogLevel> { { Status.Error, NLog.LogLevel.Error }, { Status.Warning, NLog.LogLevel.Warn }, { Status.Info, NLog.LogLevel.Info }, { Status.Success, NLog.LogLevel.Info } };
 
 
         // FIXME: in case of one of the available detector has already opened in not read-only mode (e.g. by hand) application will not run. The problem related with this  event!
@@ -61,7 +61,7 @@ namespace Regata.Core
             {
                 StackTrace st = new StackTrace();
                 StackFrame sf = st.GetFrame(1);
-            var method = sf.GetMethod();
+                var method = sf.GetMethod();
                 var status = msg.Status;
 
                 //switch (msg)

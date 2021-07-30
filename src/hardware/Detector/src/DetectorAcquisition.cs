@@ -52,8 +52,13 @@ namespace Regata.Core.Hardware
                     Report.Notify(new DetectorMessage(Codes.ERR_DET_NOT_READY));
                     return;
                 }
-                
-                _device.SpectroscopyAcquireSetup(AcquisitionModes.aCountToRealTime, CurrentMeasurement.Duration.Value);
+
+                if (!CheckMeasurement(CurrentMeasurement))
+                {
+                    return;
+                }
+
+                _device.SpectroscopyAcquireSetup((AcquisitionModes)CurrentMeasurement.AcqMode, CurrentMeasurement.Duration.Value);
                 _device.AcquireStart(); // already async
                 Status = DetectorStatus.busy;
                 CurrentMeasurement.DateTimeStart = DateTime.Now;
@@ -136,6 +141,7 @@ namespace Regata.Core.Hardware
             {
                 _acquisitionModes = value;
                 Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_MODE_CHNG)); //$"Detector has got Acquisition mode - '{value}' and number of counts - '{Counts}'"));
+                CurrentMeasurement.AcqMode = (int?)value;
                 _device.SpectroscopyAcquireSetup(value, Counts);
             }
         }
@@ -214,6 +220,7 @@ namespace Regata.Core.Hardware
                 {
                     response = "Device ready to use!";
                     isForCalling = false;
+                    ParamChange?.Invoke(this);
                 }
 
                 if (isForCalling)

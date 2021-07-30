@@ -35,11 +35,12 @@ namespace Regata.Core.Hardware
     {
         private void AddEfficiencyCalibrationFileByHeight(float height)
         {
+            CanberraDataAccessLib.DataAccess effFile = null;
             try
             {
                 var tmpl = "2,5";
                 if (height != 2.5)
-                        tmpl = height.ToString();
+                    tmpl = height.ToString();
 
                 string effFileName = Path.Combine(DetSet.EffCalFolder, Name, $"{Name}-eff-{tmpl}.CAL");
 
@@ -49,8 +50,8 @@ namespace Regata.Core.Hardware
                     return;
                 }
 
-                Report.Notify(new DetectorMessage(Codes.INFO_DET_EFF_H_FILE_ADD)); 
-                var effFile = new CanberraDataAccessLib.DataAccess();
+                Report.Notify(new DetectorMessage(Codes.INFO_DET_EFF_H_FILE_ADD));
+                effFile = new CanberraDataAccessLib.DataAccess();
                 effFile.Open(effFileName);
                 effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_GEOM);
                 effFile.Close();
@@ -60,10 +61,17 @@ namespace Regata.Core.Hardware
             {
                 Report.Notify(new DetectorMessage(Codes.ERR_DET_EFF_H_FILE_UNREG) { DetailedText = ex.ToString() });
             }
+            finally
+            {
+                if (effFile != null && effFile.IsOpen)
+                    effFile.Close();
+            }
         }
 
         private void AddEfficiencyCalibrationFileByEnergy()
         {
+            CanberraDataAccessLib.DataAccess engFile = null;
+
             try
             {
                 string effFileName = Path.Combine(DetSet.EffCalFolder, $"{Name}", $"{Name}-energy.CAL");
@@ -75,16 +83,21 @@ namespace Regata.Core.Hardware
                 }
 
                 Report.Notify(new DetectorMessage(Codes.INFO_DET_EFF_ENG_FILE_ADD));
-                var effFile = new CanberraDataAccessLib.DataAccess();
-                effFile.Open(effFileName);
-                effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_SHAPECALRES);
-                effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_CALRESULTS);
-                effFile.Close();
+                engFile = new CanberraDataAccessLib.DataAccess();
+                engFile.Open(effFileName);
+                engFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_SHAPECALRES);
+                engFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_CALRESULTS);
+                engFile.Close();
                 _device.Save("", true);
             }
             catch (Exception ex)
             {
                 Report.Notify(new DetectorMessage(Codes.ERR_DET_EFF_ENG_FILE_UNREG) { DetailedText = ex.ToString() });
+            }
+            finally
+            {
+                if (engFile != null && engFile.IsOpen)
+                    engFile.Close();
             }
         }
 

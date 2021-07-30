@@ -61,14 +61,16 @@ namespace Regata.Core.Hardware
 
                 if (File.Exists(FullFileSpectraName))
                 {
-                    Report.Notify(new DetectorMessage(Codes.ERR_DET_FSAVE_DUPL));
+                    Report.Notify(new DetectorMessage(Codes.WARN_DET_FSAVE_DUPL));
                     FullFileSpectraName = GetUniqueName(FullFileSpectraName);
                 }
 
                 _device.Save(FullFileSpectraName);
 
                 if (File.Exists(FullFileSpectraName))
+                {
                     Report.Notify(new DetectorMessage(Codes.SUCC_DET_FILE_SAVED));
+                }
                 else
                 {
                     Report.Notify(new DetectorMessage(Codes.ERR_DET_FILE_NOT_SAVED));

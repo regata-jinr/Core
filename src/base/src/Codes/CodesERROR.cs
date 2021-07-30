@@ -108,7 +108,6 @@ namespace Regata.Core
         public const int ERR_DET_IRR_EMPTY = 3226;
         public const int ERR_DET_FILE_SAVE_UNREG = 3227;
         public const int ERR_DET_FILE_NOT_SAVED = 3228;
-        public const int ERR_DET_FSAVE_DUPL = 3229;
         public const int ERR_DET_GET_DEADT_UNREG = 3230;
         public const int ERR_DET_LOAD_SMPL_INFO_UNREG = 3231;
         public const int ERR_DET_NAME_N_EXST = 3232;

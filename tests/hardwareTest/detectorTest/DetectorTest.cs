@@ -90,6 +90,7 @@ namespace Regata.Tests.Hardware.Detectors
 
             var m = new Measurement(sd);
             m.Duration = 5;
+            m.AcqMode = 2;
             m.Detector = "D1";
             m.Height = 10;
             m.Type = 0;

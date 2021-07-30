@@ -58,12 +58,17 @@ namespace Regata.Core.Hardware
                     return;
                 }
 
-                _device.Param[parCode] = val.ToString();
+                _ = parCode switch
+                {
+                    ParamCodes.CAM_T_SGEOMTRY => _device.Param[parCode] = val.ToString(),
+                    _ => _device.Param[parCode] = val
+                };
+
                 _device.Save("", true);
             }
-            catch (Exception ex)
+            catch
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_SET_PARAM_UNREG) { DetailedText = ex.ToString() });
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_SET_PARAM_UNREG) { DetailedText = Enum.GetName(typeof(ParamCodes), parCode) });
             }
         }
 

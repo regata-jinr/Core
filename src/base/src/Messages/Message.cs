@@ -28,7 +28,7 @@ namespace Regata.Core.Messages
 
         private MessageBase _mb;
 
-        public Message(ushort code)
+        public Message(int code)
         {
             Code = code;
             Status = code == 0 ? Status.Error : (Status)(code / 1000);
