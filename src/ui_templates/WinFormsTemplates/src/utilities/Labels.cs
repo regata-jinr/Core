@@ -35,11 +35,11 @@ namespace Regata.Core.UI.WinForms
             }
         }
 
-        public static void SetControlsLabels(Control.ControlCollection controls)
+        public static void SetControlsLabels(Control control)
         {
-            _formName = controls.Owner.TopLevelControl.Name;
-            foreach (var cont in controls)
-                Utilities.ApplyActionToControl(cont, SetTextField);
+            _formName = control.TopLevelControl.Name;
+             Utilities.ApplyActionToControl(control, SetTextField);
+            //foreach (var cont in control.Controls)
         }
 
         /// <summary>

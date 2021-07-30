@@ -50,20 +50,25 @@ namespace Regata.Core.Hardware
     public partial class Detector : IDisposable
     {
         private readonly         DeviceAccess  _device;
-        public  static           DetectorSettings DetSet = new DetectorSettings();
         private bool             _isDisposed;
         private DetectorStatus   _status;
-        public Measurement       CurrentMeasurement { get; private set; }
-        public string            CurrentUser { get; set; }
-        public Irradiation       RelatedIrradiation { get; private set; }
-        public event             EventHandler       StatusChanged;
+
+        public Measurement CurrentMeasurement   { get; private set; }
+        public string      CurrentUser          { get; set; }
+        public Irradiation RelatedIrradiation   { get; private set; }
+        public string      FullFileSpectraName  { get; private set; }
+
+        public static DetectorSettings DetSet;
         public SampleInfo Sample;
-        public bool IsConnected => _device.IsConnected;
+        public bool   IsConnected => _device.IsConnected;
+        public string Name => DetSet.Name;
 
-        public string Name { get { return DetSet.Name; } }
-
-        public string FullFileSpectraName              { get; private set; }
+        public event  EventHandler                     StatusChanged;
         public event  EventHandler<DetectorEventsArgs> AcquiringStatusChanged;
+        public event  Action<Detector>                 AcquireDone;
+        public event  Action<Detector>                 AcquireStart;
+        public event  Action<Detector>                 HardwareError;
+        public event  Action<Detector>                 ParamChange;
 
         private bool DetectorExists(string name)
         {

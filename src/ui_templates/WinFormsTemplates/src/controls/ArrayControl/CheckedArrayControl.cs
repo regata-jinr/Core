@@ -144,14 +144,15 @@ namespace Regata.Core.UI.WinForms.Controls
                 ClearOtherSelection(r.Name);
             }
 
-            _seletedItem = _array[r.TabIndex];
-            _seletedItems.Add(_array[r.TabIndex]);
+            _seletedItem = _array.Find(a => a.ToString() == r.Name );
+            _seletedItems.Add(_seletedItem);
             
             SelectionChanged?.Invoke();
         }
 
         public void Add(T elem)
         {
+            _array.Add(elem);
             _checkBoxes.Add(CreateCheckBox(elem?.ToString()));
         }
 
@@ -160,7 +161,7 @@ namespace Regata.Core.UI.WinForms.Controls
             var i = _checkBoxes.IndexOf(_checkBoxes.Where(c => c.Text == elem.ToString()).First());
             _checkBoxes[i].CheckedChanged -= CheckBox_CheckedChanged;
             _checkBoxes.RemoveAt(i);
-            _array.RemoveAt(i);
+            _array.Remove(elem);
         }
 
     } // public partial class RadioButtonsView<T> : UserControl, IArrayControlSingleSelection<T>

@@ -29,6 +29,7 @@ namespace Regata.Core.UI.WinForms
         /// <param name="act">Action delegate with object as paramter</param>
         internal static void ApplyActionToControl(object control, Action<object> act)
         {
+            
             switch (control)
             {
                 case DataGridView dgv:

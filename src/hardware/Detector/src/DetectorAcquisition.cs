@@ -182,7 +182,7 @@ namespace Regata.Core.Hardware
         private void DeviceMessagesHandler(int message, int wParam, int lParam)
         {
             string response = "";
-            bool isForCalling = false;
+            bool isForCalling = true;
             try
             {
                 if ((int)AdviseMessageMasks.amAcquireDone == lParam && !IsPaused)
@@ -191,7 +191,7 @@ namespace Regata.Core.Hardware
                     response = "Acquire has done";
                     Status = DetectorStatus.ready;
                     CurrentMeasurement.DateTimeFinish = DateTime.Now;
-                    isForCalling = true;
+                    AcquireDone?.Invoke(this);
                 }
 
                 if ((int)AdviseMessageMasks.amAcquireStart == lParam)
@@ -199,7 +199,7 @@ namespace Regata.Core.Hardware
                     Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_START)); //$"Has got message amAcquireStart."));
                     response = "Acquire has start";
                     Status = DetectorStatus.busy;
-                    isForCalling = true;
+                    AcquireStart?.Invoke(this);
                 }
 
                 if ((int)AdviseMessageMasks.amHardwareError == lParam)
@@ -207,12 +207,13 @@ namespace Regata.Core.Hardware
                     Status = DetectorStatus.error;
                     ErrorMessage = $"{_device.Message((MessageCodes)lParam)}";
                     response = ErrorMessage;
-                    isForCalling = true;
                     Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_HRDW));
+                    HardwareError?.Invoke(this);
                 }
                 if ((int)AdviseMessageMasks.amAcquisitionParamChange == lParam)
                 {
                     response = "Device ready to use!";
+                    isForCalling = false;
                 }
 
                 if (isForCalling)

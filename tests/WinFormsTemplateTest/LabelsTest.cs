@@ -35,11 +35,11 @@ namespace Regata.Tests.WinForms
             Settings<LabelsSettings>.AssemblyName = "LabelsTest";
         }
 
-        private string[] russianLabels1 = { "Журналы облучений1", "Журналы измерений1", "Список111", "Список121", "Список211", "Список221", "Загрузка1", "Дата1", "Дата1" };
-        private string[] englishLabels1 = { "Irradiation Registers1", "Measurement Registers1", "List111", "List121", "List211", "List221", "LoadNumber1", "Date1", "Date1" };
+        private string[] russianLabels1 = { "Журналы облучений1", "Журналы измерений1", "Список111", "Список121", "Список211", "Список221", "Загрузка1", "Дата1", "Дата1", "Тестовая форма1" };
+        private string[] englishLabels1 = { "Irradiation Registers1", "Measurement Registers1", "List111", "List121", "List211", "List221", "LoadNumber1", "Date1", "Date1", "Testing form1" };
         
-        private string[] russianLabels = { "Журналы облучений", "Журналы измерений", "Список11", "Список12", "Список21", "Список22", "Загрузка", "Дата", "Дата" };
-        private string[] englishLabels = { "Irradiation Registers", "Measurement Registers", "List11", "List12", "List21", "List22", "LoadNumber", "Date", "Date" };
+        private string[] russianLabels = { "Журналы облучений", "Журналы измерений", "Список11", "Список12", "Список21", "Список22", "Загрузка", "Дата", "Дата", "Тестовая форма" };
+        private string[] englishLabels = { "Irradiation Registers", "Measurement Registers", "List11", "List12", "List21", "List22", "LoadNumber", "Date", "Date", "Testing form" };
 
         private RegisterForm<Irradiation> Create_Form(string name)
         {

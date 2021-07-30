@@ -57,7 +57,7 @@ namespace Regata.Core.Hardware
         {
             try
             {
-
+                DetSet = new DetectorSettings();
                 DetSet.ConnectOption = ConnectOptions.aReadWrite;
                 _isDisposed = false;
                 Status = DetectorStatus.off;
@@ -98,7 +98,7 @@ namespace Regata.Core.Hardware
             }
         }
 
-        private void CleanUp(bool isDisposing)
+        private void Dispose(bool isDisposing)
         {
             Report.Notify(new DetectorMessage(Codes.INFO_DET_CLN));
 
@@ -115,7 +115,7 @@ namespace Regata.Core.Hardware
 
         ~Detector()
         {
-            CleanUp(false);
+            Dispose(false);
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Regata.Core.Hardware
         /// </summary>
         public void Dispose()
         {
-            CleanUp(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -149,5 +149,5 @@ namespace Regata.Core.Hardware
             }
         }
 
-    } //  public partial class Detector : IDisposable
+    } // public partial class Detector : IDisposable
 }     // namespace Regata.Core.Hardware
