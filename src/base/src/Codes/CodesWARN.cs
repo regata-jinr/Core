@@ -43,6 +43,8 @@ namespace Regata.Core
         public const int WARN_DET_CONN_TIMEOUT = 2201;  // "Can not to disconnect from detector {_name}. Exceeded timeout limit.");
         public const int WARN_DET_RST = 2202;
         public const int WARN_DET_FSAVE_DUPL = 2203;
+        public const int WARN_DET_FSAVE_NOT_UNIQ_DB = 2204;
+        public const int WARN_DET_FSAVE_NOT_UNIQ_LCL = 2205;
 
 
         #endregion

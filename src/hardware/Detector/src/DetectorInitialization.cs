@@ -57,6 +57,9 @@ namespace Regata.Core.Hardware
         {
             try
             {
+                DetSet = new DetectorSettings();
+                Sample = new SampleInfo(this);
+
                 DetSet.ConnectOption = ConnectOptions.aReadWrite;
                 _isDisposed = false;
                 Status = DetectorStatus.off;
@@ -83,7 +86,6 @@ namespace Regata.Core.Hardware
                 Connect();
 
                 AcquisitionMode = AcquisitionModes.aCountToRealTime;
-                Sample = new SampleInfo(this);
 
                 CurrentUser = currentUser;
 

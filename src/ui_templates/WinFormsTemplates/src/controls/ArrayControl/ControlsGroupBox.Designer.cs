@@ -49,7 +49,6 @@ namespace Regata.Core.UI.WinForms.Controls
             // 
             // _tableLayoutPanel
             // 
-            this._tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this._tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             //this._tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this._tableLayoutPanel.Name = "_tableLayoutPanel";

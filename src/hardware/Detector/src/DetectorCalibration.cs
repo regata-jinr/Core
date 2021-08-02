@@ -50,12 +50,11 @@ namespace Regata.Core.Hardware
                     return;
                 }
 
-                Report.Notify(new DetectorMessage(Codes.INFO_DET_EFF_H_FILE_ADD));
                 effFile = new CanberraDataAccessLib.DataAccess();
                 effFile.Open(effFileName);
                 effFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_GEOM);
-                effFile.Close();
                 _device.Save("", true);
+                Report.Notify(new DetectorMessage(Codes.INFO_DET_EFF_H_FILE_ADD));
             }
             catch (Exception ex)
             {
@@ -82,13 +81,12 @@ namespace Regata.Core.Hardware
                     return;
                 }
 
-                Report.Notify(new DetectorMessage(Codes.INFO_DET_EFF_ENG_FILE_ADD));
                 engFile = new CanberraDataAccessLib.DataAccess();
                 engFile.Open(effFileName);
                 engFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_SHAPECALRES);
                 engFile.CopyBlock(_device, CanberraDataAccessLib.ClassCodes.CAM_CLS_CALRESULTS);
-                engFile.Close();
                 _device.Save("", true);
+                Report.Notify(new DetectorMessage(Codes.INFO_DET_EFF_ENG_FILE_ADD));
             }
             catch (Exception ex)
             {

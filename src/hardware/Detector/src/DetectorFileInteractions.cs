@@ -29,7 +29,9 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using CanberraDeviceAccessLib;
+using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
 using Regata.Core.Messages;
 
@@ -47,6 +49,8 @@ namespace Regata.Core.Hardware
                 if (!_device.IsConnected || Status == DetectorStatus.off)
                     Report.Notify(new DetectorMessage(Codes.ERR_DET_FSAVE_DCON));
 
+               
+
                 if (string.IsNullOrEmpty(fileName))
                 {
                     var _currentDir = Path.Combine(@"D:\Spectra", 
@@ -56,7 +60,10 @@ namespace Regata.Core.Hardware
                                                    );
 
                     Directory.CreateDirectory(_currentDir);
-                    FullFileSpectraName = Path.Combine(_currentDir, $"{CurrentMeasurement.FileSpectra}.cnf");
+                    if (string.IsNullOrEmpty(CurrentMeasurement.FileSpectra))
+                        FullFileSpectraName = Path.Combine(_currentDir, $"{CurrentMeasurement}.cnf");
+                    else 
+                        FullFileSpectraName = Path.Combine(_currentDir, $"{CurrentMeasurement.FileSpectra}.cnf");
                 }
 
                 if (File.Exists(FullFileSpectraName))
@@ -226,6 +233,102 @@ namespace Regata.Core.Hardware
         {
             _device.Param[ParamCodes.CAM_F_SQUANT]      = wght;       // weight
         }
+
+
+        /// <summary>
+        /// Generator of unique name of file spectra
+        /// Name of file spectra should be unique and it has constraint in data base
+        /// There is an algorithm:
+        /// For the specified type it determines maximum of spectra number from the numbers that might be converted to integer number
+        /// Then it choose the max number and convert it to string using next code:
+        /// First digit of name spectra is the digit from the name of detector
+        /// Second digit is number of type - {SLI - 0} {LLI-1 - 1} {LLI-2 - 2}
+        /// The next five digits is number of spectra
+        /// Typical name of spectra file: 1006261 means
+        /// The spectra was acquried on detector 'D1' it was SLI type and it has a number 6261.
+        /// **Pay attention that beside FileSpectra filed in MeasurementInfo**
+        /// **each Detector has a property with FullName that included path on local storage**
+        /// <see cref="Detector.FullFileSpectraName"/>
+        /// </summary>
+        /// <param name="detName">Name of detector which save acquiring session to file</param>
+        /// <returns>Name of spectra file</returns>
+
+        public static async Task<string> GenerateSpectraFileNameFromDBAsync(string dName, int type)
+        {
+            return await Task.Run(async () =>
+            {
+                try
+                {
+                    using (var r = new RegataContext())
+                    {
+                        var spectras = r.Measurements.Where(m => (
+                                                                   m.FileSpectra.Length == 7 &&
+                                                                   m.Type == type &&
+                                                                   m.FileSpectra.Substring(0, 1) == dName.Substring(1, 1)
+                                                                )
+                                                        )
+                                                  .Select(m => new
+                                                  {
+                                                      FileNumber = m.FileSpectra.Substring(2, 5)
+                                                  }
+                                                         )
+                                                  .ToArray();
+
+                        int maxNumber = spectras.Where(s => int.TryParse(s.FileNumber, out _)).Select(s => int.Parse(s.FileNumber)).Max();
+
+
+                        return $"{dName.Substring(1, 1)}{type}{(++maxNumber).ToString("D5")}";
+                    }
+                }
+                catch (Exception e)
+                {
+                    Report.Notify(new DetectorMessage(Codes.WARN_DET_FSAVE_NOT_UNIQ_DB));
+                    return await GenerateSpectraFileNameFromLocalStorageAsync(dName, type);
+                }
+            });
+        }
+
+        private static bool IsNumber(string str)
+        {
+            return int.TryParse(str, out _);
+        }
+
+
+        public static async Task<string> GenerateSpectraFileNameFromLocalStorageAsync(string dName, int type)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    if (!Directory.Exists(@"D:\Spectra"))
+                        throw new Exception("Spectra Directory doesn't exist");
+
+                    var dir = new DirectoryInfo(@"D:\Spectra");
+                    var files = dir.GetFiles("*.cnf", SearchOption.AllDirectories).Where(f => f.CreationTime >= DateTime.Now.AddDays(-30)).ToList();
+
+                    int maxNumber = files.Where(f =>
+                                                f.Name.Length == 11 &&
+                                                f.Name.Substring(1, 1) == type.ToString() &&
+                                                IsNumber(Path.GetFileNameWithoutExtension(f.Name)) &&
+                                                f.Name.Substring(0, 1) == dName.Substring(1, 1)
+                                           ).
+                                      Select(f => new
+                                      {
+                                          FileNumber = int.Parse(f.Name.Substring(2, 5))
+                                      }
+                                            ).
+                                      Max(f => f.FileNumber);
+
+                    return $"{dName.Substring(1, 1)}{type}{(++maxNumber).ToString("D5")}";
+                }
+                catch (Exception e)
+                {
+                    Report.Notify(new DetectorMessage(Codes.WARN_DET_FSAVE_NOT_UNIQ_LCL));
+                    return "";
+                }
+            });
+        }
+
 
     } // public partial class Detector : IDisposable
 }     // namespace Regata.Core.Hardware

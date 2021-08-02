@@ -167,7 +167,7 @@ namespace Regata.Core.Hardware
 
         public static async Task<bool> IsDetectorAvailableAsync(string name)
         {
-            var ct = new CancellationTokenSource(DetSet.ConnectionTimeOut);
+            var ct = new CancellationTokenSource(TimeSpan.FromSeconds(10));
             try
             {
                 return await Task.Run(() => IsDetectorAvailable(name), ct.Token);

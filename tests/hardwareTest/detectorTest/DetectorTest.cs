@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 using CanberraDataAccessLib;
+using cdl = CanberraDeviceAccessLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Regata.Core.DataBase.Models;
 using Regata.Core.Hardware;
@@ -184,6 +185,56 @@ namespace Regata.Tests.Hardware.Detectors
                 CollectionAssert.AreNotEqual(new string[] { "D1", "D2", "D3", "D4" }, await Detector.GetAvailableDetectorsAsync());
                 CollectionAssert.AreEqual(new string[] { "D2", "D3", "D4" }, await Detector.GetAvailableDetectorsAsync());
                 Detector.CloseDetector("D1");
+            }
+        }
+
+
+        [TestMethod]
+        public void LoadingEfficiencyByHeightTest()
+        {
+            using (var d = new Detector("D1"))
+            {
+                var sd = new Irradiation()
+                {
+                    CountryCode = "RO",
+                    ClientNumber = "2",
+                    Year = "19",
+                    SetNumber = "12",
+                    SetIndex = "b",
+                    SampleNumber = "2",
+                    Assistant = 1,
+                    Note = "test2",
+                    DateTimeStart = DateTime.Now,
+                    DateTimeFinish = DateTime.Now.AddSeconds(3),
+                    Duration = 3
+                };
+
+                var m = new Measurement(sd);
+                m.Duration = 5;
+                m.AcqMode = 2;
+                m.Detector = "D1";
+                m.Height = 20;
+                m.Type = 0;
+                m.FileSpectra = "testD1";
+                m.Assistant = 150562;
+                m.Note = "bdrum-test";
+
+                d.LoadMeasurementInfoToDevice(m, sd);
+
+                Assert.AreEqual("D1-b16021-H20", d.GetParameterValue<string>(cdl.ParamCodes.CAM_T_GEOMETRY));
+
+                m.Height = 10;
+                d.LoadMeasurementInfoToDevice(m, sd);
+                Assert.AreEqual("D1-b16021-H10", d.GetParameterValue<string>(cdl.ParamCodes.CAM_T_GEOMETRY));
+
+                m.Height = 5;
+                d.LoadMeasurementInfoToDevice(m, sd);
+                Assert.AreEqual("D1-b16021-H5", d.GetParameterValue<string>(cdl.ParamCodes.CAM_T_GEOMETRY));
+
+                m.Height = 2.5f;
+                d.LoadMeasurementInfoToDevice(m, sd);
+                Assert.AreEqual("D1-b16021-H2,5", d.GetParameterValue<string>(cdl.ParamCodes.CAM_T_GEOMETRY));
+
             }
         }
 
