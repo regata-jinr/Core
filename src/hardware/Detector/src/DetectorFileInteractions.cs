@@ -116,7 +116,7 @@ namespace Regata.Core.Hardware
                 Sample.DateTimeStart   = irradiation.DateTimeStart.Value;        // irr start date time
                 Sample.DateTimeFinish    = irradiation.DateTimeFinish.Value;       // irr finish date time
                 Sample.StatError    = 0;                                      // Random sample error (%)
-                Sample.SysEror    = 0;                                      // Non-random sample error (%)
+                Sample.SysEror      = 0;                                      // Non-random sample error (%)
                 Sample.Type = Measurement.TypeToString[(MeasurementsType)measurement.Type];
                 Sample.Height   = measurement.Height.Value; // height
                 Sample.Note = CurrentMeasurement.Note; //filling description field in file
@@ -228,12 +228,6 @@ namespace Regata.Core.Hardware
             }
             return Path.Combine(folderPath, $"{validatedName}.cnf");
         }
-
-        public void SetWeight(float wght)
-        {
-            _device.Param[ParamCodes.CAM_F_SQUANT]      = wght;       // weight
-        }
-
 
         /// <summary>
         /// Generator of unique name of file spectra

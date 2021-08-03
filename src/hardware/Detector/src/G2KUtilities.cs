@@ -37,30 +37,36 @@ namespace Regata.Core.Hardware
 {
     public partial class Detector : IDisposable
     {
-        //TODO: async code doesn't work!
-
-        private const int _timeOut = 5;
+        private const int _timeOutSec = 5;
 
         public static async Task<ProcessResult> RunMvcgAsync()
         {
-            var result = await ExecuteShellCommand("putview.exe", @"/CXCY=-100,-100 /NO_DATASRC");
-            return result;
+            return await ExecuteShellCommandAsync("putview.exe", @"/CXCY=-100,-100 /NO_DATASRC");
         }
 
         public static async Task<ProcessResult> ShowDetectorInMvcgAsync(string det)
         {
-            var result = await ExecuteShellCommand("pvopen.exe", $"DET:{det} //READ_ONLY");
-            return result;
+            return await ExecuteShellCommandAsync("pvopen.exe", $"DET:{det} /READ_ONLY");
         }
 
         public static async Task<ProcessResult> CloseMvcgAsync()
         {
-            var result = await ExecuteShellCommand("endview.exe", "");
-            return result;
+            return await ExecuteShellCommandAsync("endview.exe");
+        }
+
+        public static async Task<ProcessResult> SelectDetectorAsync(string det)
+        {
+            return await ExecuteShellCommandAsync("pvselect.exe", $"DET:{det}");
+        }
+
+        public static async Task<ProcessResult> CloseDetectorAsync(string det)
+        {
+            return await ExecuteShellCommandAsync("pvclose.exe", $"DET:{det}");
         }
 
 
-        public static async Task<ProcessResult> ExecuteShellCommand(string command, string arguments)
+
+        private static async Task<ProcessResult> ExecuteShellCommandAsync(string command, string arguments = "")
         {
             var result = new ProcessResult();
 
@@ -133,13 +139,13 @@ namespace Regata.Core.Hardware
                     process.BeginErrorReadLine();
 
                     // Creates task to wait for process exit using timeout
-                    var waitForExit = WaitForExitAsync(process, _timeOut);
+                    var waitForExit = WaitForExitAsync(process, _timeOutSec);
 
                     // Create task to wait for process exit and closing all output streams
                     var processTask = Task.WhenAll(waitForExit, outputCloseEvent.Task, errorCloseEvent.Task);
 
                     // Waits process completion and then checks it was not completed by timeout
-                    if (await Task.WhenAny(Task.Delay(_timeOut), processTask) == processTask && waitForExit.Result)
+                    if (await Task.WhenAny(Task.Delay(TimeSpan.FromSeconds(_timeOutSec)), processTask) == processTask && waitForExit.Result)
                     {
                         result.Completed = true;
                         result.ExitCode = process.ExitCode;
@@ -163,14 +169,12 @@ namespace Regata.Core.Hardware
                     }
                 }
             }
-
             return result;
         }
 
-
         private static Task<bool> WaitForExitAsync(Process process, int timeout)
         {
-            return Task.Run(() => process.WaitForExit(timeout));
+            return Task.Run(() => process.WaitForExit(timeout*1000));
         }
 
         public struct ProcessResult
@@ -180,37 +184,6 @@ namespace Regata.Core.Hardware
             public string Output;
         }
 
-
-        public static void Run(string command, string arguments)
-        {
-            using (var process = new Process())
-            {
-                process.StartInfo.FileName = command;
-                process.StartInfo.Arguments = arguments;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardInput = true;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.StartInfo.CreateNoWindow = true;
-                process.StartInfo.WorkingDirectory = @"C:\GENIE2K\EXEFILES";
-                process.Start();
-            }
-            //catch (Exception ex)
-            //{
-            //    MessageBoxTemplates.ErrorSync(ex.ToString()); 
-            //}
-
-        }
-
-        public static void RunMvcg() => Run("putview.exe", @"/CXCY=-100,-100 /NO_DATASRC");
-
-        public static void ShowDetectorInMvcg(string det) => Run("pvopen.exe", $"DET:{det} /READ_ONLY");
-
-        public static void CloseDetector(string det) => Run("pvclose.exe", $"DET:{det}");
-
-        public static void SelectDetector(string det) => Run("pvselect.exe", $"DET:{det}");
-
-        public static void CloseMvcg() => Run("endview.exe", "");
 
     } // public partial class Detector : IDisposable
 }     // namespace Regata.Core.Hardware
