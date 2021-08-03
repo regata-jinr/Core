@@ -38,6 +38,14 @@ namespace Regata.Tests.Collections
                 Assert.AreEqual(i % 7, cl.Current);
                 cl.MoveBack();
             }
+
+            cl.Reset();
+
+            Assert.AreEqual(0, cl.Current);
+            Assert.AreEqual(1, cl.Next);
+            Assert.AreEqual(6, cl.Prev);
+            Assert.AreEqual(3, cl[3]);
+
         }
 
     } // public class CircularListTest

@@ -37,7 +37,7 @@ namespace Regata.Core.Hardware
 {
     public partial class Detector : IDisposable
     {
-        private const int _timeOutSec = 5;
+        private const int _timeOutSec = 15;
 
         public static async Task<ProcessResult> RunMvcgAsync()
         {
@@ -183,7 +183,6 @@ namespace Regata.Core.Hardware
             public int? ExitCode;
             public string Output;
         }
-
 
     } // public partial class Detector : IDisposable
 }     // namespace Regata.Core.Hardware

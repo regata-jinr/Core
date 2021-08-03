@@ -36,6 +36,21 @@ namespace Regata.Core.Collections
         
         public T[] ToArray() => _arr;
 
+        public T Next => this[_ind + 1];
+        public T Prev => this[_ind - 1];
+
+        public T this[int i]
+        {
+            get 
+            {
+                if (i >= _arr.Length)
+                    return _arr[0];
+                if (i < 0)
+                    return _arr[_arr.Length - 1];
+                return _arr[i];
+            }
+        }
+
         public bool MoveForward()
         {
             _ind++;

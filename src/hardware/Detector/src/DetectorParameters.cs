@@ -84,6 +84,7 @@ namespace Regata.Core.Hardware
             set
             {
                 SetParameterValue(ParamCodes.CAM_X_PREAL, value);
+                Counts = (int)value;
             }
         }
 

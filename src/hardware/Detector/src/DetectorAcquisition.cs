@@ -153,6 +153,7 @@ namespace Regata.Core.Hardware
             set
             {
                 _counts = value;
+                CurrentMeasurement.Duration = _counts;
                 Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_COUNTS_CHNG)); //$"Detector has got Acquisition mode - '{AcquisitionMode}' and number of counts - '{value}'"));
                 _device.SpectroscopyAcquireSetup(AcquisitionMode, value);
             }
