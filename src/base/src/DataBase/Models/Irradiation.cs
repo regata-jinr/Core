@@ -18,7 +18,7 @@ namespace Regata.Core.DataBase.Models
 {
     public enum IrradiationType { sli, lli1, lli2, bckg };
 
-    public class Irradiation
+    public class Irradiation : ISample
     {
         [Key]
         public int       Id             { get; set; }

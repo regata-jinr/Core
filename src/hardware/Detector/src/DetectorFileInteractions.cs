@@ -122,6 +122,31 @@ namespace Regata.Core.Hardware
                 Sample.Type = Measurement.TypeToString[(MeasurementsType)measurement.Type];
                 Sample.Height   = measurement.Height.Value; // height
                 Sample.Note = CurrentMeasurement.Note; //filling description field in file
+
+                if (measurement.Year == "s")
+                {
+                    Sample.Weight = measurement.Type switch
+                    {
+                        0 => Data.GetSrmOrMonitor<Standard>(measurement.ToString()).SLIWeight ?? 0,
+                        _ => Data.GetSrmOrMonitor<Standard>(measurement.ToString()).LLIWeight ?? 0
+                    };
+                }
+                else if (measurement.Year == "m")
+                {
+                    Sample.Weight = measurement.Type switch
+                    {
+                        0 => Data.GetSrmOrMonitor<Monitor>(measurement.ToString()).SLIWeight ?? 0,
+                        _ => Data.GetSrmOrMonitor<Monitor>(measurement.ToString()).LLIWeight ?? 0
+                    };
+                }
+                else
+                {
+                    Sample.Weight = measurement.Type switch
+                    {
+                        0 => Data.GetSampleSLIWeight(measurement) ?? 0,
+                        _ => Data.GetSampleLLIWeight(measurement) ?? 0
+                    };
+                }
                 Counts = measurement.Duration.Value;
                 
                 AddEfficiencyCalibrationFileByEnergy();

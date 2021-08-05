@@ -18,14 +18,14 @@ namespace Regata.Core.DataBase
 {
     public class RegataContext : DbContext
     {
-     // public DbSet<Monitor>              Monitors              { get; set; }
      // public DbSet<MonitorsSet>          MonitorsSets          { get; set; }
-     // public DbSet<SRM>                  SRMs                  { get; set; }
      // public DbSet<SRMsSet>              SRMsSets              { get; set; }
-     // public DbSet<reweightInfo>         Reweights             { get; set; }
 
         public DbSet<Sample>               Samples               { get; set; }
+        public DbSet<ReweightInfo>         ReweightInfoes        { get; set; }
         public DbSet<SamplesSet>           SamplesSets           { get; set; }
+        public DbSet<Standard>             Standards             { get; set; }
+        public DbSet<Monitor>              Monitors              { get; set; }
         public DbSet<Irradiation>          Irradiations          { get; set; }
         public DbSet<Measurement>          Measurements          { get; set; }
         public DbSet<MeasurementsRegister> MeasurementsRegisters { get; set; }
@@ -96,6 +96,18 @@ namespace Regata.Core.DataBase
                                    s.SampleNumber
                                });
 
+            modelBuilder.Entity<ReweightInfo>()
+                              .HasKey(ri => new
+                              {
+                                  ri.LoadNumber,
+                                  ri.CountryCode,
+                                  ri.ClientNumber,
+                                  ri.Year,
+                                  ri.SetNumber,
+                                  ri.SetIndex,
+                                  ri.SampleNumber
+                              });
+
             modelBuilder.Entity<SamplesSet>()
                                .HasKey(s => new
                                {
@@ -106,15 +118,25 @@ namespace Regata.Core.DataBase
                                    s.Sample_Set_Index
                                });
 
+            modelBuilder.Entity<Standard>()
+                               .HasKey(srm => new
+                               {
+                                   srm.SetName,
+                                   srm.SetNumber,
+                                   srm.Number
+                               });
+
+            modelBuilder.Entity<Monitor>()
+                               .HasKey(m => new
+                               {
+                                   m.SetName,
+                                   m.SetNumber,
+                                   m.Number
+                               });
+
             #region to be added
 
-            //modelBuilder.Entity<Monitor>()
-            //                   .HasKey(s => new
-            //                   {
-            //                       s.Monitor_Set_Name,
-            //                       s.Monitor_Set_Number,
-            //                       s.Monitor_Number
-            //                   });
+
 
             //modelBuilder.Entity<MonitorsSet>()
             //                   .HasKey(s => new
@@ -123,13 +145,6 @@ namespace Regata.Core.DataBase
             //                       s.Monitor_Set_Number
             //                   });
 
-            //modelBuilder.Entity<SRM>()
-            //                   .HasKey(s => new
-            //                   {
-            //                       s.SRM_Set_Name,
-            //                       s.SRM_Set_Number,
-            //                       s.SRM_Number
-            //                   });
 
             //modelBuilder.Entity<SRMsSet>()
             //                   .HasKey(s => new
@@ -137,17 +152,6 @@ namespace Regata.Core.DataBase
             //                       s.SRM_Set_Name,
             //                       s.SRM_Set_Number
             //                   });
-
-            //modelBuilder.Entity<reweightInfo>().HasKey(s => new
-            //{
-            //    s.loadNumber,
-            //    s.Country_Code,
-            //    s.Client_Id,
-            //    s.Year,
-            //    s.Sample_Set_Id,
-            //    s.Sample_Set_Index,
-            //    s.Sample_ID
-            //});
 
             #endregion
 

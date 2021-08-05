@@ -24,8 +24,8 @@ namespace Regata.Core
     ///    -[3300-3399) - Logger             error codes
     ///    -[3400-3499) - Settings           error codes
     ///    -[3500-3599) - Export:Excel       error codes
-    ///    -[3600-3699) - Export:GoogleSheet error codes
-    ///    -[3700-3799) - Export:CSV         error codes
+    ///    -[3600-3699) - Data               error codes
+    ///    -[3700-3799) -                    error codes
     ///    -[3800-3899) - UI:WinForms        error codes
     ///    -[3900-3999) - UI:WinForms        error codes
     /// </summary>
@@ -154,24 +154,31 @@ namespace Regata.Core
 
 
         #region Export Errors
+        // 3500 - 3599
 
         #region Excel Errors
-        // 3500 - 3599
 
         #endregion
 
         #region Google sheets Errors
-        // 3600 - 3699
 
         #endregion
 
         #region CSV Errors
-        // 3700 - 3799
 
         #endregion
 
         #endregion
 
+        #region Data Errors
+        // 3600 - 3699
+
+        public const int ERR_DATA_GET_SSID = 3600;
+        public const int ERR_DATA_GET_SRMSID = 3601;
+
+
+
+        #endregion
 
         #region UI:Winforms Errors
 
