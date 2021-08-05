@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-
 using CanberraDeviceAccessLib;
+using Regata.Core.Messages;
 using System;
 
 namespace Regata.Core.Hardware
@@ -171,7 +171,6 @@ namespace Regata.Core.Hardware
                 }
             }
 
-
             public float Height
             {
                 get
@@ -243,10 +242,53 @@ namespace Regata.Core.Hardware
                             break;
                     }
                 }
+            } // public string Note
+
+            //NOTE There is an another solution - create empty spectra (save file after new detector added) and make emptyFile.CopyBlock(det, CanberraDataAccessLib.ClassCodes.CAM_CLS_SAMP);
+            /// <summary>
+            /// Method clears detector sample info block
+            /// </summary>
+            public void Clear()
+            {
+                try
+                {
+                    SampleKey = string.Empty;
+                    SampleCode = string.Empty;
+                    Assistant = string.Empty;
+                    _det.SetParameterValue(ParamCodes.CAM_T_SDESC1, string.Empty);
+                    _det.SetParameterValue(ParamCodes.CAM_T_SDESC2, string.Empty);
+                    _det.SetParameterValue(ParamCodes.CAM_T_SDESC3, string.Empty);
+                    _det.SetParameterValue(ParamCodes.CAM_T_SDESC4, string.Empty);
+                    Type = string.Empty;
+                    WeightUnits = string.Empty;
+                    BuildType = string.Empty;
+
+                    _det.SetParameterValue(ParamCodes.CAM_T_SGEOMTRY, string.Empty);
+
+                    SysEror = 0;
+                    StatError = 0;
+                    Error = 0;
+                    Weight = 0;
+
+                    // TODO how to add empty date?
+                    //d.Param[ParamCodes.CAM_X_SDEPOSIT] = string.Empty; // Error: ece99d7c. Windows System Error: Cannot convert BSTR to CSTR.
+                    //d.Param[ParamCodes.CAM_X_STIME] = string.Empty; // Error: ece99d7c. Windows System Error: Cannot convert BSTR to CSTR.
+
+                    Report.Notify(new DetectorMessage(Codes.SUCC_DET_CLR_SMPL_INFO));
+
+                }
+                catch (Exception ex)
+                {
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_CLR_SMPL_INFO_UNREG) {Name = _det.Name, DetailedText =  ex.Message} );
+                }
+                finally
+                {
+                    _det._device.Save("", true);
+                }
+
             }
 
+        } // public class SampleInfo
 
-        }
-    }
-}
-
+    } // public partial class Detector : IDisposable
+}     // namespace Regata.Core.Hardware

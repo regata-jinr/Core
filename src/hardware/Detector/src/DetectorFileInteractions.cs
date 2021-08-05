@@ -103,6 +103,8 @@ namespace Regata.Core.Hardware
 
             Report.Notify(new DetectorMessage(Codes.INFO_DET_LOAD_SMPL_INFO)); //$"Set sample {measurement} to detector"));
 
+            Sample.Clear();
+
             try
             {
                 CurrentMeasurement = measurement;

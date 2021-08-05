@@ -126,7 +126,6 @@ namespace Regata.Core.UI.WinForms.Forms
 
             InitializeMainTable();
 
-
             StatusStrip                        = new StatusStrip();
             ProgressBar                        = new ToolStripProgressBar();
             MenuStrip                          = new MenuStrip();
@@ -187,6 +186,8 @@ namespace Regata.Core.UI.WinForms.Forms
             ProgressBar.Name = "ProgressBar";
             ProgressBar.Size = new Size(150, 22);
             ProgressBar.Alignment = ToolStripItemAlignment.Right;
+            ProgressBar.Minimum = 0;
+            ProgressBar.Step = 1;
             // 
             // MenuStrip
             // 

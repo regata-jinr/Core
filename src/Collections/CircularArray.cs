@@ -29,13 +29,12 @@ namespace Regata.Core.Collections
         }
 
         public int Length => _arr.Length;
-
-        public T Current => _arr[_ind];
         
         public event Action Moved;
         
         public T[] ToArray() => _arr;
 
+        public T Current => this[_ind];
         public T Next => this[_ind + 1];
         public T Prev => this[_ind - 1];
 

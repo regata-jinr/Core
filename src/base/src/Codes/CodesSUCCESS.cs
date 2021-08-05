@@ -53,6 +53,7 @@ namespace Regata.Core
         public const int SUCC_DET_ACQ_STOP   = 1204;
         public const int SUCC_DET_ACQ_PAUSE  = 1205;
         public const int SUCC_DET_FILE_SAVED = 1206;
+        public const int SUCC_DET_CLR_SMPL_INFO = 1207;
 
         #endregion
 
