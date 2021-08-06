@@ -60,6 +60,9 @@ namespace Regata.Core
 
         #region UI:Winforms
         public const int SUCC_UI_WF_PIN_SAVED = 1800;
+        public const int SUCC_UI_WF_ACQ_DONE = 1801;
+        public const int SUCC_UI_WF_ACQ_START = 1802;
+        
         #endregion
 
     }

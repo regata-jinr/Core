@@ -204,6 +204,36 @@ namespace Regata.Core
         public const int ERR_UI_WF_DCP_CLR_UNREG                   = 3819;
         public const int ERR_UI_WF_DCP_REFR_TIME_UNREG             = 3820;
         public const int ERR_UI_WF_DCP_INIT_UNREG                  = 3821;
+        public const int ERR_UI_WF_ACQ_DONE_UNREG                  = 3822;
+        public const int ERR_UI_WF_ACQ_DONE_DB                     = 3823;
+        public const int ERR_UI_WF_ACQ_START                       = 3824;
+        public const int ERR_UI_WF_ACQ_STOP                        = 3825;
+        public const int ERR_UI_WF_ACQ_CLEAR                       = 3826;
+        public const int ERR_UI_WF_ACQ_PAUSE                       = 3827;
+        public const int ERR_UI_WF_INI_DET                         = 3828;
+        public const int ERR_UI_WF_INI_MEAS_CONTR                  = 3829;
+        public const int ERR_UI_WF_INI_MEAS_REGS                   = 3830;
+        public const int ERR_UI_WF_FILL_MEAS_REGS                  = 3831;
+        public const int ERR_UI_WF_FILL_SEL_MEAS                   = 3832;
+        public const int ERR_UI_WF_HIDE_MEAS_COLS                  = 3833;
+        public const int ERR_UI_WF_INI_IRR_CONTR                   = 3834;
+        public const int ERR_UI_WF_INI_IRR_REGS                    = 3835;
+        public const int ERR_UI_WF_FILL_IRR_REGS                   = 3836;
+        public const int ERR_UI_WF_FILL_IRR_MEAS                   = 3837;
+        public const int ERR_UI_WF_HIDE_IRR_COLS                   = 3838;
+        public const int ERR_UI_WF_FILL_SEL_IRR                    = 3839;
+        public const int ERR_UI_WF_GEN_QUE_FORM                    = 3840;
+        public const int ERR_UI_WF_INI_MEAS_PARAMS                 = 3841;
+        public const int ERR_UI_WF_FILL_DUR                        = 3842;
+        public const int ERR_UI_WF_UPD_CUR_MEAS_REG                = 3843;
+        public const int ERR_UI_WF_CRT_MEAS_REG                    = 3844;
+        public const int ERR_UI_WF_HIDE_MRDGV_COLS                 = 3845;
+        public const int ERR_UI_WF_MAIN_FORM_DISP                  = 3846;
+        public const int ERR_UI_WF_INIT_CUR_REG                    = 3847;
+        public const int ERR_UI_WF_CLR_CUR_REG                     = 3848;
+        public const int ERR_UI_WF_ADD_REC                         = 3849;
+        
+
 
 
         #endregion

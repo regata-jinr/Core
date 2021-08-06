@@ -30,7 +30,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CanberraDeviceAccessLib;
 using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
 using Regata.Core.Messages;
@@ -109,18 +108,18 @@ namespace Regata.Core.Hardware
             {
                 CurrentMeasurement = measurement;
                 RelatedIrradiation = irradiation;
-                Sample.SampleKey   = measurement.SampleKey;                  // title
-                Sample.Assistant   = CurrentUser; // operator's name. for operators we have separate logon system despite on windows login
-                Sample.SampleCode     = measurement.SetKey;                     // sample code
-                Sample.Error   = 0;                                      // err = 0
-                Sample.WeightUnits     = "gram";                                 // units = gram
+                Sample.SampleKey = measurement.SampleKey;                  // title
+                Sample.Assistant = CurrentUser; // operator's name. for operators we have separate logon system despite on windows login
+                Sample.SampleCode = measurement.SetKey;                     // sample code
+                Sample.Error = 0;                                      // err = 0
+                Sample.WeightUnits = "gram";                                 // units = gram
                 Sample.BuildType = "IRRAD";
-                Sample.DateTimeStart   = irradiation.DateTimeStart.Value;        // irr start date time
-                Sample.DateTimeFinish    = irradiation.DateTimeFinish.Value;       // irr finish date time
-                Sample.StatError    = 0;                                      // Random sample error (%)
-                Sample.SysEror      = 0;                                      // Non-random sample error (%)
+                Sample.DateTimeStart = irradiation.DateTimeStart.Value;        // irr start date time
+                Sample.DateTimeFinish = irradiation.DateTimeFinish.Value;       // irr finish date time
+                Sample.StatError = 0;                                      // Random sample error (%)
+                Sample.SysEror = 0;                                      // Non-random sample error (%)
                 Sample.Type = Measurement.TypeToString[(MeasurementsType)measurement.Type];
-                Sample.Height   = measurement.Height.Value; // height
+                Sample.Height = measurement.Height.Value; // height
                 Sample.Note = CurrentMeasurement.Note; //filling description field in file
 
                 if (measurement.Year == "s")
@@ -148,14 +147,17 @@ namespace Regata.Core.Hardware
                     };
                 }
                 Counts = measurement.Duration.Value;
-                
+
                 AddEfficiencyCalibrationFileByEnergy();
 
-                _device.Save("", true);
             }
             catch (Exception ex)
             {
                 Report.Notify(new DetectorMessage(Codes.ERR_DET_LOAD_SMPL_INFO_UNREG) { DetailedText = ex.ToString() });
+            }
+            finally
+            {
+                _device.Save("", true);
             }
         }
 
@@ -301,9 +303,9 @@ namespace Regata.Core.Hardware
                         return $"{dName.Substring(1, 1)}{type}{(++maxNumber).ToString("D5")}";
                     }
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Report.Notify(new DetectorMessage(Codes.WARN_DET_FSAVE_NOT_UNIQ_DB));
+                    Report.Notify(new DetectorMessage(Codes.WARN_DET_FSAVE_NOT_UNIQ_DB) { DetailedText = ex.ToString() });
                     return await GenerateSpectraFileNameFromLocalStorageAsync(dName, type);
                 }
             });
@@ -342,9 +344,9 @@ namespace Regata.Core.Hardware
 
                     return $"{dName.Substring(1, 1)}{type}{(++maxNumber).ToString("D5")}";
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Report.Notify(new DetectorMessage(Codes.WARN_DET_FSAVE_NOT_UNIQ_LCL));
+                    Report.Notify(new DetectorMessage(Codes.WARN_DET_FSAVE_NOT_UNIQ_LCL) { DetailedText = ex.ToString() });
                     return "";
                 }
             });

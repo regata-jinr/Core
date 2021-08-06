@@ -22,9 +22,6 @@ namespace Regata.Core.DataBase.Models
         [Column("Monitor_Set_Number")]
         public string SetNumber { get; set; }
 
-        [Column("Monitor_Set_Weight")]
-        public float? SetWeight { get; set; }
-
         [Column("Monitor_Number")]
         public string Number { get; set; }
 
