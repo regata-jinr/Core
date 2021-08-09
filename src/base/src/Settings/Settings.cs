@@ -9,18 +9,20 @@
  *                                                                         *
  ***************************************************************************/
 
+using Microsoft.Extensions.Configuration;
 using System;
+using System.ComponentModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.IO;
 using Regata.Core.Messages;
-using Microsoft.Extensions.Configuration;
+using System.Runtime.CompilerServices;
 
 namespace Regata.Core.Settings
 {
     public enum Language { Russian, English};
 
-    public abstract class ASettings
+    public abstract class ASettings : INotifyPropertyChanged
     {
         private Language _lang;
         public Language CurrentLanguage
@@ -31,11 +33,30 @@ namespace Regata.Core.Settings
             {
                 _lang = value;
                 GlobalSettings.CurrentLanguage = _lang;
-                LanguageChanged?.Invoke();
+                NotifyPropertyChanged();
             }
         }
-        public Status Verbosity { get; set; }
-        public event Action LanguageChanged;
+        public Status _verbosity;
+        public Status Verbosity
+        {
+            get
+            {
+                return _verbosity;
+            }
+            set
+            {
+                _verbosity = value;
+                GlobalSettings.Verbosity = _verbosity;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     public class Target
@@ -125,12 +146,12 @@ namespace Regata.Core.Settings
                 GlobalSettings.CurrentLanguage = CurrentSettings.CurrentLanguage;
                 GlobalSettings.Verbosity = CurrentSettings.Verbosity;
                 // FIXME: where to remove subscription? IDisposable?
-                CurrentSettings.LanguageChanged += () => { Save(); };
+                CurrentSettings.PropertyChanged += (s,e) => { Save(); };
 
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new Message(Codes.ERR_SET_LOAD_UNREG));
+                Report.Notify(new Message(Codes.ERR_SET_LOAD_UNREG) { DetailedText = ex.ToString() });
                 ResetToDefaults();
             }
         }
@@ -143,9 +164,9 @@ namespace Regata.Core.Settings
                 CurrentSettings = Activator.CreateInstance<TSettings>();
                 Save();
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new Message(Codes.ERR_SET_RST_UNREG));
+                Report.Notify(new Message(Codes.ERR_SET_RST_UNREG) { DetailedText = ex.ToString() });
             }
         }
 
@@ -159,9 +180,9 @@ namespace Regata.Core.Settings
 
                 File.WriteAllText(FilePath, JsonSerializer.Serialize(CurrentSettings, options));
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new Message(Codes.ERR_SET_SAVE_UNREG));
+                Report.Notify(new Message(Codes.ERR_SET_SAVE_UNREG) { DetailedText = ex.ToString() } );
             }
         }
 

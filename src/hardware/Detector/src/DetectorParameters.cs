@@ -43,7 +43,7 @@ namespace Regata.Core.Hardware
             }
             catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_GET_PARAM_UNREG) { DetailedText = ex.ToString() });
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_GET_PARAM_UNREG) { DetailedText = string.Join(Environment.NewLine, Enum.GetName(typeof(ParamCodes), parCode), ex.ToString()) });
                 return default(T);
             }
         }
@@ -54,7 +54,7 @@ namespace Regata.Core.Hardware
             {
                 if (val == null)
                 {
-                    Report.Notify(new DetectorMessage(Codes.ERR_DET_SET_NULL_PARAM));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_SET_NULL_PARAM) { DetailedText = Enum.GetName(typeof(ParamCodes), parCode) });
                     return;
                 }
 
@@ -66,9 +66,9 @@ namespace Regata.Core.Hardware
 
                 _device.Save("", true);
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_SET_PARAM_UNREG) { DetailedText = Enum.GetName(typeof(ParamCodes), parCode) });
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_SET_PARAM_UNREG) { DetailedText = string.Join(Environment.NewLine, Enum.GetName(typeof(ParamCodes), parCode), ex.ToString()) });
             }
         }
 
@@ -129,8 +129,6 @@ namespace Regata.Core.Hardware
     {
         public static T Convert<T>(this string input)
         {
-            try
-            {
                 var converter = TypeDescriptor.GetConverter(typeof(T));
                 if (converter != null)
                 {
@@ -138,12 +136,6 @@ namespace Regata.Core.Hardware
                 }
                 Report.Notify(new DetectorMessage(Codes.ERR_DET_SMPL_CNVTR));
                 return default(T);
-            }
-            catch (Exception ex)
-            {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_SMPL_CNVTR_UNREG) { DetailedText = ex.ToString() });
-                return default(T);
-            }
         }
     }
 

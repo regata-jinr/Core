@@ -154,9 +154,9 @@ namespace Regata.Core
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Notify(new Message(Codes.ERR_REP_SEND_MAIL));
+                Notify(new Message(Codes.ERR_REP_SEND_MAIL_UNREG) { DetailedText = ex.ToString() });
             }
 
         } // private static void SendMessageByEmail(Message msg)

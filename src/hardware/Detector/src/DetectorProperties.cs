@@ -77,13 +77,13 @@ namespace Regata.Core.Hardware
                 var detsList = (IEnumerable<object>)_device.ListSpectroscopyDevices;
                 if (detsList.Contains(name))
                 {
-                    Report.Notify(new DetectorMessage(Codes.INFO_DET_NAME_EXSTS));
+                    Report.Notify(new DetectorMessage(Codes.INFO_DET_NAME_EXSTS) { DetailedText = Name });
                     return true;
                 }
                 else
                 {
                     Status = DetectorStatus.error;
-                    Report.Notify(new DetectorMessage(Codes.ERR_DET_NAME_EXSTS));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_NAME_EXSTS) { DetailedText = Name }) ;
                     return false;
                 }
             }

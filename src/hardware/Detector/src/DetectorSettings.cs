@@ -19,8 +19,8 @@ namespace Regata.Core.Hardware
     {
         public string           Name                  { get; set; }
         public ConnectOptions   ConnectOption         { get; set; } = ConnectOptions.aReadWrite;
-        public uint             CountNumber           { get; set; }
-        public TimeSpan         ConnectionTimeOut     { get; set; } = new TimeSpan(0, 0, 5);
+        public int              CountNumber           { get; set; }
+        public int              ConnectionTimeOut     { get; set; } = 5;
         public AcquisitionModes AcquisitionMode       { get; set; } = AcquisitionModes.aCountToRealTime;
         public string           EffCalFolder          { get; set; }
     }

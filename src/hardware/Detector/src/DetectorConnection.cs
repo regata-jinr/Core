@@ -85,7 +85,7 @@ namespace Regata.Core.Hardware
         {
             try
             {
-                var ct = new CancellationTokenSource(DetSet.ConnectionTimeOut);
+                var ct = new CancellationTokenSource(TimeSpan.FromSeconds(DetSet.ConnectionTimeOut));
                 await Task.Run(ConnectInternal, ct.Token);
                 if (_device.IsConnected)
                     Report.Notify(new DetectorMessage(Codes.SUCC_DET_CON));
@@ -111,7 +111,7 @@ namespace Regata.Core.Hardware
             Report.Notify(new DetectorMessage(Codes.INFO_DET_RECON));
             // fixme: I think here is better to don't use _device object in other thread. It's better to use static functions
             var t1 = Task.Run(() => { while (!_device.IsConnected) { Disconnect(); } });
-            var t2 = Task.Delay(DetSet.ConnectionTimeOut);
+            var t2 = Task.Delay(TimeSpan.FromSeconds(DetSet.ConnectionTimeOut));
 
             var t3 = await Task.WhenAny(t1, t2);
 

@@ -55,6 +55,7 @@ namespace Regata.Core.UI.WinForms.Items
             _tdp.Icon = _statusIcon[msg.Status];
             _tdp.AllowCancel = true;
             _tdp.Caption = msg.Caption;
+            _tdp.SizeToContent = true;
 
             FillDefaultElements();
 

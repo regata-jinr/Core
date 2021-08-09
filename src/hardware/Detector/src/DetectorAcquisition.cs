@@ -214,7 +214,7 @@ namespace Regata.Core.Hardware
                     Status = DetectorStatus.error;
                     ErrorMessage = $"{_device.Message((MessageCodes)lParam)}";
                     response = ErrorMessage;
-                    Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_HRDW));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_ACQ_HRDW) { DetailedText = ErrorMessage });
                     HardwareError?.Invoke(this);
                 }
                 if ((int)AdviseMessageMasks.amAcquisitionParamChange == lParam)

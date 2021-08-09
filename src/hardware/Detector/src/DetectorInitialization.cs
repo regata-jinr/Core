@@ -80,7 +80,6 @@ namespace Regata.Core.Hardware
                 }
 
                 _device.DeviceMessages += DeviceMessagesHandler;
-                DetSet.ConnectionTimeOut = TimeSpan.FromSeconds(10);
                 IsPaused = false;
 
                 Connect();

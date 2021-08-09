@@ -111,12 +111,10 @@ namespace Regata.Core
         public const int ERR_DET_GET_DEADT_UNREG = 3230;
         public const int ERR_DET_LOAD_SMPL_INFO_UNREG = 3231;
         public const int ERR_DET_NAME_N_EXST = 3232;
-        public const int ERR_DET_RST = 3233;
         public const int ERR_DET_NOT_READY = 3235;
         public const int ERR_DET_GET_PARAM_UNREG = 3236;
         public const int ERR_DET_SET_NULL_PARAM = 3237;
         public const int ERR_DET_SET_PARAM_UNREG = 3238;
-        public const int ERR_DET_SMPL_CNVTR_UNREG = 3239;
         public const int ERR_DET_SMPL_CNVTR = 3240;
         public const int ERR_DET_EFF_DIR_EMPTY = 3241;
         public const int ERR_DET_CLR_SMPL_INFO_UNREG = 3242;
@@ -125,7 +123,7 @@ namespace Regata.Core
 
         #region Logger Errors
         // 3300 - 3399
-        public const int ERR_REP_SEND_MAIL = 3300;
+        public const int ERR_REP_SEND_MAIL_UNREG = 3300;
 
 
         #endregion

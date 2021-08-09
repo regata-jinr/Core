@@ -46,9 +46,10 @@ namespace Regata.Core.Hardware
             try
             {
                 if (!_device.IsConnected || Status == DetectorStatus.off)
+                {
                     Report.Notify(new DetectorMessage(Codes.ERR_DET_FSAVE_DCON));
-
-               
+                    return;
+                }
 
                 if (string.IsNullOrEmpty(fileName))
                 {
@@ -97,7 +98,7 @@ namespace Regata.Core.Hardware
         /// <param name="irradiation"></param>        
         public void LoadMeasurementInfoToDevice(Measurement measurement, Irradiation irradiation)
         {
-            if (!CheckIrradiation(irradiation) || !CheckMeasurement(measurement))
+            if (!CheckIrradiation(irradiation) && !CheckMeasurement(measurement))
                 return;
 
             Report.Notify(new DetectorMessage(Codes.INFO_DET_LOAD_SMPL_INFO)); //$"Set sample {measurement} to detector"));
@@ -177,7 +178,7 @@ namespace Regata.Core.Hardware
                 }
 
                 var type = typeof(Irradiation);
-                var neededProps = new string[] { "DateTimeStart", "Duration", "Weight" };
+                var neededProps = new string[] { "DateTimeStart", "Duration" };
 
                 foreach (var pi in type.GetProperties())
                 {
@@ -230,13 +231,19 @@ namespace Regata.Core.Hardware
                     measurement.Detector = Name;
 
                 if (measurement.Detector != Name)
+                {
                     Report.Notify(new DetectorMessage(Codes.ERR_DET_MEAS_WRONG_DET));
+                    return false;
+                }
 
 
                 if (measurement.Duration.Value == 0)
+                {
                     Report.Notify(new DetectorMessage(Codes.ERR_DET_MEAS_ZERO_DUR));
+                    return false;
+                }
 
-            }
+                }
             catch (Exception ex)
             {
                 Report.Notify(new DetectorMessage(Codes.ERR_DET_CHCK_MEAS_UNREG) { DetailedText = ex.ToString() });

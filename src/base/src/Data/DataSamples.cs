@@ -53,7 +53,7 @@ namespace Regata.Core
             }
             catch (Exception ex)
             {
-                Report.Notify(new Message(Codes.ERR_DATA_GET_SSID) { DetailedText = ex.Message } );
+                Report.Notify(new Message(Codes.ERR_DATA_GET_SSID) { DetailedText = string.Join(Environment.NewLine, SampleStringId, ex.Message) } );
                 return null;
             }
         }
@@ -83,7 +83,7 @@ namespace Regata.Core
             }
             catch (Exception ex)
             {
-                Report.Notify(new Message(Codes.ERR_DATA_GET_SRMSID) { DetailedText = ex.Message });
+                Report.Notify(new Message(Codes.ERR_DATA_GET_SRMSID) { DetailedText = string.Join(Environment.NewLine, SrmOrMonitorStringId, ex.Message) });
                 return null;
             }
         }
