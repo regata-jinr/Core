@@ -254,6 +254,9 @@ namespace Regata.Tests.Hardware.Detectors
             }
         }
 
+
+
+
     } // public class DetectorsTest
 }     // namespace Tests
 

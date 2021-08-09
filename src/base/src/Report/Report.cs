@@ -67,6 +67,8 @@ namespace Regata.Core
                 //switch (msg)
                 //{
                 //    case DetectorMessage dmsg:
+                //    dmsg.Sender = $"Detector {dmsg.Name}";
+                //     ....
                 //        break;
                 //    default Message 
                 //}

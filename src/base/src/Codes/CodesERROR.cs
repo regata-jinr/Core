@@ -232,9 +232,12 @@ namespace Regata.Core
         public const int ERR_UI_WF_INIT_CUR_REG                    = 3847;
         public const int ERR_UI_WF_CLR_CUR_REG                     = 3848;
         public const int ERR_UI_WF_ADD_REC                         = 3849;
+        public const int ERR_UI_WF_INI_MENU                        = 3850;
+        public const int ERR_UI_WF_INI_STAT                        = 3851;
+        public const int ERR_UI_WF_ASSIGN_REC_TMPL                 = 3852;
+        public const int ERR_UI_WF_DCP_CTOR_UNREG                  = 3853;
+        public const int ERR_UI_WF_REM_REC                         = 3854;
         
-
-
 
         #endregion
 

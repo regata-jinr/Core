@@ -74,10 +74,10 @@ namespace Regata.Core.DataBase
                            .HasKey(l => new { l.FormName, l.ComponentName });
 
             modelBuilder.Entity<MessageBase>()
-                           .HasKey(m => new { m.Code, m.Language});
+                           .HasKey(m => (new { m.Code, m.Language}));
 
             modelBuilder.Entity<MessageDefault>()
-                           .HasKey(m => new { m.Language });
+                           .HasKey(m => new { m.Language, m.ExpandButtonText });
 
             modelBuilder.Entity<User>()
                            .HasKey(u => new { u.Id });

@@ -58,10 +58,13 @@ namespace Regata.Core.UI.WinForms.Items
 
             FillDefaultElements();
 
+            _tdp.Heading = msg.Head;
+            _tdp.Text = msg.Text;
             _tdp.Footnote = _tdf;
             _tdp.Expander = _tde;
-                _tde.Text = msg.DetailedText;
-
+            _tde.Text = msg.DetailedText;
+            
+            // autoclosing only for info or success
             if ((msg.Status == Status.Info || msg.Status == Status.Success) && autoCloseIntervalSeconds != 0)
             {
                 _tdpbar = new TaskDialogProgressBar();

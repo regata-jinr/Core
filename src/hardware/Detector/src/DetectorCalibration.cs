@@ -77,7 +77,7 @@ namespace Regata.Core.Hardware
 
                 if (!File.Exists(effFileName))
                 {
-                    Report.Notify(new DetectorMessage(Codes.ERR_DET_EFF_ENG_FILE_NF));
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_EFF_ENG_FILE_NF) { DetailedText = $"File '{effFileName}' not found" } );
                     return;
                 }
 

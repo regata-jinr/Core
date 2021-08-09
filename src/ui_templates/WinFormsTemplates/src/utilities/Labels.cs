@@ -85,7 +85,7 @@ namespace Regata.Core.UI.WinForms
                 }
                 else
                 {
-                    Report.Notify(new RCM.Message(Codes.WARN_LBL_NOT_EXIST));
+                    //Report.Notify(new RCM.Message(Codes.WARN_LBL_NOT_EXIST));
                     return compt;
                 }
 
