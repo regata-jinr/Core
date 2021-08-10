@@ -9,17 +9,18 @@
  *                                                                         *
  ***************************************************************************/
 
-using System.Windows.Forms;
-using System.ComponentModel;
-using System.Drawing;
+using Regata.Core.DataBase.Models;
+using Regata.Core.Settings;
 using Regata.Core.UI.WinForms.Controls;
 using Regata.Core.UI.WinForms.Items;
-using Regata.Core.Settings;
+using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms.Forms
 {
-    partial class RegisterForm<MainTableModel>
-        where MainTableModel : class
+    public partial class RegisterForm<MainTableModel>
+        where MainTableModel : class, IId
     {
         public RDataGridView<MainTableModel> MainRDGV;
         public DGVTabPaneControl TabsPane;
@@ -46,6 +47,10 @@ namespace Regata.Core.UI.WinForms.Forms
             if (disposing && (components != null))
             {
                 components.Dispose();
+            }
+            if (disposing)
+            {
+                MainRDGV.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -247,5 +252,5 @@ namespace Regata.Core.UI.WinForms.Forms
 
         }
 
-    } // partial class RegisterForm<MainTableModel>
+    } // public partial class RegisterForm<MainTableModel>
 }     // namespace Regata.Core.UI.WinForms.Forms

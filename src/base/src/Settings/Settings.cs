@@ -177,8 +177,8 @@ namespace Regata.Core.Settings
                 var options = new JsonSerializerOptions();
                 options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
                 options.WriteIndented = true;
-
-                File.WriteAllText(FilePath, JsonSerializer.Serialize(CurrentSettings, options));
+                var s = JsonSerializer.Serialize(CurrentSettings, options);
+                File.WriteAllText(FilePath, s);
             }
             catch (Exception ex)
             {

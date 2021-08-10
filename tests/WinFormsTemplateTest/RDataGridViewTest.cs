@@ -10,18 +10,17 @@
  ***************************************************************************/
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
-using System.Windows.Forms;
 using Regata.Core.DataBase.Models;
 using Regata.Core.UI.WinForms.Controls;
 using System;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Regata.Tests.WinForms
 {
     [TestClass]
     public class RDataGridViewTest
     {
-
         private RDataGridView<Irradiation> _rdgv;
         public RDataGridViewTest()
         {

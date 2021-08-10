@@ -45,8 +45,6 @@ namespace Regata.Core
             return rw.ARepackWght;
         }
 
-
-
         /// <summary>
         /// 
         /// </summary>

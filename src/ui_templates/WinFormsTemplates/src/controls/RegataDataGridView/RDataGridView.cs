@@ -1,7 +1,7 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2020-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
  *                                                                         *
  * The REGATA Experiment team license this file to you under the           *
@@ -9,18 +9,14 @@
  *                                                                         *
  ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
-using Regata.Core.UI.WinForms.Controls.Settings;
 using Regata.Core.DataBase;
+using Regata.Core.DataBase.Models;
 using RCM=Regata.Core.Messages;
+using Regata.Core.UI.WinForms.Controls.Settings;
+using System;
+using System.ComponentModel;
+using System.Windows.Forms;
 
 // TODO: add column filling by value
 // TODO: add data validation
@@ -41,32 +37,8 @@ namespace Regata.Core.UI.WinForms.Controls
     /// </summary>
     /// <typeparam name="Model"></typeparam>
     public partial class RDataGridView<Model> : DataGridView , IDisposable
-        where Model : class
+        where Model : class, IId
     {
-        private BindingList<Model> _data = new BindingList<Model>();
-
-        public BindingList<Model> Data
-        {
-            get { return _data; }
-
-            set 
-            {
-                if (value == null)
-                {
-                    _data = new BindingList<Model>();
-                    Report.Notify(new RCM.Message(Codes.ERR_UI_WF_RDGV_Null_Data));
-                    return;
-                }
-
-                if (value.Count == 0)
-                    Report.Notify(new RCM.Message(Codes.WARN_UI_WF_RDGV_Empty_Data));
-                
-                _data = value;
-
-                DataSource = _data;
-            }
-        }
-
         public DbSet<Model> CurrentDbSet;
 
         private DbContext _rdbc;
@@ -74,37 +46,41 @@ namespace Regata.Core.UI.WinForms.Controls
         //private bool ModelInRegataModels() => Assembly.GetExecutingAssembly().GetTypes()
         //              .Where(t => t.Namespace == "Regata.Core.DataBase.Models")
         //              .ToList().Contains(typeof(Model));
-        
+
         // FIXME: not mapped fields from model still visible in binding context.
 
-        public static RDataGridViewSettings RDGV_Set = new RDataGridViewSettings();
+        public RDataGridViewSettings RDGV_Set;
 
         // TODO:  exception or notification here?
 
-        public RDataGridView(RDataGridViewSettings rdgv_set = null) : base()
+        public RDataGridView() : base()
         {
             //if (!ModelInRegataModels()) throw new TypeAccessException($"This type {typeof(Model).Name} doesn't contains in Regata.Core.DataBase.Models");
-
-            if (rdgv_set != null)
-                RDGV_Set = rdgv_set;
-            else
-                RDGV_Set = new RDataGridViewSettings();
 
             _rdbc = new RegataContext();
 
             CurrentDbSet = _rdbc.Set<Model>();
 
+            DataSource = CurrentDbSet.Local;
+
             RowHeadersVisible = false;
-            AutoSizeColumnsMode = RDGV_Set.ColumnSize;
+            AutoSizeColumnsMode  = DataGridViewAutoSizeColumnsMode.Fill;
 
 
             DataBindingComplete += RDataGridView_DataBindingComplete;
 
             ColumnHeaderMouseClick += RDataGridView_ColumnHeaderMouseClick;
 
+            CellValueChanged += RDataGridView_CellValueChanged;
+
             HideColumns();
             SetUpReadOnlyColumns();
 
+        }
+
+        private void RDataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            SaveChanges();
         }
 
         private void RDataGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -161,11 +137,6 @@ namespace Regata.Core.UI.WinForms.Controls
             }
         }
 
-        public void SaveChanges()
-        {
-            _rdbc.SaveChanges();
-        }
-
         public void SetUpReadOnlyColumns()
         {
             foreach (DataGridViewColumn cl in Columns)
@@ -176,7 +147,6 @@ namespace Regata.Core.UI.WinForms.Controls
                     Columns[cl.Name].ReadOnly = false;
             }
         }
-
 
         private bool _isDisposed = false;
 
@@ -195,14 +165,6 @@ namespace Regata.Core.UI.WinForms.Controls
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
-        public override void Sort(DataGridViewColumn dataGridViewColumn, ListSortDirection direction)
-        {
-
-           
-            
-        }
-
 
     } // public abstract partial class RDataGridView<Model> : DataGridView
 }     // namespace Regata.Core.UI.WinForms

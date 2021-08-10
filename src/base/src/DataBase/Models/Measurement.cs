@@ -18,7 +18,7 @@ namespace Regata.Core.DataBase.Models
 {
     public enum MeasurementsType { sli, lli1, lli2, bckg };
 
-    public class Measurement : ISample
+    public class Measurement : ISample, IId
     {
         // DatabaseGenerated(DatabaseGeneratedOption.Identity)
         [Key]

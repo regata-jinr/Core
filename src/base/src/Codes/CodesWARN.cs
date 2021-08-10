@@ -64,7 +64,8 @@ namespace Regata.Core
         public const int WARN_UI_WF_UTLT_NULL_CONTRL = 2804;
         public const int WARN_LBL_NOT_EXIST = 2805;
         public const int WARN_FORM_LBL_NOT_EXIST = 2806;
-
+        public const int WARN_UI_WF_ACQ_START_ALL_MEAS = 2807;
+        
         #endregion
 
     }

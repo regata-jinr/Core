@@ -107,6 +107,7 @@ namespace Regata.Core.Hardware
 
             try
             {
+                AcquisitionMode = (CanberraDeviceAccessLib.AcquisitionModes)measurement.AcqMode;
                 CurrentMeasurement = measurement;
                 RelatedIrradiation = irradiation;
                 Sample.SampleKey = measurement.SampleKey;                  // title
@@ -215,7 +216,7 @@ namespace Regata.Core.Hardware
 
 
                 var type = typeof(Measurement);
-                var neededProps = new string[] { "Type", "Duration", "Height" };
+                var neededProps = new string[] { "Type", "Duration", "Height", "AcqMode" };
 
                 foreach (var pi in type.GetProperties())
                 {

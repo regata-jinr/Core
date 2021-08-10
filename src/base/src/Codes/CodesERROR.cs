@@ -42,6 +42,11 @@ namespace Regata.Core
         public const int ERR_DB_REMOVE = 3004;
         public const int ERR_DB_PRIV = 3005;
         public const int ERR_DB_EMPTY_CS = 3006;
+        public const int ERR_DB_UPD_RNG = 3007;
+        public const int ERR_DB_SAVE = 3008;
+        public const int ERR_DB_CLEAR = 3009;
+        public const int ERR_DB_REMOVE_RNG = 3010;
+        public const int ERR_DB_INS_RNG = 3011;
 
 
         #endregion
@@ -232,10 +237,14 @@ namespace Regata.Core
         public const int ERR_UI_WF_ADD_REC                         = 3849;
         public const int ERR_UI_WF_INI_MENU                        = 3850;
         public const int ERR_UI_WF_INI_STAT                        = 3851;
-        public const int ERR_UI_WF_ASSIGN_REC_TMPL                 = 3852;
+        public const int ERR_UI_WF_FILL_DB_VAL                     = 3852;
         public const int ERR_UI_WF_DCP_CTOR_UNREG                  = 3853;
         public const int ERR_UI_WF_REM_REC                         = 3854;
+        public const int ERR_UI_WF_ACQ_START_IRR_NF                = 3855;
+        public const int ERR_UI_WF_SAVE_CHNG                       = 3856;
         
+
+
 
         #endregion
 
