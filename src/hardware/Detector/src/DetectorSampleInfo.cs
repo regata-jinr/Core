@@ -209,6 +209,8 @@ namespace Regata.Core.Hardware
                     if (string.IsNullOrEmpty(value)) return;
                     int descriptionsCount = value.Length / 65;
 
+                    _det.CurrentMeasurement.Note = value;
+
                     switch (descriptionsCount)
                     {
                         case 0:

@@ -148,6 +148,17 @@ namespace Regata.Core.UI.WinForms.Controls
             }
         }
 
+        public void SetUpWritableColumns()
+        {
+            foreach (DataGridViewColumn cl in Columns)
+            {
+                if (RDGV_Set.WritableColumns.Contains(cl.Name))
+                    Columns[cl.Name].ReadOnly = false;
+                else
+                    Columns[cl.Name].ReadOnly = true;
+            }
+        }
+
         private bool _isDisposed = false;
 
         private new void Dispose(bool isDisposing)

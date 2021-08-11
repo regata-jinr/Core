@@ -21,6 +21,7 @@ namespace Regata.Core.UI.WinForms.Controls.Settings
     {
         public List<string> HidedColumns { get; set; } = new List<string>();
         public List<string> ReadOnlyColumns { get; set; } = new List<string>();
+        public List<string> WritableColumns { get; set; } = new List<string>();
         public DataGridViewAutoSizeColumnsMode ColumnSize { get; set; } = DataGridViewAutoSizeColumnsMode.Fill;
         public ColorizeMode ColorMode { get; set; }
         

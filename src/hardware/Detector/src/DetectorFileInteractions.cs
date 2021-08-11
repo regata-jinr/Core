@@ -108,6 +108,8 @@ namespace Regata.Core.Hardware
             try
             {
                 AcquisitionMode = (CanberraDeviceAccessLib.AcquisitionModes)measurement.AcqMode;
+                Counts = measurement.Duration.Value;
+
                 CurrentMeasurement = measurement;
                 RelatedIrradiation = irradiation;
                 Sample.SampleKey = measurement.SampleKey;                  // title
@@ -148,9 +150,11 @@ namespace Regata.Core.Hardware
                         _ => Data.GetSampleLLIWeight(measurement) ?? 0
                     };
                 }
-                Counts = measurement.Duration.Value;
 
                 AddEfficiencyCalibrationFileByEnergy();
+
+                if (measurement.Type > 0 && measurement.Type < 3 && Data.GetSampleLLIReWeight(measurement) == null)
+                    Sample.Note += " Was not reweighted";
 
             }
             catch (Exception ex)
