@@ -9,23 +9,24 @@
  *                                                                         *
  ***************************************************************************/
 
+using System;
+using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms.Controls
 {
-    public interface ICheckedArrayControl
+    public interface ICheckedArrayControl<T>
     {
-        event System.Action SelectionChanged;
+        event Action<CheckedArrayControl<T>> SelectionChanged;
 
     }
 
-
-    public interface ISingleCheckedArrayControl<T> : ICheckedArrayControl
+    public interface ISingleCheckedArrayControl<T> : ICheckedArrayControl<T>
     {
         void ClearSelection();
         T SelectedItem { get; }
     }
 
-    public interface IMultiCheckedArrayControl<T> : ICheckedArrayControl
+    public interface IMultiCheckedArrayControl<T> : ICheckedArrayControl<T>
     {
         void ClearSelection();
         T[] SelectedItems { get; }
@@ -35,8 +36,8 @@ namespace Regata.Core.UI.WinForms.Controls
     {
         bool   Checked { get; set; }
         string Name { get; set; }
-        System.Windows.Forms.DockStyle Dock { get; set; }
+        DockStyle Dock { get; set; }
         string Text  { get; set; }
-        event System.EventHandler CheckedChanged;
+        event EventHandler CheckedChanged;
     }
 }
