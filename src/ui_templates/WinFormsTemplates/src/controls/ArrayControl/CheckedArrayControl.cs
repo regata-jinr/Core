@@ -10,50 +10,27 @@
  ***************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms.Controls
 {
-    public partial class CheckedArrayControl<T> : UserControl, ISingleCheckedArrayControl<T>, IMultiCheckedArrayControl<T>
+    public partial class CheckedArrayControl<T> : UserControl
     {
-        private readonly List<CheckBox> _checkBoxes;
-        private T _selectedItem;
-        private List<T> _selectedItems;
-        private List<T> _array;
-
         /// <summary>
         /// Return one and only selected element in case of MultiSelection is false and last selected element in case of MultiSelection is true.
         /// </summary>
-        public T SelectedItem => _selectedItem;
+        public T SelectedItem => (T)checkedListBox.SelectedItem;
 
         /// <summary>
         /// Returns array of selected items in case of multiselection and array with single element in case of single selection
         /// </summary>
-        public T[] SelectedItems => _selectedItems.ToArray();
+        public T[] SelectedItems => checkedListBox.CheckedItems.Cast<T>().ToArray();
 
-        public bool IsSelected(T elem)
-        {
-            return _selectedItems.Contains(elem);
-        }
+        public readonly bool MultiSelection;
 
-        public bool MultiSelection { get; set; }
+        public event ItemCheckEventHandler SelectionChanged;
 
-        public event Action<CheckedArrayControl<T>> SelectionChanged;
-
-        public FlowDirection FlowDirection
-        {
-            get
-            {
-                return flowLayoutPanel.FlowDirection;
-            }
-            set
-            {
-                flowLayoutPanel.FlowDirection = value;
-            }
-        }
 
         public override string Text
         {
@@ -69,127 +46,56 @@ namespace Regata.Core.UI.WinForms.Controls
 
         public CheckedArrayControl(T[] array, bool multiSelection = false)
         {
-            _selectedItem = default;
-            _array = new List<T>(array.Length);
-            _array.AddRange(array);
-            _selectedItems = new List<T>();
             InitializeComponent();
 
             MultiSelection = multiSelection;
 
-            _checkBoxes = new List<CheckBox>(array.Length);
             for (var i = 0; i < array.Length; ++i)
             {
-                _checkBoxes.Add(CreateCheckBox(array[i]?.ToString()));
+                checkedListBox.Items.Add(array[i]);
             }
+
+            checkedListBox.ItemCheck += CheckedListBox_ItemCheck;
 
             Dock = DockStyle.Fill;
 
             RBV_groupBoxTitle.ResumeLayout(false);
             flowLayoutPanel.ResumeLayout(false);
+            checkedListBox.ResumeLayout(false);
             ResumeLayout(false);
 
         }
 
-        private CheckBox CreateCheckBox(string text)
+        private int lastCheckedIndex = -1;
+
+        private void CheckedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            var cb = new CheckBox();
-            cb.Name = text;
-            cb.AutoSize = true;
-            cb.UseVisualStyleBackColor = true;
-            cb.Dock = DockStyle.Fill;
-            cb.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            cb.Text = text;
-            cb.CheckedChanged += CheckBox_CheckedChanged;
-            SetTooltip(ref cb);
-            flowLayoutPanel.Controls.Add(cb);
-
-            return cb;
-        }
-
-        private void SetTooltip(ref CheckBox cb)
-        {
-            var toolTip1 = new ToolTip();
-
-            toolTip1.AutoPopDelay = 5000;
-            toolTip1.InitialDelay = 1000;
-            toolTip1.ReshowDelay = 500;
-            toolTip1.ShowAlways = true;
-            toolTip1.SetToolTip(cb, cb.Text);
-        }
-
-        public void ClearSelection()
-        {
-            foreach (var r in _checkBoxes)
-            {
-                r.CheckedChanged -= CheckBox_CheckedChanged;
-                r.Checked = false;
-                r.CheckedChanged += CheckBox_CheckedChanged;
-            }
-            _selectedItems.Clear();
-            _selectedItem = default;
-        }
-
-        private void ClearOtherSelection(string nameOne)
-        {
-            foreach (var r in _checkBoxes)
-            {
-                if (r.Name == nameOne) continue;
-                r.CheckedChanged -= CheckBox_CheckedChanged;
-                r.Checked = false;
-                r.CheckedChanged += CheckBox_CheckedChanged;
-            }
-        }
-
-        private void CheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            var r = sender as CheckBox;
+            checkedListBox.ItemCheck -= CheckedListBox_ItemCheck;
 
             if (!MultiSelection)
             {
-                _selectedItems.Clear();
-                ClearOtherSelection(r.Name);
+                if (e.Index != lastCheckedIndex)
+                {
+                    if (lastCheckedIndex != -1)
+                        checkedListBox.SetItemCheckState(lastCheckedIndex, CheckState.Unchecked);
+                    lastCheckedIndex = e.Index;
+                }
             }
+            SelectionChanged?.Invoke(sender, e);
+            checkedListBox.ItemCheck += CheckedListBox_ItemCheck;
 
-            if (r.Checked)
-            {
-                _selectedItem = _array.Find(a => a.ToString() == r.Name);
-                _selectedItems.Add(_selectedItem);
-            }
-            else
-            {
-                _selectedItems.Remove(_selectedItem);
-                if (_selectedItems.Count >= 1)
-                    _selectedItem = _selectedItems[0];
-            }
-            
-            SelectionChanged?.Invoke(this);
         }
 
         public void Add(T elem)
         {
-            _array.Add(elem);
-            _checkBoxes.Add(CreateCheckBox(elem?.ToString()));
+            checkedListBox.Items.Add(elem);
         }
 
         public void Remove(T elem)
         {
-            var i = _checkBoxes.IndexOf(_checkBoxes.Where(c => c.Text == elem.ToString()).First());
-            _checkBoxes[i].CheckedChanged -= CheckBox_CheckedChanged;
-            _checkBoxes.RemoveAt(i);
-            _array.Remove(elem);
-            flowLayoutPanel.Refresh();
-        }
+            checkedListBox.Items.Remove(elem);
+        }   
 
-        public void Hide(T elem)
-        {
-            flowLayoutPanel.Controls.OfType<CheckBox>().Where(c => c.Text == elem.ToString()).First().Visible = false;
-        }
-
-        public void Show(T elem)
-        {
-            flowLayoutPanel.Controls.OfType<CheckBox>().Where(c => c.Text == elem.ToString()).First().Visible = true;
-        }
 
     } // public partial class RadioButtonsView<T> : UserControl, IArrayControlSingleSelection<T>
 }     // namespace Regata.Core.UI.WinForms.Controls

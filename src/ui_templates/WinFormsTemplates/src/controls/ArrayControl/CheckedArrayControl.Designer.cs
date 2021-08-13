@@ -9,8 +9,9 @@
  *                                                                         *
  ***************************************************************************/
 
-using System.Windows.Forms;
 using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms.Controls
 {
@@ -40,43 +41,64 @@ namespace Regata.Core.UI.WinForms.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.RBV_groupBoxTitle = new System.Windows.Forms.GroupBox();
-            this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.RBV_groupBoxTitle.SuspendLayout();
+            RBV_groupBoxTitle = new GroupBox();
+            flowLayoutPanel = new FlowLayoutPanel();
+            checkedListBox = new CheckedListBox();
+            
+            checkedListBox.SuspendLayout();
+            RBV_groupBoxTitle.SuspendLayout();
             flowLayoutPanel.SuspendLayout();
-            this.SuspendLayout();
+            SuspendLayout();
 
             // 
             // flowLayoutPanel
             // 
-            this.flowLayoutPanel.AutoScroll = true;
-            this.flowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel.Name = "flowLayoutPanel";
-            this.flowLayoutPanel.TabIndex = 0;
+            flowLayoutPanel.AutoScroll = true;
+            flowLayoutPanel.Dock = DockStyle.Fill;
+            flowLayoutPanel.Name = "flowLayoutPanel";
+            flowLayoutPanel.TabIndex = 0;
+
+            // 
+            // checkedListBox
+            // 
+            checkedListBox.BackColor = SystemColors.Control;
+            checkedListBox.CheckOnClick = true;
+            checkedListBox.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            checkedListBox.FormattingEnabled = true;
+            checkedListBox.MultiColumn = true;
+            checkedListBox.Name = "checkedListBox";
+            checkedListBox.RightToLeft = RightToLeft.No;
+            checkedListBox.Dock = DockStyle.Fill;
+            checkedListBox.Sorted = true;
+            checkedListBox.TabIndex = 18;
+            checkedListBox.UseCompatibleTextRendering = true;
+            checkedListBox.SelectionMode = SelectionMode.One;
 
             // 
             // RBV_groupBoxTitle
             // 
-            this.RBV_groupBoxTitle.Controls.Add(this.flowLayoutPanel);
-            this.RBV_groupBoxTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RBV_groupBoxTitle.Name = "RBV_groupBoxTitle";
-            this.RBV_groupBoxTitle.TabIndex = 0;
-            this.RBV_groupBoxTitle.TabStop = false;
-            this.RBV_groupBoxTitle.Text = "RBV_groupBoxTitle";
+            //RBV_groupBoxTitle.Controls.Add(flowLayoutPanel);
+            RBV_groupBoxTitle.Controls.Add(checkedListBox);
+            RBV_groupBoxTitle.Dock = DockStyle.Fill;
+            RBV_groupBoxTitle.Name = "RBV_groupBoxTitle";
+            RBV_groupBoxTitle.TabIndex = 0;
+            RBV_groupBoxTitle.TabStop = false;
+            RBV_groupBoxTitle.Text = "RBV_groupBoxTitle";
            
             // 
             // CheckedArrayControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.RBV_groupBoxTitle);
-            this.Name = "CheckedArrayControl";
-            this.Size = new System.Drawing.Size(343, 102);
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(RBV_groupBoxTitle);
+            Name = "CheckedArrayControl";
+            Size = new Size(343, 102);
 
         }
 
-        public GroupBox RBV_groupBoxTitle;
-        public FlowLayoutPanel flowLayoutPanel;
+        private GroupBox RBV_groupBoxTitle;
+        private FlowLayoutPanel flowLayoutPanel;
+        public CheckedListBox checkedListBox;
 
     } // partial class CheckedArrayControl<T> : UserControl
 }     // namespace Regata.Core.UI.WinForms.Controls

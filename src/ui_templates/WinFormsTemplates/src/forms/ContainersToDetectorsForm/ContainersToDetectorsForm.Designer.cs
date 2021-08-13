@@ -14,7 +14,7 @@ using System.Drawing;
 
 namespace Regata.Core.UI.WinForms.Forms
 {
-    partial class SamplesToDetectorsForm
+    partial class ContainersToDetectorsForm
     {
         /// <summary>
         /// Required designer variable.
@@ -51,16 +51,16 @@ namespace Regata.Core.UI.WinForms.Forms
             // 
             MainLabelDesc.Font = new Font("Segoe UI", 14.25F);
             MainLabelDesc.Location = new Point(0, 11);
-            MainLabelDesc.Name = "labelExpl";
+            MainLabelDesc.Name = "MainLabelDesc";
             MainLabelDesc.Dock = DockStyle.Fill;
             MainLabelDesc.TabIndex = 5;
             MainLabelDesc.TextAlign = ContentAlignment.MiddleLeft;
             MainLabelDesc.UseCompatibleTextRendering = true;
 
 
-            buttonExportToCSV = new Button() { Name = "buttonExportToCSV",  UseVisualStyleBackColor = true };
-            buttonExportToExcel = new Button() { Name = "buttonExportToExcel", UseVisualStyleBackColor = true };
-            buttonFillMeasurementRegister = new Button() { Name = "buttonFillMeasurementRegister", UseVisualStyleBackColor = true };
+            buttonExportToCSV = new Button() { Name = "buttonExportToCSV",  UseVisualStyleBackColor = true, AutoSize = true };
+            buttonExportToExcel = new Button() { Name = "buttonExportToExcel", UseVisualStyleBackColor = true, AutoSize = true };
+            buttonFillMeasurementRegister = new Button() { Name = "buttonFillMeasurementRegister", UseVisualStyleBackColor = true, AutoSize = true };
 
 
             // 
@@ -73,9 +73,9 @@ namespace Regata.Core.UI.WinForms.Forms
             tableLayoutPanelMain.Location = new Point(13, 578);
             tableLayoutPanelMain.Name = "tableLayoutPanelMain";
             tableLayoutPanelMain.RowCount = 3;
-            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 60F));
-            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 80F));
+            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanelMain.Controls.Add(MainLabelDesc, 0, 0);
             tableLayoutPanelMain.Dock = DockStyle.Fill;
             tableLayoutPanelMain.TabIndex = 9;
@@ -90,7 +90,7 @@ namespace Regata.Core.UI.WinForms.Forms
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "SamplesToDetectorsForm";
+            Name = "ContainersToDetectorsForm";
 
         }
 
@@ -98,7 +98,6 @@ namespace Regata.Core.UI.WinForms.Forms
         {
             tableLayoutPanelMain.ResumeLayout(false);
             ResumeLayout(false);
-
         }
 
         #endregion

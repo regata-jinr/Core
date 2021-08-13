@@ -20,7 +20,7 @@ using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms.Forms
 {
-    public partial class SamplesToDetectorsForm : Form
+    public partial class ContainersToDetectorsForm : Form
     {
         private readonly int _loadNumber;
 
@@ -30,7 +30,7 @@ namespace Regata.Core.UI.WinForms.Forms
 
         private readonly Dictionary<int, bool> _assignedContainers;
 
-        public SamplesToDetectorsForm(string[] dets, int loadNumber)
+        public ContainersToDetectorsForm(string[] dets, int loadNumber)
         {
             InitializeComponent();
 
@@ -62,54 +62,50 @@ namespace Regata.Core.UI.WinForms.Forms
             for (int i = 0; i < chacs.Length; ++i)
             {
                 chacs[i] = new CheckedArrayControl<int>(_assignedContainers.Keys.ToArray(), multiSelection: true) 
-                { FlowDirection = FlowDirection.TopDown, Name = dets[i], Text = dets[i]};
+                {  Name = dets[i], Text = dets[i]};
                 chacs[i].SelectionChanged += SamplesToDetectorsForm_SelectionChanged;
+                chacs[i].checkedListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             }
 
-            _detsCheckedArray = new ControlsGroupBox(chacs, vertical: false) { Dock = DockStyle.Fill };
+            _detsCheckedArray = new ControlsGroupBox(chacs, vertical: false) { Dock = DockStyle.Fill, Name = "ContToDetsGroupBox" };
 
             tableLayoutPanelMain.Controls.Add(_detsCheckedArray, 0, 1); 
         }
 
         private void FillButtonsRow()
         {
-            tableLayoutPanelMain.Controls.Add(new ControlsGroupBox(new Control[] { buttonExportToCSV, buttonExportToCSV, buttonFillMeasurementRegister }, vertical: false), 0, 2);
+            tableLayoutPanelMain.Controls.Add(new ControlsGroupBox(new Control[] { buttonExportToCSV, buttonExportToCSV, buttonFillMeasurementRegister }, vertical: false) { Name = "ContToDetsButtonsGroupBox" }, 0, 2);
         }
 
         private CheckedArrayControl<int> CreateArrayCheckBox(string dName)
         {
-            return new CheckedArrayControl<int>(Enumerable.Range(1, MaxContNumber.Value).ToArray(), multiSelection: true) { FlowDirection = FlowDirection.TopDown};
+            return new CheckedArrayControl<int>(Enumerable.Range(1, MaxContNumber.Value).ToArray(), multiSelection: true);
         }
 
-        private void SamplesToDetectorsForm_SelectionChanged(CheckedArrayControl<int> sender)
+        private void SamplesToDetectorsForm_SelectionChanged(object sender, ItemCheckEventArgs e)
         {
-            foreach (var iv in _assignedContainers.Keys)
-            {
-                var tempBool = false;
-                foreach (var dc in _detsCheckedArray._controls.OfType<CheckedArrayControl<int>>())
-                {
-                    tempBool = tempBool || dc.IsSelected(iv);
-                }
-                    _assignedContainers[iv] = tempBool;
-            }
+            var currentListBox = sender as CheckedListBox;
 
-            foreach (var dc in _detsCheckedArray._controls.OfType<CheckedArrayControl<int>>())
+            if (currentListBox == null) return; // never?
+
+            var currentItem = currentListBox.Items[e.Index];
+            foreach (var cac in _detsCheckedArray._controls.OfType<CheckedArrayControl<int>>())
             {
-                if (dc == sender)
+                var dlb = cac.checkedListBox;
+                if (dlb == currentListBox)
                     continue;
-
-                foreach (var ac in _assignedContainers.Keys)
+                if (e.NewValue == CheckState.Checked)
                 {
-                    if (dc.IsSelected(ac)) continue;
-
-                    if (_assignedContainers[ac])
-                        dc.Hide(ac);
-                    else
-                        dc.Show(ac);
+                    dlb.Items.Remove(currentItem);
+                }
+                else
+                {
+                    dlb.Items.Add(currentItem);
+                    //SortCheckBoxList(dlb);
                 }
             }
-
         }
+
 
         public CheckedArrayControl<int> this[string name] => _detsCheckedArray._controls.OfType<CheckedArrayControl<int>>().Where(c => c.Text == name).FirstOrDefault();
 
