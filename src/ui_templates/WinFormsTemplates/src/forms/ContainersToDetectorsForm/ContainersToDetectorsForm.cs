@@ -10,7 +10,6 @@
  ***************************************************************************/
 
 using Regata.Core.DataBase;
-using Regata.Core.UI.WinForms;
 using Regata.Core.UI.WinForms.Controls;
 using System;
 using System.Collections.Generic;
@@ -101,7 +100,6 @@ namespace Regata.Core.UI.WinForms.Forms
                 else
                 {
                     dlb.Items.Add(currentItem);
-                    //SortCheckBoxList(dlb);
                 }
             }
         }

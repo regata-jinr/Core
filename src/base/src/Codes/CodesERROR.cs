@@ -242,9 +242,8 @@ namespace Regata.Core
         public const int ERR_UI_WF_REM_REC                         = 3854;
         public const int ERR_UI_WF_ACQ_START_IRR_NF                = 3855;
         public const int ERR_UI_WF_SAVE_CHNG                       = 3856;
-        
-
-
+        public const int ERR_UI_WF_ADD_MEAS_REC                    = 3857;
+ 
 
         #endregion
 

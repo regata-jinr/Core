@@ -18,6 +18,7 @@ namespace Regata.Core.DataBase
 {
     public class RegataContext : DbContext
     {
+        private readonly string _cs;
      // public DbSet<MonitorsSet>          MonitorsSets          { get; set; }
      // public DbSet<SRMsSet>              SRMsSets              { get; set; }
 
@@ -38,9 +39,17 @@ namespace Regata.Core.DataBase
         public DbSet<User>                 Users                 { get; set; }
         public DbSet<Log>                  Logs                  { get; set; }
 
+        public RegataContext(string cs = "")
+        {
+            if (string.IsNullOrEmpty(cs))
+                _cs = CredentialManager.GetCredentials(GlobalSettings.Targets.DB).Password;
+            else
+                _cs = cs;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)   
         {
-            optionsBuilder.UseSqlServer(CredentialManager.GetCredentials(GlobalSettings.Targets.DB).Password, 
+            optionsBuilder.UseSqlServer(_cs, 
                                         options => 
                                             {
                                                 options.EnableRetryOnFailure(3);

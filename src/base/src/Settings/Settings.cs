@@ -83,7 +83,7 @@ namespace Regata.Core.Settings
             Configuration.GetSection(nameof(Target)).Bind(Targets);
         }
 
-        public static string User => Environment.UserName;
+        public static string User { get; set; }
 
         public static string MailHostTarget;
         public static string EmailRecipients;
