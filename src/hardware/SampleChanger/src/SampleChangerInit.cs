@@ -25,12 +25,25 @@ namespace Regata.Core.Hardware
         /// <summary>
         /// Serial number of Xemo controller. Labeled on on of side panel of Xemo Controller SU 360
         /// </summary>
-        private string _sn;
+        public string SerialNumber { get; set; }
+
+
+        private ushort _comPort;
 
         /// <summary>
         /// Port number referred to Xemo device. By default is 0 that means auto matching.
         /// </summary>
-        private short _comPort;
+        public ushort ComPort
+        {
+            get
+            {
+                return 0;
+            }
+            private set
+            {
+                _comPort = value;
+            }
+        }
 
         /// <summary>
         /// BaudRate for chosen com port. Not used in case interface initialization via USB.
@@ -44,31 +57,29 @@ namespace Regata.Core.Hardware
         /// <param name="comPort">Port number referred to Xemo device. By default is 0 that means auto matching.</param>
         /// <param name="baudRate">BaudRate for chosen com port. Not used in case interface initialization via USB.</param>
         /// <param name="sets">Initial settings of current settings</param><seealso cref="SampleChangerSettings"/>
-        public SampleChanger(string sn, short comPort = 0, int baudRate = 19200, SampleChangerSettings sets = null)
+        public SampleChanger(string sn, ushort comPort = 0, int baudRate = 19200, SampleChangerSettings sets = null)
         {
             if (string.IsNullOrEmpty(sn))
                 throw new ArgumentNullException("Serial number should not be null or empty");
 
             if (sets == null)
                 Settings = new SampleChangerSettings();
-                
 
-            _sn = sn;
-            _comPort = comPort;
+
+            SerialNumber = sn;
+            ComPort = comPort;
             _baudRate = baudRate;
 
             Connect();
 
             InitializeAxes();
 
-
-
         }
 
         private void Connect()
         {
             XemoDLL.ML_DeIniCom();
-            XemoDLL.ML_IniUsb(_comPort, _sn);
+            XemoDLL.ML_IniUsb((short)ComPort, SerialNumber);
             // XemoDLL.ML_ComSelect(_comPort);
             Reset();
         }
@@ -87,7 +98,10 @@ namespace Regata.Core.Hardware
             XemoDLL.ML_DeIniCom();
         }
 
-
+        /// <summary>
+        /// See description for each parameter before change something!
+        /// </summary>
+        /// <param name="ax"></param>
         private void InitAxisParam(Axes ax)
         { 
        
@@ -95,14 +109,17 @@ namespace Regata.Core.Hardware
             var XemoType = XemoDLL.MB_Get(XemoConst.Version);
 
             XemoDLL.MB_ASet(axisNum, XemoConst.Current, Settings.AxesParams.MOTOR_CURRENT[axisNum]);
-            XemoDLL.MB_ASet(axisNum, XemoConst.StopCurr, Settings.AxesParams.MOTOR_STOP_CURRENT[axisNum]);
+
             XemoDLL.MB_ASet(axisNum, XemoConst.Micro, Settings.AxesParams.MICROSTEP_RESOLUTION[axisNum]);
 
-            XemoDLL.MB_ASet(axisNum, XemoConst.Uscale, (int)Math.Round(unchecked(Settings.AxesParams.MM_PER_REVOLUTION[axisNum] * 100f)));
-            XemoDLL.MB_ASet(axisNum, XemoConst.Iscale, (int)Math.Round((float)Settings.AxesParams.INC_PER_REVOLUTION[axisNum] / Settings.AxesParams.MICROSTEP_RESOLUTION[axisNum]));
+            XemoDLL.MB_ASet(axisNum, XemoConst.StopCurr, Settings.AxesParams.MOTOR_STOP_CURRENT[axisNum]);
 
+            XemoDLL.MB_ASet(axisNum, XemoConst.Iscale, (int)Math.Round((float)Settings.AxesParams.INC_PER_REVOLUTION[axisNum] / Settings.AxesParams.MICROSTEP_RESOLUTION[axisNum]));
+            
+            XemoDLL.MB_ASet(axisNum, XemoConst.Uscale, (int)Math.Round(unchecked(Settings.AxesParams.MM_PER_REVOLUTION[axisNum] * 100f)));
 
             XemoDLL.MB_ASet(axisNum, XemoConst.Speed, Settings.AxesParams.MAX_VELOCITY[axisNum] * 100);
+
             XemoDLL.MB_ASet(axisNum, XemoConst.Accel, (int)Math.Round(unchecked(Settings.AxesParams.ACCELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum] * 100))));
             XemoDLL.MB_ASet(axisNum, XemoConst.Decel, (int)Math.Round(unchecked(Settings.AxesParams.DECELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum] * 100))));
 
@@ -113,18 +130,26 @@ namespace Regata.Core.Hardware
             XemoDLL.MB_ASet(axisNum, XemoConst.H3Speed, Settings.AxesParams.REF_VELOCITY_H3[axisNum] * 100);
 
             XemoDLL.MB_ASet(axisNum, XemoConst.HOffset, (int)Math.Round(unchecked(Settings.AxesParams.ZERO_REF_OFFSET[axisNum] * 100)));
-            XemoDLL.MB_ASet(axisNum, XemoConst.SlLimit, 0);
-            XemoDLL.MB_ASet(axisNum, XemoConst.SrLimit, Settings.AxesParams.TRAVEL_AXIS[axisNum] * 100);
 
-            XemoDLL.MB_IoSet(axisNum, 0, 3, 4000, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
+            //// negative switch polarity
+            //XemoDLL.MB_IoSet(axisNum, 0, 0, XemoConst.InPolarity, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
+            //// positive switch polarity
+            //XemoDLL.MB_IoSet(axisNum, 0, 1, XemoConst.InPolarity, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
+            //// reference switch polarity
+            //XemoDLL.MB_IoSet(axisNum, 0, 2, XemoConst.InPolarity, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
+            // all switches polarity
+            XemoDLL.MB_IoSet(axisNum, 0, 3, XemoConst.InPolarity, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
+
+            XemoDLL.MB_ASet(axisNum, XemoConst.SlLimit, 0);
+            XemoDLL.MB_ASet(axisNum, XemoConst.SrLimit, Settings.AxesParams.RIGHT_SOFTWARE_LIMIT[axisNum]);
 
             XemoDLL.MB_ASet(axisNum, XemoConst.BLash, (int)Math.Round(unchecked(Settings.AxesParams.BLASH[axisNum] * 100)));
 
             if (Settings.AxesParams.XTYPE[axisNum] != 0)
                 XemoDLL.MB_ASet(axisNum, XemoConst.XType, Settings.AxesParams.XTYPE[axisNum]);
 
-            if (Settings.AxesParams.GANTRY_ACHSE[axisNum] != 0)
-                XemoDLL.MB_ASet(axisNum, XemoConst.Gantry, Settings.AxesParams.GANTRY_ACHSE[axisNum]);
+            if (Settings.AxesParams.GANTRY_AXIS[axisNum] != 0)
+                XemoDLL.MB_ASet(axisNum, XemoConst.Gantry, Settings.AxesParams.GANTRY_AXIS[axisNum]);
 
             if (Settings.AxesParams.JERKMS[axisNum] != 0)
                 XemoDLL.MB_ASet(axisNum, XemoConst.Jerkms, Settings.AxesParams.JERKMS[axisNum]);
@@ -174,6 +199,7 @@ namespace Regata.Core.Hardware
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+       
 
     } // public partial class SampleChanger  : IDisposable
 }     // namespace Measurements.Core.Hardware

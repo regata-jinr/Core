@@ -41,12 +41,13 @@ namespace Regata.Core.UI.WinForms.Items
             }
         }
 
-        public T CheckedItem => (T)Enum.Parse(typeof(T), EnumMenuItem.DropDownItems.OfType<ToolStripMenuItem>().Where(i => i.Checked).First().Name);
+        public T CheckedItem => (T)Enum.Parse(typeof(T), ToString());
 
+        public override string ToString() => EnumMenuItem.DropDownItems.OfType<ToolStripMenuItem>().Where(i => i.Checked).First().Name;
 
         private string _enumName;
 
-        public EnumItem() // (T currentItem)
+        public EnumItem()
         {
             var values = Enum.GetValues(typeof(T));
             _enumName = typeof(T).Name;

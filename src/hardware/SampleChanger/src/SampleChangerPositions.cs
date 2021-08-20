@@ -38,8 +38,8 @@ namespace Regata.Core.Hardware
         public bool IsNegativeSwitcher => false;
         public bool IsReferenceSwitcher => false;
 
-        public Position Target { get; set; }
-        public Position Current 
+        public Position TargetPosition { get; set; }
+        public Position CurrentPosition 
         {
             get
             {

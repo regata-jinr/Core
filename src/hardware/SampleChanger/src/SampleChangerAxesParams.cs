@@ -9,10 +9,33 @@
  *                                                                         *
  ***************************************************************************/
 
+using Regata.Core.Hardware.Xemo;
+
 namespace Regata.Core.Hardware
 {
     public partial class SampleChanger
     {
+
+        public string Text;
+        public bool IsError => XemoDLL.ML_GetErrState() == 0;
+        public int Code => IsError ? XemoDLL.ML_GetErrCode() : XemoDLL.MB_GetState();
+        
+        public bool NegativeSwitcherX => XemoDLL.MB_IoGet((short)Axes.X, 0, 0, XemoConst.InPolarity) != 0;
+        public bool NegativeSwitcherY => XemoDLL.MB_IoGet((short)Axes.Y, 0, 0, XemoConst.InPolarity) != 0;
+        public bool NegativeSwitcherC => XemoDLL.MB_IoGet((short)Axes.C, 0, 0, XemoConst.InPolarity) != 0;
+
+        public bool PositiveSwitcherX => XemoDLL.MB_IoGet((short)Axes.X, 0, 1, XemoConst.InPolarity) != 0;
+        public bool PositiveSwitcherY => XemoDLL.MB_IoGet((short)Axes.Y, 0, 1, XemoConst.InPolarity) != 0;
+        public bool PositiveSwitcherC => XemoDLL.MB_IoGet((short)Axes.C, 0, 1, XemoConst.InPolarity) != 0;
+
+        public bool ReferenceSwitcherX => XemoDLL.MB_IoGet((short)Axes.X, 0, 2, XemoConst.InPolarity) != 0;
+        public bool ReferenceSwitcherY => XemoDLL.MB_IoGet((short)Axes.Y, 0, 2, XemoConst.InPolarity) != 0;
+        public bool ReferenceSwitcherC => XemoDLL.MB_IoGet((short)Axes.C, 0, 2, XemoConst.InPolarity) != 0;
+
+        public bool ReferenceSwitcher => NegativeSwitcherX || NegativeSwitcherY || NegativeSwitcherC;
+        public bool PositiveSwitcher => PositiveSwitcherX || PositiveSwitcherY || PositiveSwitcherC;
+        public bool NegativeSwitcher => ReferenceSwitcherX || ReferenceSwitcherY || ReferenceSwitcherC;
+
         public const int MaxX = 77400;
         public const int MaxY = 37300;
         public const int MaxC = 0;
@@ -21,18 +44,42 @@ namespace Regata.Core.Hardware
 
         public SampleChangerSettings Settings { get; set; }
 
-
-
+        /// <summary>
+        /// Before an axis in a machine can be used, the following preparatory steps must 
+        /// be taken.On the one hand, this applies to the electric connections, on the
+        /// other it is the initialization of all parameters relevant for the axes. Not until this
+        /// has all been correctly prepared can an axis fulfil its actual assignment. 
+        /// 
+        /// The corresponding references for the electric connections and the procedure
+        /// are described in the technical documentation of the respective devices (device
+        /// manual) and in the installation manual and can be referred to there.In this
+        /// chapter, the complete programming of all axis parameters and the interrelattions between these are dealt with. 
+        /// 
+        /// The important parameters comprise: 
+        /// • Current setting 
+        /// • Step resolution 
+        /// • Scaling of the axes 
+        /// • Running velocity 
+        /// • Acceleration ramps 
+        /// • Running velocity for reference runs 
+        /// • Machine zero point
+        /// • Polarity of the end / reference switches
+        /// • Polarity of the digital inputs and outputs
+        /// These parameters are prescribed through the prevailing kinematics and their
+        /// technical characteristics.Accordingly, the programmer must know and consider all of this data.
+        /// </summary>
         public class AxesParams
-        { 
+        {
             /// <summary>
             /// The stepping-motor power stages of the Xemo Compact Controller 
             /// function as current regulators.With MotionBasic 5, the desired motor
             /// current can be programmed between 0 % and 100% of the maximum
             /// output current of the power stage.Initially, the current is set at 0% when
-            /// the controller is powered up. As a rule, the power current tolerance is 
-            /// inscribed on the motors as “rated current”. This indicates the rated
-            /// current per coil.If the coils of a stepping motor with eight conductors
+            /// the controller is powered up. 
+            ///  
+            /// **As a rule, the power current tolerance is inscribed on the motors as “rated current”.**
+            /// 
+            /// This indicates the rated current per coil.If the coils of a stepping motor with eight conductors
             /// are wired in series, the motor current should be set at this rated current. 
             /// However, if the coils are wired in parallel, the rated current can be
             /// multiplied with a factor of 1.414 (√2) to determine the motor current
@@ -40,9 +87,10 @@ namespace Regata.Core.Hardware
             /// NOTE: If the motor current is set too high, it will result in the destruction of the
             /// motor by overheating.
             /// </summary>
+            /// <seealso>625-11-09_Xemo_Equipment_Manual_Web page 30</seealso>
             public int[] MOTOR_CURRENT { get; set; } = new int[]
            {
-                60,
+                50,
                 50,
                 50,
                 100,
@@ -84,6 +132,29 @@ namespace Regata.Core.Hardware
                 1
            };
 
+            /// <summary>
+            /// Only relevant for stepping motors. This value states the reduction of the motor's current during standstill.
+            /// Unit: % of the preset motor current
+            /// NOTE: Fifty ms after the relevant axis has reached standstill, the current will automatically be reduced.
+            /// Prior to the movement of the axis or the motor, it will be raised again.If the axis or
+            /// motor stood still for longer than 50 ms, i.e.was the current reduced, the axis will remain
+            /// standing for 10 ms to make certain that the renewed raise of current in the end stages is 
+            /// carried out. Not until after that can the axis move again.If the current was not reduced
+            /// (0% reduction), no delay will occur.
+            /// The latter does not apply if the axis has already reached standstill when the current reduction is being deactivated. 
+            /// Note: During µ-step operation, the current should only be reduced insofar as the holding torque
+            /// can resist extrinsic forces.
+            /// </summary>
+            /// <seealso>625-11-09_Xemo_Equipment_Manual_Web page 31</seealso>
+            public int[] MOTOR_STOP_CURRENT { get; set; } = new int[]
+           {
+                50,
+                50,
+                50,
+                50,
+                50
+           };
+
             public int[] MAX_VELOCITY { get; set; } = new int[]
             {
                 100,
@@ -93,10 +164,10 @@ namespace Regata.Core.Hardware
                 400
             };
 
-            public int[] TRAVEL_AXIS { get; set; } = new int[]
+            public int[] RIGHT_SOFTWARE_LIMIT { get; set; } = new int[]
             {
-                400,
-                800,
+                40000,
+                80000,
                 0,
                 100,
                 100
@@ -131,17 +202,6 @@ namespace Regata.Core.Hardware
                 130
             };
 
-
-
-            public int[] MOTOR_STOP_CURRENT { get; set; } = new int[]
-            {
-                70,
-                70,
-                70,
-                70,
-                70
-            };
-
             public float[] ZERO_REF_OFFSET { get; set; } = new float[]
             {
                 0f,
@@ -151,42 +211,18 @@ namespace Regata.Core.Hardware
                 0f
             };
 
-            public float[] NULL_OFFSET { get; set; } = new float[]
-            {
-                -373f,
-                -774f,
-                0f,
-                0f,
-                0f
-            };
-
-            public int[] REF_ORDER { get; set; } = new int[]
-            {
-                1,
-                2,
-                3,
-                4,
-                5
-            };
-
-            public int[] REF_PORT { get; set; } = new int[]
-            {
-                -1,
-                -1,
-                -1,
-                -1,
-                -1
-            };
-
-            public int[] REF_SWITCH { get; set; } = new int[]
-            {
-                -1,
-                -1,
-                -1,
-                -1,
-                -1
-            };
-
+            /// <summary>
+            /// The parameter is bit-oriented. A "1" inverts the logical level of the corresponding input. 
+            /// Example:
+            /// 
+            /// _InPolarity(10.0) = 1 
+            /// "Polarity" of the dig.entry 10.0 will be changed to opener
+            /// 
+            /// _InPolarity(0.0..2) = 7
+            /// "Polarity" the limit switch (inputs 0 and 1) and of the reference switch (input 2) 
+            /// of motor X(port 0) will be changed to opener.The binary statement "7" 
+            /// means that the last 3 bits(bits 0 to 2) are set(111).
+            /// </summary>
             public short[] POLARITY_SWITCHES { get; set; } = new short[]
             {
                 3,
@@ -242,6 +278,10 @@ namespace Regata.Core.Hardware
                 10f
             };
 
+            /// <summary>
+            /// This value determines the start velocity to which a motor can be accelerated starting from 
+            /// its standstill or the stop velocity from which the motor is to be braked down to its standstill.
+            /// </summary>
             public int[] START_STOP_FREQUENCY { get; set; } = new int[]
             {
                 0,
@@ -269,15 +309,6 @@ namespace Regata.Core.Hardware
                 0f
             };
 
-            public int[] NODE_ID { get; set; } = new int[]
-            {
-                1,
-                2,
-                3,
-                4,
-                5
-            };
-
             public int[] POSITION_ERROR { get; set; } = new int[]
             {
                 200,
@@ -285,60 +316,6 @@ namespace Regata.Core.Hardware
                 200,
                 10000,
                 10000
-            };
-
-            public int[] POSITION_WINDOW { get; set; } = new int[]
-            {
-                100,
-                100,
-                100,
-                100,
-                100
-            };
-
-            public int[] POSITION_TIME { get; set; } = new int[]
-            {
-                0,
-                0,
-                0,
-                0,
-                0
-            };
-
-            public int[] HOME_METHOD { get; set; } = new int[]
-            {
-                19,
-                19,
-                19,
-                19,
-                19
-            };
-
-            public int[] ENCODER_NACHBILDUNG { get; set; } = new int[]
-            {
-                -1,
-                -1,
-                -1,
-                -1,
-                -1
-            };
-
-            public int[] ENCODER_RESOLUTION { get; set; } = new int[]
-            {
-                2000,
-                2000,
-                2000,
-                0,
-                0
-            };
-
-            public int[] MAX_ENCODER_FEHLER { get; set; } = new int[]
-            {
-                200,
-                200,
-                200,
-                0,
-                0
             };
 
             public int[] BRAKE { get; set; } = new int[]
@@ -350,43 +327,7 @@ namespace Regata.Core.Hardware
                 -1
             };
 
-            public int[] INIT_PNOZ_OUT { get; set; } = new int[]
-            {
-                -1,
-                -1,
-                -1,
-                -1,
-                -1
-            };
-
-            public int[] P_FAKTOR_GESCHW { get; set; } = new int[]
-            {
-                0,
-                0,
-                0,
-                0,
-                -1
-            };
-
-            public int[] P_FAKTOR_POSMODUS { get; set; } = new int[]
-            {
-                0,
-                0,
-                0,
-                0,
-                0
-            };
-
-            public int[] KOMMUTIERUNGS_METHODE { get; set; } = new int[]
-            {
-                3,
-                3,
-                3,
-                3,
-                3
-            };
-
-            public int[] GANTRY_ACHSE { get; set; } = new int[]
+            public int[] GANTRY_AXIS { get; set; } = new int[]
             {
                 0,
                 0,

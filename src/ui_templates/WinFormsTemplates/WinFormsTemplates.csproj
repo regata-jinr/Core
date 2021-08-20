@@ -32,6 +32,9 @@
     <Compile Update="src\controls\ArrayControl\ButtonsArrayControl - Copy.Designer.cs">
       <DependentUpon>ButtonsArrayControl.Designer.cs</DependentUpon>
     </Compile>
+    <Compile Update="src\forms\RegataBaseForm\RegataBaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

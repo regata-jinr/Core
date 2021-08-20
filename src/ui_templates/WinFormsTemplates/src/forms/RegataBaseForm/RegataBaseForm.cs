@@ -9,12 +9,17 @@
  *                                                                         *
  ***************************************************************************/
 
-using System;
+using System.Windows.Forms;
 
-namespace Regata.Core.Hardware
+namespace Regata.Core.UI.WinForms.Forms
 {
-     public partial class SampleChanger
+    public partial class RegataBaseForm : Form
     {
+        public RegataBaseForm()
+        {
+            InitializeComponent();
+        }
 
-    } // public partial class SampleChanger
-}     // namespace Measurements.Core
+    } //public partial class RegisterForm : Form
+}     // namespace Regata.Core.UI.WinForms
+

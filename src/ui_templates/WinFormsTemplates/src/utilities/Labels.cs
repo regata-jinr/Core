@@ -19,7 +19,6 @@ using Regata.Core.DataBase.Models;
 using RCM=Regata.Core.Messages;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace Regata.Core.UI.WinForms
 { 
     public static class Labels

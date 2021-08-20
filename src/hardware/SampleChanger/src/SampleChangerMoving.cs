@@ -18,78 +18,67 @@ namespace Regata.Core.Hardware
      public partial class SampleChanger
     {
 
-        
-
         public void MoveToTarget()
         {
             // NOTE: Y and C can move in parallel, but X only after Y!
             // https://github.com/regata-jinr/Core/issues/62
 
-            MoveC(Target.C);
-            MoveY(Target.Y);
+            MoveToC(TargetPosition.C);
+            MoveToY(TargetPosition.Y);
             XemoDLL.MB_Still((short)Axes.Y);
-            MoveX(Target.X);
+            MoveToX(TargetPosition.X);
         }
 
         public void MoveToPosition(Position pos)
         {
-            MoveC(pos.C);
-            MoveY(pos.Y);
+            MoveToC(pos.C);
+            MoveToY(pos.Y);
             XemoDLL.MB_Still((short)Axes.Y);
-            MoveX(pos.X);
+            MoveToX(pos.X);
         }
 
         public void MoveRight()
         {
-            Move(Axes.X, Settings.XVelocity, Direction.Positive);
+            Move(Axes.X, velocity: Settings.XVelocity, dir: Direction.Positive);
         }
 
         public void MoveLeft()
         {
-            Move(Axes.X, Settings.XVelocity, Direction.Negative);
+            Move(Axes.X, velocity: Settings.XVelocity, dir: Direction.Negative);
         }
 
         public void MoveUp()
         {
-            Move(Axes.Y, Settings.YVelocity, Direction.Positive);
+            Move(Axes.Y, velocity: Settings.YVelocity, dir: Direction.Positive);
         }
 
         public void MoveDown()
         {
-            Move(Axes.Y, Settings.YVelocity, Direction.Negative);
+            Move(Axes.Y, velocity: Settings.YVelocity, dir: Direction.Negative);
         }
 
         public void MoveClockwise()
         {
-            Move(Axes.C, Settings.CVelocity, Direction.Positive);
+            Move(Axes.C, velocity: Settings.CVelocity, dir: Direction.Positive);
         }
 
         public void MoveСounterclockwise()
         {
-            Move(Axes.C, Settings.CVelocity, Direction.Negative);
+            Move(Axes.C, velocity: Settings.CVelocity, dir: Direction.Negative);
         }
 
-        public void MoveX(int x_coord)
+        public void MoveToX(int x_coord)
         {
-            MoveAxisToCoordinate(Axes.X, x_coord);
+            Move(axis: Axes.X, coordinate: x_coord);
         }
-        public void MoveY(int y_coord)
+        public void MoveToY(int y_coord)
         {
-            MoveAxisToCoordinate(Axes.Y, y_coord);
-        }
-        public void MoveC(int c_coord)
-        {
-            MoveAxisToCoordinate(Axes.C, c_coord);
-        }
+            Move(axis: Axes.Y, coordinate: y_coord);
 
-        private void MoveAxisToCoordinate(Axes axis, int coord)
-        {
-            XemoDLL.MB_Amove((short)axis, coord);
         }
-
-        private void Move(Axes axis, int velocity, Direction dir)
+        public void MoveToC(int c_coord)
         {
-            XemoDLL.MB_Jog((short)axis, (int)dir * velocity);
+            Move(axis: Axes.C, coordinate:c_coord);
         }
 
         private void Move(Axes axis, int? coordinate = null, int? velocity = null, Direction? dir = null)
@@ -100,8 +89,17 @@ namespace Regata.Core.Hardware
                 return;
             }
 
+            if (coordinate.HasValue)
+            {
+                XemoDLL.MB_Amove((short)axis, coordinate.Value);
+                return;
+            }
 
-            
+            if (velocity.HasValue && dir.HasValue)
+            {
+                XemoDLL.MB_Jog((short)axis, (int)dir.Value * velocity.Value);
+                return;
+            }
         }
 
         #region Stop
