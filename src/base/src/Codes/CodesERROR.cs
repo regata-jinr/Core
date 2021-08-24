@@ -25,9 +25,9 @@ namespace Regata.Core
     ///    -[3400-3499) - Settings           error codes
     ///    -[3500-3599) - Export:Excel       error codes
     ///    -[3600-3699) - Data               error codes
-    ///    -[3700-3799) -                    error codes
+    ///    -[3700-3799) - XEMO SampleChanger error codes
     ///    -[3800-3899) - UI:WinForms        error codes
-    ///    -[3900-3999) - UI:WinForms        error codes
+    ///    -[3900-3999) - Scales             error codes
     /// </summary>
     public partial struct Codes
     {
@@ -179,7 +179,14 @@ namespace Regata.Core
         public const int ERR_DATA_GET_SSID = 3600;
         public const int ERR_DATA_GET_SRMSID = 3601;
 
+        #endregion
 
+        #region XEMO SampleChanger Errors
+
+        public const int ERR_XM_COM_UNREG = 3700;
+        public const int ERR_XM_INI_UNREG = 3701;
+        public const int ERR_XM_CON_UNREG = 3702;
+        public const int ERR_XM_INI_AX_UNREG = 3703;
 
         #endregion
 

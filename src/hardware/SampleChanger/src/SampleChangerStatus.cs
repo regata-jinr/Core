@@ -10,7 +10,6 @@
  ***************************************************************************/
 
 using System;
-using System.Threading.Tasks;
 
 namespace Regata.Core.Hardware
 {
@@ -46,9 +45,8 @@ namespace Regata.Core.Hardware
 
         //public async Task GetStatusAsync()
         //{
-            
-        //}
 
+        //}
 
     } // public partial class SampleChanger
 }     // namespace Measurements.Core

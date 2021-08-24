@@ -223,7 +223,7 @@ namespace Regata.Core.UI.WinForms.Forms
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            MinimumSize = new Size(2300,1300);
+            //MinimumSize = new Size(2300,1300);
             StartPosition = FormStartPosition.CenterScreen;
             Margin = new Padding(4, 3, 4, 3);
             AutoScroll = true;

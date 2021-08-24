@@ -10,8 +10,8 @@
  ***************************************************************************/
 
 using System;
-using Regata.Core;
 using Regata.Core.Hardware.Xemo;
+using Regata.Core.Messages;
 
 namespace Regata.Core.Hardware
 {
@@ -59,29 +59,48 @@ namespace Regata.Core.Hardware
         /// <param name="sets">Initial settings of current settings</param><seealso cref="SampleChangerSettings"/>
         public SampleChanger(string sn, ushort comPort = 0, int baudRate = 19200, SampleChangerSettings sets = null)
         {
-            if (string.IsNullOrEmpty(sn))
-                throw new ArgumentNullException("Serial number should not be null or empty");
+            try
+            {
+                if (string.IsNullOrEmpty(sn))
+                    throw new ArgumentNullException("Serial number should not be null or empty");
 
-            if (sets == null)
-                Settings = new SampleChangerSettings();
+                if (sets == null)
+                    Settings = new SampleChangerSettings();
 
 
-            SerialNumber = sn;
-            ComPort = comPort;
-            _baudRate = baudRate;
+                SerialNumber = sn;
 
-            Connect();
+                if (comPort == 0)
+                    ComPort = GetComPortByDeviceId(SerialNumber);
+                else
+                    ComPort = comPort;
 
-            InitializeAxes();
+                _baudRate = baudRate;
+
+                Connect();
+
+                InitializeAxes();
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new Message(Codes.ERR_XM_INI_UNREG) { DetailedText = ex.Message });
+            }
 
         }
 
         private void Connect()
         {
+            try
+            { 
             XemoDLL.ML_DeIniCom();
             XemoDLL.ML_IniUsb((short)ComPort, SerialNumber);
             // XemoDLL.ML_ComSelect(_comPort);
             Reset();
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new Message(Codes.ERR_XM_CON_UNREG) { DetailedText = ex.Message });
+            }
         }
 
         private void InitializeAxes()
@@ -103,68 +122,75 @@ namespace Regata.Core.Hardware
         /// </summary>
         /// <param name="ax"></param>
         private void InitAxisParam(Axes ax)
-        { 
-       
-            var axisNum = (short)ax;
-            var XemoType = XemoDLL.MB_Get(XemoConst.Version);
-
-            XemoDLL.MB_ASet(axisNum, XemoConst.Current, Settings.AxesParams.MOTOR_CURRENT[axisNum]);
-
-            XemoDLL.MB_ASet(axisNum, XemoConst.Micro, Settings.AxesParams.MICROSTEP_RESOLUTION[axisNum]);
-
-            XemoDLL.MB_ASet(axisNum, XemoConst.StopCurr, Settings.AxesParams.MOTOR_STOP_CURRENT[axisNum]);
-
-            XemoDLL.MB_ASet(axisNum, XemoConst.Iscale, (int)Math.Round((float)Settings.AxesParams.INC_PER_REVOLUTION[axisNum] / Settings.AxesParams.MICROSTEP_RESOLUTION[axisNum]));
-            
-            XemoDLL.MB_ASet(axisNum, XemoConst.Uscale, (int)Math.Round(unchecked(Settings.AxesParams.MM_PER_REVOLUTION[axisNum] * 100f)));
-
-            XemoDLL.MB_ASet(axisNum, XemoConst.Speed, Settings.AxesParams.MAX_VELOCITY[axisNum] * 100);
-
-            XemoDLL.MB_ASet(axisNum, XemoConst.Accel, (int)Math.Round(unchecked(Settings.AxesParams.ACCELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum] * 100))));
-            XemoDLL.MB_ASet(axisNum, XemoConst.Decel, (int)Math.Round(unchecked(Settings.AxesParams.DECELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum] * 100))));
-
-            XemoDLL.MB_ASet(axisNum, XemoConst.Vmin, (int)Math.Round(unchecked(Settings.AxesParams.START_STOP_FREQUENCY[axisNum] * 100f) / 10.0));
-
-            XemoDLL.MB_ASet(axisNum, XemoConst.H1Speed, Settings.AxesParams.REF_VELOCITY_H1[axisNum] * 100);
-            XemoDLL.MB_ASet(axisNum, XemoConst.H2Speed, Settings.AxesParams.REF_VELOCITY_H2[axisNum] * 100);
-            XemoDLL.MB_ASet(axisNum, XemoConst.H3Speed, Settings.AxesParams.REF_VELOCITY_H3[axisNum] * 100);
-
-            XemoDLL.MB_ASet(axisNum, XemoConst.HOffset, (int)Math.Round(unchecked(Settings.AxesParams.ZERO_REF_OFFSET[axisNum] * 100)));
-
-            //// negative switch polarity
-            //XemoDLL.MB_IoSet(axisNum, 0, 0, XemoConst.InPolarity, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
-            //// positive switch polarity
-            //XemoDLL.MB_IoSet(axisNum, 0, 1, XemoConst.InPolarity, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
-            //// reference switch polarity
-            //XemoDLL.MB_IoSet(axisNum, 0, 2, XemoConst.InPolarity, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
-            // all switches polarity
-            XemoDLL.MB_IoSet(axisNum, 0, 3, XemoConst.InPolarity, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
-
-            XemoDLL.MB_ASet(axisNum, XemoConst.SlLimit, 0);
-            XemoDLL.MB_ASet(axisNum, XemoConst.SrLimit, Settings.AxesParams.RIGHT_SOFTWARE_LIMIT[axisNum]);
-
-            XemoDLL.MB_ASet(axisNum, XemoConst.BLash, (int)Math.Round(unchecked(Settings.AxesParams.BLASH[axisNum] * 100)));
-
-            if (Settings.AxesParams.XTYPE[axisNum] != 0)
-                XemoDLL.MB_ASet(axisNum, XemoConst.XType, Settings.AxesParams.XTYPE[axisNum]);
-
-            if (Settings.AxesParams.GANTRY_AXIS[axisNum] != 0)
-                XemoDLL.MB_ASet(axisNum, XemoConst.Gantry, Settings.AxesParams.GANTRY_AXIS[axisNum]);
-
-            if (Settings.AxesParams.JERKMS[axisNum] != 0)
-                XemoDLL.MB_ASet(axisNum, XemoConst.Jerkms, Settings.AxesParams.JERKMS[axisNum]);
-
-            if (Settings.AxesParams.INC_MONITORING_ENCODER[axisNum] != 0)
+        {
+            try
             {
-                XemoDLL.MB_ASet(axisNum, XemoConst.StpEncoder, Settings.AxesParams.INC_MONITORING_ENCODER[axisNum]);
-                XemoDLL.MB_ASet(axisNum, XemoConst.FErrWin, Settings.AxesParams.POSITION_ERROR[axisNum]);
+                var axisNum = (short)ax;
+                var XemoType = XemoDLL.MB_Get(XemoConst.Version);
+
+                XemoDLL.MB_ASet(axisNum, XemoConst.Current, Settings.AxesParams.MOTOR_CURRENT[axisNum]);
+
+                XemoDLL.MB_ASet(axisNum, XemoConst.Micro, Settings.AxesParams.MICROSTEP_RESOLUTION[axisNum]);
+
+                XemoDLL.MB_ASet(axisNum, XemoConst.StopCurr, Settings.AxesParams.MOTOR_STOP_CURRENT[axisNum]);
+
+                XemoDLL.MB_ASet(axisNum, XemoConst.Iscale, (int)Math.Round((float)Settings.AxesParams.INC_PER_REVOLUTION[axisNum] / Settings.AxesParams.MICROSTEP_RESOLUTION[axisNum]));
+
+                XemoDLL.MB_ASet(axisNum, XemoConst.Uscale, (int)Math.Round(unchecked(Settings.AxesParams.MM_PER_REVOLUTION[axisNum] * 100f)));
+
+                XemoDLL.MB_ASet(axisNum, XemoConst.Speed, Settings.AxesParams.MAX_VELOCITY[axisNum] * 100);
+
+                XemoDLL.MB_ASet(axisNum, XemoConst.Accel, (int)Math.Round(unchecked(Settings.AxesParams.ACCELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum] * 100))));
+                XemoDLL.MB_ASet(axisNum, XemoConst.Decel, (int)Math.Round(unchecked(Settings.AxesParams.DECELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum] * 100))));
+
+                XemoDLL.MB_ASet(axisNum, XemoConst.Vmin, (int)Math.Round(unchecked(Settings.AxesParams.START_STOP_FREQUENCY[axisNum] * 100f) / 10.0));
+
+                XemoDLL.MB_ASet(axisNum, XemoConst.H1Speed, Settings.AxesParams.REF_VELOCITY_H1[axisNum] * 100);
+                XemoDLL.MB_ASet(axisNum, XemoConst.H2Speed, Settings.AxesParams.REF_VELOCITY_H2[axisNum] * 100);
+                XemoDLL.MB_ASet(axisNum, XemoConst.H3Speed, Settings.AxesParams.REF_VELOCITY_H3[axisNum] * 100);
+
+                XemoDLL.MB_ASet(axisNum, XemoConst.HOffset, (int)Math.Round(unchecked(Settings.AxesParams.ZERO_REF_OFFSET[axisNum] * 100)));
+
+                //// negative switch polarity
+                //XemoDLL.MB_IoSet(axisNum, 0, 0, XemoConst.InPolarity, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
+                //// positive switch polarity
+                //XemoDLL.MB_IoSet(axisNum, 0, 1, XemoConst.InPolarity, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
+                //// reference switch polarity
+                //XemoDLL.MB_IoSet(axisNum, 0, 2, XemoConst.InPolarity, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
+
+                // all switches polarity
+                XemoDLL.MB_IoSet(axisNum, 0, 3, XemoConst.InPolarity, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
+
+                XemoDLL.MB_ASet(axisNum, XemoConst.SlLimit, 0);
+                XemoDLL.MB_ASet(axisNum, XemoConst.SrLimit, Settings.AxesParams.RIGHT_SOFTWARE_LIMIT[axisNum]);
+
+                XemoDLL.MB_ASet(axisNum, XemoConst.BLash, (int)Math.Round(unchecked(Settings.AxesParams.BLASH[axisNum] * 100)));
+
+                if (Settings.AxesParams.XTYPE[axisNum] != 0)
+                    XemoDLL.MB_ASet(axisNum, XemoConst.XType, Settings.AxesParams.XTYPE[axisNum]);
+
+                if (Settings.AxesParams.GANTRY_AXIS[axisNum] != 0)
+                    XemoDLL.MB_ASet(axisNum, XemoConst.Gantry, Settings.AxesParams.GANTRY_AXIS[axisNum]);
+
+                if (Settings.AxesParams.JERKMS[axisNum] != 0)
+                    XemoDLL.MB_ASet(axisNum, XemoConst.Jerkms, Settings.AxesParams.JERKMS[axisNum]);
+
+                if (Settings.AxesParams.INC_MONITORING_ENCODER[axisNum] != 0)
+                {
+                    XemoDLL.MB_ASet(axisNum, XemoConst.StpEncoder, Settings.AxesParams.INC_MONITORING_ENCODER[axisNum]);
+                    XemoDLL.MB_ASet(axisNum, XemoConst.FErrWin, Settings.AxesParams.POSITION_ERROR[axisNum]);
+                }
+
+                if (XemoType != 448)
+                    XemoDLL.MB_ASet(axisNum, XemoConst.LDecel, (int)Math.Round(unchecked(checked(Settings.AxesParams.MAX_VELOCITY[axisNum] * 100)) * Settings.AxesParams.EMERGCY_DECEL_FACTOR[axisNum]));
+
+                if (Settings.AxesParams.BRAKE[axisNum] >= 0)
+                    XemoDLL.MB_ASet(axisNum, XemoConst.BrakeOutp, 10 + 4096 * Settings.AxesParams.BRAKE[axisNum] + 256);
             }
-
-            if (XemoType != 448)
-                XemoDLL.MB_ASet(axisNum, XemoConst.LDecel, (int)Math.Round(unchecked(checked(Settings.AxesParams.MAX_VELOCITY[axisNum] * 100)) * Settings.AxesParams.EMERGCY_DECEL_FACTOR[axisNum]));
-
-            if (Settings.AxesParams.BRAKE[axisNum] >= 0)
-                XemoDLL.MB_ASet(axisNum, XemoConst.BrakeOutp, 10 + 4096 * Settings.AxesParams.BRAKE[axisNum] + 256);
+            catch (Exception ex)
+            {
+                Report.Notify(new Message(Codes.ERR_XM_INI_AX_UNREG) { DetailedText = string.Join('.', $"Error during axis {(short)ax} initialization", ex.Message) });
+            }
         }
 
         private bool _isDisposed;
@@ -202,4 +228,4 @@ namespace Regata.Core.Hardware
        
 
     } // public partial class SampleChanger  : IDisposable
-}     // namespace Measurements.Core.Hardware
+}     // namespace Regata.Core.Hardware

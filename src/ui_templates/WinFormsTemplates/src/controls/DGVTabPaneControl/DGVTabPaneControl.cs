@@ -184,4 +184,4 @@ namespace Regata.Core.UI.WinForms.Controls
         public int SelectedTabIndex => tabControl.SelectedIndex;
 
     }   // public partial class DGVTabPaneControl : UserControl
-}     // namespace WinFormsTemplates.src.RegataTabPaneControl
+}       // namespace Regata.Core.UI.WinForms.Controls

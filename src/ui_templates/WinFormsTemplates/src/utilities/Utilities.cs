@@ -47,11 +47,15 @@ namespace Regata.Core.UI.WinForms
                     break;
 
                 case StatusStrip ss:
-                    foreach (ToolStripItem item in ss.Items)
+                    foreach (object item in ss.Items)
                     {
                         act(item);
                         ApplyActionToControl(item, act);
                     }
+                    break;
+
+                case ToolStripControlHost tsch:
+                    act(tsch.Control);
                     break;
 
                 case ToolStripMenuItem tsi:

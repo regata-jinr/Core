@@ -25,7 +25,7 @@ namespace Regata.Core
     ///    -[2400-2499) - Settings           warning codes
     ///    -[2500-2599) - Export:Excel       warning codes
     ///    -[2600-2699) - Export:GoogleSheet warning codes
-    ///    -[2700-2799) - Export:CSV         warning codes
+    ///    -[2700-2799) - XEMO SampleChanger warning codes
     ///    -[2800-2899) - UI:WinForms        warning codes
     /// </summary>
     public partial struct Codes
@@ -49,12 +49,16 @@ namespace Regata.Core
 
         #endregion
 
-        #region
+        #region Settings
 
         public const int WARN_SET_FILE_NOT_EXST = 2400;
-
         #endregion
 
+        #region SampleChanger
+
+        public const int WARN_XM_COM_NOT_FOUND = 2700;
+
+        #endregion
 
         #region UI:WinForms
         public const int WARN_UI_WF_RDGV_Empty_Data = 2800;

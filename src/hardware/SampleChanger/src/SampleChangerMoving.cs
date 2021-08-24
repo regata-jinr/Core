@@ -143,5 +143,5 @@ namespace Regata.Core.Hardware
 
 
     } // public partial class SampleChanger
-}     // namespace Measurements.Core.Hardware
+}     // namespace Regata.Core.Hardware
 

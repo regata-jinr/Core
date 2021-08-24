@@ -23,6 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="src\controls\ArrayControl\ButtonsArrayControl - Copy - Copy.Designer.cs">
       <DependentUpon>ButtonsArrayControl - Copy.Designer.cs</DependentUpon>
     </Compile>
@@ -32,14 +37,28 @@
     <Compile Update="src\controls\ArrayControl\ButtonsArrayControl - Copy.Designer.cs">
       <DependentUpon>ButtonsArrayControl.Designer.cs</DependentUpon>
     </Compile>
+    <Compile Update="src\controls\IndicatorControl\IndicatorControl.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IndicatorControl.resx</DependentUpon>
+    </Compile>
     <Compile Update="src\forms\RegataBaseForm\RegataBaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="src\controls\ArrayControl\ButtonsArrayControl - Copy.resx">
       <DependentUpon>ButtonsArrayControl.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="src\controls\IndicatorControl\IndicatorControl.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IndicatorControl.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 

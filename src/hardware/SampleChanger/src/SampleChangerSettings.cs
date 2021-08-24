@@ -18,7 +18,6 @@ namespace Regata.Core.Hardware
     {
         public SampleChanger.AxesParams AxesParams { get; set; } = new SampleChanger.AxesParams();
 
-
         #region Velocity
         public int XVelocity
         {
@@ -185,6 +184,5 @@ namespace Regata.Core.Hardware
 
         #endregion
 
-        // TODO: add all binding position like above detector and so on
-    }
-}
+    } // public class SampleChangerSettings
+}     // namespace Regata.Core.Hardware
