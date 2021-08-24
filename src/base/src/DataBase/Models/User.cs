@@ -11,7 +11,6 @@
 
 
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Regata.Core.DataBase.Models
 {

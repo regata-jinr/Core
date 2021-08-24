@@ -19,8 +19,6 @@ namespace Regata.Core.DataBase
     public class RegataContext : DbContext
     {
         private readonly string _cs;
-     // public DbSet<MonitorsSet>          MonitorsSets          { get; set; }
-     // public DbSet<SRMsSet>              SRMsSets              { get; set; }
 
         public DbSet<Sample>               Samples               { get; set; }
         public DbSet<ReweightInfo>         ReweightInfoes        { get; set; }
@@ -38,6 +36,7 @@ namespace Regata.Core.DataBase
         public DbSet<MessageDefault>       MessageDefaults       { get; set; }
         public DbSet<User>                 Users                 { get; set; }
         public DbSet<Log>                  Logs                  { get; set; }
+        public DbSet<BindingPosition>      BindingPositions      { get; set; }
 
         public RegataContext(string cs = "")
         {
@@ -142,6 +141,12 @@ namespace Regata.Core.DataBase
                                    m.SetNumber,
                                    m.Number
                                });
+
+            modelBuilder.Entity<BindingPosition>()
+                              .HasKey(bp => new
+                              {
+                                  bp.Id
+                              });
 
             #region to be added
 

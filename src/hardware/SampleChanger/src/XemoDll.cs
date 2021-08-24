@@ -6,6 +6,7 @@ namespace Regata.Core.Hardware.Xemo
     /// Definition der XemoDLL-Funktionen
     /// </summary>
     /// <remarks></remarks>
+    /// 
     internal static class XemoDLL
     {
         public const string XEMO_DLL_VESRION = "2.40";

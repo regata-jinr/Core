@@ -157,9 +157,9 @@ namespace Regata.Core.Hardware
 
             public int[] MAX_VELOCITY { get; set; } = new int[]
             {
-                100,
-                100,
-                120,
+                1000,
+                1000,
+                1000,
                 400,
                 400
             };

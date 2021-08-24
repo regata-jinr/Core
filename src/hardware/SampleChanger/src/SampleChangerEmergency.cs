@@ -9,12 +9,28 @@
  *                                                                         *
  ***************************************************************************/
 
+using Regata.Core.Messages;
 using System;
+using System.Runtime.InteropServices;
 
 namespace Regata.Core.Hardware
 {
-     public partial class SampleChanger
+    public partial class SampleChanger
     {
+        private ErrorHandlerDelegate ErrorHandlerDel { get; set; }
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate IntPtr ErrorHandlerDelegate(IntPtr ptr);
+
+        [DllImport("XemoDll.dll", EntryPoint = "_ML_ErrorCallBack@4", ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern void ML_ErrorCallBackDelegate(ErrorHandlerDelegate edel);
+
+        private IntPtr ErrorHandler(IntPtr errNo)
+        {
+            Report.Notify(new Message((int)errNo) { Head = $"Getting error from xemo device: {SerialNumber}"});
+            ErrorOccurred?.Invoke(SerialNumber, (int)errNo);
+            return IntPtr.Zero;
+        }
 
     } // public partial class SampleChanger
-}     // namespace Measurements.Core
+}     // namespace Regata.Core.Hardware

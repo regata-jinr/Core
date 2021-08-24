@@ -37,34 +37,34 @@ namespace Regata.Core.Hardware
             MoveToX(pos.X);
         }
 
-        public void MoveRight()
+        public void MoveRight(int VelocityScalingFactor)
         {
-            Move(Axes.X, velocity: Settings.XVelocity, dir: Direction.Positive);
+            Move(Axes.X, velocityScalingFactor: VelocityScalingFactor, dir: Direction.Positive);
         }
 
-        public void MoveLeft()
+        public void MoveLeft(int VelocityScalingFactor)
         {
-            Move(Axes.X, velocity: Settings.XVelocity, dir: Direction.Negative);
+            Move(Axes.X, velocityScalingFactor: VelocityScalingFactor, dir: Direction.Negative);
         }
 
-        public void MoveUp()
+        public void MoveUp(int VelocityScalingFactor)
         {
-            Move(Axes.Y, velocity: Settings.YVelocity, dir: Direction.Positive);
+            Move(Axes.Y, velocityScalingFactor: VelocityScalingFactor, dir: Direction.Positive);
         }
 
-        public void MoveDown()
+        public void MoveDown(int VelocityScalingFactor)
         {
-            Move(Axes.Y, velocity: Settings.YVelocity, dir: Direction.Negative);
+            Move(Axes.Y, velocityScalingFactor: VelocityScalingFactor, dir: Direction.Negative);
         }
 
-        public void MoveClockwise()
+        public void MoveClockwise(int VelocityScalingFactor)
         {
-            Move(Axes.C, velocity: Settings.CVelocity, dir: Direction.Positive);
+            Move(Axes.C, velocityScalingFactor: VelocityScalingFactor, dir: Direction.Positive);
         }
 
-        public void MoveСounterclockwise()
+        public void MoveСounterclockwise(int VelocityScalingFactor)
         {
-            Move(Axes.C, velocity: Settings.CVelocity, dir: Direction.Negative);
+            Move(Axes.C, velocityScalingFactor: VelocityScalingFactor, dir: Direction.Negative);
         }
 
         public void MoveToX(int x_coord)
@@ -81,9 +81,9 @@ namespace Regata.Core.Hardware
             Move(axis: Axes.C, coordinate:c_coord);
         }
 
-        private void Move(Axes axis, int? coordinate = null, int? velocity = null, Direction? dir = null)
+        private void Move(Axes axis, int? coordinate = null, int? velocityScalingFactor = null, Direction? dir = null)
         {
-            if (coordinate == null && velocity == null)
+            if (coordinate == null && velocityScalingFactor == null)
             {
                 Home(axis);
                 return;
@@ -95,9 +95,17 @@ namespace Regata.Core.Hardware
                 return;
             }
 
-            if (velocity.HasValue && dir.HasValue)
+            if (velocityScalingFactor.HasValue && dir.HasValue)
             {
-                XemoDLL.MB_Jog((short)axis, (int)dir.Value * velocity.Value);
+                var _speed = axis switch
+                { 
+                    Axes.X => Settings.XVelocity,
+                    Axes.Y => Settings.YVelocity,
+                    Axes.C => Settings.CVelocity,
+                    _ => 0
+
+                };
+                XemoDLL.MB_Jog((short)axis, (int)dir.Value * velocityScalingFactor.Value * _speed);
                 return;
             }
         }

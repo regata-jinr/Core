@@ -91,11 +91,17 @@ namespace Regata.Core.Hardware
         private void Connect()
         {
             try
-            { 
-            XemoDLL.ML_DeIniCom();
-            XemoDLL.ML_IniUsb((short)ComPort, SerialNumber);
-            // XemoDLL.ML_ComSelect(_comPort);
-            Reset();
+            {
+
+                //XemoDLL.ML_RunErrCallBack(((int)Handler(new IntPtr(XemoDLL.MB_Get(XemoKonst.m_ErrNo)))));
+
+                ErrorHandlerDel = ErrorHandler; // you must save a "copy" of the delegate so that if the C functions calls this method at any time, this copy is still "alive" and hasn't been GC 
+                ML_ErrorCallBackDelegate(ErrorHandlerDel);
+
+                XemoDLL.ML_DeIniCom();
+                XemoDLL.ML_IniUsb((short)ComPort, SerialNumber);
+                // XemoDLL.ML_ComSelect(_comPort);
+                Reset();
             }
             catch (Exception ex)
             {
@@ -138,7 +144,13 @@ namespace Regata.Core.Hardware
 
                 XemoDLL.MB_ASet(axisNum, XemoConst.Uscale, (int)Math.Round(unchecked(Settings.AxesParams.MM_PER_REVOLUTION[axisNum] * 100f)));
 
-                XemoDLL.MB_ASet(axisNum, XemoConst.Speed, Settings.AxesParams.MAX_VELOCITY[axisNum] * 100);
+                var _speeds = new int[] { Settings.YVelocity, Settings.XVelocity, Settings.CVelocity };
+                
+                if (_speeds[axisNum] > Settings.AxesParams.MAX_VELOCITY[axisNum])
+                    XemoDLL.MB_ASet(axisNum, XemoConst.Speed, Settings.AxesParams.MAX_VELOCITY[axisNum]);
+                else
+                    XemoDLL.MB_ASet(axisNum, XemoConst.Speed, _speeds[axisNum]);
+
 
                 XemoDLL.MB_ASet(axisNum, XemoConst.Accel, (int)Math.Round(unchecked(Settings.AxesParams.ACCELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum] * 100))));
                 XemoDLL.MB_ASet(axisNum, XemoConst.Decel, (int)Math.Round(unchecked(Settings.AxesParams.DECELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum] * 100))));
