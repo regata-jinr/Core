@@ -1,0 +1,158 @@
+code	alias	desc
+1000	_State	System status 90
+1001	_PartNo	Part number of the Xemo controller 90
+1002	_EcLevel	Engineering level of the Xemo controller 90
+1003	_SerialNo	Serial number of the Xemo controller 90
+1004	_Version	Software - number of the operating system 91
+1005	_Release	Release number of the operating system 91
+1006	_ComRelease	Downwards compatibility limit 91
+1007	_Extent	Expansion level of the Xemo controller 91
+1008	_Clock	Present status of the system timer 91
+1010	_ErrNo	Runtime error 91
+1011	_ErrState	Present error status 92
+1012	_ErrLine	Line number in the source code at which the error occurred
+1013	_ErrAxis	Number of the axis affected by the error 92
+1014	_ErrParam	Number of the parameter which caused the error
+1015	_SubError	Additional information about the error 93
+1017	_EnaOptCode	Influence the behaviour of the axis release 93
+1021	_FIFOSize	Size of the online FIFO 93
+1022	_FIFOLevel	Fill level of the online FIFO 93
+1023	_FIFOLeft	Free memory in the FIFO 94
+1024	_FIFOMarker	Setting of the upper FIFO mark 94
+1025	_FIFOLow	Setting of the lower FIFO mark 94
+1030	_Mode1	Baud rate and mode of the 1. serial interface 94
+1033	_ModeUsb	Release USB interface for HPGL or G-code 95
+1034	_CanMode	Set CAN baud rate channel 1 96
+1035	_OtSelect	Register OTxxx control panel 96
+1036	_	Can2Mode Set CAN baud rate channel 2 96
+1038	_Can1Device	Register first CANopen device for I/O expansion 97
+1039	_Can2Device	Register second CANopen device for I/O expansion
+1040	_IpGroup	Coordinate system for trajectory control 97
+1041	_H1Trans	Define H-portal 1 97
+1042	_H2Trans	Define H-portal 2 98
+1043	_IpSyncClk	Manipulation of the CANopen synchronization pulse for external power electronics (controller)
+1050	_BkPwmCycle	Cyclic time of the PWM 98
+1051	_BkPwmDuty	Input/Break ratio of the PWM 98
+1060	_AnlIn	Analog input Xemo-Step / analog input 0 98
+1061	_AnlOut	Analog value display (option) 99
+1062	_OvrIn	Analog input of the override-poti 99
+1063	_JoyX	Analog input of the X axis joystick
+1064	_JoyY	Analog input of the Y axis joystick 99
+1070	_HandWheel	Present position of the handwheel 99
+1071	_Encoder	Present position at the incremental encoder input
+1072	_EncIdx	Index position at the incremental encoder input 100
+1073	_EncIpr	Impulse per revolution for index monitoring 100
+1075	_Ovride	Write over the present velocity 100
+1076	_Omode	Override mode 100
+1077	_OvScale	Scaling the override-poti 101
+1080	_SanlIn0	Analog input 0 (option) 101
+1081	_SanlIn1	Analog input 1 (option) 101
+1082	_SanlIn2	Analog input 2 (option) 101
+1090	_VoMode	Velocity-dependent analog value issue 101
+1091	_VoScale	Scaling of the velocity dependence 102
+1092	_VoOffs	Offset for analog output voltage 102
+1093	_VoMax	Upper limit for analog output voltage 102
+1094	_VoMin	Lower limit for analog output voltage 102
+1100	_AnlFSel	Selection of an analog input for filter programming 102
+1101	_AFType	Selection of the filter type for an analog input 102
+1102	_AFSTime	Filter sampling interval for analog input 102
+1103	_AFSpread	Spread analog input 102
+1104	_AFHyster	Hysteresis of the hysteresis filter 103
+1105	_AFTrack	Step width of the tracking filter 103
+1106	_AFAverage	Sampling number of the mid-value filter 103
+1110	_IsoLineNr	Present G-code line number 103
+1111	_IsoGScale	Scaling of the G-code coordinates 103
+1112	_IsoFScale	Scaling of the feed-motion value 103
+1113	_IsoSScale	Scaling of the spindle revolutions 103
+1120	_IdxFunc	Selection of the special function 104
+1121	_IdxFcMode	Functions of the special function 104
+1400	_ComPort	Selection of the command interface 105
+1401	_Bdrate	Configuration of the baud rate 105
+1402	_DsplContr	Set the display contrast 105
+1403	_PonComDelay	Delay of the interface initialization after switching on 105
+1404	_USBConfig	Configure the USB interface 106
+1405	_CanTerm	Terminator resistance CAN on/off 106
+1406	_BkType	Indicate bus coupler type 106
+1407	Selection	of communication interface 106
+1408	_USBSpeed	Speed of the USB interface 107
+1409	_IpAddr	IP address of the Xemo controller 107
+1410	_IpMask	Net mask 107
+1411	_IpGateWay	IP ґGateway address 107
+1412	_MacAddr1	MAC address M1-M2-M3 107
+1413	_MacAddr2	MAC address M4-M5-M6 107
+2000	_Speed	Running velocity 108
+2001	_Accel	Acceleration 108
+2002	_Decel	Deceleration 108
+2003	_Vmin	Start/Stop velocity 109
+2004	_Ldecel	Emergency stop ramp 109
+2006	_Jerk	Smoothing of the ramps [UU / sec^3] 110
+2007	_Jerkms	Smoothing of the ramps [ms] 110
+2008	_MaxVel	Maximum programmable velocity 111
+2009	_MaxAcc	Maximum programmable acceleration 111
+2010	_IpLink	Allocation to a coordinate system 111
+2011	_IpAxis	Allocation to an interpolation axis in the coordinate system 111
+2012	_NodeId	CAN address a CANopen power stage 112
+2013	_XType	Type of axis (connection type of axis) 112
+2014	_XVersion	Version number of a iPM550 motor amplifier 112
+2020	_H1Speed	Velocity 1 reference run 112
+2021	_H2Speed	Velocity 2 reference run 113
+2022	_H3Speed	Velocity 3 reference run 113
+2023	_HOffset	Distance between the zero point of the machine and the reference point 113
+2024	_HVerify	Inspection of the reference position 113
+2025	_HMethod	Kind of reference run algorithm 113
+2026	_HRefInps	Programming of limit and reference switches 114
+2030	_OpMode	Activate the controller 114
+2031	_Current	Phase current of a stepping motor 115
+2032	_FErrWin	Permissible contouring error 115
+2033	_TPosWin	target window 115
+2034	_TPosTime	Permissible positioning time 115
+2035	_Brakeoutp	Activation of a brake output 116
+2036	_BrkDelay1	Time interval between setting the motor current and releasing the brake 116
+2037	_BrkDelay2	Time interval during which the brake output is fully supplied with current 116
+2038	_MaxFErr	Maximum measured contouring error 117
+2040	_Uscale	Scaling user units 117
+2041	_Iscale	Scaling increments 117
+2042	_Zero	Shift of the zero point 118
+2043	_Origin	Shift of the zero point 118
+2044	_Refp	Shift of the zero point 118
+2045	_SlLimit	Software limit switch negative (left) 118
+2046	_SrLimit	Software limit switch positive (right) 119
+2047	_Pmode	Position counter mode (ring mode) 119
+2048	_Blash	Reversal slack compensation 120
+2049	_Gantry	Define the gantry system 120
+2050	_Micro	Microstep resolution 121
+2052	_StopCurr	Current reduction to the axis during standstill 122
+2053	_PulsMode	Switch Encoder signal or pulse-direction card on or off 123
+2054	_RunCurrDelay	Delay between switching on the run current and the start of the motor 123
+2055	_StopCurrDelay	Delay between stop of the motor and switching off the run current 123
+2056	_StpEncoder	Settings for step monitoring 124
+2061	_Apos	Present position of the axis 124
+2062	_Rpos	Present is-value position 124
+2063	_Rvelo	Present running velocity 124
+2075	_Xovr	Override the present velocity of the axis 124
+2076	_Xomode	Override mode 125
+3000	_IpSpeed	High velocity 126
+3001	_IpAccel	Acceleration 126
+3002	_IpDecel	Deceleration 126
+3003	_IpVmin	Start/Stop velocity 126
+3004	_IpLDecel	Emergency stop ramp 126
+3005	_IpVend	End velocity 127
+3006	_IpFeed	Feed motion velocity 127
+3008	_IpMaxVel	Maximum programmable velocity 127
+3009	_IpMaxAcc	Maximum programmable acceleration 127
+3010	_IpDim	Number of interpolation axes 127
+3011	_IpUnit	Specification for trajectory commands 127
+3012	_IpLeft	Look Ahead, number of remaining cycles 128
+3013	_IpLaFact	Look Ahead, factor for acceleration 128
+3014	_IpLaCvFact	Look Ahead, factor for circular acceleration 128
+3015	_IpLaTprof	Look Ahead, running time 128
+3017	_IpTrigger	Distance in UU 128
+3018	_IpTrgTime	Duty cycle of the output 129
+3019	_IpTrgOutp	Address of the digital output 129
+3063	_IpVelo	Present trajectory velocity 129
+3075	_IpOvr	Override present trajectory velocity 129
+3076	_IpOmode	Override mode 129
+4000	_InPolarity	Polarity of the digital inputs 130
+4001	_OutPolarity	Polarity of the digital outputs 130
+4002	_InPortExist	Inquiry whether the entry ports address is available 130
+4003	_OutPortExist	Inquiry whether the output ports address is available 131

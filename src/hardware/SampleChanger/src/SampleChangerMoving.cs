@@ -83,6 +83,8 @@ namespace Regata.Core.Hardware
 
         private void Move(Axes axis, int? coordinate = null, int? velocityScalingFactor = null, Direction? dir = null)
         {
+            _activeAxis = axis;
+
             if (coordinate == null && velocityScalingFactor == null)
             {
                 Home(axis);
@@ -148,6 +150,16 @@ namespace Regata.Core.Hardware
         }
         #endregion
 
+        public int GetAxisPosition(Axes ax)
+        {
+            return ax switch
+            {
+                Axes.X => CurrentPosition.X,
+                Axes.Y => CurrentPosition.Y,
+                Axes.C => CurrentPosition.C,
+                _ => -444
+            };
+        }
 
 
     } // public partial class SampleChanger

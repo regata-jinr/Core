@@ -15,26 +15,45 @@ namespace Regata.Core.Hardware
 {
     public partial class SampleChanger
     {
+        private Axes _activeAxis;
+
+        /// <summary>
+        /// The flag shows that sample changer has sample on caret.
+        /// </summary>
+        public bool IsSampleCaptured { get; set; }
 
         public string Text;
         public bool IsError => XemoDLL.ML_GetErrState() == 0;
         public int Code => IsError ? XemoDLL.ML_GetErrCode() : XemoDLL.MB_GetState();
         
-        public bool NegativeSwitcherX => XemoDLL.MB_IoGet((short)Axes.X, 0, 0, XemoConst.InPolarity) != 0;
-        public bool NegativeSwitcherY => XemoDLL.MB_IoGet((short)Axes.Y, 0, 0, XemoConst.InPolarity) != 0;
-        public bool NegativeSwitcherC => XemoDLL.MB_IoGet((short)Axes.C, 0, 0, XemoConst.InPolarity) != 0;
+        public bool NegativeSwitcherX => IsNegativeSwitcher(Axes.X);
+        public bool NegativeSwitcherY => IsNegativeSwitcher(Axes.Y);
 
-        public bool PositiveSwitcherX => XemoDLL.MB_IoGet((short)Axes.X, 0, 1, XemoConst.InPolarity) != 0;
-        public bool PositiveSwitcherY => XemoDLL.MB_IoGet((short)Axes.Y, 0, 1, XemoConst.InPolarity) != 0;
-        public bool PositiveSwitcherC => XemoDLL.MB_IoGet((short)Axes.C, 0, 1, XemoConst.InPolarity) != 0;
+        public bool PositiveSwitcherX => IsPositiveSwitcher(Axes.X);
+        public bool PositiveSwitcherY => IsPositiveSwitcher(Axes.Y);
 
-        public bool ReferenceSwitcherX => XemoDLL.MB_IoGet((short)Axes.X, 0, 2, XemoConst.InPolarity) != 0;
-        public bool ReferenceSwitcherY => XemoDLL.MB_IoGet((short)Axes.Y, 0, 2, XemoConst.InPolarity) != 0;
-        public bool ReferenceSwitcherC => XemoDLL.MB_IoGet((short)Axes.C, 0, 2, XemoConst.InPolarity) != 0;
+        public bool ReferenceSwitcherX => IsReferenceSwitcher(Axes.X);
+        public bool ReferenceSwitcherY => IsReferenceSwitcher(Axes.Y);
 
-        public bool ReferenceSwitcher => NegativeSwitcherX || NegativeSwitcherY || NegativeSwitcherC;
-        public bool PositiveSwitcher => PositiveSwitcherX || PositiveSwitcherY || PositiveSwitcherC;
-        public bool NegativeSwitcher => ReferenceSwitcherX || ReferenceSwitcherY || ReferenceSwitcherC;
+        public bool ReferenceSwitcher => NegativeSwitcherX  || NegativeSwitcherY ;
+        public bool PositiveSwitcher  => PositiveSwitcherX  || PositiveSwitcherY ;
+        public bool NegativeSwitcher  => ReferenceSwitcherX || ReferenceSwitcherY;
+
+
+        public bool IsReferenceSwitcher(Axes ax)
+        {
+            return XemoDLL.MB_IoGet((short)ax, 0, 2, XemoConst.InPolarity) != 0;
+        }
+
+        public bool IsPositiveSwitcher(Axes ax)
+        {
+            return XemoDLL.MB_IoGet((short)ax, 0, 1, XemoConst.InPolarity) != 0;
+        }
+
+        public bool IsNegativeSwitcher(Axes ax)
+        {
+            return XemoDLL.MB_IoGet((short)ax, 0, 0, XemoConst.InPolarity) != 0;
+        }
 
         public const int MaxX = 77400;
         public const int MaxY = 37300;

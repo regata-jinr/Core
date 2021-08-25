@@ -18,7 +18,7 @@ namespace Regata.Core.Hardware
     /// <summary>
     /// Sample changer consist from 3 systems each can moving along one of an axis: X - hotizontal , Y - vertical and C - circle
     /// </summary>
-    enum Axes : short { Y, X, C} 
+    public enum Axes : short { Y, X, C} 
 
     public partial class SampleChanger : IDisposable
     {

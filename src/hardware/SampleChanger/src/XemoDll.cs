@@ -9,6 +9,17 @@ namespace Regata.Core.Hardware.Xemo
     /// 
     internal static class XemoDLL
     {
+        
+        // TODO: can we use it?
+        // 
+        //35   22 00002740 FT_GetStatus
+        //37   24 00001910 FT_ListDevices
+        //24   17 000090E0 FT_GetComPortNumber
+        //25   18 00006C10 FT_GetDeviceInfo
+        //26   19 00008940 FT_GetDeviceInfoDetail
+        //27   1A 00008850 FT_GetDeviceInfoList
+        //28   1B 00008A80 FT_GetDriverVersion
+
         public const string XEMO_DLL_VESRION = "2.40";
 
         // ----------------------------------------------------------------------
@@ -199,5 +210,6 @@ namespace Regata.Core.Hardware.Xemo
         public static extern void MB_SdoTrm(short NodeId, short Index, short SubIndex, int Value);
         [DllImport("XemoDll.dll", EntryPoint = "_MB_SdoRcv@12", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int MB_SdoRcv(short NodeId, short Index, short SubIndex);
-    }
-}
+
+    } // internal static class XemoDLL
+}     // namespace Regata.Core.Hardware.Xemo

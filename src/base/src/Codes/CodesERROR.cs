@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
  * Copyright(c) 2020-2021, REGATA Experiment at FLNP|JINR                  *
@@ -24,8 +24,8 @@ namespace Regata.Core
     ///    -[3300-3399) - Logger             error codes
     ///    -[3400-3499) - Settings           error codes
     ///    -[3500-3599) - Export:Excel       error codes
-    ///    -[3600-3699) - Data               error codes
-    ///    -[3700-3799) - XEMO SampleChanger error codes
+    ///    -[3600-3630) - Data               error codes
+    ///    -[3630-3799) - XEMO SampleChanger error codes
     ///    -[3800-3899) - UI:WinForms        error codes
     ///    -[3900-3999) - Scales             error codes
     /// </summary>
@@ -174,7 +174,7 @@ namespace Regata.Core
         #endregion
 
         #region Data Errors
-        // 3600 - 3699
+        // 3600 - 3630
 
         public const int ERR_DATA_GET_SSID = 3600;
         public const int ERR_DATA_GET_SRMSID = 3601;
@@ -182,11 +182,448 @@ namespace Regata.Core
         #endregion
 
         #region XEMO SampleChanger Errors
+        // 3630 - 3799
 
-        public const int ERR_XM_COM_UNREG = 3700;
-        public const int ERR_XM_INI_UNREG = 3701;
-        public const int ERR_XM_CON_UNREG = 3702;
-        public const int ERR_XM_INI_AX_UNREG = 3703;
+        public const int ERR_XM_COM_UNREG = 3630;
+        public const int ERR_XM_INI_UNREG = 3631;
+        public const int ERR_XM_CON_UNREG = 3632;
+        public const int ERR_XM_INI_AX_UNREG = 3633;
+
+        #region MotionBasic runtime errors 
+        ///<summary>
+        /// Unknown command or P-code Critical error
+        ///</summary>
+        public const int ERR_XM_1 = 3634;
+        ///<summary>
+        /// Exceeds data range Critical error
+        ///</summary>
+        public const int ERR_XM_2 = 3635;
+        ///<summary>
+        /// Stack overflow Critical error
+        ///</summary>
+        public const int ERR_XM_3 = 3636;
+        ///<summary>
+        /// Unknown library function Critical error
+        ///</summary>
+        public const int ERR_XM_4 = 3637;
+        ///<summary>
+        /// Unknown operator Critical error
+        ///</summary>
+        public const int ERR_XM_5 = 3638;
+        ///<summary>
+        /// Overflow during type conversion 
+        ///</summary>
+        public const int ERR_XM_6 = 3639;
+        ///<summary>
+        /// P-Code not implemented Critical error
+        ///</summary>
+        public const int ERR_XM_7 = 3640;
+        ///<summary>
+        /// Array dimension conflict 
+        ///</summary>
+        public const int ERR_XM_8 = 3641;
+        ///<summary>
+        /// Exceeds array range 
+        ///</summary>
+        public const int ERR_XM_9 = 3642;
+        ///<summary>
+        /// Library function not implemented Critical error
+        ///</summary>
+        public const int ERR_XM_10 = 3643;
+        ///<summary>
+        /// Exceeds maximum string length 
+        ///</summary>
+        public const int ERR_XM_11 = 3644;
+        ///<summary>
+        /// Not enough memory for data range Critical error
+        ///</summary>
+        public const int ERR_XM_12 = 3645;
+        ///<summary>
+        /// Not enough memory for stack area Critical error
+        ///</summary>
+        public const int ERR_XM_13 = 3646;
+        ///<summary>
+        /// Not enough memory for P-code Critical error
+        ///</summary>
+        public const int ERR_XM_14 = 3647;
+        ///<summary>
+        /// online fifo overflow 
+        ///</summary>
+        public const int ERR_XM_15 = 3648;
+        ///<summary>
+        /// Timeout while burning flash Critical error
+        ///</summary>
+        public const int ERR_XM_16 = 3649;
+        ///<summary>
+        /// Erase error for flash sector Critical error
+        ///</summary>
+        public const int ERR_XM_17 = 3650;
+        ///<summary>
+        /// Read-only for flash active Critical error
+        ///</summary>
+        public const int ERR_XM_18 = 3651;
+        ///<summary>
+        /// Check-sum error in P-code Critical error
+        ///</summary>
+        public const int ERR_XM_19 = 3652;
+        ///<summary>
+        /// Invalid signature in P-code Critical error
+        ///</summary>
+        public const int ERR_XM_20 = 3653;
+        ///<summary>
+        /// Not enough memory for EEprom area Critical error
+        ///</summary>
+        public const int ERR_XM_21 = 3654;
+        ///<summary>
+        /// Read-only for EEprom active 
+        ///</summary>
+        public const int ERR_XM_22 = 3655;
+        ///<summary>
+        /// Timeout while burning EEprom 
+        ///</summary>
+        public const int ERR_XM_23 = 3656;
+        ///<summary>
+        /// Invalid axis number 
+        ///</summary>
+        public const int ERR_XM_24 = 3657;
+        ///<summary>
+        /// Invalid parameter number 
+        ///</summary>
+        public const int ERR_XM_25 = 3658;
+        ///<summary>
+        /// Invalid Setfifo command 
+        ///</summary>
+        public const int ERR_XM_26 = 3659;
+        ///<summary>
+        /// Invalid SysControl command 
+        ///</summary>
+        public const int ERR_XM_27 = 3660;
+        ///<summary>
+        /// Invalid I/O address 
+        ///</summary>
+        public const int ERR_XM_28 = 3661;
+        ///<summary>
+        /// Assignment to a constant not possible 
+        ///</summary>
+        public const int ERR_XM_29 = 3662;
+        ///<summary>
+        /// Task already active 
+        ///</summary>
+        public const int ERR_XM_30 = 3663;
+        ///<summary>
+        /// Invalid signature in EEprom Critical error
+        ///</summary>
+        public const int ERR_XM_31 = 3664;
+        ///<summary>
+        /// Defect memory allocation in EEprom Critical error
+        ///</summary>
+        public const int ERR_XM_32 = 3665;
+        ///<summary>
+        /// Check-sum error in EEprom Critical error
+        ///</summary>
+        public const int ERR_XM_33 = 3666;
+        ///<summary>
+        /// Incompatible P-code Critical error
+        ///</summary>
+        public const int ERR_XM_35 = 3668;
+        ///<summary>
+        /// Assignment to identical string not permitted 
+        ///</summary>
+        public const int ERR_XM_36 = 3669;
+        ///<summary>
+        /// Limit switch reached 
+        ///</summary>
+        public const int ERR_XM_37 = 3670;
+        ///<summary>
+        /// Not enough memory for download 
+        ///</summary>
+        public const int ERR_XM_38 = 3671;
+        ///<summary>
+        /// Invalid parameter value 
+        ///</summary>
+        public const int ERR_XM_39 = 3672;
+        ///<summary>
+        /// Function not configured 
+        ///</summary>
+        public const int ERR_XM_40 = 3673;
+        ///<summary>
+        /// Command only permitted during axis standstill 
+        ///</summary>
+        public const int ERR_XM_41 = 3674;
+        ///<summary>
+        /// Circle commands require at least 2D 
+        ///</summary>
+        public const int ERR_XM_42 = 3675;
+        ///<summary>
+        /// No program loaded 
+        ///</summary>
+        public const int ERR_XM_43 = 3676;
+        ///<summary>
+        /// Unknown subprocedure number 
+        ///</summary>
+        public const int ERR_XM_45 = 3678;
+        ///<summary>
+        /// target position outside the software limit 
+        ///</summary>
+        public const int ERR_XM_47 = 3680;
+        ///<summary>
+        /// Parameter value too large 
+        ///</summary>
+        public const int ERR_XM_48 = 3681;
+        ///<summary>
+        /// Not enabled 
+        ///</summary>
+        public const int ERR_XM_49 = 3682;
+        ///<summary>
+        /// Software limit reached 
+        ///</summary>
+        public const int ERR_XM_50 = 3683;
+        ///<summary>
+        /// Parameter can only be read 
+        ///</summary>
+        public const int ERR_XM_51 = 3684;
+        ///<summary>
+        /// Contouring error in the electronic transmission 
+        ///</summary>
+        public const int ERR_XM_52 = 3685;
+        ///<summary>
+        /// Ventilator overload (overcurrent) 
+        ///</summary>
+        public const int ERR_XM_53 = 3686;
+        ///<summary>
+        /// Excess temperature in the device 
+        ///</summary>
+        public const int ERR_XM_54 = 3687;
+        ///<summary>
+        /// Error in the index monitoring at the encoder input 
+        ///</summary>
+        public const int ERR_XM_55 = 3688;
+        ///<summary>
+        /// Electric error in the encoder signal 
+        ///</summary>
+        public const int ERR_XM_56 = 3689;
+        ///<summary>
+        /// Electronic transmission: synchronic position missed 
+        ///</summary>
+        public const int ERR_XM_57 = 3690;
+        ///<summary>
+        /// Function not available in this stage of expansion 
+        ///</summary>
+        public const int ERR_XM_58 = 3691;
+        ///<summary>
+        /// Function (Gantry operation, step monitoring) not available with this hardware 
+        ///</summary>
+        public const int ERR_XM_59 = 3692;
+        ///<summary>
+        /// Velocity setting too large 
+        ///</summary>
+        public const int ERR_XM_60 = 3693;
+        ///<summary>
+        /// Acceleration setting too large 
+        ///</summary>
+        public const int ERR_XM_61 = 3694;
+        ///<summary>
+        /// Circle radius too large 
+        ///</summary>
+        public const int ERR_XM_62 = 3695;
+        ///<summary>
+        /// Negative parameter value not permitted 
+        ///</summary>
+        public const int ERR_XM_63 = 3696;
+        ///<summary>
+        /// Error during reference run 
+        ///</summary>
+        public const int ERR_XM_64 = 3697;
+        ///<summary>
+        /// Error on a power card 
+        ///</summary>
+        public const int ERR_XM_65 = 3698;
+        ///<summary>
+        /// Encoder input overflow 
+        ///</summary>
+        public const int ERR_XM_66 = 3699;
+        ///<summary>
+        /// Not permitted with activated electronic transmission 
+        ///</summary>
+        public const int ERR_XM_67 = 3700;
+        ///<summary>
+        /// Parameter value must be unequal to zero 
+        ///</summary>
+        public const int ERR_XM_68 = 3701;
+        ///<summary>
+        /// CAN communication error 
+        ///</summary>
+        public const int ERR_XM_69 = 3702;
+        ///<summary>
+        /// Check-sum error in online command 
+        ///</summary>
+        public const int ERR_XM_70 = 3703;
+        ///<summary>
+        /// Over- or undervoltage in the 12 volt vehicle voltage 
+        ///</summary>
+        public const int ERR_XM_71 = 3704;
+        ///<summary>
+        /// Over- or undervoltage in the 24 volt feed in 
+        ///</summary>
+        public const int ERR_XM_72 = 3705;
+        ///<summary>
+        /// Over- or undervoltage in the motor's intermediate circuit voltage 
+        ///</summary>
+        public const int ERR_XM_73 = 3706;
+        ///<summary>
+        /// Short circuit in a digital output 
+        ///</summary>
+        public const int ERR_XM_74 = 3707;
+        ///<summary>
+        /// Serial interface: format error 
+        ///</summary>
+        public const int ERR_XM_75 = 3708;
+        ///<summary>
+        /// Serial interface: overflow 
+        ///</summary>
+        public const int ERR_XM_76 = 3709;
+        ///<summary>
+        /// Setup parameter is write-protected 
+        ///</summary>
+        public const int ERR_XM_77 = 3710;
+        ///<summary>
+        /// Error during writing of the setup parameter 
+        ///</summary>
+        public const int ERR_XM_78 = 3711;
+        ///<summary>
+        /// Setup parameter check-sum error 
+        ///</summary>
+        public const int ERR_XM_79 = 3712;
+        ///<summary>
+        /// Communications error in the second CAN channel 
+        ///</summary>
+        public const int ERR_XM_80 = 3713;
+        ///<summary>
+        /// axis is not available 
+        ///</summary>
+        public const int ERR_XM_81 = 3714;
+        ///<summary>
+        /// Too many I/O ports 
+        ///</summary>
+        public const int ERR_XM_82 = 3715;
+        ///<summary>
+        /// CANopen guarding error 
+        ///</summary>
+        public const int ERR_XM_83 = 3716;
+        ///<summary>
+        /// axis regulator cannot be switched on 
+        ///</summary>
+        public const int ERR_XM_84 = 3717;
+        ///<summary>
+        /// axis regulator has turned itself off 
+        ///</summary>
+        public const int ERR_XM_85 = 3718;
+        ///<summary>
+        /// No axis is registered 
+        ///</summary>
+        public const int ERR_XM_86 = 3719;
+        ///<summary>
+        /// Reference run method not implemented 
+        ///</summary>
+        public const int ERR_XM_87 = 3720;
+        ///<summary>
+        /// H-portal transformation: axes not within a coordinate system 
+        ///</summary>
+        public const int ERR_XM_88 = 3721;
+        ///<summary>
+        /// Not permitted with a switched-on gantry axis 
+        ///</summary>
+        public const int ERR_XM_89 = 3722;
+        ///<summary>
+        /// Error in axis regulator; cannot be read out 
+        ///</summary>
+        public const int ERR_XM_99 = 3732;
+        ///<summary>
+        /// Unknown error in the axis regulator 
+        ///</summary>
+        public const int ERR_XM_100 = 3733;
+        ///<summary>
+        /// Software reset in the axis regulator 
+        ///</summary>
+        public const int ERR_XM_101 = 3734;
+        ///<summary>
+        /// Loss of synchronization in the axis regulator 
+        ///</summary>
+        public const int ERR_XM_102 = 3735;
+        ///<summary>
+        /// Motor-encoder antivalence error 
+        ///</summary>
+        public const int ERR_XM_103 = 3736;
+        ///<summary>
+        /// Motor-encoder counter error 
+        ///</summary>
+        public const int ERR_XM_104 = 3737;
+        ///<summary>
+        /// Master-encoder counter error 
+        ///</summary>
+        public const int ERR_XM_105 = 3738;
+        ///<summary>
+        /// Excessive temperature in the axis regulator 
+        ///</summary>
+        public const int ERR_XM_106 = 3739;
+        ///<summary>
+        /// Undervoltage in the logic-unit supply in the axis regulator 
+        ///</summary>
+        public const int ERR_XM_107 = 3740;
+        ///<summary>
+        /// Intermediate circuit overvoltage in the axis regulator 
+        ///</summary>
+        public const int ERR_XM_108 = 3741;
+        ///<summary>
+        /// Intermediate circuit undervoltage in the axis regulator 
+        ///</summary>
+        public const int ERR_XM_109 = 3742;
+        ///<summary>
+        /// Short circuit phase A in the axis regulator 
+        ///</summary>
+        public const int ERR_XM_110 = 3743;
+        ///<summary>
+        /// Short circuit phase B in the axis regulator 
+        ///</summary>
+        public const int ERR_XM_111 = 3744;
+        ///<summary>
+        /// Short circuit digital output in the axis regulator 
+        ///</summary>
+        public const int ERR_XM_112 = 3745;
+        ///<summary>
+        /// Axis regulator not enabled 
+        ///</summary>
+        public const int ERR_XM_113 = 3746;
+        ///<summary>
+        /// Contouring error too high 
+        ///</summary>
+        public const int ERR_XM_114 = 3747;
+        ///<summary>
+        /// Velocity too high 
+        ///</summary>
+        public const int ERR_XM_115 = 3748;
+        ///<summary>
+        /// Communication not found 
+        ///</summary>
+        public const int ERR_XM_116 = 3749;
+        ///<summary>
+        /// CAN communication interrupted 
+        ///</summary>
+        public const int ERR_XM_117 = 3750;
+        ///<summary>
+        /// i??*t ??� monitoring activated 
+        ///</summary>
+        public const int ERR_XM_118 = 3751;
+        ///<summary>
+        /// Negative hardware end position activated 
+        ///</summary>
+        public const int ERR_XM_119 = 3752;
+        ///<summary>
+        /// Positive hardware end position activated 
+        ///</summary>
+        public const int ERR_XM_120 = 3753;
+
+        #endregion
 
         #endregion
 

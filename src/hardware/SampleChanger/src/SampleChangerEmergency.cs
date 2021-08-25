@@ -27,9 +27,33 @@ namespace Regata.Core.Hardware
 
         private IntPtr ErrorHandler(IntPtr errNo)
         {
-            Report.Notify(new Message((int)errNo) { Head = $"Getting error from xemo device: {SerialNumber}"});
-            ErrorOccurred?.Invoke(SerialNumber, (int)errNo);
+            // NOTE: xemo error codes begin from 1, our SC error codes start with 3630, first three position already taken, so we have to add 3633 to xemo error code to convert it into our format
+            Report.Notify(new Message((int)errNo+3633) { DetailedText = $"Xemo device sn: {SerialNumber}. Xemo error code {(int)errNo}"});
+            AutoEmergency((int)errNo + 3633);
+            ErrorOccurred?.Invoke(SerialNumber, (int)errNo + 3633);
             return IntPtr.Zero;
+        }
+
+        /// <summary>
+        /// The method reacts to the given error
+        /// </summary>
+        /// <param name="code">Error code in Regata format</param>
+        private void AutoEmergency(int code)
+        {
+            switch (code)
+            {
+                
+                case Codes.ERR_XM_37:
+                    Stop(_activeAxis);
+                    if (IsNegativeSwitcher(_activeAxis))
+                        Move(_activeAxis, GetAxisPosition(_activeAxis) + 1000);
+                    if (IsPositiveSwitcher(_activeAxis))
+                        Move(_activeAxis, GetAxisPosition(_activeAxis) - 1000);
+                    break;
+
+                default:
+                    break;
+            }
         }
 
     } // public partial class SampleChanger

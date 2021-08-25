@@ -1,4 +1,4 @@
-/***************************************************************************
+﻿/***************************************************************************
  *                                                                         *
  * Based on XemoKonst.cs by SYSTEC                                         *
  * Copyright(c) 2021, REGATA Experiment at FLNP|JINR                       *
@@ -41,17 +41,26 @@ namespace Regata.Core.Hardware.Xemo
         public const short STATE_FIFO_FULL = 3;
 
         /// <summary>
-        /// System Reset 
+        /// Sets the controller in the status which it had after being switched on. All axes 
+        /// are stopped immediately, all outputs are reset and all parameters are returned
+        /// to their initial values.
         /// </summary>
         public const short Reset = 1;
         /// <summary>
-        /// Break a current MotionBasic Programm
+        /// A running MotionBasic is aborted. All axes are stopped and all outputs reset. 
+        /// The online fifo is erased.All position counters and settings remain unchanged.
         /// </summary>
-        public const short Break = 2; 
+        public const short Break = 2;
         /// <summary>
-        /// Halt a current MotionBasic Programm
+        /// A running MotionBasic program is halted. The online fifo is erased. The axes 
+        /// and outputs remain unchanged.
         /// </summary>
-        public const short Halt = 3; 
+        public const short Halt = 3;
+        /// <summary>
+        /// Like _Reset but with a restart of the possibly loaded MotionBasic program.
+        /// NOTE: When switched on and at every program start in the main routine, the controller is automatically reset. 
+        /// </summary>
+        public const short Restart = 4;
 
         public const short PrgQuit = 100;         // MotionBasic Programm benden 
         public const short DebugShell = 101;      // Zur Debug-Shell wechseln 
@@ -805,5 +814,5 @@ namespace Regata.Core.Hardware.Xemo
         public const short ERR_CANCEL = 4;
         public const short ERR_COM_DEINI = 5;
 
-    }
-}
+    } // internal static class XemoConst
+}     // namespace Regata.Core.Hardware.Xemo

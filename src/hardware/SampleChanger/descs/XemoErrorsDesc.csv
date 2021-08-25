@@ -1,0 +1,109 @@
+No;Desc
+1;Unknown command or P-code Critical error
+2;Exceeds data range Critical error
+3;Stack overflow Critical error
+4;Unknown library function Critical error
+5;Unknown operator Critical error
+6;Overflow during type conversion 
+7;P-Code not implemented Critical error
+8;Array dimension conflict 
+9;Exceeds array range 
+10;Library function not implemented Critical error
+11;Exceeds maximum string length 
+12;Not enough memory for data range Critical error
+13;Not enough memory for stack area Critical error
+14;Not enough memory for P-code Critical error
+15;online fifo overflow 
+16;Timeout while burning flash Critical error
+17;Erase error for flash sector Critical error
+18;Read-only for flash active Critical error
+19;Check-sum error in P-code Critical error
+20;Invalid signature in P-code Critical error
+21;Not enough memory for EEprom area Critical error
+22;Read-only for EEprom active 
+23;Timeout while burning EEprom 
+24;Invalid axis number 
+25;Invalid parameter number 
+26;Invalid Setfifo command 
+27;Invalid SysControl command 
+28;Invalid I/O address 
+29;Assignment to a constant not possible 
+30;Task already active 
+31;Invalid signature in EEprom Critical error
+32;Defect memory allocation in EEprom Critical error
+33;Check-sum error in EEprom Critical error
+35;Incompatible P-code Critical error
+36;Assignment to identical string not permitted 
+37;Limit switch reached 
+38;Not enough memory for download 
+39;Invalid parameter value 
+40;Function not configured 
+41;Command only permitted during axis standstill 
+42;Circle commands require at least 2D 
+43;No program loaded 
+45;Unknown subprocedure number 
+47;target position outside the software limit 
+48;Parameter value too large 
+49;Not enabled 
+50;Software limit reached 
+51;Parameter can only be read 
+52;Contouring error in the electronic transmission 
+53;Ventilator overload (overcurrent) 
+54;Excess temperature in the device 
+55;Error in the index monitoring at the encoder input 
+56;Electric error in the encoder signal 
+57;Electronic transmission: synchronic position missed 
+58;Function not available in this stage of expansion 
+59;Function (Gantry operation, step monitoring) not available with this hardware 
+60;Velocity setting too large 
+61;Acceleration setting too large 
+62;Circle radius too large 
+63;Negative parameter value not permitted 
+64;Error during reference run 
+65;Error on a power card 
+66;Encoder input overflow 
+67;Not permitted with activated electronic transmission 
+68;Parameter value must be unequal to zero 
+69;CAN communication error 
+70;Check-sum error in online command 
+71;Over- or undervoltage in the 12 volt vehicle voltage 
+72;Over- or undervoltage in the 24 volt feed in 
+73;Over- or undervoltage in the motor's intermediate circuit voltage 
+74;Short circuit in a digital output 
+75;Serial interface: format error 
+76;Serial interface: overflow 
+77;Setup parameter is write-protected 
+78;Error during writing of the setup parameter 
+79;Setup parameter check-sum error 
+80;Communications error in the second CAN channel 
+81;axis is not available 
+82;Too many I/O ports 
+83;CANopen guarding error 
+84;axis regulator cannot be switched on 
+85;axis regulator has turned itself off 
+86;No axis is registered 
+87;Reference run method not implemented 
+88;H-portal transformation: axes not within a coordinate system 
+89;Not permitted with a switched-on gantry axis 
+99;"Error in axis regulator; cannot be read out "
+100;Unknown error in the axis regulator 
+101;Software reset in the axis regulator 
+102;Loss of synchronization in the axis regulator 
+103;Motor-encoder antivalence error 
+104;Motor-encoder counter error 
+105;Master-encoder counter error 
+106;Excessive temperature in the axis regulator 
+107;Undervoltage in the logic-unit supply in the axis regulator 
+108;Intermediate circuit overvoltage in the axis regulator 
+109;Intermediate circuit undervoltage in the axis regulator 
+110;Short circuit phase A in the axis regulator 
+111;Short circuit phase B in the axis regulator 
+112;Short circuit digital output in the axis regulator 
+113;Axis regulator not enabled 
+114;Contouring error too high 
+115;Velocity too high 
+116;Communication not found 
+117;CAN communication interrupted 
+118;i??*t ??“ monitoring activated 
+119;Negative hardware end position activated 
+120;Positive hardware end position activated 

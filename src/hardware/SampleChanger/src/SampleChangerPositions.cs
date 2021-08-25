@@ -34,10 +34,6 @@ namespace Regata.Core.Hardware
 
     public partial class SampleChanger
     {
-        public bool IsPositiveSwitcher => false;
-        public bool IsNegativeSwitcher => false;
-        public bool IsReferenceSwitcher => false;
-
         public Position TargetPosition { get; set; }
         public Position CurrentPosition 
         {
