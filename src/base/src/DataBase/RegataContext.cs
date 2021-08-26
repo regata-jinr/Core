@@ -36,7 +36,7 @@ namespace Regata.Core.DataBase
         public DbSet<MessageDefault>       MessageDefaults       { get; set; }
         public DbSet<User>                 Users                 { get; set; }
         public DbSet<Log>                  Logs                  { get; set; }
-        public DbSet<BindingPosition>      BindingPositions      { get; set; }
+        public DbSet<Position>             Positions             { get; set; }
 
         public RegataContext(string cs = "")
         {
@@ -142,10 +142,10 @@ namespace Regata.Core.DataBase
                                    m.Number
                                });
 
-            modelBuilder.Entity<BindingPosition>()
-                              .HasKey(bp => new
+            modelBuilder.Entity<Position>()
+                              .HasKey(p => new
                               {
-                                  bp.Id
+                                  p.Name
                               });
 
             #region to be added

@@ -9,9 +9,10 @@
  *                                                                         *
  ***************************************************************************/
 
-using System;
 using Regata.Core.Hardware.Xemo;
 using Regata.Core.Messages;
+using System;
+using System.Collections.Generic;
 
 namespace Regata.Core.Hardware
 {
@@ -25,30 +26,28 @@ namespace Regata.Core.Hardware
         /// <summary>
         /// Serial number of Xemo controller. Labeled on on of side panel of Xemo Controller SU 360
         /// </summary>
-        public string SerialNumber { get; set; }
+        public readonly int SerialNumber;
 
+        public readonly string PairedDetector;
 
-        private ushort _comPort;
 
         /// <summary>
         /// Port number referred to Xemo device. By default is 0 that means auto matching.
         /// </summary>
-        public ushort ComPort
-        {
-            get
-            {
-                return 0;
-            }
-            private set
-            {
-                _comPort = value;
-            }
-        }
+        public readonly ushort ComPort;
 
         /// <summary>
         /// BaudRate for chosen com port. Not used in case interface initialization via USB.
         /// </summary>
-        private int _baudRate;
+        private readonly int _baudRate;
+
+        private IReadOnlyDictionary<int, string> XemoDet = new Dictionary<int, string>()
+        {
+            { 107374, "D1"  },
+            { 107375, "D2"  },
+            { 107376, "D3"  },
+            { 114005, "D4"  },
+        };
 
         /// <summary>
         /// 
@@ -57,12 +56,12 @@ namespace Regata.Core.Hardware
         /// <param name="comPort">Port number referred to Xemo device. By default is 0 that means auto matching.</param>
         /// <param name="baudRate">BaudRate for chosen com port. Not used in case interface initialization via USB.</param>
         /// <param name="sets">Initial settings of current settings</param><seealso cref="SampleChangerSettings"/>
-        public SampleChanger(string sn, ushort comPort = 0, int baudRate = 19200, SampleChangerSettings sets = null)
+        public SampleChanger(int sn, ushort comPort = 0, int baudRate = 19200, SampleChangerSettings sets = null)
         {
             try
             {
-                if (string.IsNullOrEmpty(sn))
-                    throw new ArgumentNullException("Serial number should not be null or empty");
+                if (!XemoDet.ContainsKey(sn))
+                    throw new ArgumentNullException($"Device with such serial number '{sn}' not found");
 
                 if (sets == null)
                     Settings = new SampleChangerSettings();
@@ -77,6 +76,8 @@ namespace Regata.Core.Hardware
 
                 _baudRate = baudRate;
 
+                PairedDetector = XemoDet[sn];
+
                 Connect();
 
                 InitializeAxes();
@@ -84,6 +85,7 @@ namespace Regata.Core.Hardware
             catch (Exception ex)
             {
                 Report.Notify(new Message(Codes.ERR_XM_INI_UNREG) { DetailedText = ex.Message });
+                throw;
             }
 
         }
@@ -99,7 +101,7 @@ namespace Regata.Core.Hardware
                 ML_ErrorCallBackDelegate(ErrorHandlerDel);
 
                 XemoDLL.ML_DeIniCom();
-                XemoDLL.ML_IniUsb((short)ComPort, SerialNumber);
+                XemoDLL.ML_IniUsb((short)ComPort, SerialNumber.ToString());
                 // XemoDLL.ML_ComSelect(_comPort);
                 Reset();
             }

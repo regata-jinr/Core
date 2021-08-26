@@ -92,9 +92,14 @@ namespace Regata.Core.Hardware
                     CurrentUser = Settings.GlobalSettings.User;
 
             }
+            catch (ArgumentException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 Report.Notify(new DetectorMessage(Codes.ERR_DET_CTOR_UNREG) { DetailedText = ex.ToString() });
+                throw;
             }
         }
 

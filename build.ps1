@@ -12,7 +12,8 @@
     .PARAMETER projName
      Will be passed to fiter options of gci with *.csproj
     .EXAMPLE
-     
+    In order to build all projects with *win* run command:
+    build -Name win
     #>
     param 
     (

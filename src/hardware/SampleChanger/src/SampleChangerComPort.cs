@@ -20,7 +20,7 @@ namespace Regata.Core.Hardware
     {
         private const string PathToComs = @"System\ControlSet001\Enum\FTDIBUS\VID_0403+PID_6001+";
 
-        private ushort GetComPortByDeviceId(string xemoSN)
+        private ushort GetComPortByDeviceId(int xemoSN)
         {
             try
             {

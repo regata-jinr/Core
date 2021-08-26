@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-using System;
+using Regata.Core.DataBase.Models;
 using Regata.Core.Hardware.Xemo;
 
 namespace Regata.Core.Hardware
@@ -22,16 +22,20 @@ namespace Regata.Core.Hardware
         {
             // NOTE: Y and C can move in parallel, but X only after Y!
             // https://github.com/regata-jinr/Core/issues/62
-
             MoveToC(TargetPosition.C);
+
             MoveToY(TargetPosition.Y);
+
             XemoDLL.MB_Still((short)Axes.Y);
+
             MoveToX(TargetPosition.X);
         }
 
         public void MoveToPosition(Position pos)
         {
-            MoveToC(pos.C);
+            if (pos.C.HasValue)
+                MoveToC(pos.C.Value);
+            
             MoveToY(pos.Y);
             XemoDLL.MB_Still((short)Axes.Y);
             MoveToX(pos.X);
@@ -67,16 +71,16 @@ namespace Regata.Core.Hardware
             Move(Axes.C, velocityScalingFactor: VelocityScalingFactor, dir: Direction.Negative);
         }
 
-        public void MoveToX(int x_coord)
+        public void MoveToX(int? x_coord)
         {
             Move(axis: Axes.X, coordinate: x_coord);
         }
-        public void MoveToY(int y_coord)
+        public void MoveToY(int? y_coord)
         {
             Move(axis: Axes.Y, coordinate: y_coord);
 
         }
-        public void MoveToC(int c_coord)
+        public void MoveToC(int? c_coord)
         {
             Move(axis: Axes.C, coordinate:c_coord);
         }
@@ -86,10 +90,7 @@ namespace Regata.Core.Hardware
             _activeAxis = axis;
 
             if (coordinate == null && velocityScalingFactor == null)
-            {
-                Home(axis);
                 return;
-            }
 
             if (coordinate.HasValue)
             {
@@ -156,7 +157,7 @@ namespace Regata.Core.Hardware
             {
                 Axes.X => CurrentPosition.X,
                 Axes.Y => CurrentPosition.Y,
-                Axes.C => CurrentPosition.C,
+                Axes.C => CurrentPosition.C.HasValue ? CurrentPosition.C.Value : 0,
                 _ => -444
             };
         }

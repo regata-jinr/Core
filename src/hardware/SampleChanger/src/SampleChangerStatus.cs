@@ -15,10 +15,10 @@ namespace Regata.Core.Hardware
 {
     public partial class SampleChanger
     {
-        public event Action<string, int> ErrorOccurred;
-        public event Action<string, int> NegativeSwitcherFired;
-        public event Action<string, int> PositiveSwitcherFired;
-        public event Action<string, int> ReferenceSwitcherFired;
+        public event Action<int, int> ErrorOccurred;
+        public event Action<int, int> NegativeSwitcherFired;
+        public event Action<int, int> PositiveSwitcherFired;
+        public event Action<int, int> ReferenceSwitcherFired;
 
         public void GetStatus()
         {

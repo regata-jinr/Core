@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
+using Regata.Core.DataBase.Models;
 using Regata.Core.Hardware.Xemo;
 
 namespace Regata.Core.Hardware
@@ -59,7 +60,7 @@ namespace Regata.Core.Hardware
         public const int MaxY = 37300;
         public const int MaxC = 0;
 
-        public readonly Position HomePosition = new Position(MaxX, MaxY, MaxC);
+        public readonly Position HomePosition = new Position() { X = MaxX, Y = MaxY, C = MaxC };
 
         public SampleChangerSettings Settings { get; set; }
 
