@@ -102,7 +102,7 @@ namespace Regata.Core.Hardware
 
         #region Y software limits
 
-        public int SoftwareYRightLimit
+        public int SoftwareYUpLimit
         {
             get
             {
@@ -114,7 +114,7 @@ namespace Regata.Core.Hardware
             }
         }
 
-        public int SoftwareYLeftLimit
+        public int SoftwareYDownLimit
         {
             get
             {

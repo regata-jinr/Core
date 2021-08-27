@@ -41,11 +41,11 @@ namespace Regata.Tests.WinForms
         private string[] russianLabels = { "Журналы облучений", "Журналы измерений", "Список11", "Список12", "Список21", "Список22", "Загрузка", "Дата", "Дата", "Тестовая форма" };
         private string[] englishLabels = { "Irradiation Registers", "Measurement Registers", "List11", "List12", "List21", "List22", "LoadNumber", "Date", "Date", "Testing form" };
 
-        private RegataBaseForm<Irradiation> Create_Form(string name)
+        private RegisterForm<Irradiation> Create_Form(string name)
         {
             var f = new RegisterForm<Irradiation>();
             f.LangItem.CheckItem(Settings<LabelsSettings>.CurrentSettings.CurrentLanguage);
-            f.LangItem.CheckedChanged += () => { Settings<LabelsSettings>.CurrentSettings.CurrentLanguage = f.LangItem.CheckedItem; Labels.SetControlsLabels(f.Controls); };
+            f.LangItem.CheckedChanged += () => { Settings<LabelsSettings>.CurrentSettings.CurrentLanguage = f.LangItem.CheckedItem; Labels.SetControlsLabels(f); };
             f.Name = name;
 
             var btn = new Button();
@@ -57,11 +57,11 @@ namespace Regata.Tests.WinForms
 
                 f.TabsPane[1, 0].DataSource = r.Irradiations.Where(ir => ir.Type == 0 && ir.DateTimeStart != null).Select(ir => new { ir.DateTimeStart.Value.Date }).Distinct().Take(10).ToArray();
             }
-            Labels.SetControlsLabels(f.Controls);
+            Labels.SetControlsLabels(f);
             return f;
         }
 
-        private List<string> GetSomeTextFromForm(ref RegataBaseForm<Irradiation> f)
+        private List<string> GetSomeTextFromForm(ref RegisterForm<Irradiation> f)
         {
             var labels = new List<string>();
 

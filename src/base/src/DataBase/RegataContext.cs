@@ -145,7 +145,7 @@ namespace Regata.Core.DataBase
             modelBuilder.Entity<Position>()
                               .HasKey(p => new
                               {
-                                  p.Name
+                                  p.Name, p.SerialNumber, p.Detector
                               });
 
             #region to be added

@@ -22,35 +22,35 @@ namespace Regata.Core.DataBase.Models
     {
         // DatabaseGenerated(DatabaseGeneratedOption.Identity)
         [Key]
-        public int        Id                   { get; set; }
+        public int         Id                    { get; set; }
         [Required]
-        public int        IrradiationId        { get; set; }
-        public int        RegId                { get; set; }
+        public int         IrradiationId         { get; set; }
+        public int         RegId                 { get; set; }
         [Required]
-        public string     CountryCode          { get; set; }
+        public string      CountryCode           { get; set; }
         [Required]
-        public string     ClientNumber         { get; set; }
+        public string      ClientNumber          { get; set; }
         [Required]
-        public string     Year                 { get; set; }
+        public string      Year                  { get; set; }
         [Required]
-        public string     SetNumber            { get; set; }
+        public string      SetNumber             { get; set; }
         [Required]
-        public string     SetIndex             { get; set; }
+        public string      SetIndex              { get; set; }
         [Required]
-        public string     SampleNumber         { get; set; }
+        public string      SampleNumber          { get; set; }
         [Required]
-        public int        Type                 { get; set; }
-        public int?        AcqMode             { get; set; }
-        public int?      DiskPosition          { get; set; }
-        public DateTime?  DateTimeStart        { get; set; }
-        public int?      Duration              { get; set; }
-        public DateTime?  DateTimeFinish       { get; set; }
-        public float?     Height               { get; set; }
-        public float?     DeadTime             { get; set; }
-        public string     FileSpectra          { get; set; }
-        public string     Detector             { get; set; }
-        public int?       Assistant            { get; set; }
-        public string     Note                 { get; set; }
+        public int         Type                  { get; set; }
+        public int?        AcqMode               { get; set; }
+        public int?        DiskPosition          { get; set; }
+        public DateTime?   DateTimeStart         { get; set; }
+        public int?        Duration              { get; set; }
+        public DateTime?   DateTimeFinish        { get; set; }
+        public float?      Height                { get; set; }
+        public float?      DeadTime              { get; set; }
+        public string      FileSpectra           { get; set; }
+        public string      Detector              { get; set; }
+        public int?        Assistant             { get; set; }
+        public string      Note                  { get; set; }
 
         [NotMapped]
         public string SetKey => $"{CountryCode}-{ClientNumber}-{Year}-{SetNumber}-{SetIndex}";

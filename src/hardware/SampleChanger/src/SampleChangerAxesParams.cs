@@ -58,9 +58,9 @@ namespace Regata.Core.Hardware
 
         public const int MaxX = 77400;
         public const int MaxY = 37300;
-        public const int MaxC = 0;
+        public const int MaxC = 60000;
 
-        public readonly Position HomePosition = new Position() { X = MaxX, Y = MaxY, C = MaxC };
+        public readonly Position HomePosition = new Position() { X = -MaxX, Y = -MaxY, C = 0};
 
         public SampleChangerSettings Settings { get; set; }
 
@@ -168,7 +168,7 @@ namespace Regata.Core.Hardware
             /// <seealso>625-11-09_Xemo_Equipment_Manual_Web page 31</seealso>
             public int[] MOTOR_STOP_CURRENT { get; set; } = new int[]
            {
-                50,
+                60,
                 50,
                 50,
                 50,
@@ -177,17 +177,17 @@ namespace Regata.Core.Hardware
 
             public int[] MAX_VELOCITY { get; set; } = new int[]
             {
-                1000,
-                1000,
-                1000,
+                10000,
+                10000,
+                10000,
                 400,
                 400
             };
 
             public int[] RIGHT_SOFTWARE_LIMIT { get; set; } = new int[]
             {
-                40000,
-                80000,
+                38000,
+                77000,
                 0,
                 100,
                 100
@@ -311,13 +311,13 @@ namespace Regata.Core.Hardware
                 2
             };
 
-            public float[] EMERGCY_DECEL_FACTOR { get; set; } = new float[]
+            public int[] L_DECEL { get; set; } = new int[]
             {
-                10f,
-                10f,
-                10f,
-                10f,
-                10f
+                500000,
+                500000,
+                500000,
+                10,
+                10
             };
 
             public float[] BLASH { get; set; } = new float[]

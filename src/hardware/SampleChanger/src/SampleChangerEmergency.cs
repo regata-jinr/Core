@@ -19,19 +19,21 @@ namespace Regata.Core.Hardware
     {
         private ErrorHandlerDelegate ErrorHandlerDel { get; set; }
 
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate IntPtr ErrorHandlerDelegate(IntPtr ptr);
 
-        [DllImport("XemoDll.dll", EntryPoint = "_ML_ErrorCallBack@4", ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("XemoDll.dll", EntryPoint = "_ML_ErrorCallBack@4", ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern void ML_ErrorCallBackDelegate(ErrorHandlerDelegate edel);
 
         private IntPtr ErrorHandler(IntPtr errNo)
         {
+            if (errNo == IntPtr.Zero)
+                return IntPtr.Zero;
             // NOTE: xemo error codes begin from 1, our SC error codes start with 3630, first three position already taken, so we have to add 3633 to xemo error code to convert it into our format
             Report.Notify(new Message((int)errNo+3633) { DetailedText = $"Xemo device sn: {SerialNumber}. Xemo error code {(int)errNo}"});
             AutoEmergency((int)errNo + 3633);
             ErrorOccurred?.Invoke(SerialNumber, (int)errNo + 3633);
-            return IntPtr.Zero;
+            return errNo;
         }
 
         /// <summary>

@@ -140,9 +140,32 @@ namespace Regata.Core.Hardware
 
         public void Home()
         {
+            Connect();
+            InitializeAxes();
+            ResetAllSoftwareLimits();
+
             HomeY();
+            XemoDLL.MB_Still((short)Axes.Y);
+            Settings.LYDecel = Settings.AxesParams.L_DECEL[0];
             HomeX();
+            XemoDLL.MB_Still((short)Axes.X);
+            Settings.LXDecel = Settings.AxesParams.L_DECEL[1];
             HomeC();
+            XemoDLL.MB_Still((short)Axes.C);
+            Settings.LCDecel = Settings.AxesParams.L_DECEL[2];
+
+            CurrentPosition = HomePosition;
+
+
+            Settings.SoftwareYUpLimit = MaxY + 1000;
+            //Settings.SoftwareYDownLimit = 0;
+
+            //Settings.SoftwareXLeftLimit = 1500;
+            Settings.SoftwareXRightLimit = MaxX + 1000;
+
+            Settings.SoftwareCLeftLimit = -MaxC;
+            Settings.SoftwareCRightLimit = MaxC;
+
         }
 
         private void Home(Axes ax)

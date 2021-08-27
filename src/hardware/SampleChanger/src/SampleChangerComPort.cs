@@ -18,13 +18,13 @@ namespace Regata.Core.Hardware
 {
     public partial class SampleChanger
     {
-        private const string PathToComs = @"System\ControlSet001\Enum\FTDIBUS\VID_0403+PID_6001+";
+        private const string PathToComs = @"System\ControlSet001\Enum\FTDIBUS\VID_0403+PID_6001";
 
         private ushort GetComPortByDeviceId(int xemoSN)
         {
             try
             {
-                var path = string.Join('+', PathToComs, xemoSN);
+                var path = string.Join('+', PathToComs, $"{xemoSN}A");
                 var regexpForCom = new Regex(@"\d{1,2}");
 
                 using (RegistryKey subFoldersList = Registry.LocalMachine.OpenSubKey(path))

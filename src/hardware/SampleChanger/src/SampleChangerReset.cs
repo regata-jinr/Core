@@ -27,8 +27,8 @@ namespace Regata.Core.Hardware
             Settings.SoftwareXLeftLimit = 0;
             Settings.SoftwareXRightLimit = 0;
 
-            Settings.SoftwareYLeftLimit = 0;
-            Settings.SoftwareYRightLimit = 0;
+            Settings.SoftwareYDownLimit = 0;
+            Settings.SoftwareYUpLimit = 0;
 
             Settings.SoftwareCLeftLimit = 0;
             Settings.SoftwareCRightLimit = 0;
