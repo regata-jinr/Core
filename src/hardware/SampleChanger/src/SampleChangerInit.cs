@@ -78,7 +78,7 @@ namespace Regata.Core.Hardware
                 PairedDetector = XemoDet[sn];
 
                 ErrorHandlerDel = ErrorHandler; // you must save a "copy" of the delegate so that if the C functions calls this method at any time, this copy is still "alive" and hasn't been GC 
-                //ML_ErrorCallBackDelegate(ErrorHandlerDel);
+                ML_ErrorCallBackDelegate(ErrorHandlerDel);
 
                 Connect();
 
@@ -99,7 +99,8 @@ namespace Regata.Core.Hardware
                 XemoDLL.ML_DeIniCom();
                 XemoDLL.ML_IniUsb((short)ComPort, SerialNumber.ToString());
                 // XemoDLL.ML_ComSelect(_comPort);
-                Reset();
+                if (IsError)
+                    Reset();
             }
             catch (Exception ex)
             {
@@ -138,24 +139,24 @@ namespace Regata.Core.Hardware
 
                 XemoDLL.MB_ASet(axisNum, XemoConst.StopCurr, Settings.AxesParams.MOTOR_STOP_CURRENT[axisNum]);
 
-                XemoDLL.MB_ASet(axisNum, XemoConst.Iscale, (int)Math.Round((float)Settings.AxesParams.INC_PER_REVOLUTION[axisNum] / Settings.AxesParams.MICROSTEP_RESOLUTION[axisNum]));
+                XemoDLL.MB_ASet(axisNum, XemoConst.Iscale, (int)Math.Round((float)Settings.AxesParams.INC_PER_REVOLUTION[axisNum] / Settings.AxesParams.MICROSTEP_RESOLUTION[axisNum])); // 10000
 
-                XemoDLL.MB_ASet(axisNum, XemoConst.Uscale, (int)Math.Round(unchecked(Settings.AxesParams.MM_PER_REVOLUTION[axisNum] * 100f)));
+                XemoDLL.MB_ASet(axisNum, XemoConst.Uscale, (int)Math.Round(unchecked(Settings.AxesParams.MM_PER_REVOLUTION[axisNum] * 100f))); // 800
 
 
                 //var _speeds = new int[] { Settings.YVelocity, Settings.XVelocity, Settings.CVelocity };
-                var _speeds = new int[] { 5000, 5000, 5000 };
-                
+                var _speeds = new int[] { 1000, 1000, 1000 };
+
                 if (_speeds[axisNum] > Settings.AxesParams.MAX_VELOCITY[axisNum])
                     XemoDLL.MB_ASet(axisNum, XemoConst.Speed, Settings.AxesParams.MAX_VELOCITY[axisNum]);
                 else
                     XemoDLL.MB_ASet(axisNum, XemoConst.Speed, _speeds[axisNum]);
 
 
-                XemoDLL.MB_ASet(axisNum, XemoConst.Accel, (int)Math.Round(unchecked(Settings.AxesParams.ACCELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum]))));
-                XemoDLL.MB_ASet(axisNum, XemoConst.Decel, (int)Math.Round(unchecked(Settings.AxesParams.DECELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum]))));
+                XemoDLL.MB_ASet(axisNum, XemoConst.Accel, (int)Math.Round(unchecked(Settings.AxesParams.ACCELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum])))); // 100 000
+                XemoDLL.MB_ASet(axisNum, XemoConst.Decel, (int)Math.Round(unchecked(Settings.AxesParams.DECELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum])))); // 100 000
 
-                XemoDLL.MB_ASet(axisNum, XemoConst.Vmin, (int)Math.Round(unchecked(Settings.AxesParams.START_STOP_FREQUENCY[axisNum] * 100f) / 10.0));
+                XemoDLL.MB_ASet(axisNum, XemoConst.Vmin, (int)Math.Round(unchecked(Settings.AxesParams.START_STOP_FREQUENCY[axisNum] * 100f) / 10.0)); // 50
 
                 XemoDLL.MB_ASet(axisNum, XemoConst.H1Speed, Settings.AxesParams.REF_VELOCITY_H1[axisNum] * 100);
                 XemoDLL.MB_ASet(axisNum, XemoConst.H2Speed, Settings.AxesParams.REF_VELOCITY_H2[axisNum] * 100);
@@ -173,31 +174,17 @@ namespace Regata.Core.Hardware
                 // all switches polarity
                 XemoDLL.MB_IoSet(axisNum, 0, 3, XemoConst.InPolarity, Settings.AxesParams.POLARITY_SWITCHES[axisNum]);
 
-                XemoDLL.MB_ASet(axisNum, XemoConst.SlLimit, 0);
-                XemoDLL.MB_ASet(axisNum, XemoConst.SrLimit, Settings.AxesParams.RIGHT_SOFTWARE_LIMIT[axisNum]);
+                XemoDLL.MB_ASet(axisNum, XemoConst.SlLimit, -100000);
+                XemoDLL.MB_ASet(axisNum, XemoConst.SrLimit, 100000);
 
                 XemoDLL.MB_ASet(axisNum, XemoConst.BLash, (int)Math.Round(unchecked(Settings.AxesParams.BLASH[axisNum] * 100)));
 
-                if (Settings.AxesParams.XTYPE[axisNum] != 0)
-                    XemoDLL.MB_ASet(axisNum, XemoConst.XType, Settings.AxesParams.XTYPE[axisNum]);
 
-                if (Settings.AxesParams.GANTRY_AXIS[axisNum] != 0)
-                    XemoDLL.MB_ASet(axisNum, XemoConst.Gantry, Settings.AxesParams.GANTRY_AXIS[axisNum]);
+                XemoDLL.MB_ASet(axisNum, XemoConst.StpEncoder, Settings.AxesParams.INC_MONITORING_ENCODER[axisNum]);
+                XemoDLL.MB_ASet(axisNum, XemoConst.FErrWin, Settings.AxesParams.POSITION_ERROR[axisNum]);
 
-                if (Settings.AxesParams.JERKMS[axisNum] != 0)
-                    XemoDLL.MB_ASet(axisNum, XemoConst.Jerkms, Settings.AxesParams.JERKMS[axisNum]);
+                XemoDLL.MB_ASet(axisNum, XemoConst.LDecel, Settings.AxesParams.L_DECEL[axisNum]);
 
-                if (Settings.AxesParams.INC_MONITORING_ENCODER[axisNum] != 0)
-                {
-                    XemoDLL.MB_ASet(axisNum, XemoConst.StpEncoder, Settings.AxesParams.INC_MONITORING_ENCODER[axisNum]);
-                    XemoDLL.MB_ASet(axisNum, XemoConst.FErrWin, Settings.AxesParams.POSITION_ERROR[axisNum]);
-                }
-
-                if (XemoType != 448)
-                    XemoDLL.MB_ASet(axisNum, XemoConst.LDecel, Settings.AxesParams.L_DECEL[axisNum]);
-
-                if (Settings.AxesParams.BRAKE[axisNum] >= 0)
-                    XemoDLL.MB_ASet(axisNum, XemoConst.BrakeOutp, 10 + 4096 * Settings.AxesParams.BRAKE[axisNum] + 256);
             }
             catch (Exception ex)
             {

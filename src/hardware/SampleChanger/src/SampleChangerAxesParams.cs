@@ -39,6 +39,12 @@ namespace Regata.Core.Hardware
         public bool ReferenceSwitcher => NegativeSwitcherX  || NegativeSwitcherY ;
         public bool PositiveSwitcher  => PositiveSwitcherX  || PositiveSwitcherY ;
         public bool NegativeSwitcher  => ReferenceSwitcherX || ReferenceSwitcherY;
+        
+        public bool DeviceIsMoving    => DeviceIsMovingX    || DeviceIsMovingY || DeviceIsMovingC;
+        
+        public bool DeviceIsMovingX   => XemoDLL.MB_Busy(1) != 0;
+        public bool DeviceIsMovingY   => XemoDLL.MB_Busy(0) != 0;
+        public bool DeviceIsMovingC   => XemoDLL.MB_Busy(2) != 0;
 
 
         public bool IsReferenceSwitcher(Axes ax)
@@ -304,9 +310,9 @@ namespace Regata.Core.Hardware
             /// </summary>
             public int[] START_STOP_FREQUENCY { get; set; } = new int[]
             {
-                0,
-                0,
-                0,
+                5,
+                5,
+                5,
                 2,
                 2
             };
@@ -338,41 +344,6 @@ namespace Regata.Core.Hardware
                 10000
             };
 
-            public int[] BRAKE { get; set; } = new int[]
-            {
-                -1,
-                -1,
-                -1,
-                -1,
-                -1
-            };
-
-            public int[] GANTRY_AXIS { get; set; } = new int[]
-            {
-                0,
-                0,
-                0,
-                0,
-                0
-            };
-
-            public int[] XTYPE { get; set; } = new int[]
-            {
-                0,
-                0,
-                0,
-                0,
-                0
-            };
-
-            public int[] JERKMS { get; set; } = new int[]
-            {
-                0,
-                0,
-                0,
-                0,
-                0
-            };
         }
 
     } // public partial class SampleChanger

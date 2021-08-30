@@ -9,12 +9,17 @@
  *                                                                         *
  ***************************************************************************/
 
+using Microsoft.EntityFrameworkCore;
+using Regata.Core.Messages;
+using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
 using Regata.Core.Hardware.Xemo;
+using System.Linq;
 
 namespace Regata.Core.Hardware
 {
-    enum Direction { Negative = -1, Positive = 1 }
+    public enum Direction { Negative = -1, Positive = 1 }
+    public enum Heights { h2p5, h5, h10, h20 }
      public partial class SampleChanger
     {
 
@@ -31,15 +36,60 @@ namespace Regata.Core.Hardware
             MoveToX(TargetPosition.X);
         }
 
-        public void MoveToPosition(Position pos)
+        public void MoveToPosition(Position pos, Axes moveAlongAxisFirst)
         {
             if (pos.C.HasValue)
                 MoveToC(pos.C.Value);
-            
-            MoveToY(pos.Y);
-            XemoDLL.MB_Still((short)Axes.Y);
-            MoveToX(pos.X);
+
+            if (moveAlongAxisFirst == Axes.X)
+            {
+                MoveToX(pos.X);
+                MoveToY(pos.Y);
+            }
+            else
+            {
+                MoveToY(pos.Y);
+                MoveToX(pos.X);
+            }
         }
+
+        public void PutSampleToTheDisk(short cellNum)
+        {
+            var posName = cellNum switch
+            {
+                 > 30  => "AboveCellInternalDisk",
+                <= 30 => "AboveCellExternalDisk"
+            };
+
+            int cell = cellNum switch
+            {
+                > 45 => 1,
+                <= 0 => 1,
+                _ => cellNum
+            };
+
+            Position pos = null;
+            using (var r = new RegataContext())
+            {
+                pos = r.Positions.AsNoTracking().Where(p => p.Detector == PairedDetector && p.SerialNumber == p.SerialNumber && p.Name == posName).First();
+
+                if (pos == null || !pos.C.HasValue)
+                    Report.Notify(new Message(Codes.ERR_XM_WRONG_POS));
+            }
+
+            int c_coord = pos.C.Value + (cellNum - 1) * Settings.GapBetweenCellsExternalDisk;
+        }
+
+        public void TakeSampleFromTheCell(short cellNum)
+        {
+
+        }
+
+        public void PutSampleAboveDetectorWithHeight(Heights h)
+        {
+            
+        }
+
 
         public void MoveRight(int VelocityScalingFactor)
         {
@@ -95,6 +145,8 @@ namespace Regata.Core.Hardware
             if (coordinate.HasValue)
             {
                 XemoDLL.MB_Amove((short)axis, coordinate.Value);
+                XemoDLL.MB_Still((short)axis);
+
                 return;
             }
 
@@ -145,13 +197,10 @@ namespace Regata.Core.Hardware
             ResetAllSoftwareLimits();
 
             HomeY();
-            XemoDLL.MB_Still((short)Axes.Y);
             Settings.LYDecel = Settings.AxesParams.L_DECEL[0];
             HomeX();
-            XemoDLL.MB_Still((short)Axes.X);
             Settings.LXDecel = Settings.AxesParams.L_DECEL[1];
             HomeC();
-            XemoDLL.MB_Still((short)Axes.C);
             Settings.LCDecel = Settings.AxesParams.L_DECEL[2];
 
             CurrentPosition = HomePosition;
@@ -171,6 +220,7 @@ namespace Regata.Core.Hardware
         private void Home(Axes ax)
         {
             XemoDLL.MB_Home((short)ax);
+            XemoDLL.MB_Still((short)ax);
         }
         #endregion
 

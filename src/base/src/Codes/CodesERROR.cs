@@ -184,10 +184,11 @@ namespace Regata.Core
         #region XEMO SampleChanger Errors
         // 3630 - 3799
 
-        public const int ERR_XM_COM_UNREG = 3630;
-        public const int ERR_XM_INI_UNREG = 3631;
-        public const int ERR_XM_CON_UNREG = 3632;
+        public const int ERR_XM_COM_UNREG    = 3630;
+        public const int ERR_XM_INI_UNREG    = 3631;
+        public const int ERR_XM_CON_UNREG    = 3632;
         public const int ERR_XM_INI_AX_UNREG = 3633;
+        public const int ERR_XM_WRONG_POS    = 3754;
 
         #region MotionBasic runtime errors 
         ///<summary>

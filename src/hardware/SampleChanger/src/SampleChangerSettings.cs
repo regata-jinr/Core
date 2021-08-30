@@ -16,6 +16,10 @@ namespace Regata.Core.Hardware
 {
     public class SampleChangerSettings
     {
+
+        public int GapBetweenCellsExternalDisk { get; set; }
+        public int GapBetweenCellsInternalDisk { get; set; }
+
         public SampleChanger.AxesParams AxesParams { get; set; } = new SampleChanger.AxesParams();
 
         #region Velocity
