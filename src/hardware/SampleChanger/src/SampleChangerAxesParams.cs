@@ -64,7 +64,7 @@ namespace Regata.Core.Hardware
 
         public const int MaxX = 77400;
         public const int MaxY = 37300;
-        public const int MaxC = 60000;
+        public const int MaxC = 100000;
 
         public readonly Position HomePosition = new Position() { X = -MaxX, Y = -MaxY, C = 0};
 

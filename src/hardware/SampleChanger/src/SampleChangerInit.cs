@@ -145,7 +145,7 @@ namespace Regata.Core.Hardware
 
 
                 //var _speeds = new int[] { Settings.YVelocity, Settings.XVelocity, Settings.CVelocity };
-                var _speeds = new int[] { 1000, 1000, 1000 };
+                var _speeds = new int[] { 5000, 5000, 5000 };
 
                 if (_speeds[axisNum] > Settings.AxesParams.MAX_VELOCITY[axisNum])
                     XemoDLL.MB_ASet(axisNum, XemoConst.Speed, Settings.AxesParams.MAX_VELOCITY[axisNum]);

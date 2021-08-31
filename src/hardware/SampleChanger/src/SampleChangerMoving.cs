@@ -14,6 +14,7 @@ using Regata.Core.Messages;
 using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
 using Regata.Core.Hardware.Xemo;
+using System;
 using System.Linq;
 
 namespace Regata.Core.Hardware
@@ -22,19 +23,6 @@ namespace Regata.Core.Hardware
     public enum Heights { h2p5, h5, h10, h20 }
      public partial class SampleChanger
     {
-
-        public void MoveToTarget()
-        {
-            // NOTE: Y and C can move in parallel, but X only after Y!
-            // https://github.com/regata-jinr/Core/issues/62
-            MoveToC(TargetPosition.C);
-
-            MoveToY(TargetPosition.Y);
-
-            XemoDLL.MB_Still((short)Axes.Y);
-
-            MoveToX(TargetPosition.X);
-        }
 
         public void MoveToPosition(Position pos, Axes moveAlongAxisFirst)
         {
@@ -53,36 +41,49 @@ namespace Regata.Core.Hardware
             }
         }
 
-        public void PutSampleToTheDisk(short cellNum)
+        private (Position Above, Position Near) GetAboveAndNearPositions(string diskName)
         {
-            var posName = cellNum switch
-            {
-                 > 30  => "AboveCellInternalDisk",
-                <= 30 => "AboveCellExternalDisk"
-            };
 
-            int cell = cellNum switch
-            {
-                > 45 => 1,
-                <= 0 => 1,
-                _ => cellNum
-            };
-
-            Position pos = null;
+            Position posAbove = null;
+            Position posNear = null;
             using (var r = new RegataContext())
             {
-                pos = r.Positions.AsNoTracking().Where(p => p.Detector == PairedDetector && p.SerialNumber == p.SerialNumber && p.Name == posName).First();
+                posAbove = r.Positions.AsNoTracking().Where(p => p.Detector == PairedDetector && p.SerialNumber == p.SerialNumber && p.Name == $"AboveCell{diskName}Disk").First();
 
-                if (pos == null || !pos.C.HasValue)
+                posNear = r.Positions.AsNoTracking().Where(p => p.Detector == PairedDetector && p.SerialNumber == p.SerialNumber && p.Name == $"NearAndAbove{diskName}Disk").First();
+
+
+                if (posAbove == null || posNear == null || !posAbove.C.HasValue)
+                {
                     Report.Notify(new Message(Codes.ERR_XM_WRONG_POS));
-            }
+                    return (null,null);
+                }
 
-            int c_coord = pos.C.Value + (cellNum - 1) * Settings.GapBetweenCellsExternalDisk;
+                return (posAbove, posNear);
+            }
+        }
+
+
+        public void PutSampleToTheDisk(short cellNum)
+        {
+            var _dp = new DiskParams(cellNum);
+
+            var pos = GetAboveAndNearPositions(_dp.DiskName);
+
+            pos.Above.C = pos.Above.C.Value + (_dp.CellNum - _dp.InitCellNum) * _dp.Gap;
+            MoveToPosition(pos.Above, Axes.X);
+            MoveToX(pos.Near.X);
+
+            
         }
 
         public void TakeSampleFromTheCell(short cellNum)
         {
-
+            var _dp = new DiskParams(cellNum);
+            var pos = GetAboveAndNearPositions(_dp.DiskName);
+            pos.Near.C = pos.Near.C.Value + (_dp.CellNum - _dp.InitCellNum) * _dp.Gap;
+            MoveToPosition(pos.Near, Axes.X);
+            MoveToX(pos.Above.X);
         }
 
         public void PutSampleAboveDetectorWithHeight(Heights h)
@@ -91,34 +92,34 @@ namespace Regata.Core.Hardware
         }
 
 
-        public void MoveRight(int VelocityScalingFactor)
+        public void MoveRight(int speed)
         {
-            Move(Axes.X, velocityScalingFactor: VelocityScalingFactor, dir: Direction.Positive);
+            Move(Axes.X, speed: speed, dir: Direction.Positive);
         }
 
-        public void MoveLeft(int VelocityScalingFactor)
+        public void MoveLeft(int speed)
         {
-            Move(Axes.X, velocityScalingFactor: VelocityScalingFactor, dir: Direction.Negative);
+            Move(Axes.X, speed: speed, dir: Direction.Negative);
         }
 
-        public void MoveUp(int VelocityScalingFactor)
+        public void MoveUp(int speed)
         {
-            Move(Axes.Y, velocityScalingFactor: VelocityScalingFactor, dir: Direction.Positive);
+            Move(Axes.Y, speed: speed, dir: Direction.Positive);
         }
 
-        public void MoveDown(int VelocityScalingFactor)
+        public void MoveDown(int speed)
         {
-            Move(Axes.Y, velocityScalingFactor: VelocityScalingFactor, dir: Direction.Negative);
+            Move(Axes.Y, speed: speed, dir: Direction.Negative);
         }
 
-        public void MoveClockwise(int VelocityScalingFactor)
+        public void MoveClockwise(int speed)
         {
-            Move(Axes.C, velocityScalingFactor: VelocityScalingFactor, dir: Direction.Positive);
+            Move(Axes.C, speed: speed, dir: Direction.Positive);
         }
 
-        public void MoveСounterclockwise(int VelocityScalingFactor)
+        public void MoveСounterclockwise(int speed)
         {
-            Move(Axes.C, velocityScalingFactor: VelocityScalingFactor, dir: Direction.Negative);
+            Move(Axes.C, speed: speed, dir: Direction.Negative);
         }
 
         public void MoveToX(int? x_coord)
@@ -135,32 +136,31 @@ namespace Regata.Core.Hardware
             Move(axis: Axes.C, coordinate:c_coord);
         }
 
-        private void Move(Axes axis, int? coordinate = null, int? velocityScalingFactor = null, Direction? dir = null)
+        private void Move(Axes axis, int? coordinate = null, int? speed = null, Direction? dir = null)
         {
             _activeAxis = axis;
 
-            if (coordinate == null && velocityScalingFactor == null)
+            if (coordinate == null && speed == null)
                 return;
 
             if (coordinate.HasValue)
             {
+                var _speed = XemoDLL.MB_AGet((short)axis, XemoConst.Speed);
+                if (speed.HasValue)
+                    XemoDLL.MB_ASet((short)axis, XemoConst.Speed, speed.Value);
+
                 XemoDLL.MB_Amove((short)axis, coordinate.Value);
                 XemoDLL.MB_Still((short)axis);
+
+                XemoDLL.MB_ASet((short)axis, XemoConst.Speed, _speed);
 
                 return;
             }
 
-            if (velocityScalingFactor.HasValue && dir.HasValue)
+            if (speed.HasValue && dir.HasValue)
             {
-                var _speed = axis switch
-                { 
-                    Axes.X => Settings.XVelocity,
-                    Axes.Y => Settings.YVelocity,
-                    Axes.C => Settings.CVelocity,
-                    _ => 0
-
-                };
-                XemoDLL.MB_Jog((short)axis, (int)dir.Value * velocityScalingFactor.Value * _speed);
+                
+                XemoDLL.MB_Jog((short)axis, (int)dir.Value * speed.Value);
                 return;
             }
         }
@@ -237,5 +237,43 @@ namespace Regata.Core.Hardware
 
 
     } // public partial class SampleChanger
+
+    public struct DiskParams
+    {
+        public int    CellNum;
+        public int    Gap;
+        public string DiskName;
+        public int    InitCellNum;
+
+        public DiskParams(int cellNum)
+        {
+            DiskName = cellNum switch
+            {
+                > 30 => "Internal",
+                <= 30 => "External"
+            };
+
+            this.CellNum = cellNum switch
+            {
+                > 45 => 1,
+                <= 0 => 1,
+                _ => cellNum
+            };
+
+            Gap = cellNum switch
+            {
+                > 30 => 2400,
+                <= 30 => 1200
+            };
+
+            InitCellNum = cellNum switch
+            {
+                > 30 => 31,
+                <= 30 => 1
+            };
+        }
+
+    }
+
 }     // namespace Regata.Core.Hardware
 
