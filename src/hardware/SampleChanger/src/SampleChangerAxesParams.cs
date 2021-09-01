@@ -23,6 +23,8 @@ namespace Regata.Core.Hardware
         /// </summary>
         public bool IsSampleCaptured { get; set; }
 
+        public PinnedPositions PinnedPosition { get; private set; }
+
         public string Text;
         public bool IsError => XemoDLL.ML_GetErrState() == 0;
         public int Code => IsError ? XemoDLL.ML_GetErrCode() : XemoDLL.MB_GetState();

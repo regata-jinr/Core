@@ -28,8 +28,10 @@ namespace Regata.Core.Hardware
         /// </summary>
         public readonly int SerialNumber;
 
+        /// <summary>
+        /// Name of detector that paired with sample changer
+        /// </summary>
         public readonly string PairedDetector;
-
 
         /// <summary>
         /// Port number referred to Xemo device. By default is 0 that means auto matching.

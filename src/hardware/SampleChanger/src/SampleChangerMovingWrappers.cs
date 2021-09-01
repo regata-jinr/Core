@@ -1,0 +1,239 @@
+﻿/***************************************************************************
+ *                                                                         *
+ *                                                                         *
+ * Copyright(c) 2021, REGATA Experiment at FLNP|JINR                       *
+ * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
+ *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
+ *                                                                         *
+ ***************************************************************************/
+
+using Microsoft.EntityFrameworkCore;
+using Regata.Core.Messages;
+using Regata.Core.DataBase;
+using Regata.Core.DataBase.Models;
+using System.Linq;
+
+namespace Regata.Core.Hardware
+{
+    public enum Heights { h2p5, h5, h10, h20 }
+
+    public partial class SampleChanger
+    {
+
+
+        public void MoveToPosition(Position pos, Axes moveAlongAxisFirst)
+        {
+            if (pos.C.HasValue)
+                MoveToC(pos.C.Value);
+
+            if (moveAlongAxisFirst == Axes.X)
+            {
+                MoveToX(pos.X);
+                MoveToY(pos.Y);
+            }
+            else
+            {
+                MoveToY(pos.Y);
+                MoveToX(pos.X);
+            }
+        }
+
+        private (Position Above, Position Near) GetAboveAndNearPositions(string diskName)
+        {
+
+            Position posAbove = null;
+            Position posNear = null;
+            using (var r = new RegataContext())
+            {
+                posAbove = r.Positions.AsNoTracking().Where(p => p.Detector == PairedDetector && p.SerialNumber == p.SerialNumber && p.Name == $"AboveCell{diskName}Disk").First();
+
+                posNear = r.Positions.AsNoTracking().Where(p => p.Detector == PairedDetector && p.SerialNumber == p.SerialNumber && p.Name == $"NearAndAbove{diskName}Disk").First();
+
+
+                if (posAbove == null || posNear == null || !posAbove.C.HasValue)
+                {
+                    Report.Notify(new Message(Codes.ERR_XM_WRONG_POS));
+                    return (null, null);
+                }
+
+                return (posAbove, posNear);
+            }
+        }
+
+
+        public void PutSampleToTheDisk(short cellNum)
+        {
+            var _dp = new DiskParams(cellNum);
+
+            var pos = GetAboveAndNearPositions(_dp.DiskName);
+
+            pos.Above.C = pos.Above.C.Value + (_dp.CellNum - _dp.InitCellNum) * _dp.Gap;
+
+            //if (PinnedPosition == PinnedPositions.InsideDetShield)
+            MoveToY(MaxY);
+
+            MoveToPosition(pos.Above, Axes.X);
+            MoveToX(pos.Near.X);
+
+            IsSampleCaptured = false;
+            PinnedPosition = PinnedPositions.NearDisk;
+
+        }
+
+        public void TakeSampleFromTheCell(short cellNum)
+        {
+            var _dp = new DiskParams(cellNum);
+            var pos = GetAboveAndNearPositions(_dp.DiskName);
+            pos.Near.C = pos.Near.C.Value + (_dp.CellNum - _dp.InitCellNum) * _dp.Gap;
+            MoveToY(MaxY);
+            MoveToPosition(pos.Near, Axes.X);
+            MoveToX(pos.Above.X);
+            IsSampleCaptured = true;
+            PinnedPosition = PinnedPositions.AboveDisk;
+
+        }
+
+        public void PutSampleAboveDetectorWithHeight(Heights h)
+        {
+            // TODO: go to y with sample
+            // TODO: ignore c
+            var hstr = h switch
+            {
+                Heights.h2p5 => "H2p5",
+                Heights.h5 => "H5",
+                Heights.h10 => "H10",
+                Heights.h20 => "H20",
+                _ => "H2p5" // ?
+            };
+
+            Position posAbove = null;
+            using (var r = new RegataContext())
+            {
+                posAbove = r.Positions.AsNoTracking().Where(p => p.Detector == PairedDetector && p.SerialNumber == p.SerialNumber && p.Name == $"AboveDetector{hstr}").First();
+
+
+                if (posAbove == null)
+                {
+                    Report.Notify(new Message(Codes.ERR_XM_WRONG_POS));
+                    return;
+                }
+
+            }
+
+            MoveToY(MaxY);
+            MoveToPosition(posAbove, Axes.X);
+
+            PinnedPosition = PinnedPositions.AboveDisk;
+
+
+        }
+
+        public void MoveRight(int speed)
+        {
+            Move(Axes.X, speed: speed, dir: Direction.Positive);
+        }
+
+        public void MoveLeft(int speed)
+        {
+            Move(Axes.X, speed: speed, dir: Direction.Negative);
+        }
+
+        public void MoveUp(int speed)
+        {
+            Move(Axes.Y, speed: speed, dir: Direction.Positive);
+        }
+
+        public void MoveDown(int speed)
+        {
+            Move(Axes.Y, speed: speed, dir: Direction.Negative);
+        }
+
+        public void MoveClockwise(int speed)
+        {
+            Move(Axes.C, speed: speed, dir: Direction.Positive);
+        }
+
+        public void MoveСounterclockwise(int speed)
+        {
+            Move(Axes.C, speed: speed, dir: Direction.Negative);
+        }
+
+        public void MoveToX(int? x_coord)
+        {
+            Move(axis: Axes.X, coordinate: x_coord);
+        }
+        public void MoveToY(int? y_coord)
+        {
+            Move(axis: Axes.Y, coordinate: y_coord);
+
+        }
+        public void MoveToC(int? c_coord)
+        {
+            Move(axis: Axes.C, coordinate: c_coord);
+        }
+
+
+        #region Stop
+        public void StopX() => Stop(Axes.X);
+        public void StopY() => Stop(Axes.Y);
+
+        public void StopC() => Stop(Axes.C);
+
+        public void Stop()
+        {
+            StopX();
+            StopY();
+            StopC();
+        }
+
+        #endregion Stop
+
+        #region Home
+        public void HomeX() 
+        {
+            Home(Axes.X);
+            PinnedPosition = PinnedPositions.HomeX;
+        }
+
+        public void HomeY()
+        {
+            Home(Axes.Y);
+            PinnedPosition = PinnedPositions.HomeY;
+        }
+
+        public void HomeC() => Home(Axes.C);
+
+        public void Home()
+        {
+            Connect();
+            InitializeAxes();
+            ResetAllSoftwareLimits();
+
+            HomeY();
+            Settings.LYDecel = Settings.AxesParams.L_DECEL[0];
+            HomeX();
+            Settings.LXDecel = Settings.AxesParams.L_DECEL[1];
+            HomeC();
+            Settings.LCDecel = Settings.AxesParams.L_DECEL[2];
+
+            CurrentPosition = HomePosition;
+
+
+            Settings.SoftwareYUpLimit = MaxY + 1000;
+            //Settings.SoftwareYDownLimit = 0;
+
+            //Settings.SoftwareXLeftLimit = 1500;
+            Settings.SoftwareXRightLimit = MaxX + 1000;
+
+            Settings.SoftwareCLeftLimit = -MaxC;
+            Settings.SoftwareCRightLimit = MaxC;
+            PinnedPosition = PinnedPositions.Home;
+        }
+
+        #endregion
+
+
+    } // public partial class SampleChanger
+}     // namespace Regata.Core.Hardware

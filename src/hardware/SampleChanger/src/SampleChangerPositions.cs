@@ -11,9 +11,14 @@
 
 using Regata.Core.DataBase.Models;
 using Regata.Core.Hardware.Xemo;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Regata.Core.Hardware
 {
+    public enum PinnedPositions { Unknown, Home, InsideDetShield, AboveDisk, NearDisk, HomeX, HomeY }
+
     public partial class SampleChanger
     {
         public Position TargetPosition { get; set; }
@@ -35,6 +40,35 @@ namespace Regata.Core.Hardware
                 XemoDLL.MB_ASet((short)Axes.Y, XemoConst.APos, value.Y);
                 XemoDLL.MB_ASet((short)Axes.C, XemoConst.APos, value.C.HasValue ? value.C.Value : 0);
             }
+        }
+
+        public event Action PositionReached;
+
+        private Task TrackPositionAsync()
+        {
+            var ct = new CancellationTokenSource(TimeSpan.FromMinutes(1));
+            return Task.Run(() =>
+            {
+                while (DeviceIsMoving)
+                {
+                    if (TargetPosition == CurrentPosition)
+                    {
+                        PositionReached?.Invoke();
+                        break;
+                    }
+                }
+            }, ct.Token);
+        }
+
+        public int GetAxisPosition(Axes ax)
+        {
+            return ax switch
+            {
+                Axes.X => CurrentPosition.X,
+                Axes.Y => CurrentPosition.Y,
+                Axes.C => CurrentPosition.C.HasValue ? CurrentPosition.C.Value : 0,
+                _ => -444
+            };
         }
 
 
