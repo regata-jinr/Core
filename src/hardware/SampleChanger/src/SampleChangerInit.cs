@@ -63,7 +63,10 @@ namespace Regata.Core.Hardware
             try
             {
                 if (!XemoDet.ContainsKey(sn))
+                {
+                    Report.Notify(new Message(Codes.ERR_XM_INI_DEV_NF) { DetailedText = $"Device with such serial number '{sn}' not found" });
                     throw new ArgumentNullException($"Device with such serial number '{sn}' not found");
+                }
 
                 if (sets == null)
                     Settings = new SampleChangerSettings();
@@ -208,6 +211,7 @@ namespace Regata.Core.Hardware
 
                 }
                 Stop();
+                HaltSystem();
                 Disconnect();
             }
             _isDisposed = true;

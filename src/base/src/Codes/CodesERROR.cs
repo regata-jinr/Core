@@ -176,7 +176,7 @@ namespace Regata.Core
         #region Data Errors
         // 3600 - 3630
 
-        public const int ERR_DATA_GET_SSID = 3600;
+        public const int ERR_DATA_GET_SSID   = 3600;
         public const int ERR_DATA_GET_SRMSID = 3601;
 
         #endregion
@@ -184,11 +184,21 @@ namespace Regata.Core
         #region XEMO SampleChanger Errors
         // 3630 - 3799
 
-        public const int ERR_XM_COM_UNREG    = 3630;
-        public const int ERR_XM_INI_UNREG    = 3631;
-        public const int ERR_XM_CON_UNREG    = 3632;
-        public const int ERR_XM_INI_AX_UNREG = 3633;
-        public const int ERR_XM_WRONG_POS    = 3754;
+        public const int ERR_XM_COM_UNREG               = 3630;
+        public const int ERR_XM_INI_UNREG               = 3631;
+        public const int ERR_XM_CON_UNREG               = 3632;
+        public const int ERR_XM_INI_AX_UNREG            = 3633;
+        public const int ERR_XM_WRONG_POS               = 3754;
+        public const int ERR_XM_TRCK_POS_UNREG          = 3755;
+        public const int ERR_XM_TRCK_POS                = 3756;
+        public const int ERR_XM_HOME_UNREG              = 3757;
+        public const int ERR_XM_PUT_ABV_DET_ASYNC_UNREG = 3758;
+        public const int ERR_XM_PUT_ABV_DET_UNREG       = 3759;
+        public const int ERR_XM_GET_PIN_POS_UNREG       = 3760;
+        public const int ERR_XM_MOVE_UNREG              = 3761;
+        public const int ERR_XM_INI_DEV_NF              = 3762;
+        public const int ERR_XM_ERR_HNDL_UNREG          = 3763;
+
 
         #region MotionBasic runtime errors 
         ///<summary>

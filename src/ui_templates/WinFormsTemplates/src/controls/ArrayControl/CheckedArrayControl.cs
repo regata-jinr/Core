@@ -59,9 +59,8 @@ namespace Regata.Core.UI.WinForms.Controls
 
             Dock = DockStyle.Fill;
 
-            RBV_groupBoxTitle.ResumeLayout(false);
-            flowLayoutPanel.ResumeLayout(false);
             checkedListBox.ResumeLayout(false);
+            RBV_groupBoxTitle.ResumeLayout(false);
             ResumeLayout(false);
 
         }

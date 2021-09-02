@@ -8,10 +8,8 @@
 
 	<ItemGroup>
     <ProjectReference Include="..\..\base\base.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+	<None Include="D:\GoogleDrive\Job\flnp\dev\regata\Core\libs\XemoDll.dll" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always"/>
+		<PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
 	</ItemGroup>
 	
 </Project>

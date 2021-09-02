@@ -29,8 +29,6 @@ namespace Regata.Core.DataBase.Models
 
         public override string ToString() => $"X = {X}, Y = {Y}, C = {C}";
 
-
-
         public bool Equals(Position target)
         {
             if (target == null)
@@ -43,6 +41,27 @@ namespace Regata.Core.DataBase.Models
 
             return iseq;
         }
+
+        public override bool Equals(object obj) => this.Equals(obj as Position);
+
+        public static bool operator ==(Position lhs, Position rhs)
+        {
+            if (lhs is null)
+            {
+                if (rhs is null)
+                {
+                    return true;
+                }
+
+                // Only the left side is null.
+                return false;
+            }
+            // Equals handles case of null on right side.
+            return lhs.Equals(rhs);
+        }
+
+        public static bool operator !=(Position lhs, Position rhs) => !(lhs == rhs);
+
     }
 
 }

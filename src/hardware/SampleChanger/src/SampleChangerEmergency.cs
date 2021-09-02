@@ -27,12 +27,19 @@ namespace Regata.Core.Hardware
 
         private IntPtr ErrorHandler(IntPtr errNo)
         {
+            try
+            { 
             if (errNo == IntPtr.Zero)
                 return IntPtr.Zero;
             // NOTE: xemo error codes begin from 1, our SC error codes start with 3630, first three position already taken, so we have to add 3633 to xemo error code to convert it into our format
             Report.Notify(new Message((int)errNo+3633) { DetailedText = $"Xemo device sn: {SerialNumber}. Xemo error code {(int)errNo}"});
             AutoEmergency((int)errNo + 3633);
             ErrorOccurred?.Invoke(SerialNumber, (int)errNo + 3633);
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new Message(Codes.ERR_XM_ERR_HNDL_UNREG) { DetailedText = ex.Message });
+            }
             return errNo;
         }
 

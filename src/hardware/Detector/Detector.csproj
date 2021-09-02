@@ -1,22 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+	<TargetFramework>net5.0</TargetFramework>
 	<PlatformTarget>x86</PlatformTarget>
 	<RootNamespace>Regata.Core.Hardware</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\base\base.csproj" />
+	<ProjectReference Include="..\..\base\base.csproj" />
+	<ProjectReference Include="..\SampleChanger\SampleChanger.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Interop.CanberraDataAccessLib">
-      <HintPath>..\..\..\libs\Interop.CanberraDataAccessLib.dll</HintPath>
-    </Reference>
-    <Reference Include="Interop.CanberraDeviceAccessLib">
-      <HintPath>..\..\..\libs\Interop.CanberraDeviceAccessLib.dll</HintPath>
-    </Reference>
+	<Reference Include="Interop.CanberraDataAccessLib">
+	  <HintPath>..\..\..\libs\Interop.CanberraDataAccessLib.dll</HintPath>
+	</Reference>
+	<Reference Include="Interop.CanberraDeviceAccessLib">
+	  <HintPath>..\..\..\libs\Interop.CanberraDeviceAccessLib.dll</HintPath>
+	</Reference>
   </ItemGroup>
 
 </Project>

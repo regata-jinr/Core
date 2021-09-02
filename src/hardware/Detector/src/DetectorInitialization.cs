@@ -53,7 +53,7 @@ namespace Regata.Core.Hardware
         /// <param name="name">Name of detector. Without path.</param>
         /// <param name="currentUser"> Name of current user of the program.</param>
         /// <param name="option">CanberraDeviceAccessLib.ConnectOptions {aReadWrite, aContinue, aNoVerifyLicense, aReadOnly, aTakeControl, aTakeOver}.By default ConnectOptions is ReadWrite.</param>
-        public Detector(string name, string currentUser = "")
+        public Detector(string name, string currentUser = "", bool enableXemo = false)
         {
             try
             {
@@ -91,6 +91,9 @@ namespace Regata.Core.Hardware
                 if (string.IsNullOrEmpty(CurrentUser))
                     CurrentUser = Settings.GlobalSettings.User;
 
+                if (enableXemo)
+                    EnableXemo();
+
             }
             catch (ArgumentException)
             {
@@ -101,6 +104,20 @@ namespace Regata.Core.Hardware
                 Report.Notify(new DetectorMessage(Codes.ERR_DET_CTOR_UNREG) { DetailedText = ex.ToString() });
                 throw;
             }
+        }
+
+
+        public void EnableXemo()
+        {
+            PairedXemoDevice = new SampleChanger(PairedXemoSN[DetSet.Name]);
+            IsXemoEnabled = true;
+        }
+
+        public void DisableXemo()
+        {
+            PairedXemoDevice?.Dispose();
+            PairedXemoDevice = null;
+            IsXemoEnabled = false;
         }
 
         private void Dispose(bool isDisposing)
@@ -116,6 +133,7 @@ namespace Regata.Core.Hardware
                 Disconnect();
             }
             _isDisposed = true;
+            PairedXemoDevice?.Dispose();
         }
 
         ~Detector()

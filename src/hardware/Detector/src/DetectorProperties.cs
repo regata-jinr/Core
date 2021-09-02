@@ -33,6 +33,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using CanberraDeviceAccessLib;
+using Regata.Core.Hardware;
 using Regata.Core.Messages;
 using Regata.Core.DataBase.Models;
 
@@ -57,6 +58,17 @@ namespace Regata.Core.Hardware
         public string      CurrentUser          { get; set; }
         public Irradiation RelatedIrradiation   { get; private set; }
         public string      FullFileSpectraName  { get; private set; }
+
+        private IReadOnlyDictionary<string, int> PairedXemoSN = new Dictionary<string, int>()
+        {
+            { "D1", 107374 },
+            { "D2", 107375 },
+            { "D3", 107376 },
+            { "D4", 114005 },
+        };
+
+        public SampleChanger PairedXemoDevice;
+        public bool IsXemoEnabled {get; private set; }
 
         public DetectorSettings DetSet;
         public SampleInfo Sample;

@@ -10,6 +10,8 @@
  ***************************************************************************/
 
 using Regata.Core.Hardware.Xemo;
+using Regata.Core.Messages;
+using System;
 
 namespace Regata.Core.Hardware
 {
@@ -20,30 +22,38 @@ namespace Regata.Core.Hardware
 
         private void Move(Axes axis, int? coordinate = null, int? speed = null, Direction? dir = null)
         {
-            _activeAxis = axis;
-
-            if (coordinate == null && speed == null)
-                return;
-
-            if (coordinate.HasValue)
+            try
             {
-                var _speed = XemoDLL.MB_AGet((short)axis, XemoConst.Speed);
-                if (speed.HasValue)
-                    XemoDLL.MB_ASet((short)axis, XemoConst.Speed, speed.Value);
+                _activeAxis = axis;
 
-                XemoDLL.MB_Amove((short)axis, coordinate.Value);
-                XemoDLL.MB_Still((short)axis);
+                if (coordinate == null && speed == null)
+                    return;
 
-                XemoDLL.MB_ASet((short)axis, XemoConst.Speed, _speed);
+                if (coordinate.HasValue)
+                {
+                    var _speed = XemoDLL.MB_AGet((short)axis, XemoConst.Speed);
+                    if (speed.HasValue)
+                        XemoDLL.MB_ASet((short)axis, XemoConst.Speed, speed.Value);
 
-                return;
+                    XemoDLL.MB_Amove((short)axis, coordinate.Value);
+                    XemoDLL.MB_Still((short)axis);
+
+                    XemoDLL.MB_ASet((short)axis, XemoConst.Speed, _speed);
+
+                    return;
+                }
+
+                if (speed.HasValue && dir.HasValue)
+                {
+
+                    XemoDLL.MB_Jog((short)axis, (int)dir.Value * speed.Value);
+                    return;
+                }
             }
-
-            if (speed.HasValue && dir.HasValue)
+            catch (Exception ex)
             {
+                Report.Notify(new Message(Codes.ERR_XM_MOVE_UNREG) { DetailedText = ex.Message });
 
-                XemoDLL.MB_Jog((short)axis, (int)dir.Value * speed.Value);
-                return;
             }
         }
 

@@ -9,8 +9,12 @@
  *                                                                         *
  ***************************************************************************/
 
+using Microsoft.EntityFrameworkCore;
+using Regata.Core.Messages;
+using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
 using Regata.Core.Hardware.Xemo;
+using System.Linq;
 
 namespace Regata.Core.Hardware
 {
@@ -68,7 +72,28 @@ namespace Regata.Core.Hardware
         public const int MaxY = 37300;
         public const int MaxC = 100000;
 
-        public readonly Position HomePosition = new Position() { X = -MaxX, Y = -MaxY, C = 0};
+        public Position HomePosition
+        {
+            get
+            {
+                Position posHome = null;
+
+                using (var r = new RegataContext())
+                {
+                    posHome = r.Positions.AsNoTracking().Where(p => p.Detector == PairedDetector && p.SerialNumber == p.SerialNumber && p.Name == "Home").First();
+
+
+                    if (posHome == null || !posHome.C.HasValue)
+                    {
+                        Report.Notify(new Message(Codes.ERR_XM_WRONG_POS));
+                        return null;
+                    }
+
+                    return posHome;
+                }
+
+            }
+        }
 
         public SampleChangerSettings Settings { get; set; }
 

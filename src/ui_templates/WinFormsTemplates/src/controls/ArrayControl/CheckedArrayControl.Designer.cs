@@ -42,21 +42,11 @@ namespace Regata.Core.UI.WinForms.Controls
         private void InitializeComponent()
         {
             RBV_groupBoxTitle = new GroupBox();
-            flowLayoutPanel = new FlowLayoutPanel();
             checkedListBox = new CheckedListBox();
             
             checkedListBox.SuspendLayout();
             RBV_groupBoxTitle.SuspendLayout();
-            flowLayoutPanel.SuspendLayout();
             SuspendLayout();
-
-            // 
-            // flowLayoutPanel
-            // 
-            flowLayoutPanel.AutoScroll = true;
-            flowLayoutPanel.Dock = DockStyle.Fill;
-            flowLayoutPanel.Name = "flowLayoutPanel";
-            flowLayoutPanel.TabIndex = 0;
 
             // 
             // checkedListBox
@@ -65,6 +55,8 @@ namespace Regata.Core.UI.WinForms.Controls
             checkedListBox.CheckOnClick = true;
             checkedListBox.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             checkedListBox.FormattingEnabled = true;
+            checkedListBox.ScrollAlwaysVisible = false;
+            checkedListBox.HorizontalScrollbar = false;
             checkedListBox.MultiColumn = true;
             checkedListBox.Name = "checkedListBox";
             checkedListBox.RightToLeft = RightToLeft.No;
@@ -73,17 +65,17 @@ namespace Regata.Core.UI.WinForms.Controls
             checkedListBox.TabIndex = 18;
             checkedListBox.UseCompatibleTextRendering = true;
             checkedListBox.SelectionMode = SelectionMode.One;
-
+            
             // 
             // RBV_groupBoxTitle
             // 
-            //RBV_groupBoxTitle.Controls.Add(flowLayoutPanel);
             RBV_groupBoxTitle.Controls.Add(checkedListBox);
             RBV_groupBoxTitle.Dock = DockStyle.Fill;
             RBV_groupBoxTitle.Name = "RBV_groupBoxTitle";
             RBV_groupBoxTitle.TabIndex = 0;
             RBV_groupBoxTitle.TabStop = false;
             RBV_groupBoxTitle.Text = "RBV_groupBoxTitle";
+            
            
             // 
             // CheckedArrayControl
@@ -92,12 +84,11 @@ namespace Regata.Core.UI.WinForms.Controls
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(RBV_groupBoxTitle);
             Name = "CheckedArrayControl";
-            Size = new Size(343, 102);
+            Dock = DockStyle.Fill;
 
         }
 
         private GroupBox RBV_groupBoxTitle;
-        private FlowLayoutPanel flowLayoutPanel;
         public CheckedListBox checkedListBox;
 
     } // partial class CheckedArrayControl<T> : UserControl

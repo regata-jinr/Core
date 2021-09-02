@@ -108,7 +108,9 @@ namespace Regata.Core.UI.WinForms.Forms
                 _sqlcs.UserID = _user;
                 _sqlcs.Password = _password;
 
-                using (var r = new RegataContext(_sqlcs.ConnectionString))
+                RegataContext.ConString = _sqlcs.ConnectionString;
+
+                using (var r = new RegataContext())
                 {
                     if (r.Database.CanConnect())
                     {
@@ -217,7 +219,9 @@ namespace Regata.Core.UI.WinForms.Forms
                     _sqlcs.UserID = _user;
                     _sqlcs.Password = _password;
 
-                    using (var r = new RegataContext(_sqlcs.ConnectionString))
+                    RegataContext.ConString = _sqlcs.ConnectionString;
+
+                    using (var r = new RegataContext())
                     {
                         if (r.Database.CanConnect())
                         {

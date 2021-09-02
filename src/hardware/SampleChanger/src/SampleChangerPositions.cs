@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
+using Regata.Core.Messages;
 using Regata.Core.DataBase.Models;
 using Regata.Core.Hardware.Xemo;
 using System;
@@ -44,32 +45,39 @@ namespace Regata.Core.Hardware
 
         public event Action PositionReached;
 
-        private Task TrackPositionAsync()
+        private async Task TrackPositionAsync()
         {
-            var ct = new CancellationTokenSource(TimeSpan.FromMinutes(1));
-            return Task.Run(() =>
+            try
             {
+                var ct = new CancellationTokenSource(TimeSpan.FromMinutes(2));
                 while (DeviceIsMoving)
                 {
+                    await Task.Delay(TimeSpan.FromMilliseconds(1000), ct.Token);
+
                     if (TargetPosition == CurrentPosition)
                     {
                         PositionReached?.Invoke();
                         break;
                     }
                 }
-            }, ct.Token);
+                ct.Dispose();
+            }
+            catch (TaskCanceledException)
+            {
+                Report.Notify(new Message(Codes.ERR_XM_TRCK_POS) { DetailedText = "The async tracking task was cancelled by timemout." });
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new Message(Codes.ERR_XM_TRCK_POS_UNREG) { DetailedText = ex.Message });
+
+            }
+
         }
 
-        public int GetAxisPosition(Axes ax)
-        {
-            return ax switch
-            {
-                Axes.X => CurrentPosition.X,
-                Axes.Y => CurrentPosition.Y,
-                Axes.C => CurrentPosition.C.HasValue ? CurrentPosition.C.Value : 0,
-                _ => -444
-            };
-        }
+        public int GetAxisPosition(Axes ax) => XemoDLL.MB_AGet((short)ax, XemoConst.APos);
+
+        public void SetAxisPosition(Axes ax, int val) => XemoDLL.MB_ASet((short)ax, XemoConst.APos, val);
+
 
 
     } // public partial class SampleChanger
