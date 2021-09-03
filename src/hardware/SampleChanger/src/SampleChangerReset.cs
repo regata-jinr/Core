@@ -83,6 +83,7 @@ namespace Regata.Core.Hardware
         /// </summary>
         public void BreakSystemProgram()
         {
+            IsStopped = true;
             XemoDLL.MB_SysControl(XemoConst.Break);
         }
 
@@ -92,7 +93,7 @@ namespace Regata.Core.Hardware
         /// </summary>
         public void RestartSystem()
         {
-            XemoDLL.MB_SysControl(XemoConst.Break);
+            XemoDLL.MB_SysControl(XemoConst.Restart);
         }
 
         public void Reset()

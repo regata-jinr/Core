@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Regata.Core.Hardware
 {
-    public enum PinnedPositions { Unknown, Home, InsideDetShield, AboveDisk, NearDisk, HomeX, HomeY }
+    public enum PinnedPositions { Unknown, Home, InsideDetShield, AboveDisk, NearDisk, HomeX, HomeY, Moving }
 
     public partial class SampleChanger
     {
@@ -32,14 +32,16 @@ namespace Regata.Core.Hardware
                     X = XemoDLL.MB_AGet((short)Axes.X, XemoConst.APos),
                     Y = XemoDLL.MB_AGet((short)Axes.Y, XemoConst.APos),
                     C = XemoDLL.MB_AGet((short)Axes.C, XemoConst.APos),
-                    SerialNumber = this.SerialNumber
+                    SerialNumber = this.SerialNumber,
+                    Detector = PairedDetector
                 };
             }
             set
             {
                 XemoDLL.MB_ASet((short)Axes.X, XemoConst.APos, value.X);
                 XemoDLL.MB_ASet((short)Axes.Y, XemoConst.APos, value.Y);
-                XemoDLL.MB_ASet((short)Axes.C, XemoConst.APos, value.C.HasValue ? value.C.Value : 0);
+                if (value.C.HasValue)
+                    XemoDLL.MB_ASet((short)Axes.C, XemoConst.APos, value.C.Value);
             }
         }
 
@@ -49,18 +51,19 @@ namespace Regata.Core.Hardware
         {
             try
             {
-                var ct = new CancellationTokenSource(TimeSpan.FromMinutes(2));
-                while (DeviceIsMoving)
+                using (var ct = new CancellationTokenSource(TimeSpan.FromMinutes(2)))
                 {
-                    await Task.Delay(TimeSpan.FromMilliseconds(1000), ct.Token);
-
-                    if (TargetPosition == CurrentPosition)
+                    while (DeviceIsMoving)
                     {
-                        PositionReached?.Invoke();
-                        break;
+                        await Task.Delay(TimeSpan.FromSeconds(1), ct.Token);
+
+                        if (CurrentPosition == TargetPosition)
+                        {
+                            PositionReached?.Invoke();
+                            break;
+                        }
                     }
                 }
-                ct.Dispose();
             }
             catch (TaskCanceledException)
             {
@@ -68,7 +71,7 @@ namespace Regata.Core.Hardware
             }
             catch (Exception ex)
             {
-                Report.Notify(new Message(Codes.ERR_XM_TRCK_POS_UNREG) { DetailedText = ex.Message });
+                Report.Notify(new Message(Codes.ERR_XM_TRCK_POS_UNREG) { DetailedText = ex.ToString() });
 
             }
 

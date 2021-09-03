@@ -24,10 +24,15 @@ namespace Regata.Core.Hardware
         {
             try
             {
+                if (IsStopped)
+                    return;
+
                 _activeAxis = axis;
 
                 if (coordinate == null && speed == null)
                     return;
+
+                PinnedPosition = PinnedPositions.Moving;
 
                 if (coordinate.HasValue)
                 {
@@ -62,6 +67,10 @@ namespace Regata.Core.Hardware
             XemoDLL.MB_Stop((short)ax);
         }
 
+        public void Stop()
+        {
+            BreakSystemProgram();
+        }
 
         private void Home(Axes ax)
         {

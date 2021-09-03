@@ -136,7 +136,8 @@ namespace Regata.Core.Hardware
             var _dp = new DiskParams(cellNum);
             var pos = GetAboveAndNearPositions(_dp.DiskName);
             pos.Near.C = pos.Near.C.Value + (_dp.CellNum - _dp.InitCellNum) * _dp.Gap;
-            MoveToY(MaxY);
+            if(PinnedPosition != PinnedPositions.NearDisk)
+                MoveToY(MaxY);
             MoveToPosition(pos.Near, Axes.X);
             MoveToX(pos.Above.X);
             IsSampleCaptured = true;
@@ -148,7 +149,8 @@ namespace Regata.Core.Hardware
             var _dp = new DiskParams(cellNum);
             var pos = GetAboveAndNearPositions(_dp.DiskName);
             pos.Near.C = pos.Near.C.Value + (_dp.CellNum - _dp.InitCellNum) * _dp.Gap;
-            MoveToY(MaxY);
+            if(PinnedPosition != PinnedPositions.NearDisk)
+                MoveToY(MaxY);
 
             await MoveToPositionAsync(pos.Near, Axes.X);
 
@@ -289,13 +291,6 @@ namespace Regata.Core.Hardware
 
         public void StopC() => Stop(Axes.C);
 
-        public void Stop()
-        {
-            StopX();
-            StopY();
-            StopC();
-        }
-
         #endregion Stop
 
         #region Home
@@ -342,6 +337,7 @@ namespace Regata.Core.Hardware
                 Settings.SoftwareCLeftLimit = -MaxC;
                 Settings.SoftwareCRightLimit = MaxC;
                 PinnedPosition = PinnedPositions.Home;
+                IsStopped = false;
 
             }
             catch (Exception ex)

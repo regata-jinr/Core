@@ -22,6 +22,8 @@ namespace Regata.Core.Hardware
     {
         private Axes _activeAxis;
 
+        public bool IsStopped { get; set; }
+
         /// <summary>
         /// The flag shows that sample changer has sample on caret.
         /// </summary>
