@@ -40,10 +40,14 @@ namespace Regata.Core.Hardware
                     if (speed.HasValue)
                         XemoDLL.MB_ASet((short)axis, XemoConst.Speed, speed.Value);
 
+                    XemoDLL.MB_Delay(100);
+
                     XemoDLL.MB_Amove((short)axis, coordinate.Value);
                     XemoDLL.MB_Still((short)axis);
 
                     XemoDLL.MB_ASet((short)axis, XemoConst.Speed, _speed);
+
+                    XemoDLL.MB_Delay(1000);
 
                     return;
                 }
@@ -52,6 +56,8 @@ namespace Regata.Core.Hardware
                 {
 
                     XemoDLL.MB_Jog((short)axis, (int)dir.Value * speed.Value);
+                    XemoDLL.MB_Delay(1000);
+
                     return;
                 }
             }

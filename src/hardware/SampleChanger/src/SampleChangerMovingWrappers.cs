@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 using Microsoft.EntityFrameworkCore;
+using Regata.Core.Hardware.Xemo;
 using Regata.Core.Messages;
 using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
@@ -316,13 +317,19 @@ namespace Regata.Core.Hardware
                 InitializeAxes();
                 ResetAllSoftwareLimits();
 
+                XemoDLL.MB_Delay(1000);
+
                 HomeY();
+                XemoDLL.MB_Delay(100);
                 Settings.LYDecel = Settings.AxesParams.L_DECEL[0];
                 HomeX();
+                XemoDLL.MB_Delay(100);
                 Settings.LXDecel = Settings.AxesParams.L_DECEL[1];
                 HomeC();
+                XemoDLL.MB_Delay(100);
                 Settings.LCDecel = Settings.AxesParams.L_DECEL[2];
 
+                XemoDLL.MB_Delay(100);
                 MoveToC(HomePosition.C);
 
                 HomePosition.C = 0;
