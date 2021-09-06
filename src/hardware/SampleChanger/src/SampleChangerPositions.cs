@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Regata.Core.Hardware
 {
-    public enum PinnedPositions { Unknown, Home, InsideDetShield, AboveDisk, NearDisk, HomeX, HomeY, Moving }
+    public enum PinnedPositions { Unknown, Home, AboveDet2p5, AboveDet5, AboveDet10, AboveDet20, AboveDisk, NearDisk, HomeX, HomeY, Moving }
 
     public partial class SampleChanger
     {
@@ -45,7 +45,7 @@ namespace Regata.Core.Hardware
             }
         }
 
-        public event Action PositionReached;
+        public event Action<SampleChanger> PositionReached;
 
         private async Task TrackPositionAsync()
         {
@@ -53,13 +53,16 @@ namespace Regata.Core.Hardware
             {
                 using (var ct = new CancellationTokenSource(TimeSpan.FromMinutes(2)))
                 {
-                    while (DeviceIsMoving)
+                    // FIXME: due to MB_Delay after operatoin DeviceIsMoving is false
+                    //        when axis is switching
+                    //        DeviceIsMoving
+                    while (true)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1), ct.Token);
 
                         if (CurrentPosition == TargetPosition)
                         {
-                            PositionReached?.Invoke();
+                            PositionReached?.Invoke(this);
                             break;
                         }
                     }

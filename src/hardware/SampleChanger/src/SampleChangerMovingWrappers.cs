@@ -16,6 +16,7 @@ using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Regata.Core.Hardware
@@ -231,7 +232,13 @@ namespace Regata.Core.Hardware
 
                 await MoveToPositionAsync(posAbove, Axes.X);
 
-                PinnedPosition = PinnedPositions.AboveDisk;
+                PinnedPosition = h switch
+                {
+                    Heights.h2p5 => PinnedPositions.AboveDet2p5,
+                    Heights.h5   => PinnedPositions.AboveDet5,
+                    Heights.h10  => PinnedPositions.AboveDet10,
+                    Heights.h20  => PinnedPositions.AboveDet20
+                };
 
             }
             catch (Exception ex)
@@ -343,8 +350,10 @@ namespace Regata.Core.Hardware
 
                 Settings.SoftwareCLeftLimit = -MaxC;
                 Settings.SoftwareCRightLimit = MaxC;
-                PinnedPosition = PinnedPositions.Home;
+
                 IsStopped = false;
+                PinnedPosition = PinnedPositions.Home;
+
 
             }
             catch (Exception ex)
@@ -353,11 +362,35 @@ namespace Regata.Core.Hardware
             }
         }
 
-
         public async Task HomeAsync()
         {
             Home();
-            await TrackPositionAsync();
+            await TrackToHomePositionAsync();
+            PinnedPosition = PinnedPositions.Home;
+        }
+
+        private async Task TrackToHomePositionAsync()
+        {
+            try
+            {
+                using (var ct = new CancellationTokenSource(TimeSpan.FromMinutes(2)))
+                {
+                    while (DeviceIsMoving)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(1), ct.Token);
+                    }
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                Report.Notify(new Message(Codes.ERR_XM_TRCK_POS) { DetailedText = "The async tracking task was cancelled by timemout." });
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new Message(Codes.ERR_XM_TRCK_POS_UNREG) { DetailedText = ex.ToString() });
+
+            }
+
         }
 
         #endregion
