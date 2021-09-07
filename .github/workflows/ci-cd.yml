@@ -1,0 +1,25 @@
+name: CORE_CD
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: self-hosted
+
+    env:
+      Solution_Path: Core.sln
+      build_script: build.ps1
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
+
+    # Build app
+    - name:  Build app and create lib files
+      run: .\build.ps1 -Release
+  

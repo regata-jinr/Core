@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
 	  <PlatformTarget>x86</PlatformTarget>
+	  <RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
