@@ -203,7 +203,7 @@ namespace Regata.Core.Hardware
             /// <seealso>625-11-09_Xemo_Equipment_Manual_Web page 31</seealso>
             public int[] MOTOR_STOP_CURRENT { get; set; } = new int[]
            {
-                60,
+                50,
                 50,
                 50,
                 50,
