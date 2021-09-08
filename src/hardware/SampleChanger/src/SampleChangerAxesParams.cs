@@ -290,9 +290,9 @@ namespace Regata.Core.Hardware
 
             public int[] REF_VELOCITY_H1 { get; set; } = new int[]
                    {
-                50,
-                50,
-                50,
+                30,
+                30,
+                30,
                 100,
                 100
                    };
@@ -339,9 +339,9 @@ namespace Regata.Core.Hardware
             /// </summary>
             public int[] START_STOP_FREQUENCY { get; set; } = new int[]
             {
-                5,
-                5,
-                5,
+                80,
+                80,
+                80,
                 2,
                 2
             };
