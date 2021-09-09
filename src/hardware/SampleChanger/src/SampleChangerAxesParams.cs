@@ -290,8 +290,8 @@ namespace Regata.Core.Hardware
 
             public int[] REF_VELOCITY_H1 { get; set; } = new int[]
                    {
-                30,
-                30,
+                40,
+                40,
                 30,
                 100,
                 100
@@ -299,9 +299,9 @@ namespace Regata.Core.Hardware
 
             public int[] REF_VELOCITY_H2 { get; set; } = new int[]
             {
-                -1,
-                -1,
-                -1,
+                -3,
+                -3,
+                -3,
                 -30,
                 -30
             };
@@ -317,8 +317,8 @@ namespace Regata.Core.Hardware
 
             public float[] ACCELERATION_FACTOR { get; set; } = new float[]
             {
-                10f,
-                10f,
+                1f,
+                1f,
                 1f,
                 10f,
                 10f
@@ -326,8 +326,8 @@ namespace Regata.Core.Hardware
 
             public float[] DECELERATION_FACTOR { get; set; } = new float[]
             {
-                10f,
-                10f,
+                1f,
+                1f,
                 1f,
                 10f,
                 10f

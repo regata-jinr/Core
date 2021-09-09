@@ -388,9 +388,7 @@ namespace Regata.Core.Hardware
             catch (Exception ex)
             {
                 Report.Notify(new Message(Codes.ERR_XM_TRCK_POS_UNREG) { DetailedText = ex.ToString() });
-
             }
-
         }
 
         #endregion
