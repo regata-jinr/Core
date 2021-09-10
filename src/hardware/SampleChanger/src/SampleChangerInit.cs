@@ -143,9 +143,8 @@ namespace Regata.Core.Hardware
                 XemoDLL.MB_ASet(axisNum, XemoConst.StopCurr, Settings.AxesParams.MOTOR_STOP_CURRENT[axisNum]);
                 XemoDLL.MB_ASet(axisNum, XemoConst.Micro, Settings.AxesParams.MICROSTEP_RESOLUTION[axisNum]);
 
-                XemoDLL.MB_ASet(axisNum, XemoConst.Iscale, (int)Math.Round((float)Settings.AxesParams.INC_PER_REVOLUTION[axisNum] / Settings.AxesParams.MICROSTEP_RESOLUTION[axisNum])); // 10000
+                XemoDLL.MB_ASet(axisNum, XemoConst.Iscale, (int)Math.Round((float)Settings.AxesParams.INC_PER_REVOLUTION[axisNum] / Settings.AxesParams.MICROSTEP_RESOLUTION[axisNum])); // 10 000
                 XemoDLL.MB_ASet(axisNum, XemoConst.Uscale, (int)Math.Round(unchecked(Settings.AxesParams.MM_PER_REVOLUTION[axisNum] * 100f))); // 800
-
 
                 //var _speeds = new int[] { Settings.YVelocity, Settings.XVelocity, Settings.CVelocity };
                 var _speeds = new int[] { 4000, 4000, 3000 };
@@ -155,9 +154,8 @@ namespace Regata.Core.Hardware
                 else
                     XemoDLL.MB_ASet(axisNum, XemoConst.Speed, _speeds[axisNum]);
 
-
                 XemoDLL.MB_ASet(axisNum, XemoConst.Accel, (int)Math.Round(unchecked(Settings.AxesParams.ACCELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum])))); // 10 000
-                XemoDLL.MB_ASet(axisNum, XemoConst.Vmin, (int)Math.Round(unchecked(Settings.AxesParams.START_STOP_FREQUENCY[axisNum] * 100f) / 10.0)); // 50
+                XemoDLL.MB_ASet(axisNum, XemoConst.Vmin, (int)Math.Round(unchecked(Settings.AxesParams.START_STOP_FREQUENCY[axisNum] * 100f) / 10.0)); // 800
                 XemoDLL.MB_ASet(axisNum, XemoConst.Decel, (int)Math.Round(unchecked(Settings.AxesParams.DECELERATION_FACTOR[axisNum] * checked(Settings.AxesParams.MAX_VELOCITY[axisNum])))); // 10 000
 
 
@@ -204,7 +202,6 @@ namespace Regata.Core.Hardware
                 if (isDisposing)
                 {
                     NLog.LogManager.Flush();
-
                 }
                 Stop();
                 HaltSystem();
