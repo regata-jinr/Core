@@ -39,6 +39,7 @@ namespace Regata.Core.UI.WinForms.Controls
             // groupBoxTitle
             // 
             this.groupBoxTitle.Controls.Add(this._tableLayoutPanel);
+            groupBoxTitle.AutoSize = true;
             this.groupBoxTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             //this.groupBoxTitle.Location = new System.Drawing.Point(0, 0);
             this.groupBoxTitle.Name = "groupBoxTitle";

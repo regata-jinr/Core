@@ -60,6 +60,7 @@ namespace Regata.Core.UI.WinForms.Controls
             checkedListBox.MultiColumn = true;
             checkedListBox.Name = "checkedListBox";
             checkedListBox.RightToLeft = RightToLeft.No;
+            checkedListBox.IntegralHeight = false;
             checkedListBox.Dock = DockStyle.Fill;
             checkedListBox.Sorted = true;
             checkedListBox.TabIndex = 18;
