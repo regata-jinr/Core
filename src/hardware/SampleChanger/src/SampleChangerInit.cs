@@ -82,10 +82,13 @@ namespace Regata.Core.Hardware
 
                 PairedDetector = XemoDet[sn];
 
+                XemoDLL.ML_DeIniComPort((short)ComPort);
+
+                Connect();
+
                 ErrorHandlerDel = ErrorHandler; // you must save a "copy" of the delegate so that if the C functions calls this method at any time, this copy is still "alive" and hasn't been GC 
                 ML_ErrorCallBackDelegate(ErrorHandlerDel);
 
-                Connect();
 
                 InitializeAxes();
             }
@@ -100,13 +103,14 @@ namespace Regata.Core.Hardware
         private void Connect()
         {
             try
-            {                
+            {
                 //XemoDLL.ML_DeIniCom();
-                XemoDLL.ML_DeIniComPort((short)ComPort);
+                //XemoDLL.ML_DeIniComPort((short)ComPort);
                 XemoDLL.ML_IniUsb((short)ComPort, SerialNumber.ToString());
-                // XemoDLL.ML_ComSelect(_comPort);
+                SelectCurrentComPort();
+
                 //if (IsError)
-                    Reset();
+                Reset();
             }
             catch (Exception ex)
             {
@@ -124,7 +128,7 @@ namespace Regata.Core.Hardware
 
         public void Disconnect()
         {
-            HaltSystem();
+            BreakSystemProgram();
             XemoDLL.ML_DeIniCom();
         }
 
@@ -204,7 +208,6 @@ namespace Regata.Core.Hardware
                     NLog.LogManager.Flush();
                 }
                 Stop();
-                HaltSystem();
                 Disconnect();
             }
             _isDisposed = true;
@@ -223,7 +226,11 @@ namespace Regata.Core.Hardware
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-       
+
+        public void SelectCurrentComPort()
+        {
+            XemoDLL.ML_ComSelect((short)ComPort);
+        }
 
     } // public partial class SampleChanger  : IDisposable
 }     // namespace Regata.Core.Hardware

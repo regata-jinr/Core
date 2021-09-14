@@ -47,30 +47,44 @@ namespace Regata.Core.Hardware
 
         public event Action<SampleChanger> PositionReached;
 
-        private async Task TrackPositionAsync()
+        private int TracksCount = 0;
+
+        public async Task TrackPositionAsync(CancellationToken ct)
         {
             try
             {
-                using (var ct = new CancellationTokenSource(TimeSpan.FromMinutes(2)))
+                if (TracksCount > 1)
                 {
-                    // FIXME: due to MB_Delay after operatoin DeviceIsMoving is false
-                    //        when axis is switching
-                    //        DeviceIsMoving
-                    while (true)
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(1), ct.Token);
+                    TracksCount = 0;
+                    return;
+                }
+                //if (ct == CancellationToken.None)
+                //ct = new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token;
+                // FIXME: due to MB_Delay after operatoin DeviceIsMoving is false
+                //        when axis is switching
+                //        DeviceIsMoving
+                await Task.Delay(TimeSpan.FromSeconds(2), ct).ConfigureAwait(false);
 
-                        if (CurrentPosition == TargetPosition)
-                        {
-                            PositionReached?.Invoke(this);
-                            break;
-                        }
+                while (DeviceIsMoving && TracksCount <= 1)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1), ct).ConfigureAwait(false);
+
+                    if (CurrentPosition == TargetPosition)
+                    {
+                        PositionReached?.Invoke(this);
+                        break;
                     }
                 }
+
+                TracksCount++;
+                await TrackPositionAsync(ct);
+
             }
             catch (TaskCanceledException)
             {
                 Report.Notify(new Message(Codes.ERR_XM_TRCK_POS) { DetailedText = "The async tracking task was cancelled by timemout." });
+                throw;
+                //Stop();
             }
             catch (Exception ex)
             {
@@ -79,6 +93,28 @@ namespace Regata.Core.Hardware
             }
 
         }
+
+        private async Task TrackToHomePositionAsync(CancellationToken ct)
+        {
+            try
+            {
+                while (DeviceIsMoving)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1), ct).ConfigureAwait(false);
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                Report.Notify(new Message(Codes.ERR_XM_TRCK_POS) { DetailedText = "The async tracking task was cancelled by timemout." });
+                throw;
+                //Stop();
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new Message(Codes.ERR_XM_TRCK_POS_UNREG) { DetailedText = ex.ToString() });
+            }
+        }
+
 
         public int GetAxisPosition(Axes ax) => XemoDLL.MB_AGet((short)ax, XemoConst.APos);
 

@@ -9,6 +9,8 @@
      Debug configuratoin for the build command.(By default)
     .PARAMETER Test
      Build and Run test projects
+     .PARAMETER $IgnoreTest
+     Allows to ignore running test for release configuration
     .PARAMETER projName
      Will be passed to fiter options of gci with *.csproj
     .EXAMPLE
@@ -20,6 +22,7 @@ param
     [switch]$Release,
     [switch]$Debug,
     [switch]$Test,
+    [switch]$IgnoreTest,
     [string]$Name
 )
 
@@ -52,7 +55,7 @@ function RunBuild {
  
 if ($Release) {
     RunBuild -config Release
-    RunTest
+    if (!$IgnoreTest) {RunTest}
 }
 elseif ($Debug) {
     RunBuild -config Debug

@@ -65,7 +65,7 @@ namespace Regata.Core.Hardware
         /// </summary>
         public void ResetSystem()
         {
-            //XemoDLL.MB_SetFifo(XemoConst.FfClear);
+            XemoDLL.MB_SetFifo(XemoConst.FfClear);
             XemoDLL.MB_SysControl(XemoConst.Reset);
         }
 

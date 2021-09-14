@@ -32,7 +32,7 @@ namespace Regata.Core.Hardware
         public PinnedPositions PinnedPosition { get; private set; }
 
         public string Text;
-        public bool IsError => XemoDLL.ML_GetErrState() == 0;
+        public bool IsError => XemoDLL.ML_GetErrState() != 0;
         public int Code => IsError ? XemoDLL.ML_GetErrCode() : XemoDLL.MB_GetState();
         
         public bool NegativeSwitcherX => IsNegativeSwitcher(Axes.X);
@@ -214,7 +214,7 @@ namespace Regata.Core.Hardware
             {
                 10000,
                 10000,
-                10000,
+                5000,
                 400,
                 400
             };
@@ -292,7 +292,7 @@ namespace Regata.Core.Hardware
                    {
                 40,
                 40,
-                30,
+                20,
                 100,
                 100
                    };
@@ -310,7 +310,7 @@ namespace Regata.Core.Hardware
             {
                 100,
                 100,
-                100,
+                10,
                 200,
                 200
             };

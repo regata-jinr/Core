@@ -41,9 +41,11 @@ namespace Regata.Core.Hardware
                 MoveToY(pos.Y);
                 MoveToX(pos.X);
             }
+
+            //TrackPosition();
         }
 
-        public async Task MoveToPositionAsync(Position pos, Axes moveAlongAxisFirst)
+        public async Task MoveToPositionAsync(Position pos, Axes moveAlongAxisFirst, CancellationToken ct)
         {
             TargetPosition = pos;
 
@@ -61,7 +63,7 @@ namespace Regata.Core.Hardware
                 MoveToX(pos.X);
             }
 
-            await TrackPositionAsync();
+            await TrackPositionAsync(ct).ConfigureAwait(false);
 
         }
 
@@ -113,7 +115,7 @@ namespace Regata.Core.Hardware
 
         }
 
-        public async Task PutSampleToTheDiskAsync(short cellNum)
+        public async Task PutSampleToTheDiskAsync(short cellNum, CancellationToken ct)
         {
             var _dp = new DiskParams(cellNum);
 
@@ -124,7 +126,7 @@ namespace Regata.Core.Hardware
             //if (PinnedPosition == PinnedPositions.InsideDetShield)
             MoveToY(MaxY);
 
-            await MoveToPositionAsync(pos.Above, Axes.X);
+            await MoveToPositionAsync(pos.Above, Axes.X, ct).ConfigureAwait(false);
 
             MoveToX(pos.Near.X);
 
@@ -146,7 +148,7 @@ namespace Regata.Core.Hardware
             PinnedPosition = PinnedPositions.AboveDisk;
         }
 
-        public async Task TakeSampleFromTheCellAsync(short cellNum)
+        public async Task TakeSampleFromTheCellAsync(short cellNum, CancellationToken ct)
         {
             var _dp = new DiskParams(cellNum);
             var pos = GetAboveAndNearPositions(_dp.DiskName);
@@ -154,7 +156,7 @@ namespace Regata.Core.Hardware
             if(PinnedPosition != PinnedPositions.NearDisk)
                 MoveToY(MaxY);
 
-            await MoveToPositionAsync(pos.Near, Axes.X);
+            await MoveToPositionAsync(pos.Near, Axes.X, ct).ConfigureAwait(false);
 
             MoveToX(pos.Above.X);
             IsSampleCaptured = true;
@@ -201,7 +203,7 @@ namespace Regata.Core.Hardware
 
         }
 
-        public async Task PutSampleAboveDetectorWithHeightAsync(Heights h)
+        public async Task PutSampleAboveDetectorWithHeightAsync(Heights h, CancellationToken ct)
         {
             try
             {
@@ -230,7 +232,7 @@ namespace Regata.Core.Hardware
 
                 MoveToY(MaxY);
 
-                await MoveToPositionAsync(posAbove, Axes.X);
+                await MoveToPositionAsync(posAbove, Axes.X, ct).ConfigureAwait(false);
 
                 PinnedPosition = h switch
                 {
@@ -324,19 +326,19 @@ namespace Regata.Core.Hardware
                 InitializeAxes();
                 ResetAllSoftwareLimits();
 
-                XemoDLL.MB_Delay(1000);
+                //XemoDLL.MB_Delay(1000);
 
                 HomeY();
-                XemoDLL.MB_Delay(100);
+                //XemoDLL.MB_Delay(100);
                 Settings.LYDecel = Settings.AxesParams.L_DECEL[0];
                 HomeX();
-                XemoDLL.MB_Delay(100);
+                //XemoDLL.MB_Delay(100);
                 Settings.LXDecel = Settings.AxesParams.L_DECEL[1];
                 HomeC();
-                XemoDLL.MB_Delay(100);
+                //XemoDLL.MB_Delay(100);
                 Settings.LCDecel = Settings.AxesParams.L_DECEL[2];
 
-                XemoDLL.MB_Delay(100);
+                //XemoDLL.MB_Delay(100);
                 MoveToC(HomePosition.C);
 
                 HomePosition.C = 0;
@@ -362,35 +364,14 @@ namespace Regata.Core.Hardware
             }
         }
 
-        public async Task HomeAsync()
+        public async Task HomeAsync(CancellationToken ct)
         {
             Home();
-            await TrackToHomePositionAsync();
+            await TrackPositionAsync(ct).ConfigureAwait(false);
             PinnedPosition = PinnedPositions.Home;
         }
 
-        private async Task TrackToHomePositionAsync()
-        {
-            try
-            {
-                using (var ct = new CancellationTokenSource(TimeSpan.FromMinutes(2)))
-                {
-                    while (DeviceIsMoving)
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(1), ct.Token);
-                    }
-                }
-            }
-            catch (TaskCanceledException)
-            {
-                Report.Notify(new Message(Codes.ERR_XM_TRCK_POS) { DetailedText = "The async tracking task was cancelled by timemout." });
-            }
-            catch (Exception ex)
-            {
-                Report.Notify(new Message(Codes.ERR_XM_TRCK_POS_UNREG) { DetailedText = ex.ToString() });
-            }
-        }
-
+      
         #endregion
 
     } // public partial class SampleChanger

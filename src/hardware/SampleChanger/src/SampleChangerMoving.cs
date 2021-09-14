@@ -32,6 +32,8 @@ namespace Regata.Core.Hardware
                 if (coordinate == null && speed == null)
                     return;
 
+                SelectCurrentComPort();
+
                 PinnedPosition = PinnedPositions.Moving;
 
                 if (coordinate.HasValue)
@@ -40,24 +42,21 @@ namespace Regata.Core.Hardware
                     if (speed.HasValue)
                         XemoDLL.MB_ASet((short)axis, XemoConst.Speed, speed.Value);
 
-                    XemoDLL.MB_Delay(100);
+                    //XemoDLL.MB_Delay(100);
 
                     XemoDLL.MB_Amove((short)axis, coordinate.Value);
                     XemoDLL.MB_Still((short)axis);
 
                     XemoDLL.MB_ASet((short)axis, XemoConst.Speed, _speed);
 
-                    XemoDLL.MB_Delay(1000);
+                    //XemoDLL.MB_Delay(1000);
 
                     return;
                 }
 
                 if (speed.HasValue && dir.HasValue)
                 {
-
                     XemoDLL.MB_Jog((short)axis, (int)dir.Value * speed.Value);
-                    XemoDLL.MB_Delay(1000);
-
                     return;
                 }
             }
@@ -70,16 +69,19 @@ namespace Regata.Core.Hardware
 
         private void Stop(Axes ax)
         {
+            SelectCurrentComPort();
             XemoDLL.MB_Stop((short)ax);
         }
 
         public void Stop()
         {
+            SelectCurrentComPort();
             BreakSystemProgram();
         }
 
         private void Home(Axes ax)
         {
+            SelectCurrentComPort();
             XemoDLL.MB_Home((short)ax);
             XemoDLL.MB_Still((short)ax);
         }
