@@ -181,7 +181,7 @@ namespace Regata.Core.Hardware
                 {
                     _det.CurrentMeasurement.Height = value;
                     _det.SetParameterValue(ParamCodes.CAM_T_SGEOMTRY, value);
-                    _det.AddEfficiencyCalibrationFileByHeight(value);
+                    //_det.AddEfficiencyCalibrationFileByHeight(value);
                 }
             }
 

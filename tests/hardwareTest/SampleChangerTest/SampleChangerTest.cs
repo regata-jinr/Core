@@ -28,8 +28,8 @@ namespace Regata.Tests.Hardware.Detectors
         {
             var ct1 = new CancellationTokenSource(TimeSpan.FromMinutes(1)).Token;
             //SampleChanger[] s = null;
-            var s1 = new SampleChanger(107374);
-            var s2 = new SampleChanger(107375);
+            var s1 = new SampleChanger(107376);
+            var s2 = new SampleChanger(114005);
             try
             {
                 //s = new SampleChanger[] { new SampleChanger(107374), new SampleChanger(107375) };
@@ -41,18 +41,8 @@ namespace Regata.Tests.Hardware.Detectors
                 s1.PositionReached += async (s11) => await PositionReachedHandler(s11).ConfigureAwait(false);
                 s2.PositionReached += async (s22) => await PositionReachedHandler(s22).ConfigureAwait(false);
 
-                //var tasks = new List<Task>();
-                //foreach (var x in s)
-                //{
-                //    SampleChanger ss = x;
-                //    tasks.Add(Task.Factory.StartNew(async (xx) => await XemoCycle(xx as SampleChanger), ss));
-                //}
-
-                //await Task.WhenAll(tasks);
 
                 await Task.WhenAll(XemoCycle(s1), XemoCycle(s2));
-                //await Task.WhenAll(HomeAsync(s1), HomeAsync(s2));
-                //await Task.WhenAll(MoveToPosAsync(s1), MoveToPosAsync(s2));
 
                 Console.WriteLine("Press enter for exit...");
                 Console.ReadLine();

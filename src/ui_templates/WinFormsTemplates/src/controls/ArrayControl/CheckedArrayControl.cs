@@ -9,7 +9,6 @@
  *                                                                         *
  ***************************************************************************/
 
-using System;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -21,6 +20,12 @@ namespace Regata.Core.UI.WinForms.Controls
         /// Return one and only selected element in case of MultiSelection is false and last selected element in case of MultiSelection is true.
         /// </summary>
         public T SelectedItem => (T)checkedListBox.SelectedItem;
+
+
+        public void SelectItem(T item)
+        {
+            checkedListBox.SelectedItem = item;
+        }
 
         /// <summary>
         /// Returns array of selected items in case of multiselection and array with single element in case of single selection

@@ -128,11 +128,12 @@ namespace Regata.Core.Hardware
 
             await MoveToPositionAsync(pos.Above, Axes.X, ct).ConfigureAwait(false);
 
-            MoveToX(pos.Near.X);
+            // release sample
+            pos.Near.C = null;
+            await MoveToPositionAsync(pos.Near, Axes.X, ct).ConfigureAwait(false);
 
             IsSampleCaptured = false;
             PinnedPosition = PinnedPositions.NearDisk;
-
         }
 
         public void TakeSampleFromTheCell(short cellNum)
@@ -330,13 +331,13 @@ namespace Regata.Core.Hardware
 
                 HomeY();
                 //XemoDLL.MB_Delay(100);
-                Settings.LYDecel = Settings.AxesParams.L_DECEL[0];
+                LYDecel = Settings.AxesParams.L_DECEL[0];
                 HomeX();
                 //XemoDLL.MB_Delay(100);
-                Settings.LXDecel = Settings.AxesParams.L_DECEL[1];
+                LXDecel = Settings.AxesParams.L_DECEL[1];
                 HomeC();
                 //XemoDLL.MB_Delay(100);
-                Settings.LCDecel = Settings.AxesParams.L_DECEL[2];
+                LCDecel = Settings.AxesParams.L_DECEL[2];
 
                 //XemoDLL.MB_Delay(100);
                 MoveToC(HomePosition.C);
@@ -344,14 +345,14 @@ namespace Regata.Core.Hardware
                 HomePosition.C = 0;
                 CurrentPosition = HomePosition;
 
-                Settings.SoftwareYUpLimit = MaxY + 1000;
+                SoftwareYUpLimit = MaxY + 1000;
                 //Settings.SoftwareYDownLimit = 0;
 
                 //Settings.SoftwareXLeftLimit = 1500;
-                Settings.SoftwareXRightLimit = MaxX + 1000;
+                SoftwareXRightLimit = MaxX + 1000;
 
-                Settings.SoftwareCLeftLimit = -MaxC;
-                Settings.SoftwareCRightLimit = MaxC;
+                SoftwareCLeftLimit = -MaxC;
+                SoftwareCRightLimit = MaxC;
 
                 IsStopped = false;
                 PinnedPosition = PinnedPositions.Home;

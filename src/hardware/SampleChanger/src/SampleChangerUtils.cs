@@ -17,9 +17,9 @@ namespace Regata.Core.Hardware
     {
         public static void ShowDevicesCams()
         {
-            Process.Start(@"http://159.93.105.78/");
-            Process.Start(@"http://159.93.105.75/");
-            Process.Start(@"http://159.93.105.79/");
+            Process.Start(new ProcessStartInfo("http://159.93.105.78/") { UseShellExecute = true});
+            Process.Start(new ProcessStartInfo("http://159.93.105.75/") { UseShellExecute = true});
+            Process.Start(new ProcessStartInfo("http://159.93.105.79/") { UseShellExecute = true});
         }
 
     } // public partial class SampleChanger

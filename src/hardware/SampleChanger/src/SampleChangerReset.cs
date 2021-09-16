@@ -24,23 +24,21 @@ namespace Regata.Core.Hardware
 
         public void ResetOnlySoftwareLimits()
         {
-            Settings.SoftwareXLeftLimit = 0;
-            Settings.SoftwareXRightLimit = 0;
+            SoftwareXLeftLimit = 0;
+            SoftwareXRightLimit = 0;
 
-            Settings.SoftwareYDownLimit = 0;
-            Settings.SoftwareYUpLimit = 0;
+            SoftwareYDownLimit = 0;
+            SoftwareYUpLimit = 0;
 
-            Settings.SoftwareCLeftLimit = 0;
-            Settings.SoftwareCRightLimit = 0;
+            SoftwareCLeftLimit = 0;
+            SoftwareCRightLimit = 0;
         }
 
         public void ResetLDecels()
         {
-            Settings.LXDecel = 0;
-
-            Settings.LYDecel = 0;
-
-            Settings.LCDecel = 0;
+            LXDecel = 0;
+            LYDecel = 0;
+            LCDecel = 0;
         }
 
         /// <summary>
@@ -55,6 +53,7 @@ namespace Regata.Core.Hardware
         /// </summary>
         public void ResetErrors()
         {
+            SelectCurrentComPort();
             XemoDLL.MB_ResErr();
         }
 
@@ -65,6 +64,7 @@ namespace Regata.Core.Hardware
         /// </summary>
         public void ResetSystem()
         {
+            SelectCurrentComPort();
             XemoDLL.MB_SetFifo(XemoConst.FfClear);
             XemoDLL.MB_SysControl(XemoConst.Reset);
         }
@@ -75,6 +75,7 @@ namespace Regata.Core.Hardware
         /// </summary>
         public void HaltSystem()
         {
+            SelectCurrentComPort();
             XemoDLL.MB_SysControl(XemoConst.Halt);
         }
 
@@ -84,6 +85,7 @@ namespace Regata.Core.Hardware
         /// </summary>
         public void BreakSystemProgram()
         {
+            SelectCurrentComPort();
             IsStopped = true;
             XemoDLL.MB_SysControl(XemoConst.Break);
         }
@@ -94,6 +96,7 @@ namespace Regata.Core.Hardware
         /// </summary>
         public void RestartSystem()
         {
+            SelectCurrentComPort();
             XemoDLL.MB_SysControl(XemoConst.Restart);
         }
 

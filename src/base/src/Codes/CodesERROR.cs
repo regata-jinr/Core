@@ -123,6 +123,8 @@ namespace Regata.Core
         public const int ERR_DET_SMPL_CNVTR = 3240;
         public const int ERR_DET_EFF_DIR_EMPTY = 3241;
         public const int ERR_DET_CLR_SMPL_INFO_UNREG = 3242;
+        public const int ERR_DET_FSAVE_NOT_EFF_LOAD = 3243;
+        
 
         #endregion
 

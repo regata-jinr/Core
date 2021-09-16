@@ -73,22 +73,21 @@ namespace Regata.Core.Hardware
 
                 SerialNumber = sn;
 
-                if (comPort == 0)
-                    ComPort = GetComPortByDeviceId(SerialNumber);
-                else
-                    ComPort = comPort;
+                ComPort = GetComPortByDeviceId(SerialNumber);
 
                 _baudRate = baudRate;
 
                 PairedDetector = XemoDet[sn];
 
-                XemoDLL.ML_DeIniComPort((short)ComPort);
+                if (ComPort == 0)
+                    XemoDLL.ML_DeIniCom();
+                else
+                    XemoDLL.ML_DeIniComPort((short)ComPort);
 
                 Connect();
 
                 ErrorHandlerDel = ErrorHandler; // you must save a "copy" of the delegate so that if the C functions calls this method at any time, this copy is still "alive" and hasn't been GC 
                 ML_ErrorCallBackDelegate(ErrorHandlerDel);
-
 
                 InitializeAxes();
             }
@@ -108,8 +107,6 @@ namespace Regata.Core.Hardware
                 //XemoDLL.ML_DeIniComPort((short)ComPort);
                 XemoDLL.ML_IniUsb((short)ComPort, SerialNumber.ToString());
                 SelectCurrentComPort();
-
-                //if (IsError)
                 Reset();
             }
             catch (Exception ex)
@@ -140,6 +137,8 @@ namespace Regata.Core.Hardware
         {
             try
             {
+                SelectCurrentComPort();
+
                 var axisNum = (short)ax;
                 var XemoType = XemoDLL.MB_Get(XemoConst.Version);
 
@@ -229,6 +228,7 @@ namespace Regata.Core.Hardware
 
         public void SelectCurrentComPort()
         {
+            //if (ComPort != 0)
             XemoDLL.ML_ComSelect((short)ComPort);
         }
 

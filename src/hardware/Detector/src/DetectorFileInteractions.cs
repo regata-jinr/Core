@@ -26,6 +26,7 @@
 // ├── DetectorProperties.cs       --> Contains description of basics properties, events, enumerations and additional classes
 // └── IDetector.cs                --> Interface of the Detector type
 
+using CanberraDataAccessLib;
 using System;
 using System.IO;
 using System.Linq;
@@ -76,6 +77,7 @@ namespace Regata.Core.Hardware
 
                 if (File.Exists(FullFileSpectraName))
                 {
+                    AddEfficiencyCalibrationToFile(FullFileSpectraName, CurrentMeasurement.Height.Value);
                     Report.Notify(new DetectorMessage(Codes.SUCC_DET_FILE_SAVED));
                 }
                 else
@@ -151,7 +153,7 @@ namespace Regata.Core.Hardware
                     };
                 }
 
-                AddEfficiencyCalibrationFileByEnergy();
+                //AddEfficiencyCalibrationFileByEnergy();
 
                 if (measurement.Type > 0 && measurement.Type < 3 && Data.GetSampleLLIReWeight(measurement) == null)
                     Sample.Note += " Was not reweighted";
@@ -364,6 +366,45 @@ namespace Regata.Core.Hardware
             });
         }
 
+        private void AddEfficiencyCalibrationToFile(string fullFileName, float height)
+        {
+            DataAccess effFile = null;
+            DataAccess spectra = null;
+            try
+            {
+                var tmpl = "2,5";
+                if (height != 2.5)
+                    tmpl = height.ToString();
+
+                string effFileName = Path.Combine(DetSet.EffCalFolder, Name, $"{Name}-eff-{tmpl}.CAL");
+
+                if (!File.Exists(effFileName))
+                {
+                    Report.Notify(new DetectorMessage(Codes.ERR_DET_EFF_H_FILE_NF));
+                    return;
+                }
+
+                spectra = new DataAccess();
+                spectra.Open(fullFileName, OpenMode.dReadWrite);
+
+                effFile = new DataAccess();
+                effFile.Open(effFileName);
+                effFile.CopyBlock(spectra, ClassCodes.CAM_CLS_GEOM);
+                spectra.Save("", true);
+                Report.Notify(new DetectorMessage(Codes.INFO_DET_EFF_H_FILE_ADD));
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_FSAVE_NOT_EFF_LOAD) { DetailedText = ex.ToString() });
+            }
+            finally
+            {
+                if (effFile != null && effFile.IsOpen)
+                    effFile.Close();
+                if (spectra != null && spectra.IsOpen)
+                    spectra.Close();
+            }
+        }
 
     } // public partial class Detector : IDisposable
 }     // namespace Regata.Core.Hardware

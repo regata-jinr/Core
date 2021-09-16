@@ -14,6 +14,7 @@ using Regata.Core.Messages;
 using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
 using Regata.Core.Hardware.Xemo;
+using System;
 using System.Linq;
 
 namespace Regata.Core.Hardware
@@ -50,9 +51,33 @@ namespace Regata.Core.Hardware
         
         public bool DeviceIsMoving    => DeviceIsMovingX    || DeviceIsMovingY || DeviceIsMovingC;
         
-        public bool DeviceIsMovingX   => XemoDLL.MB_Busy(1) != 0;
-        public bool DeviceIsMovingY   => XemoDLL.MB_Busy(0) != 0;
-        public bool DeviceIsMovingC   => XemoDLL.MB_Busy(2) != 0;
+
+        public bool DeviceIsMovingX
+        { 
+            get 
+            { 
+                SelectCurrentComPort();
+                return XemoDLL.MB_Busy(1) != 0;
+            } 
+        }
+
+        public bool DeviceIsMovingY
+        {
+            get
+            {
+                SelectCurrentComPort();
+                return XemoDLL.MB_Busy(0) != 0;
+            }
+        }
+
+        public bool DeviceIsMovingC
+        {
+            get
+            {
+                SelectCurrentComPort();
+                return XemoDLL.MB_Busy(2) != 0;
+            }
+        }
 
 
         public bool IsReferenceSwitcher(Axes ax)
@@ -96,6 +121,184 @@ namespace Regata.Core.Hardware
 
             }
         }
+
+        private int GetAxisParameter(Axes axis, short paramCode)
+        {
+            SelectCurrentComPort();
+            return XemoDLL.MB_AGet((short)axis, paramCode);
+        }
+
+        private void SetAxisParameter(Axes axis, short paramCode, int value)
+        {
+            SelectCurrentComPort();
+            XemoDLL.MB_ASet((short)axis, paramCode, value);
+        }
+
+        #region Velocity
+        public int XVelocity
+        {
+            get
+            {
+                return GetAxisParameter(Axes.X, XemoConst.Speed);
+            }
+            set
+            {
+                SetAxisParameter(Axes.X, XemoConst.Speed, Math.Abs(value));
+            }
+
+        }
+
+        public int YVelocity
+        {
+            get
+            {
+                return GetAxisParameter(Axes.Y, XemoConst.Speed);
+            }
+            set
+            {
+                SetAxisParameter(Axes.Y, XemoConst.Speed, Math.Abs(value));
+            }
+
+        }
+        public int CVelocity
+        {
+            get
+            {
+                return GetAxisParameter(Axes.C, XemoConst.Speed);
+            }
+            set
+            {
+                SetAxisParameter(Axes.C, XemoConst.Speed, Math.Abs(value));
+            }
+
+        }
+        #endregion 
+
+        #region X software limits
+
+
+        public int SoftwareXRightLimit
+        {
+            get
+            {
+                return GetAxisParameter(Axes.X, XemoConst.SrLimit);
+            }
+            set
+            {
+                SetAxisParameter(Axes.X, XemoConst.SrLimit, value);
+            }
+        }
+
+
+        public int SoftwareXLeftLimit
+        {
+            get
+            {
+                return GetAxisParameter(Axes.X, XemoConst.SlLimit);
+            }
+            set
+            {
+                SetAxisParameter(Axes.X, XemoConst.SlLimit, value);
+            }
+        }
+
+        public int LXDecel
+        {
+            get
+            {
+                return GetAxisParameter(Axes.X, XemoConst.LDecel);
+            }
+            set
+            {
+                SetAxisParameter(Axes.X, XemoConst.LDecel, value);
+            }
+        }
+
+        #endregion
+
+        #region Y software limits
+
+        public int SoftwareYUpLimit
+        {
+            get
+            {
+                return GetAxisParameter(Axes.Y, XemoConst.SrLimit);
+            }
+            set
+            {
+                SetAxisParameter(Axes.Y, XemoConst.SrLimit, value);
+            }
+        }
+
+        public int SoftwareYDownLimit
+        {
+            get
+            {
+                return GetAxisParameter(Axes.Y, XemoConst.SlLimit);
+            }
+            set
+            {
+                SetAxisParameter(Axes.Y, XemoConst.SlLimit, value);
+            }
+        }
+
+
+        public int LYDecel
+        {
+            get
+            {
+                return GetAxisParameter(Axes.Y, XemoConst.LDecel);
+            }
+            set
+            {
+                SetAxisParameter(Axes.Y, XemoConst.LDecel, value);
+            }
+        }
+
+        #endregion
+
+
+        #region C software limits
+
+
+        public int SoftwareCRightLimit
+        {
+            get
+            {
+                return GetAxisParameter(Axes.C, XemoConst.SrLimit);
+            }
+            set
+            {
+                SetAxisParameter(Axes.C, XemoConst.SrLimit, value);
+            }
+        }
+
+
+        public int SoftwareCLeftLimit
+        {
+            get
+            {
+                return GetAxisParameter(Axes.C, XemoConst.SlLimit);
+            }
+            set
+            {
+                SetAxisParameter(Axes.C, XemoConst.SlLimit, value);
+            }
+        }
+
+        public int LCDecel
+        {
+            get
+            {
+                return GetAxisParameter(Axes.C, XemoConst.LDecel);
+            }
+            set
+            {
+                SetAxisParameter(Axes.C, XemoConst.LDecel, value);
+            }
+        }
+        #endregion
+
 
         public SampleChangerSettings Settings { get; set; }
 

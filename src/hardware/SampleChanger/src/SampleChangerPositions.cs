@@ -29,19 +29,19 @@ namespace Regata.Core.Hardware
             {
                 return new Position()
                 {
-                    X = XemoDLL.MB_AGet((short)Axes.X, XemoConst.APos),
-                    Y = XemoDLL.MB_AGet((short)Axes.Y, XemoConst.APos),
-                    C = XemoDLL.MB_AGet((short)Axes.C, XemoConst.APos),
+                    X = GetAxisPosition(Axes.X),
+                    Y = GetAxisPosition(Axes.Y),
+                    C = GetAxisPosition(Axes.C),
                     SerialNumber = this.SerialNumber,
                     Detector = PairedDetector
                 };
             }
             set
             {
-                XemoDLL.MB_ASet((short)Axes.X, XemoConst.APos, value.X);
-                XemoDLL.MB_ASet((short)Axes.Y, XemoConst.APos, value.Y);
+                SetAxisPosition(Axes.X, value.X);
+                SetAxisPosition(Axes.Y, value.Y);
                 if (value.C.HasValue)
-                    XemoDLL.MB_ASet((short)Axes.C, XemoConst.APos, value.C.Value);
+                    SetAxisPosition(Axes.C, value.C.Value);
             }
         }
 
@@ -51,6 +51,7 @@ namespace Regata.Core.Hardware
 
         public async Task TrackPositionAsync(CancellationToken ct)
         {
+            SelectCurrentComPort();
             try
             {
                 if (TracksCount > 1)
@@ -116,9 +117,9 @@ namespace Regata.Core.Hardware
         }
 
 
-        public int GetAxisPosition(Axes ax) => XemoDLL.MB_AGet((short)ax, XemoConst.APos);
+        public int GetAxisPosition(Axes ax) => GetAxisParameter(ax, XemoConst.APos);
 
-        public void SetAxisPosition(Axes ax, int val) => XemoDLL.MB_ASet((short)ax, XemoConst.APos, val);
+        public void SetAxisPosition(Axes ax, int val) => SetAxisParameter(ax, XemoConst.APos, val);
 
 
 
