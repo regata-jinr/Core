@@ -21,5 +21,5 @@ jobs:
 
     # Build app
     - name:  Build app and create lib files
-      run: .\build.ps1 -Release
-  
+      run: .\build.ps1 -Release -IgnoreTest
+
