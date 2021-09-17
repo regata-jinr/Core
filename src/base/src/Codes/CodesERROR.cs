@@ -700,7 +700,24 @@ namespace Regata.Core
         public const int ERR_UI_WF_ACQ_START_IRR_NF                = 3855;
         public const int ERR_UI_WF_SAVE_CHNG                       = 3856;
         public const int ERR_UI_WF_ADD_MEAS_REC                    = 3857;
- 
+        public const int ERR_UI_WF_TAB_HIDE_COLS_UNREG             = 3858;
+        public const int ERR_UI_WF_FILL_SEL_TBLS_UNREG             = 3859;
+        public const int ERR_UI_WF_FILL_TBL1_UNREG                 = 3860;
+        public const int ERR_UI_WF_INI_TAB_TABLS_UNREG             = 3861;
+        public const int ERR_UI_WF_FILL_SMPL_REGS                  = 3862;
+        public const int ERR_UI_WF_INI_SMPL_REGS                   = 3863;
+        public const int ERR_UI_WF_FILL_SEL_MON_UNREG              = 3864;
+        public const int ERR_UI_WF_FILL_MON_REGS_UNREG             = 3865;
+        public const int ERR_UI_WF_INI_MON_REGS_UNREG              = 3866;
+        public const int ERR_UI_WF_FILL_SEL_STD_UNREG              = 3867;
+        public const int ERR_UI_WF_FILL_STD_REGS_UNREG             = 3868;
+        public const int ERR_UI_WF_INI_STD_REGS_UNREG              = 3869;
+        public const int ERR_UI_WF_FILL_SEL_SMP_UNREG              = 3870;
+        public const int ERR_UI_WF_FILL_SMP_REGS_UNREG             = 3871;
+        public const int ERR_UI_WF_INI_SMP_REGS_UNREG              = 3872;
+        
+
+
 
         #endregion
 

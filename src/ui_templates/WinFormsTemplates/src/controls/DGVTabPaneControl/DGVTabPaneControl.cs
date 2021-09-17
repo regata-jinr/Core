@@ -9,12 +9,18 @@
  *                                                                         *
  ***************************************************************************/
 
-using System.Drawing;
+using Microsoft.EntityFrameworkCore;
+using Regata.Core.DataBase;
+using Regata.Core.DataBase.Models;
+using RCM = Regata.Core.Messages;
 using System;
+using System.ComponentModel;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.TabControl;
-using System.ComponentModel;
 
 namespace Regata.Core.UI.WinForms.Controls
 {
@@ -182,6 +188,118 @@ namespace Regata.Core.UI.WinForms.Controls
         }
 
         public int SelectedTabIndex => tabControl.SelectedIndex;
+
+        private bool RowIsVisible(DataGridViewRow row)
+        {
+            DataGridView dgv = row.DataGridView;
+            int firstVisibleRowIndex = dgv.FirstDisplayedCell.RowIndex;
+            int lastVisibleRowIndex = firstVisibleRowIndex + dgv.DisplayedRowCount(false) - 1;
+            return row.Index >= firstVisibleRowIndex && row.Index <= lastVisibleRowIndex;
+        }
+
+        public void InitTabTables<T1, T2>(DataGridView dgv1, DataGridView dgv2, IQueryable<T1> query1, IQueryable<T2> query, bool[] predicatesArray, IEnumerable<string> columnNames)
+        {
+            try
+            {
+                dgv1.SuspendLayout();
+
+                dgv1.MultiSelect = false;
+
+                dgv1.SelectionChanged += async (e, s) =>
+                {
+                   
+                    await FillAdditionalTable(dgv2, query, predicatesArray, columnNames);
+                };
+
+                dgv1.Scroll += async (s, e) =>
+                {
+                    if (RowIsVisible(dgv1.Rows[dgv1.RowCount - 1]))
+                        await FillMainTable(dgv1, query1);
+                };
+
+                dgv1.ResumeLayout(false);
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new RCM.Message(Codes.ERR_UI_WF_INI_TAB_TABLS_UNREG)
+                {
+                    DetailedText = ex.ToString()
+                });
+            }
+        }
+
+        private async Task FillMainTable<T1>(DataGridView dgv1, IQueryable<T1> query1)
+        {
+            try
+            {
+                using (var r = new RegataContext())
+                {
+                    dgv1.DataSource = await query1.ToArrayAsync();
+                }
+
+
+                dgv1.FirstDisplayedScrollingRowIndex = dgv1.RowCount - 20; ;
+
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new RCM.Message(Codes.ERR_UI_WF_FILL_TBL1_UNREG)
+                {
+                    DetailedText = ex.ToString()
+                });
+            }
+        }
+
+        private async Task FillAdditionalTable<T>(DataGridView dgv2, IQueryable<T> query2, bool[] predicatesArray, IEnumerable<string> columnNames)
+        {
+            try
+            {
+                
+                if (predicatesArray[0]) return;
+
+                var _chosenEntities = new List<T>();
+
+                _chosenEntities.Clear();
+                _chosenEntities.Capacity = 499;
+
+                dgv2.DataSource = null;
+
+                using (var r = new RegataContext())
+                {
+                    _chosenEntities.AddRange(await query2.ToArrayAsync());
+                };
+
+                _chosenEntities.TrimExcess();
+                dgv2.DataSource = _chosenEntities;
+                HideTable2RedundantColumns(columnNames);
+                Labels.SetControlsLabels(this);
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new RCM.Message(Codes.ERR_UI_WF_FILL_SEL_TBLS_UNREG)
+                {
+                    DetailedText = ex.ToString()
+                });
+            }
+        }
+
+        private void HideTable2RedundantColumns(IEnumerable<string> columnNames)
+        {
+            try
+            {
+                if (this[1, 1].Columns.Count <= 0) return;
+
+                foreach (var col in columnNames)
+                    this[1, 1].Columns[col].Visible = false;
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new RCM.Message(Codes.ERR_UI_WF_TAB_HIDE_COLS_UNREG)
+                {
+                    DetailedText = ex.ToString()
+                });
+            }
+        }
 
     }   // public partial class DGVTabPaneControl : UserControl
 }       // namespace Regata.Core.UI.WinForms.Controls

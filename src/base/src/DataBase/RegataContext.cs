@@ -24,7 +24,9 @@ namespace Regata.Core.DataBase
         public DbSet<ReweightInfo>         ReweightInfoes        { get; set; }
         public DbSet<SamplesSet>           SamplesSets           { get; set; }
         public DbSet<Standard>             Standards             { get; set; }
+        public DbSet<StandardSet>          StandardSets          { get; set; }
         public DbSet<Monitor>              Monitors              { get; set; }
+        public DbSet<MonitorSet>           MonitorSets           { get; set; }
         public DbSet<Irradiation>          Irradiations          { get; set; }
         public DbSet<Measurement>          Measurements          { get; set; }
         public DbSet<MeasurementsRegister> MeasurementsRegisters { get; set; }
@@ -132,6 +134,13 @@ namespace Regata.Core.DataBase
                                    srm.Number
                                });
 
+            modelBuilder.Entity<StandardSet>()
+                    .HasKey(srm => new
+                    {
+                        srm.SRM_Set_Name,
+                        srm.SRM_Set_Number
+                    });
+
             modelBuilder.Entity<Monitor>()
                                .HasKey(m => new
                                {
@@ -139,6 +148,13 @@ namespace Regata.Core.DataBase
                                    m.SetNumber,
                                    m.Number
                                });
+
+            modelBuilder.Entity<MonitorSet>()
+                              .HasKey(m => new
+                              {
+                                  m.SetName,
+                                  m.SetNumber
+                              });
 
             modelBuilder.Entity<Position>()
                               .HasKey(p => new

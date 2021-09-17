@@ -66,7 +66,6 @@ namespace Regata.Core.UI.WinForms.Controls
             RowHeadersVisible = false;
             AutoSizeColumnsMode  = DataGridViewAutoSizeColumnsMode.Fill;
 
-
             DataBindingComplete += RDataGridView_DataBindingComplete;
 
             ColumnHeaderMouseClick += RDataGridView_ColumnHeaderMouseClick;

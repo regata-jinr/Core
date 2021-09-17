@@ -16,7 +16,7 @@ using System.Collections.Generic;
 
 namespace Regata.Core.DataBase.Models
 {
-    public enum IrradiationType { sli, lli1, lli2, bckg };
+    public enum IrradiationType { sli, lli };
 
     public class Irradiation : ISample, IId
     {
@@ -46,7 +46,7 @@ namespace Regata.Core.DataBase.Models
         public string SampleKey => $"{SetIndex}-{SampleNumber}";
         public override string ToString() => $"{SetKey}-{SampleNumber}";
 
-        public static readonly IReadOnlyDictionary<IrradiationType, string> TypeToString = new Dictionary<IrradiationType, string> { { IrradiationType.sli, "SLI" }, { IrradiationType.lli1, "LLI-1" }, { IrradiationType.lli2, "LLI-2" }, { IrradiationType.bckg, "BCKG" } };
+        public static readonly IReadOnlyDictionary<IrradiationType, string> TypeToString = new Dictionary<IrradiationType, string> { { IrradiationType.sli, "SLI" }, { IrradiationType.lli, "LLI" }};
 
     } // public class Irradiation
 
