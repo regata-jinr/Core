@@ -48,6 +48,20 @@ namespace Regata.Core.DataBase.Models
 
         public static readonly IReadOnlyDictionary<IrradiationType, string> TypeToString = new Dictionary<IrradiationType, string> { { IrradiationType.sli, "SLI" }, { IrradiationType.lli, "LLI" }};
 
-    } // public class Irradiation
+        //public Irradiation()
+        //{ }
 
+    //    public Irradiation(Sample smp, IrradiationType irType, int? loadNumber)
+    //    {
+    //        CountryCode  = smp.CountryCode;
+    //        ClientNumber = smp.ClientNumber;
+    //        Year         = smp.Year         ;
+    //        SetNumber    = smp.SetNumber    ;
+    //        SetIndex     = smp.SetIndex     ;
+    //        SampleNumber = smp.SampleNumber ;
+    //        Type         = (int)irType;
+    //        LoadNumber   = loadNumber;
+    //}
+
+    } // public class Irradiation
 }     // namespace Regata.Core.DataBase.Models

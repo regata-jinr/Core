@@ -9,7 +9,6 @@
  *                                                                         *
  ***************************************************************************/
 
-using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Regata.Core.DataBase.Models
@@ -33,8 +32,11 @@ namespace Regata.Core.DataBase.Models
         public string  ClientSampleId     { get; set; }
 
         public string  A_Sample_Type      { get; set; }
-        public Single? P_Weighting_LLI    { get; set; }
-        public Single? P_Weighting_SLI    { get; set; }
+
+        [Column("P_Weighting_LLI")]
+        public float? LLIWeight    { get; set; }
+        [Column("P_Weighting_SLI")]
+        public float? SLIWeight { get; set; }
 
         [NotMapped]
         public string SetKey => $"{CountryCode}-{ClientNumber}-{Year}-{SetNumber}-{SetIndex}";
@@ -46,6 +48,32 @@ namespace Regata.Core.DataBase.Models
             return $"{SampleNumber}-{ClientSampleId}";
         }
 
+        // I can not use overloading constructors here because EF Core will use it
 
-    }
-}
+        public static Sample CastSRM(Standard srm) => new Sample()
+        {
+            CountryCode = "s",
+            ClientNumber = "s",
+            Year = "s",
+            SetNumber = srm.SetName,
+            SetIndex = srm.SetNumber,
+            SampleNumber = srm.Number,
+            SLIWeight = srm.SLIWeight,
+            LLIWeight = srm.LLIWeight
+        };
+
+        public static Sample CastMonitor(Monitor mon) => new Sample()
+        {
+            CountryCode = "m",
+            ClientNumber = "m",
+            Year = "m",
+            SetNumber = mon.SetName,
+            SetIndex = mon.SetNumber,
+            SampleNumber = mon.Number,
+            SLIWeight = mon.SLIWeight,
+            LLIWeight = mon.LLIWeight
+        };
+
+
+    } // public class Sample : ISample, IWeightedSample
+}     // namespace Regata.Core.DataBase.Models

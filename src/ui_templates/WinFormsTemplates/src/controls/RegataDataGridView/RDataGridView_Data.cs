@@ -31,7 +31,6 @@ namespace Regata.Core.UI.WinForms.Controls
                 }
                 c.Value = value;
             }
-
         }
 
         /// <summary>

@@ -29,11 +29,13 @@ namespace Regata.Core.UI.WinForms.Items
         {
             foreach (ToolStripMenuItem item in EnumMenuItem.DropDownItems)
             {
+                item.Text = item.Name;
+
                 if (item.Name == itm.ToString())
                 {
                     item.Checked = true;
                     EnumStatusLabel.Name = item.Name;
-                    //EnumStatusLabel.Text = item.Text;
+                    EnumStatusLabel.Text = item.Text;
                     //EnumStatusLabel.Text = $"{itm}||";
                 }
                 else
@@ -69,6 +71,7 @@ namespace Regata.Core.UI.WinForms.Items
 
             //EnumStatusLabel.Name = $"{_enumName}StatusLabel";
             EnumMenuItem.Name = $"{_enumName}MenuItem";
+            EnumMenuItem.Text = $"{_enumName}MenuItem";
 
         }
 

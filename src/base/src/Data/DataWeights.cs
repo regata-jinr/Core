@@ -23,7 +23,7 @@ namespace Regata.Core
         public static float? GetSampleSLIWeight(ISample sample)
         {
             var smpl = GetWeightedSample<Sample>(sample);
-                return smpl?.P_Weighting_SLI;
+                return smpl?.SLIWeight;
         }
 
         public static float? GetSampleLLIInitWeight(ISample sample)
@@ -32,7 +32,7 @@ namespace Regata.Core
             if (rw == null)
             {
                 var smpl = GetWeightedSample<Sample>(sample);
-                return smpl?.P_Weighting_LLI;
+                return smpl?.LLIWeight;
             }
 
             return rw.InitWght;
