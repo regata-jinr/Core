@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms.Forms
 {
-    public partial class RegisterForm<MainTableModel> : Form
+    public partial class RegisterForm<MainTableModel> : RegataBaseForm
         where MainTableModel : class, IId
     {
         /// <summary>
@@ -25,7 +25,7 @@ namespace Regata.Core.UI.WinForms.Forms
         /// <param name="BigDgvSizeCoeff"></param>
         public RegisterForm(uint tabsNum=2, uint dgvsNum=2, float BigDgvSizeCoeff = 0.66f)
         {
-            InitializeComponent();
+            Initialize();
             InitializeTabControl(tabsNum, dgvsNum, BigDgvSizeCoeff);
         }
 

@@ -23,11 +23,11 @@ namespace Regata.Core.UI.WinForms.Controls
     public partial class RDataGridView<Model> : DataGridView
     {
 
-        public async Task SortAsync(DataGridViewColumn dataGridViewColumn, ListSortDirection direction)
-        {
-            base.Sort(dataGridViewColumn, direction);
+        //public async Task SortAsync(DataGridViewColumn dataGridViewColumn, ListSortDirection direction)
+        //{
+        //    base.Sort(dataGridViewColumn, direction);
             
-        }
+        //}
 
 
     }

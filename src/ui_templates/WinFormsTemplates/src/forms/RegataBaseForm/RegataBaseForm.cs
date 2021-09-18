@@ -17,7 +17,7 @@ namespace Regata.Core.UI.WinForms.Forms
     {
         public RegataBaseForm()
         {
-            InitializeComponent();
+            Initialize();
         }
 
     } //public partial class RegisterForm : Form

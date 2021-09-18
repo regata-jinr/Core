@@ -24,10 +24,10 @@ namespace Regata.Core.UI.WinForms.Controls
     public partial class RDataGridView<Model> : DataGridView
     {
 
-        public async Task ColorizeAsync(ColorizeMode mode, DataGridViewColumn dataGridViewColumn = null)
-        {
+        //public async Task ColorizeAsync(ColorizeMode mode, DataGridViewColumn dataGridViewColumn = null)
+        //{
             
-        }
+        //}
 
 
 

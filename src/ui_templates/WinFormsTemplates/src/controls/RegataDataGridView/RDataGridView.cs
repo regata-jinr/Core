@@ -61,7 +61,7 @@ namespace Regata.Core.UI.WinForms.Controls
 
             CurrentDbSet = _rdbc.Set<Model>();
 
-            DataSource = CurrentDbSet.Local;
+            DataSource = CurrentDbSet.Local.ToBindingList();
 
             RowHeadersVisible = false;
             AutoSizeColumnsMode  = DataGridViewAutoSizeColumnsMode.Fill;

@@ -24,10 +24,10 @@ namespace Regata.Core.UI.WinForms.Controls
     {
 
 
-        public async Task FilterAsync<T>(DataGridViewColumn dataGridViewColumn, List<T> filter_values)
-        {
+        //public async Task FilterAsync<T>(DataGridViewColumn dataGridViewColumn, List<T> filter_values)
+        //{
             
-        }
+        //}
 
 
 
