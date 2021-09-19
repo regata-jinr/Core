@@ -119,11 +119,11 @@ namespace Regata.Core.DataBase
             modelBuilder.Entity<SamplesSet>()
                                .HasKey(s => new
                                {
-                                   s.Country_Code,
-                                   s.Client_Id,
+                                   s.CountryCode,
+                                   s.ClientNumber,
                                    s.Year,
-                                   s.Sample_Set_Id,
-                                   s.Sample_Set_Index
+                                   s.SetNumber,
+                                   s.SetIndex
                                });
 
             modelBuilder.Entity<Standard>()
@@ -137,8 +137,8 @@ namespace Regata.Core.DataBase
             modelBuilder.Entity<StandardSet>()
                     .HasKey(srm => new
                     {
-                        srm.SRM_Set_Name,
-                        srm.SRM_Set_Number
+                        srm.SetName,
+                        srm.SetNumber
                     });
 
             modelBuilder.Entity<Monitor>()

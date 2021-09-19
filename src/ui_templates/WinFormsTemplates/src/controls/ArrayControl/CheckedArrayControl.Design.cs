@@ -47,7 +47,6 @@ namespace Regata.Core.UI.WinForms.Controls
             checkedListBox.TabIndex = 18;
             checkedListBox.UseCompatibleTextRendering = true;
             checkedListBox.SelectionMode = SelectionMode.One;
-            
             // 
             // RBV_groupBoxTitle
             // 

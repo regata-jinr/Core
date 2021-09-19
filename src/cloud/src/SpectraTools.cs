@@ -21,9 +21,6 @@ using Regata.Core.DataBase;
 using Regata.Core.Messages;
 using Microsoft.EntityFrameworkCore;
 
-/// <summary>
-/// 
-/// </summary>
 namespace Regata.Core.Cloud
 {
     public enum IrradiationType { SLI, LLI1, LLI2, BCKG }
@@ -149,7 +146,6 @@ namespace Regata.Core.Cloud
                     return result;
                 }
 
-                Report.Notify(new Message(Codes.SUCC_CLD_UPL_FILE));
             }
 
             catch

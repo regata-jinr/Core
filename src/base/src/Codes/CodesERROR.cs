@@ -137,22 +137,24 @@ namespace Regata.Core
 
         #region Settings Errors
         // 3400 - 3499
-        public const int ERR_SET_MSG_ARR_NULL = 3400;
-        public const int ERR_SET_LBL_ARR_NULL = 3401;
-        public const int ERR_SET_LBL_FILE_NOT_EXST = 3402;
-        public const int ERR_SET_CODE_FILE_NOT_EXST = 3403;
-        public const int ERR_SET_GET_MSG_UNREG = 3404;
-        public const int ERR_SET_GET_LBL_UNREG = 3405;
-        public const int ERR_SET_CODE_FILE_UNREG = 3406;
-        public const int ERR_SET_LBL_FILE_UNREG = 3407;
-        public const int ERR_SET_SAVE_UNREG = 3408;
-        public const int ERR_SET_SAVE_EMPT_ASMBL = 3409;
-        public const int ERR_SET_RST_UNREG = 3410;
-        public const int ERR_SET_RST_EMPT_ASMBL = 3411;
-        public const int ERR_SET_LOAD_UNREG = 3412;
-        public const int ERR_SET_LOAD_EMPT_ASMBL = 3413;
+        public const int ERR_SET_MSG_ARR_NULL            = 3400;
+        public const int ERR_SET_LBL_ARR_NULL            = 3401;
+        public const int ERR_SET_LBL_FILE_NOT_EXST       = 3402;
+        public const int ERR_SET_CODE_FILE_NOT_EXST      = 3403;
+        public const int ERR_SET_GET_MSG_UNREG           = 3404;
+        public const int ERR_SET_GET_LBL_UNREG           = 3405;
+        public const int ERR_SET_CODE_FILE_UNREG         = 3406;
+        public const int ERR_SET_LBL_FILE_UNREG          = 3407;
+        public const int ERR_SET_SAVE_UNREG              = 3408;
+        public const int ERR_SET_SAVE_EMPT_ASMBL         = 3409;
+        public const int ERR_SET_RST_UNREG               = 3410;
+        public const int ERR_SET_RST_EMPT_ASMBL          = 3411;
+        public const int ERR_SET_LOAD_UNREG              = 3412;
+        public const int ERR_SET_LOAD_EMPT_ASMBL         = 3413;
         public const int ERR_SET_GET_FILE_SET_EMPT_ASMBL = 3414;
-        public const int ERR_SET_SET_ASMBL_NAME_EMPTY = 3415;
+        public const int ERR_SET_SET_ASMBL_NAME_EMPTY    = 3415;
+        public const int ERR_LBL_UNREG                   = 3416;
+        public const int ERR_LBL_FNF                     = 3417;
 
         #endregion
 

@@ -24,7 +24,7 @@ namespace Regata.Core.DataBase.Models
         [Column("Monitor_Set_Type")]
         public string SetType { get; set; }
         [Column("Monitor_Set_Weight")]
-        public Single SetWeight { get; set; }
+        public float SetWeight { get; set; }
         [Column("Monitor_Set_Purchasing_Date")]
         public DateTime SetPurchasingDate { get; set; }
 

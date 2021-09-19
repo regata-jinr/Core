@@ -9,15 +9,17 @@
  *                                                                         *
  ***************************************************************************/
 
-using System.Linq;
-using System;
-using System.Collections.Generic;
 using Regata.Core.Settings;
-using System.Windows.Forms;
-using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
 using RCM=Regata.Core.Messages;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
+using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms
 { 
@@ -28,10 +30,25 @@ namespace Regata.Core.UI.WinForms
 
        static Labels()
        {
-            using (var r = new RegataContext())
+            try
             {
-                _labels = r.UILabels.AsNoTracking().ToList();
+                string fileName = "labels.json";
+
+                var options = new JsonSerializerOptions { Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic) };
+                string jsonString = File.ReadAllText(fileName);
+                _labels = JsonSerializer.Deserialize<List<UILabel>>(jsonString, options);
+
             }
+            catch (FileNotFoundException)
+            {
+                Report.Notify(new RCM.Message(Codes.ERR_LBL_FNF) { DetailedText = "File labels.json was not found in app directory." });
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new RCM.Message(Codes.ERR_LBL_UNREG) { DetailedText = ex.Message });
+            }
+
+
         }
 
         public static void SetControlsLabels(Control control)

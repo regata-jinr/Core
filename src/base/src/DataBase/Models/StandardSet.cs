@@ -17,15 +17,20 @@ namespace Regata.Core.DataBase.Models
     [Table("table_SRM_Set")]
     public class StandardSet
     {
-        public string   SRM_Set_Name              { get; set; }
-        public string   SRM_Set_Number            { get; set; }
-        public string   SRM_Set_Type              { get; set; }
-        public float    SRM_Set_Weight            { get; set; }
-        public DateTime SRM_Set_Purchasing_Date   { get; set; }
+        [Column("SRM_Set_Name")]
+        public string   SetName              { get; set; }
+        [Column("SRM_Set_Number")]
+        public string   SetNumber            { get; set; }
+        [Column("SRM_Set_Type")]
+        public string   SetType              { get; set; }
+        [Column("SRM_Set_Weight")]
+        public float    SetWeight            { get; set; }
+        [Column("SRM_Set_Purchasing_Date")]
+        public DateTime SetPurchasingDate   { get; set; }
 
         public override string ToString()
         {
-            return $"s-s-s-{SRM_Set_Name}-{SRM_Set_Number}";
+            return $"s-s-s-{SetName}-{SetNumber}";
         }
 
     }
