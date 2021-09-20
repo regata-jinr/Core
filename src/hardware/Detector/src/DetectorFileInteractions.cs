@@ -34,6 +34,7 @@ using System.Threading.Tasks;
 using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
 using Regata.Core.Messages;
+using Regata.Core.Cloud;
 
 namespace Regata.Core.Hardware
 {
@@ -78,6 +79,7 @@ namespace Regata.Core.Hardware
                 if (File.Exists(FullFileSpectraName))
                 {
                     AddEfficiencyCalibrationToFile(FullFileSpectraName, CurrentMeasurement.Height.Value);
+                    //SpectraTools.UploadFileToCloudAsync(FullFileSpectraName, new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(30)).Token).Wait();
                     Report.Notify(new DetectorMessage(Codes.SUCC_DET_FILE_SAVED));
                 }
                 else

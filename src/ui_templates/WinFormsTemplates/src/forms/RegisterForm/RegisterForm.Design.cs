@@ -125,8 +125,8 @@ namespace Regata.Core.UI.WinForms.Forms
             MainTableLayoutPanel.ColumnCount = 1;
             MainTableLayoutPanel.Name = "MainTableLayoutPanel";
             MainTableLayoutPanel.RowCount = 2;
-            MainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70F));
-            MainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
+            MainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 60F));
+            MainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
             MainTableLayoutPanel.TabIndex = 25;
             MainTableLayoutPanel.Dock = DockStyle.Fill;
             MainTableLayoutPanel.Controls.Add(groupBoxMainRDGV, 0, 0);

@@ -8,6 +8,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\base\base.csproj" />
+		<ProjectReference Include="..\..\cloud\cloud.csproj" />
 		<ProjectReference Include="..\SampleChanger\SampleChanger.csproj" />
 	</ItemGroup>
 
