@@ -36,13 +36,14 @@ namespace Regata.Core.UI.WinForms.Forms
 
                 if (System.Diagnostics.Process.GetProcesses().Count(p => p.ProcessName == System.Diagnostics.Process.GetCurrentProcess().ProcessName) >= 2)
                 {
-                    Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_APP_ALREADY_OPENED));
-                    Application.Exit();
+                    //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_APP_ALREADY_OPENED));
+                    throw new InvalidOperationException("Process has already opened");
                 }
             }
             catch (Exception ex)
             {
-                Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_UNREG) { DetailedText = ex.ToString()});
+                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_UNREG) { DetailedText = ex.ToString()});
+                throw;
             }
         }
 
@@ -71,7 +72,8 @@ namespace Regata.Core.UI.WinForms.Forms
             }
             catch (Exception ex)
             {
-                Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CHCK_PIN_UNREG) { DetailedText = ex.ToString()});
+                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CHCK_PIN_UNREG) { DetailedText = ex.ToString()});
+                throw;
             }
         }
 
@@ -92,17 +94,19 @@ namespace Regata.Core.UI.WinForms.Forms
                         var sm = CredentialManager.GetCredentials($"Password_{_user}");
                         if (sm == null)
                         {
-                            Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_ENTER_PIN_NOT_FOUND));
+                            //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_ENTER_PIN_NOT_FOUND));
+                            throw new ArgumentException("Pin code has not found try to make it again.");
                             //MessageBoxTemplates.ErrorSync("Пароль связанный с пин-кодом не найден. Попробуйте создать пин-код заново");
-                            return;
                         }
                         _password = sm.Password;
                     }
                     else
                     {
-                        Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_ENTER_WRONG_PIN_OR_USER));
+                        //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_ENTER_WRONG_PIN_OR_USER));
+                        throw new ArgumentException("Wrong login or pin");
+
                         //MessageBoxTemplates.ErrorSync("Неправильный логин или пин-код");
-                        return;
+                        //return;
                     }
                 }
                 _sqlcs.UserID = _user;
@@ -119,13 +123,16 @@ namespace Regata.Core.UI.WinForms.Forms
                     }
                     else
                     {
-                        Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_ENTER_WRONG_LOGIN_OR_PASS));
+                        //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_ENTER_WRONG_LOGIN_OR_PASS));
+                        throw new ArgumentException("Wrong login or pin");
+
                     }
                 }
             }
             catch (Exception ex)
             {
-                Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_ENTER_UNREG) { DetailedText = ex.ToString()});
+                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_ENTER_UNREG) { DetailedText = ex.ToString()});
+                throw;
 
             }
 
@@ -147,7 +154,8 @@ namespace Regata.Core.UI.WinForms.Forms
             }
             catch (Exception ex)
             {
-                Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CRT_PIN_UNREG) { DetailedText = ex.ToString()});
+                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CRT_PIN_UNREG) { DetailedText = ex.ToString()});
+                throw;
             }
 
         }
@@ -192,7 +200,8 @@ namespace Regata.Core.UI.WinForms.Forms
             }
             catch (Exception ex)
             {
-                Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CRT_PIN_FIELD_UNREG) { DetailedText = ex.ToString()});
+                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CRT_PIN_FIELD_UNREG) { DetailedText = ex.ToString()});
+                throw;
             }
 
         }
@@ -205,9 +214,9 @@ namespace Regata.Core.UI.WinForms.Forms
                     return;
                 if (string.IsNullOrEmpty(textboxPin.Text) || string.IsNullOrEmpty(textBoxLoginFormUser.Text) || string.IsNullOrEmpty(textBoxLoginFormPassword.Text))
                 {
-                    Report.Notify(new RCM.Message(Codes.WARN_UI_WF_EMPTY_FIELD));
+                    //Report.Notify(new RCM.Message(Codes.WARN_UI_WF_EMPTY_FIELD));
+                    throw new ArgumentException("No one field should be empty");
                     //MessageBoxTemplates.ErrorSync("При создании пин-кода все поля должны быть заполнены");
-                    return;
                 }
 
                 if (uint.TryParse(textboxPin.Text, out _) && textboxPin.Text.Length == 4)
@@ -227,7 +236,7 @@ namespace Regata.Core.UI.WinForms.Forms
                         {
                             CredentialManager.SaveCredentials($"Password_{textBoxLoginFormUser.Text}", new NetworkCredential(textBoxLoginFormUser.Text, textBoxLoginFormPassword.Text));
                             CredentialManager.SaveCredentials($"Pin_{textBoxLoginFormUser.Text}", new NetworkCredential(textBoxLoginFormUser.Text, textboxPin.Text));
-                            Report.Notify(new RCM.Message(Codes.SUCC_UI_WF_PIN_SAVED));
+                            //Report.Notify(new RCM.Message(Codes.SUCC_UI_WF_PIN_SAVED));
                             //MessageBoxTemplates.InfoAsync("Пин-код успешно сохранен");
 
                             _isPin = true;
@@ -240,21 +249,25 @@ namespace Regata.Core.UI.WinForms.Forms
                         }
                         else
                         {
-                            Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CRT_PIN_WRONG_PASS_OR_USER));
-                            return;
+                            //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CRT_PIN_WRONG_PASS_OR_USER));
+
+                            throw new ArgumentException("Wrong login or password");
+
                         }
                     }
                 }
                 else
                 {
-                    Report.Notify(new RCM.Message(Codes.WARN_UI_WF_WRONG_PIN_FORMAT));
+                    //Report.Notify(new RCM.Message(Codes.WARN_UI_WF_WRONG_PIN_FORMAT));
+                    throw new ArgumentException("Wrong pin format");
+
                     //MessageBoxTemplates.ErrorSync("Пин-код должен быть целым четырехзначным числом");
-                    return;
                 }
             }
             catch (Exception ex)
             {
-                Report.Notify(new RCM.Message(Codes.ERR_UI_WF_ADD_PIN_UNREG) { DetailedText = ex.ToString()});
+                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_ADD_PIN_UNREG) { DetailedText = ex.ToString()});
+                throw;
             }
         }
 
@@ -276,8 +289,9 @@ namespace Regata.Core.UI.WinForms.Forms
             }
             catch (Exception ex)
             {
-                Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CHCK_PIN_UNREG) { DetailedText = ex.ToString()});
-                return false;
+                throw;
+                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CHCK_PIN_UNREG) { DetailedText = ex.ToString()});
+                //return false;
             }
         }
 

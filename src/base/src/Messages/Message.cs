@@ -26,7 +26,7 @@ namespace Regata.Core.Messages
         public string DetailedText { get; set; } // filled in report notify
         public string Sender       { get; set; } // filled in report notify
 
-        private DataBase.Models.MessageBase _mb;
+        private MessageBase _mb;
 
         public Message(int code)
         {
@@ -39,7 +39,7 @@ namespace Regata.Core.Messages
             }
 
             if (_mb == null)
-                _mb = new DataBase.Models.MessageBase();
+                _mb = new MessageBase();
 
             Head = _mb.Head;
             Text = _mb.Text;
