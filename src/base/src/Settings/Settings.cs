@@ -122,7 +122,7 @@ namespace Regata.Core.Settings
             set
             {
                 _assmName = value;
-                Report.Notify(new Message(Codes.INFO_SET_SET_ASMBL_NAME));
+                //Report.Notify(new Message(Codes.INFO_SET_SET_ASMBL_NAME));
                 Load();
             }
         }

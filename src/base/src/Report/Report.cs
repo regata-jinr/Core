@@ -163,6 +163,6 @@ namespace Regata.Core
 
     } // public  class Notify
 
-    public enum Status { Info, Success, Warning, Error }
+    public enum Status { Error, Info, Success, Warning}
 
 } // namespace Regata.Measurements.Managers
