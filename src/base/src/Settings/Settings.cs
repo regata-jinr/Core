@@ -36,7 +36,7 @@ namespace Regata.Core.Settings
                 NotifyPropertyChanged();
             }
         }
-        public Status _verbosity;
+        public Status _verbosity = Status.Error;
         public Status Verbosity
         {
             get

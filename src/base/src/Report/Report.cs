@@ -62,7 +62,13 @@ namespace Regata.Core
                 StackTrace st = new StackTrace();
                 StackFrame sf = st.GetFrame(1);
                 var method = sf.GetMethod();
-                var status = msg.Status;
+                var status = (msg.Code / 1000) switch
+                {
+                    3 => Status.Error,
+                    2 => Status.Warning,
+                    1 => Status.Success,
+                    _ => Status.Info
+                };
 
                 //switch (msg)
                 //{
@@ -163,6 +169,6 @@ namespace Regata.Core
 
     } // public  class Notify
 
-    public enum Status { Error, Info, Success, Warning}
+    public enum Status { Info, Success, Warning, Error}
 
 } // namespace Regata.Measurements.Managers

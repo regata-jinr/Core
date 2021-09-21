@@ -19,7 +19,7 @@ namespace Regata.Core.Messages
 
         public DetectorMessage(int code) : base(code)
         {
-            base.Head += Name;
+            base.Head = $"{Name} {base.Head}";
         }
     }
 }
