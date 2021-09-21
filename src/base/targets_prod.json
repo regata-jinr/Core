@@ -1,0 +1,7 @@
+{
+  "Target": {
+    "DB": "Regata_DB_Base_CS",
+    "LogPath": "C:\\logs",
+    "DiskJinr":  "disk.jinr.ru"
+  }
+}

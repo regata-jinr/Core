@@ -126,6 +126,7 @@ namespace Regata.Core.UI.WinForms.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "LoginForm";
+            this.Text = "Regata login system";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.ResumeLayout(false);
             this.PerformLayout();

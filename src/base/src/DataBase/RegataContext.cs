@@ -52,7 +52,7 @@ namespace Regata.Core.DataBase
                                         options => 
                                             {
                                                 options.EnableRetryOnFailure(3);
-                                                options.CommandTimeout(60);
+                                                options.CommandTimeout(20);
                                             }
                                        );
         }

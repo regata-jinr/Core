@@ -15,7 +15,7 @@
 		<Content Update="NLog.config">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-		<None Include="targets.json" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
+
 
 		<PackageReference Include="AdysTech.CredentialManager" Version="2.3.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7" />
@@ -26,6 +26,14 @@
 		<PackageReference Include="NLog" Version="4.7.10" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
 	</ItemGroup>
+
+	<ItemGroup Condition="'$(Configuration)' != 'Release'">
+		<None Include="targets.json" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
+	</ItemGroup>
+
+	<Target Name="MoveAndRename" AfterTargets="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+		<Copy SourceFiles="targets_prod.json" DestinationFiles="$(OutDir)\targets.json"/>
+	</Target>
 
 
 </Project>

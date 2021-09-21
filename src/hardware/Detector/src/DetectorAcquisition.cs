@@ -147,6 +147,9 @@ namespace Regata.Core.Hardware
         }
 
         private int _counts;
+        /// <summary>
+        /// This parameter shows the number of counts for chosen AcquisitionMode. In case of RealTime has chosen Counts is number of seconds.
+        /// </summary>
         public int Counts
         {
             get { return _counts; }

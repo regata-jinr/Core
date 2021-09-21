@@ -41,7 +41,7 @@ namespace Regata.Core
         static Report()
         {
             NLog.GlobalDiagnosticsContext.Set("LogDir", GlobalSettings.Targets.LogPath);
-            NLog.GlobalDiagnosticsContext.Set("LogConnectionString", CredentialManager.GetCredentials(GlobalSettings.Targets.DB).Password);
+            NLog.GlobalDiagnosticsContext.Set("LogConnectionString", CredentialManager.GetCredentials(GlobalSettings.Targets.DB)?.Password);
 
             _nLogger = NLog.LogManager.GetCurrentClassLogger();
         }

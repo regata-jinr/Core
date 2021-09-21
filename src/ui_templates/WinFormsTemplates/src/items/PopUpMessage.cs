@@ -88,10 +88,25 @@ namespace Regata.Core.UI.WinForms.Items
 
         private void FillDefaultElements()
         {
-            MessageDefault md;
-            using (var rdbc = new RegataContext())
+            MessageDefault md = null;
+            try
             {
-                md = rdbc.MessageDefaults.Where(m => m.Language == GlobalSettings.CurrentLanguage.ToString()).FirstOrDefault();
+                using (var rdbc = new RegataContext())
+                {
+                    md = rdbc.MessageDefaults.Where(m => m.Language == GlobalSettings.CurrentLanguage.ToString()).FirstOrDefault();
+                }
+            }
+            //FIXME: I would like to use it in Login Form, but I have to remove dependency from DB here.
+            catch { }
+
+            if (md == null)
+            {
+                md = new MessageDefault()
+                {
+                    FooterText = "Show details",
+                    ExpandButtonText = "Show details",
+                    HideButtonText = "Hide details"
+                };
             }
 
             _tdf = new TaskDialogFootnote(md.FooterText);

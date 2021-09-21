@@ -28,6 +28,9 @@ namespace Regata.Core.Messages
 
         private MessageBase _mb;
 
+        public Message()
+        { }
+
         public Message(int code)
         {
             Code = code;

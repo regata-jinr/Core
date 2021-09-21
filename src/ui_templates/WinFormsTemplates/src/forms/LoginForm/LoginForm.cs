@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 using AdysTech.CredentialManager;
+using Regata.Core.UI.WinForms.Items;
 using Regata.Core.DataBase;
 using RCM=Regata.Core.Messages;
 using Regata.Core.Settings;
@@ -18,12 +19,15 @@ using System.Drawing;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms.Forms
 {
     public partial class LoginForm : Form
     {
+        private static RCM.Message _msg = new RCM.Message() { Caption = "Login into regata DB" };
         private SqlConnectionStringBuilder _sqlcs;
         public LoginForm()
         {
@@ -32,18 +36,33 @@ namespace Regata.Core.UI.WinForms.Forms
                 InitializeComponent();
                 textBoxLoginFormUser.Focus();
 
+                Report.NotificationEvent += (msg) => { PopUpMessage.Show(msg, 5); };
+
                 _sqlcs = new SqlConnectionStringBuilder(CredentialManager.GetCredentials(GlobalSettings.Targets.DB).Password);
 
                 if (System.Diagnostics.Process.GetProcesses().Count(p => p.ProcessName == System.Diagnostics.Process.GetCurrentProcess().ProcessName) >= 2)
                 {
-                    //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_APP_ALREADY_OPENED));
+                    _msg.Status = Status.Warning;
+                    _msg.Head = "Process already exists";
+                    _msg.Text = "You try to open already opened application.";
+                    Report.Notify(_msg);
                     throw new InvalidOperationException("Process has already opened");
                 }
             }
+            catch (NullReferenceException)
+            {
+                _msg.Status = Status.Error;
+                _msg.Head = "DB target was not found";
+                _msg.Text = "Before using regata application you have to add target in Windows Credential Manager";
+                Report.Notify(_msg);
+            }
             catch (Exception ex)
             {
-                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_UNREG) { DetailedText = ex.ToString()});
-                throw;
+                _msg.Status = Status.Error;
+                _msg.Head = "Unregistred error in Regata login system";
+                _msg.Text = ex.Message;
+                _msg.DetailedText = ex.ToString();
+                Report.Notify(_msg);
             }
         }
 
@@ -72,12 +91,15 @@ namespace Regata.Core.UI.WinForms.Forms
             }
             catch (Exception ex)
             {
-                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CHCK_PIN_UNREG) { DetailedText = ex.ToString()});
-                throw;
+                _msg.Status = Status.Error;
+                _msg.Head = "Problem with checking of pin codes";
+                _msg.Text = ex.Message;
+                _msg.DetailedText = ex.ToString();
+                Report.Notify(_msg);
             }
         }
 
-        private void ButtonLoginFormEnter_Click(object sender, EventArgs e)
+        private async void ButtonLoginFormEnter_Click(object sender, EventArgs e)
         {
             try
             {
@@ -94,19 +116,21 @@ namespace Regata.Core.UI.WinForms.Forms
                         var sm = CredentialManager.GetCredentials($"Password_{_user}");
                         if (sm == null)
                         {
-                            //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_ENTER_PIN_NOT_FOUND));
-                            throw new ArgumentException("Pin code has not found try to make it again.");
-                            //MessageBoxTemplates.ErrorSync("Пароль связанный с пин-кодом не найден. Попробуйте создать пин-код заново");
+                            _msg.Status = Status.Warning;
+                            _msg.Head = "Pin cod was not found";
+                            _msg.Text = "You try to use pin code, but it wasn't found. Try to add it before using.";
+                            Report.Notify(_msg);
+                            return;
                         }
                         _password = sm.Password;
                     }
                     else
                     {
-                        //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_ENTER_WRONG_PIN_OR_USER));
-                        throw new ArgumentException("Wrong login or pin");
-
-                        //MessageBoxTemplates.ErrorSync("Неправильный логин или пин-код");
-                        //return;
+                        _msg.Status = Status.Warning;
+                        _msg.Head = "Unsuccessful login";
+                        _msg.Text = "Wrong login or pin. In case of you don't remember your pin, you can save a new one.";
+                        Report.Notify(_msg);
+                        return;
                     }
                 }
                 _sqlcs.UserID = _user;
@@ -116,24 +140,36 @@ namespace Regata.Core.UI.WinForms.Forms
 
                 using (var r = new RegataContext())
                 {
-                    if (r.Database.CanConnect())
+                    if (await r.Database.CanConnectAsync(new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token))
                     {
                         ConnectionSuccessfull?.Invoke(_sqlcs);
                         Hide();
                     }
                     else
                     {
-                        //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_ENTER_WRONG_LOGIN_OR_PASS));
-                        throw new ArgumentException("Wrong login or pin");
+                        _msg.Status = Status.Warning;
+                        _msg.Head = "Unsuccessful login";
+                        _msg.Text = "Wrong login or pin. In case of you don't remember your pin, you can save a new one.";
+                        Report.Notify(_msg);
+                        return;
 
                     }
                 }
             }
+            catch (TaskCanceledException)
+            {
+                _msg.Status = Status.Warning;
+                _msg.Head = "Connection timeout";
+                _msg.Text = "Too long time for connection. Seems DB is not available";
+                Report.Notify(_msg);
+            }
             catch (Exception ex)
             {
-                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_LOGIN_ENTER_UNREG) { DetailedText = ex.ToString()});
-                throw;
-
+                _msg.Status = Status.Error;
+                _msg.Head = "Unregistred error in Regata login system";
+                _msg.Text = ex.Message;
+                _msg.DetailedText = ex.ToString();
+                Report.Notify(_msg);
             }
 
         }
@@ -154,8 +190,12 @@ namespace Regata.Core.UI.WinForms.Forms
             }
             catch (Exception ex)
             {
-                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CRT_PIN_UNREG) { DetailedText = ex.ToString()});
-                throw;
+                _msg.Status = Status.Error;
+                _msg.Head = "Unregistred error during pin code creation";
+                _msg.Text = ex.Message;
+                _msg.DetailedText = ex.ToString();
+                Report.Notify(_msg);
+                return;
             }
 
         }
@@ -200,13 +240,17 @@ namespace Regata.Core.UI.WinForms.Forms
             }
             catch (Exception ex)
             {
-                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CRT_PIN_FIELD_UNREG) { DetailedText = ex.ToString()});
-                throw;
+                _msg.Status = Status.Error;
+                _msg.Head = "Unregistred error during creation of 'new pin code' area";
+                _msg.Text = ex.Message;
+                _msg.DetailedText = ex.ToString();
+                Report.Notify(_msg);
+                return;
             }
 
         }
 
-        private void addPinCodeButton_Click(object sender, EventArgs e)
+        private async void addPinCodeButton_Click(object sender, EventArgs e)
         {
             try
             {
@@ -214,9 +258,11 @@ namespace Regata.Core.UI.WinForms.Forms
                     return;
                 if (string.IsNullOrEmpty(textboxPin.Text) || string.IsNullOrEmpty(textBoxLoginFormUser.Text) || string.IsNullOrEmpty(textBoxLoginFormPassword.Text))
                 {
-                    //Report.Notify(new RCM.Message(Codes.WARN_UI_WF_EMPTY_FIELD));
-                    throw new ArgumentException("No one field should be empty");
-                    //MessageBoxTemplates.ErrorSync("При создании пин-кода все поля должны быть заполнены");
+                    _msg.Status = Status.Warning;
+                    _msg.Head = "You try to add pin code with empty password or login";
+                    _msg.Text = "No one field should be empty";
+                    Report.Notify(_msg);
+                    return;
                 }
 
                 if (uint.TryParse(textboxPin.Text, out _) && textboxPin.Text.Length == 4)
@@ -232,12 +278,13 @@ namespace Regata.Core.UI.WinForms.Forms
 
                     using (var r = new RegataContext())
                     {
-                        if (r.Database.CanConnect())
-                        {
+                    if (await r.Database.CanConnectAsync(new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token))
+                            {
                             CredentialManager.SaveCredentials($"Password_{textBoxLoginFormUser.Text}", new NetworkCredential(textBoxLoginFormUser.Text, textBoxLoginFormPassword.Text));
                             CredentialManager.SaveCredentials($"Pin_{textBoxLoginFormUser.Text}", new NetworkCredential(textBoxLoginFormUser.Text, textboxPin.Text));
-                            //Report.Notify(new RCM.Message(Codes.SUCC_UI_WF_PIN_SAVED));
-                            //MessageBoxTemplates.InfoAsync("Пин-код успешно сохранен");
+                            _msg.Status = Status.Success;
+                            _msg.Head = "Pin code was saved!";
+                            Report.Notify(_msg);
 
                             _isPin = true;
                             this.Controls.Clear();
@@ -249,25 +296,39 @@ namespace Regata.Core.UI.WinForms.Forms
                         }
                         else
                         {
-                            //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CRT_PIN_WRONG_PASS_OR_USER));
-
-                            throw new ArgumentException("Wrong login or password");
+                            _msg.Status = Status.Warning;
+                            _msg.Head = "Unsuccessful login";
+                            _msg.Text = "Wrong login or password.";
+                            Report.Notify(_msg);
+                            return;
 
                         }
                     }
                 }
                 else
                 {
-                    //Report.Notify(new RCM.Message(Codes.WARN_UI_WF_WRONG_PIN_FORMAT));
-                    throw new ArgumentException("Wrong pin format");
-
-                    //MessageBoxTemplates.ErrorSync("Пин-код должен быть целым четырехзначным числом");
+                    _msg.Status = Status.Warning;
+                    _msg.Head = "Unsuccessful saving pin code";
+                    _msg.Text = "Wrong pin format. Pin code should contain only 4 digit";
+                    Report.Notify(_msg);
+                    return;
                 }
+            }
+            catch (TaskCanceledException)
+            {
+                _msg.Status = Status.Warning;
+                _msg.Head = "Connection timeout";
+                _msg.Text = "Too long time for connection. Seems DB is not available";
+                Report.Notify(_msg);
             }
             catch (Exception ex)
             {
-                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_ADD_PIN_UNREG) { DetailedText = ex.ToString()});
-                throw;
+                _msg.Status = Status.Error;
+                _msg.Head = "Unregistred error during pin code adding.";
+                _msg.Text = ex.Message;
+                _msg.DetailedText = ex.ToString();
+                Report.Notify(_msg);
+                return;
             }
         }
 
@@ -289,9 +350,12 @@ namespace Regata.Core.UI.WinForms.Forms
             }
             catch (Exception ex)
             {
-                throw;
-                //Report.Notify(new RCM.Message(Codes.ERR_UI_WF_CHCK_PIN_UNREG) { DetailedText = ex.ToString()});
-                //return false;
+                _msg.Status = Status.Error;
+                _msg.Head = "Unregistred error during pin code checking";
+                _msg.Text = ex.Message;
+                _msg.DetailedText = ex.ToString();
+                Report.Notify(_msg);
+                return false;
             }
         }
 
