@@ -103,7 +103,7 @@ namespace Regata.Core.Hardware
             {
                 if (Status == DetectorStatus.ready)
                     return;
-                Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_STOP)); //$"Attempt to stop the acquiring"));
+                Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_STOP)); //$"An attempt to stop the acquiring"));
                 _device.AcquireStop(StopOptions.aNormalStop);
                 //_device.SendCommand(DeviceCommands.aStop); // use command sending because in this case it will generate AcquireDone message
                 IsPaused = false;
@@ -126,6 +126,7 @@ namespace Regata.Core.Hardware
             {
                 Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_CLR)); //$"Clearing the detector"));
                 _device.Clear();
+                IsPaused = false;
             }
             catch (Exception ex)
             {
