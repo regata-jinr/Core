@@ -111,7 +111,7 @@ namespace Regata.Core.Hardware
                 }
             }
 
-            public DateTime DateTimeStart
+            public DateTime IrrDateTimeStart
             {
                 get
                 {
@@ -123,7 +123,7 @@ namespace Regata.Core.Hardware
                 }
             }
 
-            public DateTime DateTimeFinish
+            public DateTime IrrDateTimeFinish
             {
                 get
                 {

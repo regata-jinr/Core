@@ -61,7 +61,7 @@ namespace Regata.Core.Hardware
                 _device.SpectroscopyAcquireSetup((AcquisitionModes)CurrentMeasurement.AcqMode, CurrentMeasurement.Duration.Value);
                 _device.AcquireStart(); // already async
                 Status = DetectorStatus.busy;
-                CurrentMeasurement.DateTimeStart = DateTime.Now;
+                CurrentMeasurement.DateTimeStart = AcquisitionStartDateTime;
                 CurrentMeasurement.Detector = Name;
             }
             catch (Exception ex)
@@ -127,6 +127,8 @@ namespace Regata.Core.Hardware
                 Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_CLR)); //$"Clearing the detector"));
                 _device.Clear();
                 IsPaused = false;
+                CurrentMeasurement.DateTimeStart = AcquisitionStartDateTime;
+
             }
             catch (Exception ex)
             {
@@ -201,7 +203,11 @@ namespace Regata.Core.Hardware
                     Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_DONE)); //$"Has got message AcquireDone."));
                     response = "Acquire has done";
                     Status = DetectorStatus.ready;
-                    CurrentMeasurement.DateTimeFinish = DateTime.Now;
+                    if (AcquisitionStartDateTime.HasValue)
+                    {
+                        CurrentMeasurement.DateTimeStart  = AcquisitionStartDateTime;
+                        CurrentMeasurement.DateTimeFinish = AcquisitionStartDateTime.Value.AddSeconds(ElapsedRealTime);
+                    }
                     AcquireDone?.Invoke(this);
                 }
 

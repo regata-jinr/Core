@@ -122,8 +122,8 @@ namespace Regata.Core.Hardware
                 Sample.Error = 0;                                      // err = 0
                 Sample.WeightUnits = "gram";                                 // units = gram
                 Sample.BuildType = "IRRAD";
-                Sample.DateTimeStart = irradiation.DateTimeStart.Value;        // irr start date time
-                Sample.DateTimeFinish = irradiation.DateTimeFinish.Value;       // irr finish date time
+                Sample.IrrDateTimeStart = irradiation.DateTimeStart.Value;        // irr start date time
+                Sample.IrrDateTimeFinish = irradiation.DateTimeFinish.Value;       // irr finish date time
                 Sample.StatError = 0;                                      // Random sample error (%)
                 Sample.SysEror = 0;                                      // Non-random sample error (%)
                 Sample.Type = Measurement.TypeToString[(MeasurementsType)measurement.Type];

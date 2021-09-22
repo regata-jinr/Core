@@ -101,9 +101,19 @@ namespace Regata.Core.Hardware
             }
         }
 
-        public float ElapsedRealTime   => GetParameterValue<float>(CanberraDeviceAccessLib.ParamCodes.CAM_X_EREAL);
-        public float ElapsedLiveTime   => GetParameterValue<float>(CanberraDeviceAccessLib.ParamCodes.CAM_X_ELIVE);
+        public float ElapsedRealTime   => GetParameterValue<float>(ParamCodes.CAM_X_EREAL);
+        public float ElapsedLiveTime   => GetParameterValue<float>(ParamCodes.CAM_X_ELIVE);
+        public DateTime? AcquisitionStartDateTime
+        {
+            get
+            {
+                var str = GetParameterValue<string>(ParamCodes.CAM_X_ASTIME);
+                if (!DateTime.TryParse(str, out _))
+                    return null;
 
+                return DateTime.Parse(str);
+            }
+        }
         public float DeadTime
         {
             get

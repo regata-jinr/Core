@@ -64,6 +64,15 @@ namespace Regata.Core.Hardware
             return await ExecuteShellCommandAsync("pvclose.exe", $"DET:{det}");
         }
 
+        public static async Task<ProcessResult> MinimizeMVCG()
+        {
+            return await ExecuteShellCommandAsync("Get-Process -Name mvcg | Set-WindowState -State MINIMIZE");
+        }
+
+        public static async Task<ProcessResult> MaximizeMVCG()
+        {
+            return await ExecuteShellCommandAsync("Get-Process -Name mvcg | Set-WindowState -State MAXIMIZE");
+        }
 
 
         private static async Task<ProcessResult> ExecuteShellCommandAsync(string command, string arguments = "")
