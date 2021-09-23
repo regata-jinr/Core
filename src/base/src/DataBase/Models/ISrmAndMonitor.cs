@@ -14,10 +14,10 @@ namespace Regata.Core.DataBase.Models
 {
     public interface ISrmAndMonitor
     {
-        public string SetName { get; set; }
-        public string SetNumber { get; set; }
-        public string Number { get; set; }
-        public float? SLIWeight { get; set; }
-        public float? LLIWeight { get; set; }
+        string SetName { get; set; }
+        string SetNumber { get; set; }
+        string Number { get; set; }
+        float? SLIWeight { get; set; }
+        float? LLIWeight { get; set; }
     }
 }

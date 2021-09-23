@@ -14,7 +14,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Regata.Core.DataBase.Models
 {
     [Table("table_Sample")]
-    public class Sample : ISample, IWeightedSample
+    public class Sample : IWeightedSample
     {
         [Column("F_Country_Code")]
         public string CountryCode         { get; set; } // "RU"

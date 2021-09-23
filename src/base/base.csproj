@@ -1,12 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net5.0-windows</TargetFrameworks>
+		<Title>Base</Title>
+		<TargetFrameworks>net5.0-windows;net48</TargetFrameworks>
+		<LangVersion>7.3</LangVersion>
 		<PackageId>Regata.Core.Base</PackageId>
-		<Version>1.0.0</Version>
-		<Authors>bdrum</Authors>
-		<Company>FLNP|JINR</Company>
+		<PackageVersion>$([System.DateTime]::Now.ToString('yyyy.M.dd.HH'))</PackageVersion>
+		<Authors>Boris Rumyantsev</Authors>
+		<Company>REGATA|FLNP</Company>
+		<Owners>JINR</Owners>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<RepositoryUrl>https://github.com/regata-jinr/Core</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/regata-jinr/Core</PackageProjectUrl>
+		<Description>The package contains basic libraries for regata framework</Description>
+		<Copyright>REGATA|JINR (C) 2021</Copyright>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,7 +29,7 @@
 	
 	<ItemGroup Condition="'$(TargetFramework)' != 'net48'">
 
-			<PackageReference Include="AdysTech.CredentialManager" Version="2.3.0" />
+		<PackageReference Include="AdysTech.CredentialManager" Version="2.3.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
@@ -42,14 +51,19 @@
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
 	</ItemGroup>
 
+
 	<ItemGroup Condition="'$(Configuration)' != 'Release'">
 		<None Include="targets.json" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 
-	<Target Name="MoveAndRename" AfterTargets="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+	<Target Name="MoveTargets" AfterTargets="AfterBuild" Condition="'$(Configuration)' == 'Release'">
 		<Copy SourceFiles="targets_prod.json" DestinationFiles="$(OutDir)\targets.json" />
 	</Target>
 
+	<Target Name="MovePackage" AfterTargets="Pack" Condition="'$(Configuration)' == 'Release'">
+		<Copy SourceFiles="$(MSBuildProjectDirectory)\bin\Release\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(ARTIFACTS)\..\packages\Regata.Core\$(Title)" />
+		<Message Text="The file '$(MSBuildProjectDirectory)\bin\Release\$(PackageId).$(PackageVersion).nupkg' has copied to '$(ARTIFACTS)\..\packages\Regata.Core\$(Title)'" Importance="high" />
+	</Target>
+	
 
 </Project>
-

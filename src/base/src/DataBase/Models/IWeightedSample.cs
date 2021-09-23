@@ -12,17 +12,18 @@
 
 namespace Regata.Core.DataBase.Models
 {
-    public interface IWeightedSample
+
+    public interface IWeightedSample : ISample
     {
-        public string CountryCode         { get; set; } // "RU"
-        public string ClientNumber        { get; set; } // 1
-        public string Year                { get; set; } // 18
-        public string SetNumber           { get; set; } // 55
-        public string SetIndex            { get; set; } // j
-        public string SampleNumber        { get; set; } // 1
+        float? SLIWeight { get; set; }
+        float? LLIWeight { get; set; }
+    }
 
-        public string SetKey => $"{CountryCode}-{ClientNumber}-{Year}-{SetNumber}-{SetIndex}";
-        public string SampleKey => $"{SetKey}-{SampleNumber}";
-
+    public interface IReWeightedSample : ISample
+    {
+        float? InitWght { get; set; }
+        float? EmptyContWght { get; set; }
+        float? ContWithSampleWght { get; set; }
+        float? ARepackWght { get; set; }
     }
 }

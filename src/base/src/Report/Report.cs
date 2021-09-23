@@ -62,22 +62,35 @@ namespace Regata.Core
                 StackTrace st = new StackTrace();
                 StackFrame sf = st.GetFrame(1);
                 var method = sf.GetMethod();
-                var status = (msg.Code / 1000) switch
-                {
-                    3 => Status.Error,
-                    2 => Status.Warning,
-                    1 => Status.Success,
-                    _ => Status.Info
-                };
 
-                //switch (msg)
+                var status = Status.Info;
+
+//#if NETFRAMEWORK
+                switch (msg.Code / 1000)
+                {
+                    case 3:
+                        status = Status.Error;
+                        break;
+
+                    case 2:
+                        status = Status.Warning;
+                        break;
+
+                    case 1:
+                        status = Status.Success;
+                        break;
+
+                };
+//#endif
+                // NOTE: doesn't work with c# 7.3 thats supports by net48 targetframework
+                //var status = (msg.Code / 1000) switch
                 //{
-                //    case DetectorMessage dmsg:
-                //    dmsg.Sender = $"Detector {dmsg.Name}";
-                //     ....
-                //        break;
-                //    default Message 
-                //}
+                //    3 => Status.Error,
+                //    2 => Status.Warning,
+                //    1 => Status.Success,
+                //    _ => Status.Info
+                //};
+
 
                 msg.Sender = method.DeclaringType.Name;
                 msg.Caption = $"{method.Module}-[{status}]-[{msg.Code}]";

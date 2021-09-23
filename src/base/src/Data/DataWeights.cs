@@ -28,21 +28,14 @@ namespace Regata.Core
 
         public static float? GetSampleLLIInitWeight(ISample sample)
         {
-            var rw = GetWeightedSample<ReweightInfo>(sample);
-            if (rw == null)
-            {
-                var smpl = GetWeightedSample<Sample>(sample);
-                return smpl?.LLIWeight;
-            }
-
-            return rw.InitWght;
+            var smpl = GetWeightedSample<Sample>(sample);
+            return smpl?.LLIWeight;
         }
 
         public static float? GetSampleLLIReWeight(ISample sample)
         {
             var rw = GetWeightedSample<ReweightInfo>(sample);
-            if (rw == null) return null;
-            return rw.ARepackWght;
+            return rw?.ARepackWght;
         }
 
         /// <summary>
@@ -59,8 +52,8 @@ namespace Regata.Core
             return w;
         }
 
-        private static T GetWeightedSample<T>(ISample sample) 
-            where T : class, IWeightedSample
+        private static T GetWeightedSample<T>(ISample sample)
+              where T : class, ISample
         {
             if (sample == null) return null;
 

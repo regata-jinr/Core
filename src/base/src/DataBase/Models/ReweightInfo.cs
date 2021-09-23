@@ -14,7 +14,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Regata.Core.DataBase.Models
 {
     [Table("reweightInfo")]
-    public class ReweightInfo : ISample, IWeightedSample, IId
+    public class ReweightInfo : IReWeightedSample, IId
     {
         [NotMapped]
         public int Id { get; set; }
