@@ -29,18 +29,18 @@ namespace Regata.Core.UI.WinForms.Controls
             set
             {
                 _indicator = value;
-                switch(_indicator)
-                {
-                    case (IndicatorState.Bad):
-                        _indPictureBox.Image = ind_red;
-                        break;
-                    case (IndicatorState.Good):
-                        _indPictureBox.Image = ind_green;
-                        break;
-                    default:
-                        _indPictureBox.Image = ind_gray;
-                        break;
-                };
+                //switch(_indicator)
+                //{
+                //    case (IndicatorState.Bad):
+                //        _indPictureBox.Image = ind_red;
+                //        break;
+                //    case (IndicatorState.Good):
+                //        _indPictureBox.Image = ind_green;
+                //        break;
+                //    default:
+                //        _indPictureBox.Image = ind_gray;
+                //        break;
+                //};
             }
         }
 

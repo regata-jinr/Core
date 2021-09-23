@@ -35,9 +35,9 @@ namespace Regata.Core.UI.WinForms.Forms
             {
                 InitializeComponent();
                 textBoxLoginFormUser.Focus();
-
+#if NET5_0_OR_GREATER
                 Report.NotificationEvent += (msg) => { PopUpMessage.Show(msg, 5); };
-
+#endif
                 _sqlcs = new SqlConnectionStringBuilder(CredentialManager.GetCredentials(GlobalSettings.Targets.DB).Password);
 
                 if (System.Diagnostics.Process.GetProcesses().Count(p => p.ProcessName == System.Diagnostics.Process.GetCurrentProcess().ProcessName) >= 2)

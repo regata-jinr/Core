@@ -46,7 +46,7 @@ namespace Regata.Core.UI.WinForms.Controls
                 CellValueChanged -= RDataGridView_CellValueChanged;
                 foreach (var i in SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).Where(c => c >= 0).Distinct())
                 {
-                    var m = CurrentDbSet.Where(m => m.Id == (int)Rows[i].Cells["Id"].Value).FirstOrDefault();
+                    var m = CurrentDbSet.Where(mm => mm.Id == (int)Rows[i].Cells["Id"].Value).FirstOrDefault();
                     if (m == null) continue;
                     var setPropValue = m.GetType().GetProperty(prop).GetSetMethod();
                     setPropValue.Invoke(m, new object[] { val });

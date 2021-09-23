@@ -5,7 +5,7 @@
 		<TargetFrameworks>net5.0-windows;net48</TargetFrameworks>
 		<LangVersion>7.3</LangVersion>
 		<PackageId>Regata.Core.Base</PackageId>
-		<PackageVersion>$([System.DateTime]::Now.ToString('yyyy.M.dd.HH'))</PackageVersion>
+		<PackageVersion>1.0.0</PackageVersion>
 		<Authors>Boris Rumyantsev</Authors>
 		<Company>REGATA|FLNP</Company>
 		<Owners>JINR</Owners>
@@ -60,9 +60,8 @@
 		<Copy SourceFiles="targets_prod.json" DestinationFiles="$(OutDir)\targets.json" />
 	</Target>
 
-	<Target Name="MovePackage" AfterTargets="Pack" Condition="'$(Configuration)' == 'Release'">
-		<Copy SourceFiles="$(MSBuildProjectDirectory)\bin\Release\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(ARTIFACTS)\..\packages\Regata.Core\$(Title)" />
-		<Message Text="The file '$(MSBuildProjectDirectory)\bin\Release\$(PackageId).$(PackageVersion).nupkg' has copied to '$(ARTIFACTS)\..\packages\Regata.Core\$(Title)'" Importance="high" />
+	<Target Name="AddPackageToSource" AfterTargets="Pack" Condition="'$(Configuration)' == 'Release'">
+		<Exec Command="nuget add bin\Release\$(PackageId).$(PackageVersion).nupkg -Source $(ARTIFACTS)\..\packages\"/>
 	</Target>
 	
 

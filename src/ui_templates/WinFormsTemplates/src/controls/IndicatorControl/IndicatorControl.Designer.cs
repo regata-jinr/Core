@@ -8,9 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-namespace Regata.Core.UI.WinForms.Controls
-{
+namespace WinFormsTemplates.src.controls.IndicatorControl {
+    using System;
     
     
     /// <summary>
@@ -23,13 +22,16 @@ namespace Regata.Core.UI.WinForms.Controls
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class IndicatorControl {
+    public class IndicatorControl {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
-     
+        [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        internal IndicatorControl() {
+        }
+        
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -37,7 +39,7 @@ namespace Regata.Core.UI.WinForms.Controls
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Regata.Core.UI.WinForms.Controls.IndicatorControl", typeof(IndicatorControl).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WinFormsTemplates.src.controls.IndicatorControl.IndicatorControl", typeof(IndicatorControl).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

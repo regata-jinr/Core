@@ -21,6 +21,7 @@ using RegataCoreMessages = Regata.Core.Messages;
 
 namespace Regata.Core.UI.WinForms.Items
 {
+#if NET5_0_OR_GREATER
     public class PopUpMessage
     {
         private TaskDialogPage _tdp;
@@ -28,7 +29,9 @@ namespace Regata.Core.UI.WinForms.Items
         private TaskDialogFootnote _tdf;
         private TaskDialogProgressBar _tdpbar;
 
-        private Status _status;
+        private Timer _timer;
+
+        //private Status _status;
 
         private string Caption      => _tdp.Caption;
         private string Heading      => _tdp.Heading;
@@ -57,6 +60,11 @@ namespace Regata.Core.UI.WinForms.Items
             _tdp.Caption = msg.Caption;
             _tdp.SizeToContent = true;
 
+            _timer = new Timer();
+            _timer.Interval = 1000;
+            _timer.Tick += _timer_Tick;
+
+
             FillDefaultElements();
 
             _tdp.Heading = msg.Head;
@@ -72,18 +80,25 @@ namespace Regata.Core.UI.WinForms.Items
                 _tdpbar.Maximum = autoCloseIntervalSeconds;
                 _tdpbar.State = TaskDialogProgressBarState.Normal;
                 _tdp.ProgressBar = _tdpbar;
-                _tdp.Created += async (s, ev) =>
+                _tdp.Created += (s, ev) =>
                 {
-                    await foreach (int progressValue in Ticker(TimeSpan.FromSeconds(autoCloseIntervalSeconds)))
-                    {
-                        _tdpbar.Value = progressValue;
-                    }
-                    _tdp.BoundDialog?.Close();
+                    _timer.Start();
                 };
 
             }
 
             TaskDialog.ShowDialog(_tdp);
+        }
+
+        private void _timer_Tick(object sender, EventArgs e)
+        {
+            _tdpbar.Value++;
+            if (_tdpbar.Value == _tdpbar.Maximum)
+            {
+                _timer.Stop();
+                _tdp.BoundDialog?.Close();
+            }
+
         }
 
         private void FillDefaultElements()
@@ -122,14 +137,7 @@ namespace Regata.Core.UI.WinForms.Items
             return $"{Caption}{Environment.NewLine}{Heading}{Environment.NewLine}{Text}{Environment.NewLine}{ExpandedText}";
         }
 
-        private static async IAsyncEnumerable<int> Ticker(TimeSpan ts)
-        {
-            for (int i = 0; i <= ts.TotalSeconds; i += 1)
-            {
-                yield return i;
-                await Task.Delay(TimeSpan.FromSeconds(1));
-            }
-        }
 
     }  // public class PopUpMessage
+#endif
 }      // namespace Regata.Core.UI.WinForms.Items
