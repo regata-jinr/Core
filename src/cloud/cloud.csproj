@@ -1,11 +1,29 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+	  <Title>Cloud</Title>
+	  <TargetFrameworks>net5.0-windows;net48</TargetFrameworks>
+	  <PackageId>Regata.Core.Cloud</PackageId>
+	  <PackageVersion>1.0.0</PackageVersion>
+	  <Authors>Boris Rumyantsev</Authors>
+	  <Company>REGATA|FLNP</Company>
+	  <Owners>JINR</Owners>
+	  <PublishRepositoryUrl>true</PublishRepositoryUrl>
+	  <RepositoryUrl>https://github.com/regata-jinr/Core</RepositoryUrl>
+	  <PackageProjectUrl>https://github.com/regata-jinr/Core</PackageProjectUrl>
+	  <Description>The package contains libraries for disk.jinr.ru interactions for regata framework</Description>
+	  <Copyright>REGATA|JINR (C) 2021</Copyright>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
   </PropertyGroup>
 
+  <Target Name="AddPackageToSource" AfterTargets="Pack" Condition="'$(Configuration)' == 'Release'">
+	  <Exec Command="nuget add bin\Release\$(PackageId).$(PackageVersion).nupkg -Source $(ARTIFACTS)\..\packages\" />
+  </Target>
+
+
   <ItemGroup>
-    <ProjectReference Include="..\base\base.csproj" />
+	<ProjectReference Include="..\base\base.csproj" />
   </ItemGroup>
 
 </Project>

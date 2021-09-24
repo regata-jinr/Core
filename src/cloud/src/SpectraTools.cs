@@ -44,6 +44,22 @@ namespace Regata.Core.Cloud
             throw new NotImplementedException();
         }
 
+#if NETFRAMEWORK
+        public static async Task<List<SpectrumSLI>> GetSLISpectraForSampleSetAsync(string SetKey, CancellationToken ct)
+        {
+            var sks = SetKey.Split('-');
+            using (var ssc = new RegataContext())
+            {
+                return await  ssc.SLISpectra.FromSqlRaw("exec FormSLIFilesList @countryCode, @clientid, @year, @setnum, @setind",
+                    new SqlParameter("countrycode", sks[0]),
+                    new SqlParameter("clientid", sks[1]),
+                    new SqlParameter("year", sks[2]),
+                    new SqlParameter("setnum", sks[3]),
+                    new SqlParameter("setind", sks[4])).ToListAsync(ct);
+            }
+        }
+
+#else
         public static async IAsyncEnumerable<SpectrumSLI> GetSLISpectraForSampleSetAsync(string SetKey, CancellationToken ct)
         {
             var sks = SetKey.Split('-');
@@ -58,26 +74,48 @@ namespace Regata.Core.Cloud
 
                 await foreach (var spectraInfo in sliSpectras)
                     yield return spectraInfo;
+    }
+}
+#endif
+
+#if NETFRAMEWORK
+        public static async Task<List<SpectrumLLI>> GetLLISpectraForSampleSetAsync(string SetKey, IrradiationType type, CancellationToken ct)
+        {
+            var sks = SetKey.Split('-');
+            using (var ssc = new RegataContext())
+            {
+
+                return await ssc.LLISpectra.FromSqlRaw("exec FormLLIFilesList @countryCode, @clientid, @year, @setnum, @setind, @type",
+                   new SqlParameter("countrycode", sks[0]),
+                   new SqlParameter("clientid",    sks[1]),
+                   new SqlParameter("year",        sks[2]),
+                   new SqlParameter("setnum",      sks[3]),
+                   new SqlParameter("setind",      sks[4]),
+                   new SqlParameter("type",        IrradiationTypeMap[type])).ToListAsync(ct);
             }
         }
 
+
+#else
         public static async IAsyncEnumerable<SpectrumLLI> GetLLISpectraForSampleSetAsync(string SetKey, IrradiationType type, CancellationToken ct)
         {
             var sks = SetKey.Split('-');
             using (var ssc = new RegataContext())
             {
-                var lliSpectras = ssc.LLISpectra.FromSqlRaw("exec FormLLIFilesList @countryCode, @clientid, @year, @setnum, @setind, @type",
+
+ var lliSpectras = ssc.LLISpectra.FromSqlRaw("exec FormLLIFilesList @countryCode, @clientid, @year, @setnum, @setind, @type",
                     new SqlParameter("countrycode", sks[0]),
                     new SqlParameter("clientid", sks[1]),
                     new SqlParameter("year", sks[2]),
                     new SqlParameter("setnum", sks[3]),
                     new SqlParameter("setind", sks[4]),
                     new SqlParameter("type", IrradiationTypeMap[type])).AsAsyncEnumerable().WithCancellation(ct);
-
                 await foreach (var spectraInfo in lliSpectras)
-                    yield return spectraInfo;
-            }
+                  yield return spectraInfo;
+                     }
         }
+
+#endif
 
         public static async Task DownloadSpectraAsync(string spectra, string path, CancellationToken ct)
         {

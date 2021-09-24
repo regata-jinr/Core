@@ -3,7 +3,6 @@
 	<PropertyGroup>
 		<Title>Base</Title>
 		<TargetFrameworks>net5.0-windows;net48</TargetFrameworks>
-		<LangVersion>7.3</LangVersion>
 		<PackageId>Regata.Core.Base</PackageId>
 		<PackageVersion>1.0.0</PackageVersion>
 		<Authors>Boris Rumyantsev</Authors>
@@ -35,6 +34,8 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="5.0.0" />
+
 		<PackageReference Include="NLog" Version="4.7.10" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
 	</ItemGroup>
@@ -47,6 +48,8 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.19" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.19" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.19" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="3.1.19" />
+		
 		<PackageReference Include="NLog" Version="4.7.11" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
 	</ItemGroup>

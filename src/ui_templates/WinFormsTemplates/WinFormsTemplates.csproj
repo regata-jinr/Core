@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <Title>Base</Title>
-	  <TargetFrameworks>net5.0-windows;net48</TargetFrameworks>
-	  <LangVersion>7.3</LangVersion>
+	  <Title>WinForms.Templates</Title>
+	  <TargetFrameworks>net48;net5.0-windows</TargetFrameworks>
 	  <UseWindowsForms>true</UseWindowsForms>
 	  <PackageId>Regata.Core.WinForms.Templates</PackageId>
 	  <PackageVersion>1.0.0</PackageVersion>
