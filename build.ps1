@@ -49,7 +49,7 @@ function RunTest {
 function RunBuild {
     param ($config)
 
-    GetProjects | ForEach-Object { dotnet build $_ -c $config -o ([System.IO.Path]::Combine($od, $config, [System.IO.Path]::GetFileNameWithoutExtension($_))); }
+    GetProjects | ForEach-Object { dotnet build $_ -c $config -f net5.0-windows -o ([System.IO.Path]::Combine($od, $config, [System.IO.Path]::GetFileNameWithoutExtension($_))); }
 
 }
  

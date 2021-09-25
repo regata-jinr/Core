@@ -111,6 +111,7 @@ namespace Regata.Core.Hardware
         {
             PairedXemoDevice = new SampleChanger(PairedXemoSN[DetSet.Name]);
             IsXemoEnabled = true;
+            PairedXemoDevice.ErrorOccurred += (i, j) => { Status = DetectorStatus.error; };
         }
 
         public void DisableXemo()

@@ -39,13 +39,14 @@ namespace Regata.Core.Hardware
         {
             try
             {
-                return _device.Param[parCode].ToString().Convert<T>();
+                if (_device.IsConnected)
+                    return _device.Param[parCode].ToString().Convert<T>();
             }
             catch (Exception ex)
             {
-                Report.Notify(new DetectorMessage(Codes.ERR_DET_GET_PARAM_UNREG) { DetailedText = string.Join(Environment.NewLine, Enum.GetName(typeof(ParamCodes), parCode), ex.ToString()) });
-                return default(T);
+                Report.Notify(new DetectorMessage(Codes.ERR_DET_GET_PARAM_UNREG) { DetailedText = string.Join(Environment.NewLine, Name, Enum.GetName(typeof(ParamCodes), parCode), ex.ToString()) });
             }
+                return default(T);
         }
 
         public void SetParameterValue<T>(ParamCodes parCode, T val)
