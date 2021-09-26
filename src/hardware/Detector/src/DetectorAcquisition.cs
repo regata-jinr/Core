@@ -200,6 +200,9 @@ namespace Regata.Core.Hardware
             {
                 if ((int)AdviseMessageMasks.amAcquireDone == lParam && !IsPaused)
                 {
+
+                    if (ElapsedRealTime < 10) return;
+
                     Report.Notify(new DetectorMessage(Codes.INFO_DET_ACQ_DONE)); //$"Has got message AcquireDone."));
                     response = "Acquire has done";
                     Status = DetectorStatus.ready;
