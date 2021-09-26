@@ -98,7 +98,8 @@ namespace Regata.Core.Hardware
 
         public void PutSampleToTheDisk(short cellNum)
         {
-            var _dp = new DiskParams(cellNum);
+            var _dp = new DiskParams(PairedDetector, cellNum);
+
 
             var pos = GetAboveAndNearPositions(_dp.DiskName);
 
@@ -117,7 +118,7 @@ namespace Regata.Core.Hardware
 
         public async Task PutSampleToTheDiskAsync(short cellNum, CancellationToken ct)
         {
-            var _dp = new DiskParams(cellNum);
+            var _dp = new DiskParams(PairedDetector, cellNum);
 
             var pos = GetAboveAndNearPositions(_dp.DiskName);
             // 
@@ -138,7 +139,7 @@ namespace Regata.Core.Hardware
 
         public void TakeSampleFromTheCell(short cellNum)
         {
-            var _dp = new DiskParams(cellNum);
+            var _dp = new DiskParams(PairedDetector, cellNum);
             var pos = GetAboveAndNearPositions(_dp.DiskName);
             pos.Near.C = pos.Near.C.Value + (_dp.CellNum - _dp.InitCellNum) * _dp.Gap;
             if(PinnedPosition != PinnedPositions.NearDisk)
@@ -151,7 +152,7 @@ namespace Regata.Core.Hardware
 
         public async Task TakeSampleFromTheCellAsync(short cellNum, CancellationToken ct)
         {
-            var _dp = new DiskParams(cellNum);
+            var _dp = new DiskParams(PairedDetector, cellNum);
             var pos = GetAboveAndNearPositions(_dp.DiskName);
             pos.Near.C = pos.Near.C.Value + (_dp.CellNum - _dp.InitCellNum) * _dp.Gap;
             if(PinnedPosition != PinnedPositions.NearDisk)

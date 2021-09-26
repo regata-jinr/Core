@@ -17,9 +17,13 @@ namespace Regata.Core.Hardware
         public int    Gap;
         public string DiskName;
         public int    InitCellNum;
+        public string PairedDetector;
 
-        public DiskParams(int cellNum)
+        public DiskParams(string det, int cellNum)
         {
+
+            PairedDetector = det;
+
             DiskName = cellNum switch
             {
                 > 30 => "Internal",
@@ -38,6 +42,15 @@ namespace Regata.Core.Hardware
                 > 30 => 2400,
                 <= 30 => 1200
             };
+
+            if (PairedDetector == "D4")
+            {
+                Gap = cellNum switch
+                {
+                    > 30 => 3600,
+                    <= 30 => 1800
+                };
+            }
 
             InitCellNum = cellNum switch
             {
