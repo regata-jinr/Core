@@ -144,6 +144,9 @@ namespace Regata.Core.Cloud
             {
                 Report.Notify(new Message(Codes.INFO_CLD_UPL_FILE));
 
+                if (Token.IsCancellationRequested)
+                    return false;
+
                 var result = false;
                 var token = "";
                 result = await WebDavClientApi.UploadFileAsync(file, Token);
@@ -185,7 +188,11 @@ namespace Regata.Core.Cloud
                 }
 
             }
-
+            catch (TaskCanceledException)
+            {
+                Report.Notify(new Message(Codes.WRN_CLD_UPL_FILE_CNCL));
+                return false;
+            }
             catch
             {
                 Report.Notify(new Message(Codes.ERR_CLD_UPL_UNREG));

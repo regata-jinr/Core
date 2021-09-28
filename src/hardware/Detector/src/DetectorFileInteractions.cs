@@ -43,7 +43,7 @@ namespace Regata.Core.Hardware
         /// <summary>
         /// Save current measurement session on the device.
         /// </summary>
-        public void Save(string fileName = "")
+        public async Task SaveAsync(string fileName = "")
         {
             try
             {
@@ -55,7 +55,7 @@ namespace Regata.Core.Hardware
 
                 if (string.IsNullOrEmpty(fileName))
                 {
-                    var _currentDir = Path.Combine(@"D:\Spectra", 
+                    var _currentDir = Path.Combine(@"D:\Spectra",
                                                     DateTime.Now.Year.ToString(),
                                                     DateTime.Now.Month.ToString("D2"),
                                                     Measurement.TypeToString[(MeasurementsType)CurrentMeasurement.Type].ToLower()
@@ -64,7 +64,7 @@ namespace Regata.Core.Hardware
                     Directory.CreateDirectory(_currentDir);
                     if (string.IsNullOrEmpty(CurrentMeasurement.FileSpectra))
                         FullFileSpectraName = Path.Combine(_currentDir, $"{CurrentMeasurement}.cnf");
-                    else 
+                    else
                         FullFileSpectraName = Path.Combine(_currentDir, $"{CurrentMeasurement.FileSpectra}.cnf");
                 }
 
@@ -79,7 +79,7 @@ namespace Regata.Core.Hardware
                 if (File.Exists(FullFileSpectraName))
                 {
                     AddEfficiencyCalibrationToFile(FullFileSpectraName, CurrentMeasurement.Height.Value);
-                    //SpectraTools.UploadFileToCloudAsync(FullFileSpectraName, new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(30)).Token).Wait();
+                    await SpectraTools.UploadFileToCloudAsync(FullFileSpectraName, new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(30)).Token);
                     Report.Notify(new DetectorMessage(Codes.SUCC_DET_FILE_SAVED));
                 }
                 else
@@ -88,6 +88,10 @@ namespace Regata.Core.Hardware
                     return;
                 }
 
+            }
+            catch (TaskCanceledException)
+            {
+                Report.Notify(new DetectorMessage(Codes.WARN_DET_FILE_NOT_UPL_CLD));
             }
             catch (Exception ex)
             {

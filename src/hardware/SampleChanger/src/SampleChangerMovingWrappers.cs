@@ -112,7 +112,10 @@ namespace Regata.Core.Hardware
             MoveToX(pos.Near.X);
 
             IsSampleCaptured = false;
-            PinnedPosition = PinnedPositions.NearDisk;
+            if (cellNum > 30)
+                PinnedPosition = PinnedPositions.NearInternalDisk;
+            else
+                PinnedPosition = PinnedPositions.NearExternalDisk;
 
         }
 
@@ -133,8 +136,13 @@ namespace Regata.Core.Hardware
             pos.Near.C = null;
             await MoveToPositionAsync(pos.Near, Axes.X, ct).ConfigureAwait(false);
 
+            if (cellNum > 30)
+                PinnedPosition = PinnedPositions.NearInternalDisk;
+            else 
+                PinnedPosition = PinnedPositions.NearExternalDisk;
+
+
             IsSampleCaptured = false;
-            PinnedPosition = PinnedPositions.NearDisk;
         }
 
         public void TakeSampleFromTheCell(short cellNum)
@@ -142,12 +150,22 @@ namespace Regata.Core.Hardware
             var _dp = new DiskParams(PairedDetector, cellNum);
             var pos = GetAboveAndNearPositions(_dp.DiskName);
             pos.Near.C = pos.Near.C.Value + (_dp.CellNum - _dp.InitCellNum) * _dp.Gap;
-            if(PinnedPosition != PinnedPositions.NearDisk)
+            if(PinnedPosition != PinnedPositions.NearInternalDisk && PinnedPosition != PinnedPositions.NearExternalDisk)
                 MoveToY(MaxY);
+
+            if (PinnedPosition == PinnedPositions.NearExternalDisk && cellNum > 30)
+                MoveToY(CurrentPosition.Y + 3000);
+
+            if (PinnedPosition == PinnedPositions.NearInternalDisk && cellNum <= 30)
+                MoveToY(CurrentPosition.Y + 3000);
+
             MoveToPosition(pos.Near, Axes.X);
             MoveToX(pos.Above.X);
             IsSampleCaptured = true;
-            PinnedPosition = PinnedPositions.AboveDisk;
+            if (cellNum > 30)
+                PinnedPosition = PinnedPositions.AboveInternalDisk;
+            else
+                PinnedPosition = PinnedPositions.AboveExternalDisk;
         }
 
         public async Task TakeSampleFromTheCellAsync(short cellNum, CancellationToken ct)
@@ -155,14 +173,23 @@ namespace Regata.Core.Hardware
             var _dp = new DiskParams(PairedDetector, cellNum);
             var pos = GetAboveAndNearPositions(_dp.DiskName);
             pos.Near.C = pos.Near.C.Value + (_dp.CellNum - _dp.InitCellNum) * _dp.Gap;
-            if(PinnedPosition != PinnedPositions.NearDisk)
+            if(PinnedPosition != PinnedPositions.NearInternalDisk && PinnedPosition != PinnedPositions.NearExternalDisk)
                 MoveToY(MaxY);
+
+            if (PinnedPosition == PinnedPositions.NearExternalDisk && cellNum > 30)
+                MoveToY(CurrentPosition.Y + 3000);
+
+            if (PinnedPosition == PinnedPositions.NearInternalDisk && cellNum <= 30)
+                MoveToY(CurrentPosition.Y + 3000);
 
             await MoveToPositionAsync(pos.Near, Axes.X, ct).ConfigureAwait(false);
 
             MoveToX(pos.Above.X);
             IsSampleCaptured = true;
-            PinnedPosition = PinnedPositions.AboveDisk;
+            if (cellNum > 30)
+                PinnedPosition = PinnedPositions.AboveInternalDisk;
+            else
+                PinnedPosition = PinnedPositions.AboveExternalDisk;
         }
 
 
@@ -196,7 +223,13 @@ namespace Regata.Core.Hardware
                 MoveToY(MaxY);
                 MoveToPosition(posAbove, Axes.X);
 
-                PinnedPosition = PinnedPositions.AboveDisk;
+                PinnedPosition = h switch
+                {
+                    Heights.h2p5 => PinnedPositions.AboveDet2p5,
+                    Heights.h5 => PinnedPositions.AboveDet5,
+                    Heights.h10 => PinnedPositions.AboveDet10,
+                    Heights.h20 => PinnedPositions.AboveDet20
+                };
             }
             catch (Exception ex)
             {

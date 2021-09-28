@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Regata.Core.Hardware
 {
-    public enum PinnedPositions { Unknown, Home, AboveDet2p5, AboveDet5, AboveDet10, AboveDet20, AboveDisk, NearDisk, HomeX, HomeY, Moving }
+    public enum PinnedPositions { Unknown, Home, AboveDet2p5, AboveDet5, AboveDet10, AboveDet20, AboveExternalDisk, AboveInternalDisk, NearExternalDisk, NearInternalDisk, HomeX, HomeY, Moving }
 
     public partial class SampleChanger
     {

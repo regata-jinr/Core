@@ -69,11 +69,15 @@ namespace Regata.Core.Cloud
         {
             try
             {
+
+                if (ct.IsCancellationRequested)
+                    return false;
+
                 Report.Notify(new Message(Codes.INFO_CLD_RMV_FILE));
                 if (!await IsExistsAsync(path, ct)) return true;
                 var response = await _httpClient.DeleteAsync($"{_hostBase}{_hostWebDavAPI}/{path.Substring(Path.GetPathRoot(path).Length)}", ct).ConfigureAwait(false);
 
-                return IsSuccessfull(await response.Content.ReadAsStringAsync());
+                return IsSuccessfull(await response?.Content.ReadAsStringAsync());
             }
             catch (Exception ex)
             {
@@ -86,6 +90,9 @@ namespace Regata.Core.Cloud
         {
             try
             {
+                if (ct.IsCancellationRequested)
+                    return false;
+
                 Report.Notify(new Message(Codes.INFO_CLD_UPL_FILE));
 
                 if (!File.Exists(path))
@@ -94,12 +101,19 @@ namespace Regata.Core.Cloud
                     return false;
                 }
 
+             
+
                 await CreateFolderAsync(Path.GetDirectoryName(path), ct);
                 using (HttpContent bytesContent = new ByteArrayContent(File.ReadAllBytes(path)))
                 {
                     var response = await _httpClient.PutAsync($"{_hostBase}{_hostWebDavAPI}/{path.Substring(Path.GetPathRoot(path).Length)}", bytesContent, ct).ConfigureAwait(false);
-                    return IsSuccessfull(await response.Content.ReadAsStringAsync());
+                    return IsSuccessfull(await response?.Content.ReadAsStringAsync());
                 }
+            }
+            catch (TaskCanceledException)
+            {
+                Report.Notify(new Message(Codes.WRN_CLD_UPL_FILE_CNCL));
+                return false;
             }
             catch (Exception ex)
             {
@@ -112,13 +126,15 @@ namespace Regata.Core.Cloud
         {
             try
             {
+                if (ct.IsCancellationRequested)
+                    return string.Empty;
                 Report.Notify(new Message(Codes.INFO_CLD_FL_SHRNG));
 
                 using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{_hostBase}{_hostOCSApi}?path={file.Substring(Path.GetPathRoot(file).Length)}&shareType=3&permissions=3&name={Path.GetFileNameWithoutExtension(file)}"))
                 {
                     request.Headers.Add("OCS-APIRequest", "true");
                     var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, ct).ConfigureAwait(false);
-                    var content = await response.Content.ReadAsStringAsync();
+                    var content = await response?.Content.ReadAsStringAsync();
 
                     if (string.IsNullOrEmpty(content))
                     {
@@ -142,12 +158,13 @@ namespace Regata.Core.Cloud
         public static async Task<bool> IsExistsAsync(string path, CancellationToken ct)
         {
             try 
-            { 
-
+            {
+                if (ct.IsCancellationRequested)
+                    return false;
             Report.Notify(new Message(Codes.INFO_CLD_IS_EXST));
 
             var response = await SendAsync(new Uri($"{_hostBase}{_hostWebDavAPI}/{path.Substring(Path.GetPathRoot(path).Length)}"), new HttpMethod("PROPFIND"), ct);
-            return IsSuccessfull(await response.Content.ReadAsStringAsync());
+            return IsSuccessfull(await response?.Content.ReadAsStringAsync());
             }
             catch (Exception ex)
             {
@@ -162,6 +179,9 @@ namespace Regata.Core.Cloud
             {
                 Report.Notify(new Message(Codes.INFO_CLD_CRT_DIR));
 
+                if (ct.IsCancellationRequested)
+                    return;
+
                 var dir = path.Substring(Path.GetPathRoot(path).Length);
                 var subPath = "";
                 foreach (var node in dir.Split(Path.DirectorySeparatorChar))
@@ -170,7 +190,7 @@ namespace Regata.Core.Cloud
                     if (!await IsExistsAsync(subPath, ct))
                     {
                         var response = await SendAsync(new Uri($"{_hostBase}{_hostWebDavAPI}{subPath}"), new HttpMethod("MKCOL"), ct);
-                        await response.Content.ReadAsStringAsync();
+                        await response?.Content.ReadAsStringAsync();
                     }
                 }
             }
@@ -185,13 +205,16 @@ namespace Regata.Core.Cloud
         {
             try
             {
+                if (ct.IsCancellationRequested)
+                    return;
+
                 Report.Notify(new Message(Codes.INFO_CLD_DEL_FL_DIR));
 
                 var dir = path.Substring(Path.GetPathRoot(path).Length);
                     if (!await IsExistsAsync(dir, ct))
                     {
                         var response = await SendAsync(new Uri($"{_hostBase}{_hostWebDavAPI}{dir}"), new HttpMethod("DELETE"), ct);
-                        await response.Content.ReadAsStringAsync();
+                        await response?.Content.ReadAsStringAsync();
                     }
             }
             catch (Exception ex)
@@ -205,6 +228,8 @@ namespace Regata.Core.Cloud
         {
             try
             {
+                if (resp == null)
+                    return false;
                 if (resp.Contains("exception") || resp.Contains("error"))
                 {
                     Report.Notify(new Message(Codes.WRN_CLD_BAD_RSPN));
@@ -229,6 +254,9 @@ namespace Regata.Core.Cloud
         {
             try
             {
+                if (cancellationToken.IsCancellationRequested)
+                    return null;
+
                 using (var request = new HttpRequestMessage(method, requestUri))
                 {
                     if (header != null)

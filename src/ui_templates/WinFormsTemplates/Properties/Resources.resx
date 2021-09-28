@@ -127,4 +127,10 @@
   <data name="ind_red" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\src\controls\IndicatorControl\imgs\ind_red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="tick_0_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tick_0.4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="untick_0_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\untick_0.4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

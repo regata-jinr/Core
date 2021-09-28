@@ -5,7 +5,7 @@
 	  <TargetFrameworks>net48;net5.0-windows</TargetFrameworks>
 	  <UseWindowsForms>true</UseWindowsForms>
 	  <PackageId>Regata.Core.WinForms.Templates</PackageId>
-	  <PackageVersion>1.0.0</PackageVersion>
+	  <PackageVersion>1.1.0</PackageVersion>
 	  <Authors>Boris Rumyantsev</Authors>
 	  <Company>REGATA|FLNP</Company>
 	  <Owners>JINR</Owners>
@@ -49,6 +49,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\base\base.csproj" />
+	  <ProjectReference Include="..\..\cloud\cloud.csproj" />
 	</ItemGroup>
 
   <ItemGroup>
@@ -83,7 +84,7 @@
   </ItemGroup>
 
 	<Target Name="AddPackageToSource" AfterTargets="Pack" Condition="'$(Configuration)' == 'Release'">
-		<Exec Command="nuget add bin\Release\$(PackageId).$(PackageVersion).nupkg -Source $(ARTIFACTS)\..\packages\"/>
+		<Exec Command="nuget add bin\Release\$(PackageId).$(PackageVersion).nupkg -Source $(ARTIFACTS)\..\packages\" />
 	</Target>
 
 </Project>
