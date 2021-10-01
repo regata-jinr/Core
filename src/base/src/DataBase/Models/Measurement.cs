@@ -20,50 +20,72 @@ namespace Regata.Core.DataBase.Models
 
     public class Measurement : ISample, IId
     {
-        // DatabaseGenerated(DatabaseGeneratedOption.Identity)
         [Key]
-        public int         Id                    { get; set; }
+        public int Id { get; set; }
         [Required]
-        public int         IrradiationId         { get; set; }
-        public int         RegId                 { get; set; }
+        public int IrradiationId { get; set; }
+        public int RegId { get; set; }
         [Required]
-        public string      CountryCode           { get; set; }
+        public string CountryCode { get; set; }
         [Required]
-        public string      ClientNumber          { get; set; }
+        public string ClientNumber { get; set; }
         [Required]
-        public string      Year                  { get; set; }
+        public string Year { get; set; }
         [Required]
-        public string      SetNumber             { get; set; }
+        public string SetNumber { get; set; }
         [Required]
-        public string      SetIndex              { get; set; }
+        public string SetIndex { get; set; }
         [Required]
-        public string      SampleNumber          { get; set; }
+        public string SampleNumber { get; set; }
         [Required]
-        public int         Type                  { get; set; }
-        public int?        AcqMode               { get; set; }
-        public int?        DiskPosition          { get; set; }
-        public DateTime?   DateTimeStart         { get; set; }
-        public int?        Duration              { get; set; }
-        public DateTime?   DateTimeFinish        { get; set; }
-        public float?      Height                { get; set; }
-        public float?      DeadTime              { get; set; }
-        public string      FileSpectra           { get; set; }
-        public string      Detector              { get; set; }
-        public int?        Assistant             { get; set; }
-        public string      Note                  { get; set; }
+        public int Type { get; set; }
+        public int? AcqMode { get; set; }
+        public int? DiskPosition { get; set; }
+        public DateTime? DateTimeStart { get; set; }
+        public int? Duration { get; set; }
+        public DateTime? DateTimeFinish { get; set; }
+        public float? Height { get; set; }
+        public float? DeadTime { get; set; }
+        public string FileSpectra { get; set; }
+        public string Detector { get; set; }
+        public int? Assistant { get; set; }
+        public string Note { get; set; }
 
         [NotMapped]
-        public string SetKey => $"{CountryCode}-{ClientNumber}-{Year}-{SetNumber}-{SetIndex}";
+        public string SetKey
+        {
+            get
+            {
+                if (Year == "s" || Year == "m")
+                    return $"{Year}-{SetNumber}-{SetIndex}-{SampleNumber}";
+                return $"{CountryCode}-{ClientNumber}-{Year}-{SetNumber}-{SetIndex}";
+            }
+        }
 
         [NotMapped]
-        public string SampleKey => $"{SetIndex}-{SampleNumber}";
+        public string SampleKey
+        {
+            get
+            {
+                if (Year == "s" || Year == "m")
+                    return SetNumber;
+                return $"{SetIndex}-{SampleNumber}";
+            }
+        }
         public override string ToString() => $"{SetKey}-{SampleNumber}";
 
         [NotMapped]
-        public static readonly IReadOnlyDictionary<MeasurementsType, string> TypeToString = new Dictionary<MeasurementsType, string> { { MeasurementsType.sli, "SLI" }, { MeasurementsType.lli1,"LLI-1" }, { MeasurementsType.lli2, "LLI-2" }, { MeasurementsType.bckg, "BCKG" } };
+        public static readonly IReadOnlyDictionary<MeasurementsType, string> TypeToString = new Dictionary<MeasurementsType, string> 
+        {
+            { MeasurementsType.sli, "SLI" },
+            { MeasurementsType.lli1,"LLI-1" },
+            { MeasurementsType.lli2, "LLI-2" },
+            { MeasurementsType.bckg, "BCKG" } 
+        };
 
         public Measurement()
         { }
+
         public Measurement(Irradiation ir)
         {
             Type          = ir.Type;

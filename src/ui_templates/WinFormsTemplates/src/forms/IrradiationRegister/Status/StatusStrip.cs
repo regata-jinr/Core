@@ -32,5 +32,5 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 Report.Notify(new RCM.Message(Codes.ERR_UI_WF_INI_STAT) { DetailedText = ex.ToString() });
             }
         }
-    } //public partial class MainForm
-}     // namespace Regata.Desktop.WinForms.Measurements
+    } //public partial class MeasurementsRegisterForm
+}     // namespace Regata.Core.UI.WinForms.Forms.Measurements

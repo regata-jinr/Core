@@ -13,6 +13,9 @@ using Microsoft.EntityFrameworkCore;
 using Regata.Core.DataBase.Models;
 using AdysTech.CredentialManager;
 using Regata.Core.Settings;
+using System.Collections.Generic;
+using System;
+using Microsoft.Data.SqlClient;
 
 namespace Regata.Core.DataBase
 {
@@ -55,6 +58,26 @@ namespace Regata.Core.DataBase
                                                 options.CommandTimeout(20);
                                             }
                                        );
+        }
+
+        public string UserRoles
+        {
+            get
+                {
+                using (var conn = new SqlConnection(ConString))
+                {
+                    var cs = new SqlConnectionStringBuilder(ConString);
+                    using (var cmd = new SqlCommand($"declare @results varchar(500) select @results = coalesce(@results + ',', '') +  a.Role from ( select distinct Role from UserRoles where UserName = '{cs.UserID}' and Role is not NULL) as a; select @results as roles;", conn))
+                    {
+                        conn.Open();
+                        object o = cmd.ExecuteScalar();
+                        if (o == null || DBNull.Value == o) 
+                            return string.Empty;
+                        
+                        return o.ToString();
+                    }
+                }
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

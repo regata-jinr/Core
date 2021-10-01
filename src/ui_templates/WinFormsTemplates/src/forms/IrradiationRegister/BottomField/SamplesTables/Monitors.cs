@@ -9,7 +9,6 @@
  *                                                                         *
  ***************************************************************************/
 
-using Regata.Core;
 using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
 using RCM = Regata.Core.Messages;
@@ -156,5 +155,5 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
             }
         }
 
-    } // public partial class MainForm
+    } // public partial class MeasurementsRegisterForm
 }     // namespace Regata.Desktop.WinForms.Measurements

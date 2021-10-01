@@ -20,7 +20,7 @@ using System.Windows.Forms;
 namespace Regata.Core.UI.WinForms.Forms
 {
     public partial class RegisterForm<MainTableModel>
-        where MainTableModel : class, IId
+        where MainTableModel : class, IId, ISample
     {
         public RDataGridView<MainTableModel> MainRDGV;
         public DGVTabPaneControl TabsPane;

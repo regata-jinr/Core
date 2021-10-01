@@ -47,9 +47,9 @@ Applications based on Regata.Core libs have common mechanics for switching langu
 In order to switch language we have to add such instructions for each form based on RegisterForm:
 
 ~~~csharp
- var rf = new RegisterForm<Measurement>(Settings<MeasurementsSettings>.CurrentSettings.CurrentLanguage);
- rf.LangItem.CheckItem(Settings<MeasurementsSettings>.CurrentSettings.CurrentLanguage);
- rf.LangItem.CheckedChanged += () => { Settings<MeasurementsSettings>.CurrentSettings.CurrentLanguage = rf.LangItem.CheckedItem; Labels.SetControlsLabels(rf.Controls); };
+ var rf = new RegisterForm<Measurement>(Settings<MeasurementRegisterSettings>.CurrentSettings.CurrentLanguage);
+ rf.LangItem.CheckItem(Settings<MeasurementRegisterSettings>.CurrentSettings.CurrentLanguage);
+ rf.LangItem.CheckedChanged += () => { Settings<MeasurementRegisterSettings>.CurrentSettings.CurrentLanguage = rf.LangItem.CheckedItem; Labels.SetControlsLabels(rf.Controls); };
 
 // in the end of constructor
 Labels.SetControlsLabels(rf.Controls); 

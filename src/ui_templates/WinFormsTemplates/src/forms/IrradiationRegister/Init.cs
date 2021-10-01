@@ -32,7 +32,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
 
         public IrradiationRegister(DateTime dateTime,  IrradiationType irrType, int? loadNumber = null)
         {
-            Settings<IrradiationSettings>.AssemblyName = "IrradiationRegister";
+            //Settings<IrradiationSettings>.AssemblyName = "IrradiationRegister";
 
             _loadNumber = loadNumber;
             _irrType = irrType;
@@ -88,14 +88,14 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
 
         private void Report_NotificationEvent(Messages.Message msg)
         {
+#if NETFRAMEWORK
             var dict = new Dictionary<Status, MessageBoxIcon>() 
             { 
                 { Status.Error, MessageBoxIcon.Error },
-                { Status.Info, MessageBoxIcon.Information },
+                { Status.Info,  MessageBoxIcon.Information },
                 { Status.Success, MessageBoxIcon.Information },
                 { Status.Warning, MessageBoxIcon.Warning }, 
             };
-#if NETFRAMEWORK
             MessageBox.Show(text: $"{msg.Head}{Environment.NewLine}{msg.Text}", caption: msg.Caption, icon: dict[msg.Status], buttons: MessageBoxButtons.OK );
 #else
             PopUpMessage.Show(msg, Settings<IrradiationSettings>.CurrentSettings.DefaultPopUpMessageTimeoutSeconds);
@@ -154,7 +154,21 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
 
 
             Labels.SetControlsLabels(mainForm);
+
+            SetView();
         }
 
-    } // public partial class MainForm
-}     // namespace Regata.Desktop.WinForms.Measurements
+        private void SetView()
+        {
+            using (var r = new RegataContext())
+            {
+                var roles = r.UserRoles;
+
+                if (!roles.Contains("operator") && !roles.Contains("rehandler"))
+                    mainForm.BottomLayoutPanel.Visible = false;
+
+            }
+        }
+
+    } // public partial class MeasurementsRegisterForm
+}     // namespace Regata.Core.UI.WinForms.Forms.Measurements

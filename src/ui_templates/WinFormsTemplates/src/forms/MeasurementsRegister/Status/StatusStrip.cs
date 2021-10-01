@@ -9,18 +9,25 @@
  *                                                                         *
  ***************************************************************************/
 
-using System.Diagnostics;
+using Regata.Core;
+using Regata.Core.Messages;
+using System;
 
-namespace Regata.Core.Hardware
+namespace Regata.Core.UI.WinForms.Forms.Measurements
 {
-    public partial class SampleChanger
+    public partial class MeasurementsRegisterForm
     {
-        public static void ShowDevicesCams()
+        private void InitStatusStrip()
         {
-            Process.Start(new ProcessStartInfo("http://159.93.105.78/") { UseShellExecute = true});
-            Process.Start(new ProcessStartInfo("http://159.93.105.75/") { UseShellExecute = true});
-            Process.Start(new ProcessStartInfo("http://159.93.105.79/") { UseShellExecute = true});
+            try
+            {
+                mainForm.StatusStrip.Items.Add(MeasurementsTypeItems.EnumStatusLabel);
+                mainForm.StatusStrip.Items.Add(VerbosityItems.EnumStatusLabel);
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new Message(Codes.ERR_UI_WF_INI_STAT) { DetailedText = ex.ToString() });
+            }
         }
-
-    } // public partial class SampleChanger
-}     // namespace Regata.Core.Hardware
+    } //public partial class MeasurementsRegisterForm
+}     // namespace Regata.Core.UI.WinForms.Forms.Measurements

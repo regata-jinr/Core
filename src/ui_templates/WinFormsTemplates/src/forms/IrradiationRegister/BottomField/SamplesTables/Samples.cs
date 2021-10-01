@@ -23,9 +23,6 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
 {
     public partial class IrradiationRegister
     {
-        /// <summary>
-        /// List of samples from selected sample set in first page of the TabsPane
-        /// </summary>
         private List<Sample> _chosenSamples;
 
         private void InitSamplesRegisters()

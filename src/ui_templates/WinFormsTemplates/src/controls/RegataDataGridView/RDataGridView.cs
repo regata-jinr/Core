@@ -72,8 +72,8 @@ namespace Regata.Core.UI.WinForms.Controls
 
             CellValueChanged += RDataGridView_CellValueChanged;
 
-            HideColumns();
-            SetUpReadOnlyColumns();
+            //HideColumns();
+            //SetUpReadOnlyColumns();
 
         }
 

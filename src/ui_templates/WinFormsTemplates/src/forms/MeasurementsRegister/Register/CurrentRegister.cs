@@ -10,31 +10,27 @@
  ***************************************************************************/
 
 using Microsoft.EntityFrameworkCore;
-using Regata.Core;
 using RCM = Regata.Core.Messages;
+using Regata.Core.DataBase.Models;
 using System;
 using System.Linq;
 
-namespace Regata.Core.UI.WinForms.Forms.Irradiations
+namespace Regata.Core.UI.WinForms.Forms.Measurements
 {
-    public partial class IrradiationRegister
+    public partial class MeasurementsRegisterForm
     {
-
-        private void InitCurrentRegister()
+        private void InitCurrentRegister(int id)
         {
             try
             {
-                switch (_irrType)
-                {
-                    case DataBase.Models.IrradiationType.lli:
-                mainForm.MainRDGV.CurrentDbSet.Where(ir => ir.DateTimeStart.Value.Date == _irrDateTime.Date && ir.LoadNumber == _loadNumber).OrderBy(ir => ir.Container).ThenBy(ir => ir.Position).Load();
-                        break;
-                    case DataBase.Models.IrradiationType.sli:
-                        mainForm.MainRDGV.CurrentDbSet.Where(ir => ir.DateTimeStart.Value.Date == _irrDateTime.Date && ir.LoadNumber == _loadNumber).OrderBy(ir => ir.DateTimeStart).Load();
-                        break;
-
-                };
+                mainForm.MainRDGV.CurrentDbSet.Where(m => m.RegId == id).Load();
                 mainForm.MainRDGV.DataSource = mainForm.MainRDGV.CurrentDbSet.Local.ToBindingList();
+
+                //mainForm.MainRDGV.HideColumns();
+
+                //mainForm.MainRDGV.SetUpWritableColumns();
+
+                Labels.SetControlsLabels(mainForm);
 
             }
             catch (Exception ex)
@@ -45,8 +41,6 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 });
             }
         }
-
-     
 
     } // public partial class MeasurementsRegisterForm
 }     // namespace Regata.Core.UI.WinForms.Forms.Measurements

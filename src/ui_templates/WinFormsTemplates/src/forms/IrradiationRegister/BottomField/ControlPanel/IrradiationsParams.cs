@@ -140,5 +140,5 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
             mainForm.MainRDGV.SaveChanges();
         }
 
-    } //public partial class MainForm
-}     // namespace Regata.Desktop.WinForms.Measurements
+    } //public partial class MeasurementsRegisterForm
+}     // namespace Regata.Core.UI.WinForms.Forms.Measurements

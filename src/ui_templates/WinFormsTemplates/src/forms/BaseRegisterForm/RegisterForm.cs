@@ -15,7 +15,7 @@ using System.Windows.Forms;
 namespace Regata.Core.UI.WinForms.Forms
 {
     public partial class RegisterForm<MainTableModel> : RegataBaseForm
-        where MainTableModel : class, IId
+        where MainTableModel : class, IId, ISample
     {
         /// <summary>
         /// 

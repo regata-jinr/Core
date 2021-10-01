@@ -717,7 +717,10 @@ namespace Regata.Core
         public const int ERR_UI_WF_FILL_SEL_SMP_UNREG              = 3870;
         public const int ERR_UI_WF_FILL_SMP_REGS_UNREG             = 3871;
         public const int ERR_UI_WF_INI_SMP_REGS_UNREG              = 3872;
-        
+        public const int ERR_UI_WF_INI_TAB_1_REGS_UNREG            = 3873;
+        public const int    ERR_UI_WF_FILL_1TABL_TAB_UNREG         = 3874;
+        public const int ERR_UI_WF_FILL_2TABL_TAB_UNREG            = 3875;
+
 
 
 

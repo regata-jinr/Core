@@ -133,6 +133,13 @@ namespace Regata.Core
             return Task.Run(() => process.WaitForExit(timeout * 1000));
         }
 
+        public static void ShowXemoDevicesCams()
+        {
+            Process.Start(new ProcessStartInfo("http://159.93.105.78/") { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("http://159.93.105.75/") { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("http://159.93.105.79/") { UseShellExecute = true });
+        }
+
     } // public static class Shell
 
     public struct ProcessResult

@@ -361,4 +361,4 @@ namespace Regata.Core.UI.WinForms.Forms
 
 
     } //  public partial class LoginForm : Form
-}     // namespace Regata.Desktop.WinForms.Measurements
+}     // namespace Regata.Core.UI.WinForms.Forms

@@ -10,17 +10,12 @@
  ***************************************************************************/
 
 using Regata.Core.DataBase.Models;
-using Regata.Core.Settings;
-using Regata.Core.UI.WinForms.Controls;
-using Regata.Core.UI.WinForms.Items;
 using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms.Forms
 {
     public partial class RegisterForm<MainTableModel>
-        where MainTableModel : class, IId
+        where MainTableModel : class, IId, ISample
     {
 
         /// <summary>
