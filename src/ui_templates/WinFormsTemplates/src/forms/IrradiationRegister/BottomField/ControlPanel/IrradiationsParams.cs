@@ -21,6 +21,7 @@ using System.Windows.Forms;
 
 namespace Regata.Core.UI.WinForms.Forms.Irradiations
 {
+    enum Direction : short { Negative = -1, Positive = 1 }
     public partial class IrradiationRegister
     {
         public ControlsGroupBox controlsIrrParams;
@@ -30,6 +31,9 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
         public Button buttonAssingNowDateTime;
         public DurationControl DurationControl;
         public DateTimePicker TimePicker;
+        public ControlsGroupBox controlsMovingInContainer;
+        public Button buttonMoveUpInContainer;
+        public Button buttonMoveDownInContainer;
 
         private void InitializeIrradiationsParamsControls()
         {
@@ -54,7 +58,17 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 controlsIrrParams._tableLayoutPanel.RowStyles[2].Height = 30F;
                 //controlsIrrParams._tableLayoutPanel.RowStyles[3].Height = 15F;
 
+                buttonMoveUpInContainer = new Button()   { AutoSize = false, Dock = DockStyle.Fill, Name = "buttonMoveUpInContainer"};
+                buttonMoveDownInContainer = new Button() { AutoSize = false, Dock = DockStyle.Fill, Name = "buttonMoveDownInContainer"};
+
+                buttonMoveUpInContainer.Click += (s, e) => { ChangeIrraditionPositionInContainer(mainForm.MainRDGV.SelectedCells, Direction.Negative); };
+                buttonMoveDownInContainer.Click += (s, e) => { ChangeIrraditionPositionInContainer(mainForm.MainRDGV.SelectedCells, Direction.Positive); };
+
+                 controlsMovingInContainer = new ControlsGroupBox(new Control[] { buttonMoveUpInContainer, buttonMoveDownInContainer }) { Name = "controlsMovingInContainer" };
+
+
                 mainForm.FunctionalLayoutPanel.Controls.Add(controlsIrrParams, 1, 0);
+                mainForm.FunctionalLayoutPanel.Controls.Add(controlsMovingInContainer, 2, 0);
 
                 DurationControl.DurationChanged += (s, e) =>
                     {
@@ -62,13 +76,8 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                         FillDateTimeFinish();
                     };
 
-                //TimePicker.ValueChanged += (s, e) =>
-                //{
-                //    mainForm.MainRDGV.FillDbSetValues("DateTimeStart", DateTime.Now);
-                //    FillDateTimes();
-                //};
 
-                CheckedContainerArrayControl.SelectionChanged += (s, e) => mainForm.MainRDGV.FillDbSetValues("Container", CheckedContainerArrayControl.SelectedItem);
+                CheckedContainerArrayControl.SelectionChanged += CheckedContainerArrayControl_SelectionChanged;
 #if NETFRAMEWORK
                 switch (_irrType)
                 {
@@ -108,6 +117,91 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 {
                     DetailedText = ex.ToString()
                 });
+            }
+        }
+
+        private void CheckedContainerArrayControl_SelectionChanged(object sender, ItemCheckEventArgs e)
+        {
+            mainForm.MainRDGV.FillDbSetValues("Container", CheckedContainerArrayControl.SelectedItem);
+            SetPositionInSelectedContainer();
+        }
+
+        private void SetPositionInSelectedContainer()
+        {
+            try
+            {
+                short? j = 1;
+                foreach (var c in mainForm.MainRDGV.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).Where(c => c >= 0).Distinct().OrderBy(c => c))
+                {
+                    var m = mainForm.MainRDGV.CurrentDbSet.Where(mm => mm.Id == (int)mainForm.MainRDGV.Rows[c].Cells["Id"].Value).FirstOrDefault();
+                    if (m == null) continue;
+                    m.Position = j;
+                    mainForm.MainRDGV.CurrentDbSet.Update(m);
+                    j++;
+                }
+                mainForm.MainRDGV.SaveChanges();
+                mainForm.MainRDGV.Refresh();
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new RCM.Message(Codes.ERR_UI_WF_FILL_DB_VAL) { DetailedText = string.Join(Environment.NewLine, "Positon", ex.Message) });
+            }
+        }
+
+
+        private void ChangeIrraditionPositionInContainer(DataGridViewSelectedCellCollection selCells, Direction dir)
+        {
+            try
+            {
+                if (selCells.Count <= 0)
+                {
+                    Report.Notify(new RCM.Message(Codes.WARN_UI_WF_SWAP_IRR_ROWS) { DetailedText = "You have to choose something in the table" });
+                    return;
+                }
+
+                var setColumn = selCells[0].ColumnIndex;
+                var currentRow    = selCells[0].OwningRow;
+                var currentRowNum = selCells[0].RowIndex;
+
+
+                mainForm.MainRDGV.Rows[currentRowNum].Cells["Position"].Selected = true;
+                mainForm.MainRDGV.Rows[currentRowNum].Cells["SetNumber"].Selected = true;
+                mainForm.MainRDGV.Rows[currentRowNum].Cells["SetIndex"].Selected = true;
+                mainForm.MainRDGV.Rows[currentRowNum].Cells["SampleNumber"].Selected = true;
+
+                var swapIndex = currentRowNum + (short)dir;
+                var swapRow   = mainForm.MainRDGV.Rows[swapIndex];
+
+                var currIrr    = mainForm.MainRDGV.CurrentDbSet.Local.Where(cir => cir.Id == (int)currentRow.Cells["Id"].Value).First();
+                var swapIrr    = mainForm.MainRDGV.CurrentDbSet.Local.Where(cir => cir.Id == (int)swapRow.Cells["Id"].Value).First();
+
+
+                if (currIrr.Position == 1 && dir == Direction.Negative)
+                    return;
+
+                if (currIrr.Container != swapIrr.Container)
+                    return;
+
+                currIrr.Swap(ref swapIrr);
+
+                currIrr.Position = (short?)(currIrr.Position.Value - (short)dir);
+                swapIrr.Position = (short?)(currIrr.Position.Value + (short)dir);
+
+                //mainForm.MainRDGV.CurrentDbSet.Update(currIrr);
+                //mainForm.MainRDGV.CurrentDbSet.Update(swapIrr);
+
+                //mainForm.MainRDGV.SaveChanges();
+                mainForm.MainRDGV.Refresh();
+                mainForm.MainRDGV.ClearSelection();
+                mainForm.MainRDGV.Rows[swapIndex].Cells["Position"].Selected = true;
+                mainForm.MainRDGV.Rows[swapIndex].Cells["SetNumber"].Selected = true;
+                mainForm.MainRDGV.Rows[swapIndex].Cells["SetIndex"].Selected = true;
+                mainForm.MainRDGV.Rows[swapIndex].Cells["SampleNumber"].Selected = true;
+
+            }
+            catch (Exception ex)
+            {
+                Report.Notify(new RCM.Message(Codes.WARN_UI_WF_SWAP_IRR_UNREG) { DetailedText = ex.Message });
             }
         }
 

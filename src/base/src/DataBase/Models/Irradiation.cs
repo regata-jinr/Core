@@ -18,7 +18,7 @@ namespace Regata.Core.DataBase.Models
 {
     public enum IrradiationType { sli, lli };
 
-    public class Irradiation : ISample, IId
+    public class Irradiation : ISample, IId, ICloneable
     {
         [Key]
         public int       Id             { get; set; }
@@ -48,20 +48,70 @@ namespace Regata.Core.DataBase.Models
 
         public static readonly IReadOnlyDictionary<IrradiationType, string> TypeToString = new Dictionary<IrradiationType, string> { { IrradiationType.sli, "SLI" }, { IrradiationType.lli, "LLI" }};
 
+
+        public void Swap(ref Irradiation ir2)
+        {
+            var tmpIr1 = this.Clone() as Irradiation;
+
+            this.CountryCode         = ir2.CountryCode    ;
+            this.ClientNumber        = ir2.ClientNumber   ;
+            this.Year                = ir2.Year           ;
+            this.SetNumber           = ir2.SetNumber      ;
+            this.SetIndex            = ir2.SetIndex       ;
+            this.SampleNumber        = ir2.SampleNumber   ;
+            this.Type                = ir2.Type           ;
+            this.DateTimeStart       = ir2.DateTimeStart  ;
+            this.Duration            = ir2.Duration       ;
+            this.DateTimeFinish      = ir2.DateTimeFinish ;
+            this.Container           = ir2.Container      ;
+            this.Position            = ir2.Position       ;
+            this.Channel             = ir2.Channel        ;
+            this.LoadNumber          = ir2.LoadNumber     ;
+            this.Rehandler           = ir2.Rehandler      ;
+            this.Assistant           = ir2.Assistant      ;
+            this.Note = ir2.Note;
+
+            ir2.CountryCode    = tmpIr1.CountryCode;
+            ir2.ClientNumber   = tmpIr1.ClientNumber;
+            ir2.Year           = tmpIr1.Year;
+            ir2.SetNumber      = tmpIr1.SetNumber;
+            ir2.SetIndex       = tmpIr1.SetIndex;
+            ir2.SampleNumber   = tmpIr1.SampleNumber;
+            ir2.Type           = tmpIr1.Type;
+            ir2.DateTimeStart  = tmpIr1.DateTimeStart;
+            ir2.Duration       = tmpIr1.Duration;
+            ir2.DateTimeFinish = tmpIr1.DateTimeFinish;
+            ir2.Container      = tmpIr1.Container;
+            ir2.Position       = tmpIr1.Position;
+            ir2.Channel        = tmpIr1.Channel;
+            ir2.LoadNumber     = tmpIr1.LoadNumber;
+            ir2.Rehandler      = tmpIr1.Rehandler;
+            ir2.Assistant      = tmpIr1.Assistant;
+            ir2.Note           = tmpIr1.Note;
+
+
+
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
         //public Irradiation()
         //{ }
 
-    //    public Irradiation(Sample smp, IrradiationType irType, int? loadNumber)
-    //    {
-    //        CountryCode  = smp.CountryCode;
-    //        ClientNumber = smp.ClientNumber;
-    //        Year         = smp.Year         ;
-    //        SetNumber    = smp.SetNumber    ;
-    //        SetIndex     = smp.SetIndex     ;
-    //        SampleNumber = smp.SampleNumber ;
-    //        Type         = (int)irType;
-    //        LoadNumber   = loadNumber;
-    //}
+        //    public Irradiation(Sample smp, IrradiationType irType, int? loadNumber)
+        //    {
+        //        CountryCode  = smp.CountryCode;
+        //        ClientNumber = smp.ClientNumber;
+        //        Year         = smp.Year         ;
+        //        SetNumber    = smp.SetNumber    ;
+        //        SetIndex     = smp.SetIndex     ;
+        //        SampleNumber = smp.SampleNumber ;
+        //        Type         = (int)irType;
+        //        LoadNumber   = loadNumber;
+        //}
 
     } // public class Irradiation
 }     // namespace Regata.Core.DataBase.Models

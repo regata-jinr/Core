@@ -52,66 +52,66 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 ir.LoadNumber = _loadNumber;
 
 
-#if NETFRAMEWORK
+//#if NETFRAMEWORK
    
-                switch (_irrType)
-                {
-                    case IrradiationType.sli:
-                        ir.Container = null;
-                        ir.Channel = 2;
-                        break;
-                    default:
-                        ir.Container = (short?)CheckedContainerArrayControl.SelectedItem;
-                        ir.Channel = 1;
-                        break;
+//                switch (_irrType)
+//                {
+//                    case IrradiationType.sli:
+//                        ir.Container = null;
+//                        ir.Channel = 2;
+//                        break;
+//                    default:
+//                        ir.Container = (short?)CheckedContainerArrayControl.SelectedItem;
+//                        ir.Channel = 1;
+//                        break;
 
 
-                };
-#else
-                ir.Container = _irrType switch
-                {
-                    IrradiationType.sli => null,
-                    _ => (short?)CheckedContainerArrayControl.SelectedItem
-                };
+//                };
+//#else
+//                ir.Container = _irrType switch
+//                {
+//                    IrradiationType.sli => null,
+//                    _ => (short?)CheckedContainerArrayControl.SelectedItem
+//                };
 
 
-                ir.Channel = _irrType switch
-                {
-                    IrradiationType.sli => 2,
-                    _ => 1
-                };
-#endif
+//                ir.Channel = _irrType switch
+//                {
+//                    IrradiationType.sli => 2,
+//                    _ => 1
+//                };
+//#endif
 
 
                 ir.Duration = (int?)DurationControl.Duration.TotalSeconds;
 
                 var rc = mainForm.MainRDGV.RowCount;
 
-                short? pos = 1;
-                if (rc != 0)
-                {
-                    var lastContainer = (short?)mainForm.MainRDGV.Rows[rc - 1].Cells["Container"].Value;
-                    var lastPosition = (short?)mainForm.MainRDGV.Rows[rc - 1].Cells["Position"].Value;
-                    pos = lastContainer != CheckedContainerArrayControl.SelectedItem ? 1 : (short?)(lastPosition + 1);
-                }
+//                short? pos = 1;
+//                if (rc != 0)
+//                {
+//                    var lastContainer = (short?)mainForm.MainRDGV.Rows[rc - 1].Cells["Container"].Value;
+//                    var lastPosition = (short?)mainForm.MainRDGV.Rows[rc - 1].Cells["Position"].Value;
+//                    pos = lastContainer != CheckedContainerArrayControl.SelectedItem ? 1 : (short?)(lastPosition + 1);
+//                }
 
-#if NETFRAMEWORK
-                switch (_irrType)
-                {
-                    case IrradiationType.sli:
-                        ir.Position = null;
-                        break;
-                    default:
-                        ir.Position = pos;
-                        break;
-                };
-#else
-                ir.Position = _irrType switch
-                {
-                    IrradiationType.sli => null,
-                    _ => pos
-                };
-#endif
+//#if NETFRAMEWORK
+//                switch (_irrType)
+//                {
+//                    case IrradiationType.sli:
+//                        ir.Position = null;
+//                        break;
+//                    default:
+//                        ir.Position = pos;
+//                        break;
+//                };
+//#else
+//                ir.Position = _irrType switch
+//                {
+//                    IrradiationType.sli => null,
+//                    _ => pos
+//                };
+//#endif
 
                 mainForm.MainRDGV.Add(ir);
 

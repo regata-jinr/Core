@@ -154,8 +154,9 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
 
 
             Labels.SetControlsLabels(mainForm);
-
+#if !DEBUG
             SetView();
+#endif
         }
 
         private void SetView()
@@ -164,10 +165,9 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
             {
                 var roles = r.UserRoles;
 
-                if (!roles.Contains("operator") && !roles.Contains("rehandler"))
+                if (!roles.Contains("operator") && !roles.Contains("rehandler") && !roles.Contains("db_owner"))
                     mainForm.BottomLayoutPanel.Visible = false;
-
-            }
+                }
         }
 
     } // public partial class MeasurementsRegisterForm
