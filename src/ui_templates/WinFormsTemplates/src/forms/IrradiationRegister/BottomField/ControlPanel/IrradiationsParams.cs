@@ -48,7 +48,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 controlsTimeChanged = new ControlsGroupBox(new Control[] { TimePicker }) { Name = "controlsTimeChanged" };
                 //TimePicker.MouseLeave += (s, e) => { mainForm.MainRDGV.Focus(); };
                 CheckedContainerArrayControl = new CheckedArrayControl<short?>(new short?[] { 1, 2, 3, 4, 5, 6, 7, 8 }, multiSelection: false) { Name = "CheckedArrayControlContainers" };
-                buttonAssingNowDateTime = new Button() { AutoSize = false, Dock = DockStyle.Fill, Name = "buttonAssingNowDateTime", Enabled = false };
+                buttonAssingNowDateTime = new Button() { AutoSize = false, Dock = DockStyle.Fill, Name = "buttonAssingNowDateTime" };
                 CheckedContainerArrayControl.SelectItem(1);
                 CheckedContainerArrayControl.checkedListBox.ColumnWidth = 70;
                 controlsIrrParams = new ControlsGroupBox(new Control[] { DurationControl, controlsTimeChanged, buttonAssingNowDateTime, CheckedContainerArrayControl }) { Name = "controlsIrrParams" };
@@ -106,7 +106,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 buttonAssingNowDateTime.Click += (s, e) =>
                 {
                     mainForm.MainRDGV.FillDbSetValues("DateTimeStart", DateTime.Now);
-                    FillDateTimes();
+                    FillDateTimes(null);
                     //FillDateTimeFinish();
 
                 };
@@ -219,13 +219,15 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
             mainForm.MainRDGV.SaveChanges();
         }
 
-        private void FillDateTimes()
+        private void FillDateTimes(DateTime? dt)
         {
+            if (!dt.HasValue)
+                dt = DateTime.Now;
             foreach (var i in mainForm.MainRDGV.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).Where(c => c >= 0).Distinct())
             {
                 var m = mainForm.MainRDGV.CurrentDbSet.Where(mm => mm.Id == (int)mainForm.MainRDGV.Rows[i].Cells["Id"].Value).FirstOrDefault();
                 if (m == null || !m.DateTimeStart.HasValue) continue;
-                m.DateTimeStart = DateTime.Now.Date + TimePicker.Value.TimeOfDay;
+                m.DateTimeStart = dt.Value.Date + TimePicker.Value.TimeOfDay;
                 m.DateTimeFinish = m.DateTimeStart.Value.AddSeconds(DurationControl.Duration.TotalSeconds);
                 mainForm.MainRDGV.CurrentDbSet.Update(m);
 

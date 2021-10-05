@@ -42,7 +42,10 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                     Settings<IrradiationSettings>.CurrentSettings.Verbosity = VerbosityItems.CheckedItem;
                 };
 
-                _changeRegisterDate= new ToolStripMenuItem();
+              
+
+
+                _changeRegisterDate = new ToolStripMenuItem();
                 _changeRegisterDate.Name = "ChangeDateMenu";
                 _changeRegisterDate.Click += _changeRegisterDate_Click;
 
@@ -90,7 +93,43 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
 
         private void _changeRegisterDate_Click(object sender, EventArgs e)
         {
-            // TODO: support changing date for current register
+            var form = new RegataBaseForm();
+           
+           var  _calendar = new MonthCalendar();
+
+            _calendar.MaxSelectionCount = 1;
+
+            _calendar.DateSelected += (s, ee) =>
+            {
+                foreach (var i in mainForm.MainRDGV.Rows.OfType<DataGridViewRow>().Select(c => c.Index).Where(c => c >= 0).Distinct())
+                {
+                    var m = mainForm.MainRDGV.CurrentDbSet.Where(mm => mm.Id == (int)mainForm.MainRDGV.Rows[i].Cells["Id"].Value).FirstOrDefault();
+                    if (m == null) continue;
+                    if (!m.DateTimeStart.HasValue)
+                        m.DateTimeStart = _calendar.SelectionStart.Date;
+                    else
+                        m.DateTimeStart = _calendar.SelectionStart.Date + m.DateTimeStart.Value.TimeOfDay;
+                    if (m.Duration.HasValue)
+                        m.DateTimeFinish = m.DateTimeStart.Value.AddSeconds(m.Duration.Value);
+                    mainForm.MainRDGV.CurrentDbSet.Update(m);
+
+                }
+                mainForm.MainRDGV.Refresh();
+                mainForm.MainRDGV.SaveChanges();
+            };
+            form.Controls.Add(_calendar);
+            form.MinimumSize = new System.Drawing.Size(_calendar.Size.Width, _calendar.Size.Height  + 50);
+            form.Size = form.MinimumSize;
+            _calendar.Dock = DockStyle.Fill;
+
+            form.MinimizeBox = false;
+            form.MaximizeBox = false;
+            form.FormBorderStyle = FormBorderStyle.FixedSingle;
+            form.MenuStrip.Visible = false;
+            form.StatusStrip.Visible = false;
+            form.Show();
+            form.Location = new System.Drawing.Point(mainForm.Location.X, mainForm.Location.Y + mainForm.MenuStrip.Height);
+
         }
     } // public partial class IrradiationRegister
 }     // namespace Regata.Desktop.WinForms.Irradiation
