@@ -74,6 +74,9 @@ namespace Regata.Core
         public const int WARN_UI_WF_ACQ_START_ALL_MEAS = 2807;
         public const int WARN_UI_WF_SWAP_IRR_ROWS = 2808;
         public const int WARN_UI_WF_SWAP_IRR_UNREG = 2809;
+        public const int WARN_UI_WF_ACQ_START_EMPTY_REG = 2810;
+        public const int WARN_UI_WF_ACQ_START_EMPTY_DET = 2811;
+        public const int WARN_UI_WF_ACQ_START_EMPTY_POS = 2812;
 
 
         #endregion
