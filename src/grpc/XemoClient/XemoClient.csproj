@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<OutputType>Exe</OutputType>
+	<PlatformTarget>x86</PlatformTarget>
+	<TargetFramework>net5.0-windows</TargetFramework>
+	  <StartupObject>Regata.Core.GRPC.Xemo.Client</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<Protobuf Include="..\XemoServer\Protos\gxemo.proto" GrpcServices="Client" Link="Protos\greet.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="AdysTech.CredentialManager" Version="2.3.0" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />	
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
+	<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+	<PackageReference Include="NLog" Version="4.7.10" />
+	<PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+	<PackageReference Include="Google.Protobuf" Version="3.18.1" />
+	<PackageReference Include="Grpc.Net.Client" Version="2.40.0" />
+	<PackageReference Include="Grpc.Tools" Version="2.41.0">
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  <PrivateAssets>all</PrivateAssets>
+	</PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+	<ProjectReference Include="..\..\base\base.csproj" />
+	<ProjectReference Include="..\..\hardware\SampleChanger\SampleChanger.csproj" />
+  </ItemGroup>
+
+</Project>

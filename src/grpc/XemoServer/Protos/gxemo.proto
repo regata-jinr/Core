@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package gxemo;
+
+service GRPCXemo
+{
+
+  rpc DeviceIsReady       (DeviceIsReadyRequest)       returns (TakeSampleFromCellReply);
+  rpc SampleHasTaken      (SampleHasTakenRequest)      returns (PutSampleAboveDetReply);
+  rpc SampleAboveDetector (SampleAboveDetectorRequest) returns (PutSampleToDiskReply);
+  rpc SampleInCell        (SampleInCellRequest)        returns (TakeSampleFromCellReply);
+  rpc DeviceError         (ErrorOccurredRequest)       returns (ErrorOccurredReply);
+  rpc IsMeasurementsDone  (IsMeasurementsDoneRequest)  returns (IsMeasurementsDoneReply);
+  rpc IsLastMeasurement   (IsLastMeasurementRequest)   returns (IsLastMeasurementReply);
+
+}
+
+// requests
+
+message DeviceIsReadyRequest       {int32 devId = 1; bool  isReady   = 2;}
+message SampleHasTakenRequest      {int32 devId = 1; bool  isTaken   = 2;}
+message SampleAboveDetectorRequest {int32 devId = 1; bool  isAbove   = 2;}
+message SampleInCellRequest        {int32 devId = 1; bool  isInCell  = 2;}
+message ErrorOccurredRequest       {int32 devId = 1; int32 errCode   = 2;}
+message IsMeasurementsDoneRequest  {int32 devId = 1; }
+message IsLastMeasurementRequest   {int32 devId = 1; }
+
+// replies
+
+message IsLastMeasurementReply  { bool  isLast = 1; }
+message IsMeasurementsDoneReply { bool  isDone = 1; }
+message ErrorOccurredReply      { }
+message TakeSampleFromCellReply { int32 cellNum = 1; }
+message PutSampleToDiskReply    { int32 cellNum = 1; }
+message PutSampleAboveDetReply 
+{  enum Height
+   {
+      H2p5 = 0;
+      H5 = 1;
+      H10 = 2;
+      H20 = 3;
+   }
+   Height h = 1; 
+}

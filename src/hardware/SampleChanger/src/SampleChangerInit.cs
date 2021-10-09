@@ -45,10 +45,10 @@ namespace Regata.Core.Hardware
 
         private IReadOnlyDictionary<int, string> XemoDet = new Dictionary<int, string>()
         {
-            { 107374, "D1"  },
-            { 107375, "D2"  },
-            { 107376, "D3"  },
-            { 114005, "D4"  },
+            { 107374, "D1" },
+            { 107375, "D2" },
+            { 107376, "D3" },
+            { 114005, "D4" },
         };
 
         /// <summary>

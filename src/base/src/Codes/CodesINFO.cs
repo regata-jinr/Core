@@ -27,9 +27,9 @@ namespace Regata.Core
     ///    -[200-299) - Detector           info codes
     ///    -[300-399) - Logger             info codes
     ///    -[400-499) - Settings           info codes
-    ///    -[500-599) - Export:Excel       info codes
-    ///    -[600-699) - Export:GoogleSheet info codes
-    ///    -[700-799) - Export:CSV         info codes
+    ///    -[500-599) - XEMO               info codes
+    ///    -[600-699) - Export             info codes
+    ///    -[700-799) - Free               info codes
     ///    -[800-899) - UI:WinForms        info codes
     /// </summary>
     public partial struct Codes
@@ -68,18 +68,18 @@ namespace Regata.Core
 
         #region Cloud
 
-        public const int INFO_CLD_UPL_FILE = 100;
-        public const int INFO_CLD_RMV_FILE = 101;
-        public const int INFO_CLD_IS_EXST  = 102;
-        public const int INFO_CLD_FL_SHRNG = 103;
-        public const int INFO_CLD_CRT_DIR  = 104;
+        public const int INFO_CLD_UPL_FILE   = 100;
+        public const int INFO_CLD_RMV_FILE   = 101;
+        public const int INFO_CLD_IS_EXST    = 102;
+        public const int INFO_CLD_FL_SHRNG   = 103;
+        public const int INFO_CLD_CRT_DIR    = 104;
         public const int INFO_CLD_DEL_FL_DIR = 105;
 
         #endregion
 
         #region Detector
 
-        public const int INFO_DET_NAME_EXSTS       = 200;  //.Info($"Detector with name '{name}' was found in the MID wizard
+        public const int INFO_DET_NAME_EXSTS       = 200; //.Info($"Detector with name '{name}' was found in the MID wizard
         public const int INFO_DET_CHNG_STATUS      = 201; // detector status has changed
         public const int INFO_DET_CLN              = 202; //$"Cleaning of the detector {Name}"
         public const int INFO_DET_RST              = 203; //$"Reseting of the detector {Name}"
@@ -103,6 +103,14 @@ namespace Regata.Core
 
         public const int INFO_SET_SET_ASMBL_NAME = 400;
 
+        #endregion
+
+        #region Xemo
+
+        public const int INFO_XM_GRPC_IS_MEAS_HAS_DONE   = 500;
+        public const int INFO_XM_GRPC_LAST_MEAS_HAS_DONE = 501;
+        public const int INFO_XM_GRPC_SERV_Dev_Start_Moving = 502;
+        
         #endregion
 
     }

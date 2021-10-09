@@ -188,20 +188,29 @@ namespace Regata.Core
         #region XEMO SampleChanger Errors
         // 3630 - 3799
 
-        public const int ERR_XM_COM_UNREG               = 3630;
-        public const int ERR_XM_INI_UNREG               = 3631;
-        public const int ERR_XM_CON_UNREG               = 3632;
-        public const int ERR_XM_INI_AX_UNREG            = 3633;
-        public const int ERR_XM_WRONG_POS               = 3754;
-        public const int ERR_XM_TRCK_POS_UNREG          = 3755;
-        public const int ERR_XM_TRCK_POS                = 3756;
-        public const int ERR_XM_HOME_UNREG              = 3757;
-        public const int ERR_XM_PUT_ABV_DET_ASYNC_UNREG = 3758;
-        public const int ERR_XM_PUT_ABV_DET_UNREG       = 3759;
-        public const int ERR_XM_GET_PIN_POS_UNREG       = 3760;
-        public const int ERR_XM_MOVE_UNREG              = 3761;
-        public const int ERR_XM_INI_DEV_NF              = 3762;
-        public const int ERR_XM_ERR_HNDL_UNREG          = 3763;
+        public const int ERR_XM_COM_UNREG                        = 3630;
+        public const int ERR_XM_INI_UNREG                        = 3631;
+        public const int ERR_XM_CON_UNREG                        = 3632;
+        public const int ERR_XM_INI_AX_UNREG                     = 3633;
+        public const int ERR_XM_WRONG_POS                        = 3754;
+        public const int ERR_XM_TRCK_POS_UNREG                   = 3755;
+        public const int ERR_XM_TRCK_POS                         = 3756;
+        public const int ERR_XM_HOME_UNREG                       = 3757;
+        public const int ERR_XM_PUT_ABV_DET_ASYNC_UNREG          = 3758;
+        public const int ERR_XM_PUT_ABV_DET_UNREG                = 3759;
+        public const int ERR_XM_GET_PIN_POS_UNREG                = 3760;
+        public const int ERR_XM_MOVE_UNREG                       = 3761;
+        public const int ERR_XM_INI_DEV_NF                       = 3762;
+        public const int ERR_XM_ERR_HNDL_UNREG                   = 3763;
+        public const int ERR_XM_GRPC_CLNT_UNREG                  = 3764;
+        public const int ERR_XM_GRPC_SERV_DevIsReady_UNREG       = 3765;
+        public const int ERR_XM_GRPC_SERV_SmplHasTaken_UNREG     = 3766;
+        public const int ERR_XM_GRPC_SERV_Smpl_Abv_Det_UNREG     = 3767;
+        public const int ERR_XM_GRPC_SERV_SampleInCell_UNREG     = 3768;
+        public const int ERR_XM_GRPC_SERV_DevErr_UNREG           = 3769;
+        public const int ERR_XM_GRPC_IS_MEAS_HAS_DONE_UNREG      = 3770;
+        public const int ERR_XM_GRPC_LAST_MEAS_HAS_DONE_UNREG    = 3771;
+
 
 
         #region MotionBasic runtime errors 
@@ -718,7 +727,7 @@ namespace Regata.Core
         public const int ERR_UI_WF_FILL_SMP_REGS_UNREG             = 3871;
         public const int ERR_UI_WF_INI_SMP_REGS_UNREG              = 3872;
         public const int ERR_UI_WF_INI_TAB_1_REGS_UNREG            = 3873;
-        public const int    ERR_UI_WF_FILL_1TABL_TAB_UNREG         = 3874;
+        public const int ERR_UI_WF_FILL_1TABL_TAB_UNREG            = 3874;
         public const int ERR_UI_WF_FILL_2TABL_TAB_UNREG            = 3875;
 
 
