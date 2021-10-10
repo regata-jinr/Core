@@ -30,7 +30,7 @@ namespace Regata.Core.GRPC.Xemo.Services
             {114005, 1 },
         };
 
-        public static Dictionary<int, bool> DevBusy = new Dictionary<int, bool>()
+        public static Dictionary<int, bool> IsMeasDone = new Dictionary<int, bool>()
         {
             {107374, false },
             {107375, false },
@@ -47,6 +47,13 @@ namespace Regata.Core.GRPC.Xemo.Services
             {114005, false },
         };
 
+        public static Dictionary<int, bool> SampleIsInCell = new Dictionary<int, bool>()
+        {
+            {107374, false },
+            {107375, false },
+            {107376, false },
+            {114005, false },
+        };
 
         public static Dictionary<int, bool> LastMeas = new Dictionary<int, bool>()
         {
@@ -76,8 +83,8 @@ namespace Regata.Core.GRPC.Xemo.Services
                 if (!request.IsReady)
                     throw new InvalidOperationException($"Xemo device '{request.DevId}' is not ready");
 
-                Report.Notify(new Message(Codes.INFO_XM_GRPC_SERV_Dev_Start_Moving) { DetailedText = $"Start movement to cell {DevCells[request.DevId]} one from device {request.DevId}" });
                 var t = new TakeSampleFromCellReply { CellNum = DevCells[request.DevId] };
+                Report.Notify(new Message(Codes.INFO_XM_GRPC_SERV_Dev_Start_Moving) { DetailedText = $"Start movement to cell {DevCells[request.DevId]} one from device {request.DevId}" });
                 return Task.FromResult(t);
             }
             catch (Exception ex)
@@ -107,11 +114,12 @@ namespace Regata.Core.GRPC.Xemo.Services
         {
             try
             {
-                if (!request.IsAbove)
-                    throw new InvalidOperationException($"Xemo device '{request.DevId}' is not above detector");
+                //if (!request.IsAbove)
+                //    throw new InvalidOperationException($"Xemo device '{request.DevId}' is not above detector");
 
                 var t = new PutSampleToDiskReply { CellNum = DevCells[request.DevId] };
                 SampleIsAboveDet[request.DevId] = request.IsAbove;
+                SampleIsInCell[request.DevId] = false;
 
                 return await Task.FromResult(t);
             }
@@ -126,11 +134,13 @@ namespace Regata.Core.GRPC.Xemo.Services
         {
             try
             {
-                if (!request.IsInCell)
-                    throw new InvalidOperationException($"Xemo device '{request.DevId}' has not putting sample to cell");
+                //if (!request.IsInCell)
+                //    throw new InvalidOperationException($"Xemo device '{request.DevId}' has not putting sample to cell");
 
                 var t = new TakeSampleFromCellReply { CellNum = DevCells[request.DevId] };
                 SampleIsAboveDet[request.DevId] = false;
+                SampleIsInCell[request.DevId] = request.IsInCell;
+
                 return Task.FromResult(t);
             }
             catch (Exception ex)
@@ -174,9 +184,9 @@ namespace Regata.Core.GRPC.Xemo.Services
         {
             try
             {
-                Report.Notify(new Message(Codes.INFO_XM_GRPC_IS_MEAS_HAS_DONE));
+                //Report.Notify(new Message(Codes.INFO_XM_GRPC_IS_MEAS_HAS_DONE));
 
-                var t = new IsMeasurementsDoneReply() { IsDone = DevBusy[request.DevId] };
+                var t = new IsMeasurementsDoneReply() { IsDone = IsMeasDone[request.DevId] };
                 return Task.FromResult(t);
             }
             catch (Exception ex)

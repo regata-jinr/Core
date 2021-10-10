@@ -31,6 +31,9 @@
   <ItemGroup>
 	<ProjectReference Include="..\..\base\base.csproj" />
 	<ProjectReference Include="..\..\hardware\SampleChanger\SampleChanger.csproj" />
+	  <None Include="$(ARTIFACTS)\$(Configuration)\base\targets.json" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+	  <None Include="$(ARTIFACTS)\$(Configuration)\base\NLog.config" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+
   </ItemGroup>
 
 </Project>

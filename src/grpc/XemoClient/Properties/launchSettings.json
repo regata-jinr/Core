@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "XemoClient": {
+      "commandName": "Project",
+      "commandLineArgs": "114005"
+    }
+  }
+}

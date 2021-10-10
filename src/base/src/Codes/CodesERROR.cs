@@ -210,6 +210,8 @@ namespace Regata.Core
         public const int ERR_XM_GRPC_SERV_DevErr_UNREG           = 3769;
         public const int ERR_XM_GRPC_IS_MEAS_HAS_DONE_UNREG      = 3770;
         public const int ERR_XM_GRPC_LAST_MEAS_HAS_DONE_UNREG    = 3771;
+        public const int ERR_XM_GRPC_CLNT_DEV_NOT_ANS            = 3772;
+        
 
 
 

@@ -107,10 +107,18 @@ namespace Regata.Core
 
         #region Xemo
 
-        public const int INFO_XM_GRPC_IS_MEAS_HAS_DONE   = 500;
-        public const int INFO_XM_GRPC_LAST_MEAS_HAS_DONE = 501;
+        public const int INFO_XM_GRPC_IS_MEAS_HAS_DONE      = 500;
+        public const int INFO_XM_GRPC_LAST_MEAS_HAS_DONE    = 501;
         public const int INFO_XM_GRPC_SERV_Dev_Start_Moving = 502;
-        
+        public const int INFO_XM_GRPC_CLNT_INIT             = 503;
+        public const int INFO_XM_GRPC_CLNT_IN_HOME          = 504;
+        public const int INFO_XM_GRPC_CLNT_IN_RUN_CYCL      = 505;
+        public const int INFO_XM_GRPC_CLNT_WAIT_MEAS        = 506;
+        public const int INFO_XM_GRPC_CLNT_MEAS_DONE        = 507;
+
+
+
+
         #endregion
 
     }

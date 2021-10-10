@@ -35,8 +35,10 @@ namespace Regata.Core.GRPC.Xemo
             using var channel = GrpcChannel.ForAddress("https://localhost:5001");
             var client = new GRPCXemo.GRPCXemoClient(channel);
             int devId = 0;
+
             try
             {
+                Report.Notify(new Message(Codes.INFO_XM_GRPC_CLNT_INIT));
                 // The port number(5001) must match the port of the gRPC server.
                 devId = int.Parse(args[0]);
 
@@ -44,16 +46,22 @@ namespace Regata.Core.GRPC.Xemo
 
                 using (var sc = new SampleChanger(devId))
                 {
+                    var ctinit = new CancellationTokenSource(TimeSpan.FromSeconds(90));
+
+                    await sc.HomeAsync(ctinit.Token);
 
                     var ct = new CancellationTokenSource();
-
-                    await sc.HomeAsync(ct.Token);
+                    Report.Notify(new Message(Codes.INFO_XM_GRPC_CLNT_IN_HOME));
 
                     var stopMeas = false;
 
                     while (!stopMeas)
                     {
+                        Report.Notify(new Message(Codes.INFO_XM_GRPC_CLNT_IN_RUN_CYCL));
+
                         var ts = await client.DeviceIsReadyAsync(new DeviceIsReadyRequest { DevId = devId, IsReady = true });
+
+                        await client.SampleInCellAsync(new SampleInCellRequest { DevId = devId, IsInCell = false });
 
                         await sc.TakeSampleFromTheCellAsync((short)ts.CellNum, ct.Token);
 
@@ -65,6 +73,7 @@ namespace Regata.Core.GRPC.Xemo
 
                         var isMeasDone = false;
 
+                        Report.Notify(new Message(Codes.INFO_XM_GRPC_CLNT_WAIT_MEAS));
                         do
                         {
                             var measStatus = await client.IsMeasurementsDoneAsync(new IsMeasurementsDoneRequest { DevId = devId });
@@ -73,8 +82,9 @@ namespace Regata.Core.GRPC.Xemo
                         }
                         while (!isMeasDone);
 
-                        var takeSample2 = await client.SampleAboveDetectorAsync(new SampleAboveDetectorRequest { DevId = devId, IsAbove = false });
+                        Report.Notify(new Message(Codes.INFO_XM_GRPC_CLNT_MEAS_DONE));
 
+                        var takeSample2 = await client.SampleAboveDetectorAsync(new SampleAboveDetectorRequest { DevId = devId, IsAbove = false });
 
                         await sc.PutSampleToTheDiskAsync((short)ts.CellNum, ct.Token);
 
@@ -87,7 +97,16 @@ namespace Regata.Core.GRPC.Xemo
 
                     await sc.HomeAsync(ct.Token);
 
+                    // NOTE: In order to not close main thread after await!
+                    Console.WriteLine("Push any key to exit...");
+                    Console.ReadKey();
+
                 } // using (var sc = new SampleChanger(devId))
+            }
+            catch (TaskCanceledException)
+            {
+                Report.Notify(new Message(Codes.ERR_XM_GRPC_CLNT_DEV_NOT_ANS) { DetailedText = $"Device '{devId}' do not answer. XemoClient will be rerun." });
+                Shell.StartProcess("XemoClient.exe", devId.ToString());
             }
             catch (Exception ex)
             {
