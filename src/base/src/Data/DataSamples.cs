@@ -70,14 +70,14 @@ namespace Regata.Core
 
                 var ssid_arr = SrmOrMonitorStringId.Split('-');
 
-                if (ssid_arr.Length != 6) return null;
+                if (ssid_arr.Length != 5) return null;
 
                 using (var r = new RegataContext())
                 {
                     return r.Set<T>().Where(s =>
-                                                s.SetName == ssid_arr[3] &&
-                                                s.SetNumber == ssid_arr[4] &&
-                                                s.Number == ssid_arr[5])
+                                                s.SetName == ssid_arr[1] &&
+                                                s.SetNumber == ssid_arr[2] &&
+                                                s.Number == ssid_arr[3])
                                      .FirstOrDefault();
                 }
             }
