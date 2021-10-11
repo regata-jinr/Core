@@ -11,7 +11,6 @@
 
 using Microsoft.EntityFrameworkCore;
 using RCM = Regata.Core.Messages;
-using Regata.Core.DataBase.Models;
 using System;
 using System.Linq;
 
@@ -23,7 +22,14 @@ namespace Regata.Core.UI.WinForms.Forms.Measurements
         {
             try
             {
-                mainForm.MainRDGV.CurrentDbSet.Where(m => m.RegId == id).Load();
+                if (MeasurementsTypeItems.CheckedItem == Core.DataBase.Models.MeasurementsType.sli)
+                {
+                    mainForm.MainRDGV.CurrentDbSet.Where(m => m.RegId == id).OrderByDescending(m => m.IrradiationId).Load();
+                }
+                else
+                {
+                    mainForm.MainRDGV.CurrentDbSet.Where(m => m.RegId == id).OrderBy(m => m.Detector).ThenBy(m => m.DiskPosition).Load();
+                }
                 mainForm.MainRDGV.DataSource = mainForm.MainRDGV.CurrentDbSet.Local.ToBindingList();
 
                 //mainForm.MainRDGV.HideColumns();

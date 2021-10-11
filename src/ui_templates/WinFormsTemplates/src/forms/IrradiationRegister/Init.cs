@@ -150,6 +150,8 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 mainForm.MainRDGV.Columns["Position"].Visible = false;
                 CheckedContainerArrayControl.Visible = false;
             }
+            // FIXME: doesn't work properly
+                controlsMovingInContainer.Visible = false;
             ColorizeDGV(mainForm.MainRDGV);
 
 

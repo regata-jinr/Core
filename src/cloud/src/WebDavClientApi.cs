@@ -43,15 +43,16 @@ namespace Regata.Core.Cloud
             try
             {
                 var cm = AdysTech.CredentialManager.CredentialManager.GetCredentials(GlobalSettings.Targets.DiskJinr);
-                _hostWebDavAPI += cm.UserName;
 
-                if (cm == null)
-                    Report.Notify(new Message(Codes.ERR_CLD_TRGT_NFND)); //"Can't load cloud storage credential. Please add it to the windows credential manager"));
-
-                _httpClient = new HttpClient();
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{cm.UserName}:{cm.Password}")));
-                Report.Notify(new Message(Codes.SUCC_CLD_TRGT));
+                    _httpClient = new HttpClient();
+                    _hostWebDavAPI += cm.UserName;
+                    _httpClient = new HttpClient();
+                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{cm.UserName}:{cm.Password}")));
+                    Report.Notify(new Message(Codes.SUCC_CLD_TRGT));
+                    
+                
             }
+            //catch ()
             catch (Exception ex)
             {
                 Report.Notify(new Message(Codes.ERR_CLD_CON_UNREG) { DetailedText = ex.ToString()});
@@ -278,13 +279,16 @@ namespace Regata.Core.Cloud
                 if (!Directory.Exists(Path.GetDirectoryName(path)))
                     Directory.CreateDirectory(Path.GetDirectoryName(path));
 
-                using (var request = new HttpRequestMessage(HttpMethod.Get, GetDownloadLink(shareId)))
+                using (var cli = new HttpClient())
                 {
-                    using (
-                        Stream contentStream = await (await _httpClient.SendAsync(request, ct)).Content.ReadAsStreamAsync(),
-                        stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
+                    using (var request = new HttpRequestMessage(HttpMethod.Get, GetDownloadLink(shareId)))
                     {
-                        await contentStream.CopyToAsync(stream, 4096, ct);
+                        using (
+                            Stream contentStream = await (await cli.SendAsync(request, ct)).Content.ReadAsStreamAsync(),
+                            stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
+                        {
+                            await contentStream.CopyToAsync(stream, 4096, ct);
+                        }
                     }
                 }
             }

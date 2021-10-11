@@ -179,7 +179,8 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
 
                 mainForm.TabsPane[0, 1].DataSource = _chosenSamples;
                 HideAllColumns(mainForm.TabsPane[0, 1]);
-                ShowColumns(mainForm.TabsPane[0, 1], new string[] { "CountryCode", "ClientNumber", "Year", "SetNumber", "SetIndex", "SampleNumber", "LLIWeight", "SLIWeight" });
+                // "CountryCode", "ClientNumber", "Year", "SetNumber", "SetIndex",
+                ShowColumns(mainForm.TabsPane[0, 1], new string[] {  "SampleNumber", "LLIWeight", "SLIWeight" });
                 Labels.SetControlsLabels(mainForm);
 
             }

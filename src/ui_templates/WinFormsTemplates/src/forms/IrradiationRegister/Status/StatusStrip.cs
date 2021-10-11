@@ -25,7 +25,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 mainForm.StatusStrip.Items.Add(new ToolStripStatusLabel() { Name = _irrDateTime.ToShortDateString() });
                 mainForm.StatusStrip.Items.Add(new ToolStripStatusLabel() { Name = _loadNumber.HasValue ? _loadNumber.Value.ToString() : "" });
                 mainForm.StatusStrip.Items.Add(IrradiationTypeItems.EnumStatusLabel);
-                mainForm.StatusStrip.Items.Add(VerbosityItems.EnumStatusLabel);
+                //mainForm.StatusStrip.Items.Add(VerbosityItems.EnumStatusLabel);
             }
             catch (Exception ex)
             {

@@ -41,15 +41,15 @@ namespace Regata.Core.UI.WinForms.Forms.Measurements
             MeasurementsTypeItems.CheckItem(mType);
             VerbosityItems = new EnumItem<Status>();
             mainForm.BottomLayoutPanel.Visible = false;
+            mainForm.MainTableLayoutPanel.RowStyles[0].Height = 100F;
+            mainForm.MainTableLayoutPanel.Controls.RemoveAt(1);
 
             mainForm.MainRDGV.RDGV_Set = Settings<MeasurementRegisterSettings>.CurrentSettings.MainTableSettings;
-
 
             Settings<MeasurementRegisterSettings>.CurrentSettings.PropertyChanged += (s, e) =>
             {
                 Labels.SetControlsLabels(mainForm);
             };
-
 
             Report.NotificationEvent += Report_NotificationEvent;
 
@@ -60,8 +60,6 @@ namespace Regata.Core.UI.WinForms.Forms.Measurements
             { 
                 InitCurrentRegister(r.MeasurementsRegisters.Where(mr => mr.IrradiationDate == irrDate && mr.Type == (int)_mType).FirstOrDefault().Id);
             }
-
-
 
             Labels.SetControlsLabels(mainForm);
 

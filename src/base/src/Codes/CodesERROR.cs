@@ -155,6 +155,8 @@ namespace Regata.Core
         public const int ERR_SET_SET_ASMBL_NAME_EMPTY    = 3415;
         public const int ERR_LBL_UNREG                   = 3416;
         public const int ERR_LBL_FNF                     = 3417;
+        public const int ERR_SET_CONFIG_LOAD_UNREG       = 3418;
+        
 
         #endregion
 
@@ -731,6 +733,8 @@ namespace Regata.Core
         public const int ERR_UI_WF_INI_TAB_1_REGS_UNREG            = 3873;
         public const int ERR_UI_WF_FILL_1TABL_TAB_UNREG            = 3874;
         public const int ERR_UI_WF_FILL_2TABL_TAB_UNREG            = 3875;
+        public const int ERR_WF_IRR_REG_DWNL_SPECTRA_UNREG         = 3876;
+        
 
 
 

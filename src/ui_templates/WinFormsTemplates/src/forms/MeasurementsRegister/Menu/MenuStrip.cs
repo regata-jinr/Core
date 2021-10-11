@@ -12,7 +12,11 @@
 using RCM = Regata.Core.Messages;
 using Regata.Core.Settings;
 using Regata.Core.DataBase;
+using Regata.Core.Cloud;
 using System;
+using System.IO;
+using System.Threading.Tasks;
+using System.Threading;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -22,6 +26,9 @@ namespace Regata.Core.UI.WinForms.Forms.Measurements
     {
 
         public ToolStripMenuItem _goToLLI2;
+        private ToolStripMenuItem _downloadpectraMenuItem;
+        private FolderBrowserDialog _folderDialog;
+
 
         private void InitMenuStrip()
         {
@@ -41,9 +48,16 @@ namespace Regata.Core.UI.WinForms.Forms.Measurements
                 _goToLLI2 = new ToolStripMenuItem() { Name = "GoToLLI2" };
                 _goToLLI2.Click += _goToLLI2_Click;
 
+                _folderDialog = new FolderBrowserDialog();
 
-                mainForm.MenuStrip.Items.Insert(0, _goToLLI2);
-                mainForm.MenuStrip.Items.Insert(0, VerbosityItems.EnumMenuItem);
+                _downloadpectraMenuItem = new ToolStripMenuItem();
+                _downloadpectraMenuItem.Name = "DownloadpectraMenuItem";
+                _downloadpectraMenuItem.Click += _downloadpectraMenuItem_Click;
+
+                if (MeasurementsTypeItems.CheckedItem == Core.DataBase.Models.MeasurementsType.lli1)
+                    mainForm.MenuStrip.Items.Insert(0, _goToLLI2);
+                mainForm.MenuStrip.Items.Insert(0, _downloadpectraMenuItem);
+                //mainForm.MenuStrip.Items.Insert(0, VerbosityItems.EnumMenuItem);
 
                 MeasurementsTypeItems.CheckedChanged += () =>
                 {
@@ -73,6 +87,45 @@ namespace Regata.Core.UI.WinForms.Forms.Measurements
             catch (Exception ex)
             {
                 Report.Notify(new RCM.Message(Codes.ERR_UI_WF_INI_MENU) { DetailedText = string.Join("--", ex.Message, ex?.InnerException?.Message) });
+            }
+        }
+
+        private async void _downloadpectraMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (mainForm.MainRDGV == null || mainForm.MainRDGV.SelectedCells.Count <= 0) return;
+
+                if (_folderDialog.ShowDialog() != DialogResult.OK) return;
+
+                var _cts = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+
+                mainForm.ProgressBar.Value = 0;
+                mainForm.ProgressBar.Maximum = mainForm.MainRDGV.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).Where(c => c >= 0).Distinct().Count();
+
+                foreach (var i in mainForm.MainRDGV.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).Where(c => c >= 0).Distinct())
+                {
+                    var fileS = mainForm.MainRDGV.Rows[i].Cells["FileSpectra"].Value.ToString();
+
+                    if (string.IsNullOrEmpty(fileS))
+                        continue;
+                    using (var rc = new RegataContext())
+                    {
+                        var sharedSpectra = rc.SharedSpectra.Where(ss => ss.fileS == fileS).FirstOrDefault();
+                        if (sharedSpectra == null)
+                            continue;
+                        await WebDavClientApi.DownloadFileAsync(sharedSpectra.token, Path.Combine(_folderDialog.SelectedPath, MeasurementsTypeItems.CheckedItem.ToString(), $"{fileS}.cnf"), _cts.Token);
+                        mainForm.ProgressBar.Value++;
+
+                    }
+
+                }
+            }
+            catch (TaskCanceledException)
+            { }
+            catch (Exception ex)
+            {
+                Report.Notify(new RCM.Message(Codes.ERR_WF_IRR_REG_DWNL_SPECTRA_UNREG) { DetailedText = ex.ToString() });
             }
         }
 

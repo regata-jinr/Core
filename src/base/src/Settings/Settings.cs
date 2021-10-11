@@ -73,14 +73,23 @@ namespace Regata.Core.Settings
 
         static GlobalSettings()
         {
-            Configuration = new ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("targets.json", optional: false, reloadOnChange: true)
-                .Build();
+                Targets = new Target();
+            try
+            {
+                Configuration = new ConfigurationBuilder()
+                    .SetBasePath(AppContext.BaseDirectory)
+                    .AddJsonFile("targets.json", optional: false, reloadOnChange: true)
+                    .Build();
 
-            Targets = new Target();
 
-            Configuration.GetSection(nameof(Target)).Bind(Targets);
+                Configuration.GetSection(nameof(Target)).Bind(Targets);
+            }
+            // todo: add file not found or file corrupted
+            catch 
+            {
+                Report.Notify(new Message(Codes.ERR_SET_CONFIG_LOAD_UNREG));
+                throw;
+            }
         }
 
         public static string User { get; set; }

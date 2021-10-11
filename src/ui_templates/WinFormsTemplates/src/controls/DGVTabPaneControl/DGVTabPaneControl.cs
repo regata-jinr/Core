@@ -123,7 +123,7 @@ namespace Regata.Core.UI.WinForms.Controls
 
             var dataGridViewHeaderStyle = new DataGridViewCellStyle();
             dataGridViewHeaderStyle.BackColor = SystemColors.Control;
-            dataGridViewHeaderStyle.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewHeaderStyle.Font = new Font("Microsoft Sans Serif", 11F, FontStyle.Bold, GraphicsUnit.Point);
             dataGridViewHeaderStyle.ForeColor = SystemColors.WindowText;
             dataGridViewHeaderStyle.SelectionBackColor = SystemColors.Highlight;
             dataGridViewHeaderStyle.SelectionForeColor = SystemColors.HighlightText;

@@ -66,6 +66,8 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
 
                  controlsMovingInContainer = new ControlsGroupBox(new Control[] { buttonMoveUpInContainer, buttonMoveDownInContainer }) { Name = "controlsMovingInContainer" };
 
+                controlsMovingInContainer._tableLayoutPanel.RowStyles[0].Height = 10F;
+                controlsMovingInContainer._tableLayoutPanel.RowStyles[1].Height = 10F;
 
                 mainForm.FunctionalLayoutPanel.Controls.Add(controlsIrrParams, 1, 0);
                 mainForm.FunctionalLayoutPanel.Controls.Add(controlsMovingInContainer, 2, 0);

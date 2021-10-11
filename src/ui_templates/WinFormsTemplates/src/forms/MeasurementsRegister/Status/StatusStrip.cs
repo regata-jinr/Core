@@ -22,7 +22,9 @@ namespace Regata.Core.UI.WinForms.Forms.Measurements
             try
             {
                 mainForm.StatusStrip.Items.Add(MeasurementsTypeItems.EnumStatusLabel);
-                mainForm.StatusStrip.Items.Add(VerbosityItems.EnumStatusLabel);
+                //mainForm.StatusStrip.Items.Add(VerbosityItems.EnumStatusLabel);
+                mainForm.StatusStrip.Items.Add(mainForm.ProgressBar);
+                
             }
             catch (Exception ex)
             {
