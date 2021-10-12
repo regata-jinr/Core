@@ -73,7 +73,7 @@ namespace Regata.Core.Settings
 
         static GlobalSettings()
         {
-                Targets = new Target();
+            Targets = new Target();
             try
             {
                 Configuration = new ConfigurationBuilder()
@@ -85,7 +85,7 @@ namespace Regata.Core.Settings
                 Configuration.GetSection(nameof(Target)).Bind(Targets);
             }
             // todo: add file not found or file corrupted
-            catch 
+            catch
             {
                 Report.Notify(new Message(Codes.ERR_SET_CONFIG_LOAD_UNREG));
                 throw;

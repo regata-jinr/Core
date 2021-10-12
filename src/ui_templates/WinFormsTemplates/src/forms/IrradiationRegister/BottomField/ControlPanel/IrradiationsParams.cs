@@ -125,21 +125,26 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
         private void CheckedContainerArrayControl_SelectionChanged(object sender, ItemCheckEventArgs e)
         {
             mainForm.MainRDGV.FillDbSetValues("Container", CheckedContainerArrayControl.SelectedItem);
-            SetPositionInSelectedContainer();
+            if (!CheckedContainerArrayControl.SelectedItem.HasValue) return;
+            SetPositionInSelectedContainer(CheckedContainerArrayControl.SelectedItem.Value);
         }
 
-        private void SetPositionInSelectedContainer()
+        private void SetPositionInSelectedContainer(short currentContainer)
         {
             try
             {
-                short? j = 1;
+                short? maxPosition = 0;
+
+                if (mainForm.MainRDGV.CurrentDbSet.Local.Where(m => m.Container == currentContainer && m.Position.HasValue).Any())
+                    maxPosition = mainForm.MainRDGV.CurrentDbSet.Local.Where(m => m.Container == currentContainer).Select(m => m.Position).Max();
+
                 foreach (var c in mainForm.MainRDGV.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).Where(c => c >= 0).Distinct().OrderBy(c => c))
                 {
+                    maxPosition++;
                     var m = mainForm.MainRDGV.CurrentDbSet.Where(mm => mm.Id == (int)mainForm.MainRDGV.Rows[c].Cells["Id"].Value).FirstOrDefault();
                     if (m == null) continue;
-                    m.Position = j;
+                    m.Position = maxPosition;
                     mainForm.MainRDGV.CurrentDbSet.Update(m);
-                    j++;
                 }
                 mainForm.MainRDGV.SaveChanges();
                 mainForm.MainRDGV.Refresh();
@@ -149,7 +154,6 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 Report.Notify(new RCM.Message(Codes.ERR_UI_WF_FILL_DB_VAL) { DetailedText = string.Join(Environment.NewLine, "Positon", ex.Message) });
             }
         }
-
 
         private void ChangeIrraditionPositionInContainer(DataGridViewSelectedCellCollection selCells, Direction dir)
         {
@@ -162,7 +166,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 }
 
                 var setColumn = selCells[0].ColumnIndex;
-                var currentRow    = selCells[0].OwningRow;
+                var currentRow = selCells[0].OwningRow;
                 var currentRowNum = selCells[0].RowIndex;
 
 
@@ -172,10 +176,10 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 mainForm.MainRDGV.Rows[currentRowNum].Cells["SampleNumber"].Selected = true;
 
                 var swapIndex = currentRowNum + (short)dir;
-                var swapRow   = mainForm.MainRDGV.Rows[swapIndex];
+                var swapRow = mainForm.MainRDGV.Rows[swapIndex];
 
-                var currIrr    = mainForm.MainRDGV.CurrentDbSet.Local.Where(cir => cir.Id == (int)currentRow.Cells["Id"].Value).First();
-                var swapIrr    = mainForm.MainRDGV.CurrentDbSet.Local.Where(cir => cir.Id == (int)swapRow.Cells["Id"].Value).First();
+                var currIrr = mainForm.MainRDGV.CurrentDbSet.Local.Where(cir => cir.Id == (int)currentRow.Cells["Id"].Value).First();
+                var swapIrr = mainForm.MainRDGV.CurrentDbSet.Local.Where(cir => cir.Id == (int)swapRow.Cells["Id"].Value).First();
 
 
                 if (currIrr.Position == 1 && dir == Direction.Negative)
@@ -189,10 +193,10 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 currIrr.Position = (short?)(currIrr.Position.Value - (short)dir);
                 swapIrr.Position = (short?)(currIrr.Position.Value + (short)dir);
 
-                //mainForm.MainRDGV.CurrentDbSet.Update(currIrr);
-                //mainForm.MainRDGV.CurrentDbSet.Update(swapIrr);
+                mainForm.MainRDGV.CurrentDbSet.Update(currIrr);
+                mainForm.MainRDGV.CurrentDbSet.Update(swapIrr);
 
-                //mainForm.MainRDGV.SaveChanges();
+                mainForm.MainRDGV.SaveChanges();
                 mainForm.MainRDGV.Refresh();
                 mainForm.MainRDGV.ClearSelection();
                 mainForm.MainRDGV.Rows[swapIndex].Cells["Position"].Selected = true;
@@ -200,6 +204,10 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 mainForm.MainRDGV.Rows[swapIndex].Cells["SetIndex"].Selected = true;
                 mainForm.MainRDGV.Rows[swapIndex].Cells["SampleNumber"].Selected = true;
 
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+            {
+                // NOTE: let's imagine that is could happend in case of very frequent position changing     
             }
             catch (Exception ex)
             {

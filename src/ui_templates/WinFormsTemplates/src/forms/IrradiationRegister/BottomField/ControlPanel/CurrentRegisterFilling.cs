@@ -50,6 +50,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 ir.SampleNumber = smp.SampleNumber;
                 ir.Type = (int)_irrType;
                 ir.LoadNumber = _loadNumber;
+                ir.DateTimeStart = DateTime.Now.Date;
 
 
 //#if NETFRAMEWORK

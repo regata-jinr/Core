@@ -145,13 +145,13 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
             if (_irrType == IrradiationType.sli)
             {
                 mainForm.MainRDGV.Columns["DateTimeStart"].DefaultCellStyle.Format = "dd.MM.yyyy HH:mm:ss";
-                mainForm.MainRDGV.Columns["DateTimeFinish"].Visible = false;
-                mainForm.MainRDGV.Columns["Container"].Visible = false;
-                mainForm.MainRDGV.Columns["Position"].Visible = false;
-                CheckedContainerArrayControl.Visible = false;
+                mainForm.MainRDGV.Columns["DateTimeFinish"].Visible                = false;
+                mainForm.MainRDGV.Columns["Container"].Visible                     = false;
+                mainForm.MainRDGV.Columns["Position"].Visible                      = false;
+                CheckedContainerArrayControl.Visible                               = false;
+                controlsMovingInContainer.Visible                                  = false;
             }
             // FIXME: doesn't work properly
-                controlsMovingInContainer.Visible = false;
             ColorizeDGV(mainForm.MainRDGV);
 
 

@@ -44,18 +44,17 @@ namespace Regata.Core.Cloud
             {
                 var cm = AdysTech.CredentialManager.CredentialManager.GetCredentials(GlobalSettings.Targets.DiskJinr);
 
-                    _httpClient = new HttpClient();
-                    _hostWebDavAPI += cm.UserName;
-                    _httpClient = new HttpClient();
-                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{cm.UserName}:{cm.Password}")));
-                    Report.Notify(new Message(Codes.SUCC_CLD_TRGT));
-                    
-                
+                _hostWebDavAPI += cm.UserName;
+                _httpClient = new HttpClient();
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{cm.UserName}:{cm.Password}")));
+                Report.Notify(new Message(Codes.SUCC_CLD_TRGT));
+
+
             }
             //catch ()
             catch (Exception ex)
             {
-                Report.Notify(new Message(Codes.ERR_CLD_CON_UNREG) { DetailedText = ex.ToString()});
+                Report.Notify(new Message(Codes.ERR_CLD_CON_UNREG) { DetailedText = ex.ToString() });
             }
         }
 

@@ -132,9 +132,9 @@ namespace Regata.Core.Cloud
                     await WebDavClientApi.DownloadFileAsync(sharedSpectra.token, $"{path}/{spectra}.cnf", ct);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new Message(Codes.ERR_CLD_DWLD_UNREG));
+                Report.Notify(new Message(Codes.ERR_CLD_DWLD_UNREG) { DetailedText = ex.Message });
             }
         }
 
@@ -193,9 +193,9 @@ namespace Regata.Core.Cloud
                 Report.Notify(new Message(Codes.WRN_CLD_UPL_FILE_CNCL));
                 return false;
             }
-            catch
+            catch (Exception ex)
             {
-                Report.Notify(new Message(Codes.ERR_CLD_UPL_UNREG));
+                Report.Notify(new Message(Codes.ERR_CLD_UPL_UNREG) { DetailedText = ex.Message });
                 return false;
             }
         }
