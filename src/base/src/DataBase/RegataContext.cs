@@ -60,6 +60,15 @@ namespace Regata.Core.DataBase
                                        );
         }
 
+        public static string UserLogin
+        {
+            get
+            {
+                var cs = new SqlConnectionStringBuilder(ConString);
+                return cs.UserID;
+            }
+        }
+
         public string UserRoles
         {
             get

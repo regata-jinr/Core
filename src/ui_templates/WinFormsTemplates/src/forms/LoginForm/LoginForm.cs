@@ -70,7 +70,7 @@ namespace Regata.Core.UI.WinForms.Forms
         public Button  addPinCodeButton;
         public Label pinLabel;
         private bool isPinButtonClicked = false;
-        private string _user;
+        public static string _user;
         private string _password;
         private string _pin;
         private bool _isPin = false;

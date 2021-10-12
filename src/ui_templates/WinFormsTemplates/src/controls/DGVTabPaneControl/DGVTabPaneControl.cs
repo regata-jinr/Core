@@ -54,6 +54,7 @@ namespace Regata.Core.UI.WinForms.Controls
                 pg.Controls.Add(CreateTableLayoutPanel(i));
                 Pages.Add(pg);
             }
+
             this.ResumeLayout(false);
         }
 
@@ -207,7 +208,7 @@ namespace Regata.Core.UI.WinForms.Controls
 
                 dgv1.SelectionChanged += async (e, s) =>
                 {
-                   
+
                     await FillAdditionalTable(dgv2, query, predicatesArray, columnNames);
                 };
 
@@ -254,7 +255,7 @@ namespace Regata.Core.UI.WinForms.Controls
         {
             try
             {
-                
+
                 if (predicatesArray[0]) return;
 
                 var _chosenEntities = new List<T>();

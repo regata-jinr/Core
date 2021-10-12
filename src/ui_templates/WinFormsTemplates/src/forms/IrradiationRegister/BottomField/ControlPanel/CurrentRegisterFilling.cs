@@ -52,6 +52,8 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 ir.LoadNumber = _loadNumber;
                 ir.DateTimeStart = DateTime.Now.Date;
 
+                if (_irrType == IrradiationType.sli)
+                    ir.Assistant = _uid;
 
 //#if NETFRAMEWORK
    

@@ -9,18 +9,23 @@
  *                                                                         *
  ***************************************************************************/
 
-
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+
 
 namespace Regata.Core.DataBase.Models
 {
+    [Table("Staff")]
     public class User
     {
+        [Column("personalId")]
         public int      Id         { get; set; }
         public string   LastName   { get; set; }
         public string   FirstName  { get; set; }
         public string   MiddleName { get; set; }
         public DateTime BirthDate  { get; set; }
+        [Column("Post")]
         public string   Position   { get; set; }
         public string   WPhone     { get; set; }
         public string   PPhone     { get; set; }
@@ -29,5 +34,21 @@ namespace Regata.Core.DataBase.Models
         public bool     Former     { get; set; }
         public string   OldId      { get; set; }
         public string   Login      { get; set; }
+
+        public override string ToString()
+        {
+            if (string.IsNullOrEmpty(MiddleName))
+                return $"{LastName} {FirstName[0]}.";
+            return $"{LastName} {FirstName[0]}.{MiddleName[0]}.";
+        }
+
+        public static User GetUserByLogin(string log)
+        {
+            using (var rc = new RegataContext())
+            {
+                return rc.Users.Where(u => u.Login == log).FirstOrDefault();
+
+            }
+        }
     }
 }

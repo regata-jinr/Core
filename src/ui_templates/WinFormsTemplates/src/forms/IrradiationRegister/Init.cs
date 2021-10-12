@@ -28,6 +28,9 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
         private IrradiationType _irrType;
         private DateTime _irrDateTime;
         private int? _loadNumber;
+        private int _uid;
+        private ToolStripStatusLabel _userLabel;
+
 
 
         public IrradiationRegister(DateTime dateTime,  IrradiationType irrType, int? loadNumber = null)
@@ -52,6 +55,17 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 Labels.SetControlsLabels(mainForm);
             };
 
+            var u = User.GetUserByLogin(RegataContext.UserLogin);
+            if (u == null)
+            {
+                _uid = 0;
+                _userLabel = new ToolStripStatusLabel() { Name = "UnregisteredUser" };
+            }
+            else
+            {
+                _uid = u.Id;
+                _userLabel = new ToolStripStatusLabel() { Name = u.ToString() };
+            }
             mainForm.MainRDGV.RDGV_Set = Settings<IrradiationSettings>.CurrentSettings.MainTableSettings;
 
             Report.NotificationEvent += Report_NotificationEvent;
@@ -69,6 +83,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
 
             mainForm.MainRDGV.CurrentDbSet.Local.CollectionChanged += Local_CollectionChanged;
 
+           
 
             Settings<IrradiationSettings>.Save();
         }

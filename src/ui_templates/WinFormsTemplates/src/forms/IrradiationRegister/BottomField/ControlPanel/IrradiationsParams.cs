@@ -27,7 +27,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
         public ControlsGroupBox controlsIrrParams;
         public ControlsGroupBox controlsTimeChanged;
         public CheckedArrayControl<short?> CheckedContainerArrayControl;
-        public Button buttonRehandle;
+        //public Button buttonRehandle;
         public Button buttonAssingNowDateTime;
         public DurationControl DurationControl;
         public DateTimePicker TimePicker;
@@ -70,7 +70,10 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 controlsMovingInContainer._tableLayoutPanel.RowStyles[1].Height = 10F;
 
                 mainForm.FunctionalLayoutPanel.Controls.Add(controlsIrrParams, 1, 0);
-                mainForm.FunctionalLayoutPanel.Controls.Add(controlsMovingInContainer, 2, 0);
+                //mainForm.FunctionalLayoutPanel.Controls.Add(controlsMovingInContainer, 2, 0);
+
+                mainForm.buttonsRegForm._tableLayoutPanel.Controls.RemoveAt(3); ;
+                mainForm.buttonsRegForm._tableLayoutPanel.Controls.Add(controlsMovingInContainer);
 
                 DurationControl.DurationChanged += (s, e) =>
                     {
@@ -109,6 +112,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 {
                     mainForm.MainRDGV.FillDbSetValues("DateTimeStart", DateTime.Now);
                     FillDateTimes(null);
+                    mainForm.MainRDGV.FillDbSetValues("Assistant", _uid);
                     //FillDateTimeFinish();
 
                 };

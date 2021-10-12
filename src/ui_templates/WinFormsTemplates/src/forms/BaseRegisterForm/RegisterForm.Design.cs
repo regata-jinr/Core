@@ -94,7 +94,7 @@ namespace Regata.Core.UI.WinForms.Forms
 
             TabsPane.Anchor = ((AnchorStyles)(((AnchorStyles.Bottom | AnchorStyles.Left)
            | AnchorStyles.Right)));
-            TabsPane.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            TabsPane.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             TabsPane.Margin = new Padding(4, 3, 4, 3);
             TabsPane.Name = "TabsPane";
             TabsPane.TabIndex = 1;
