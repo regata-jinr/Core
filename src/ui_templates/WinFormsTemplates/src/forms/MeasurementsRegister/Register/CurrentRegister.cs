@@ -18,17 +18,21 @@ namespace Regata.Core.UI.WinForms.Forms.Measurements
 {
     public partial class MeasurementsRegisterForm
     {
-        private void InitCurrentRegister(int id)
+        private void InitCurrentRegister(DateTime date)
         {
             try
             {
                 if (MeasurementsTypeItems.CheckedItem == Core.DataBase.Models.MeasurementsType.sli)
                 {
-                    mainForm.MainRDGV.CurrentDbSet.Where(m => m.RegId == id).OrderByDescending(m => m.IrradiationId).Load();
+                    mainForm.MainRDGV.CurrentDbSet.Where(m => m.DateTimeStart.Value.Date == date && m.Type == (int)_mType).OrderByDescending(m => m.IrradiationId).Load();
                 }
                 else
                 {
-                    mainForm.MainRDGV.CurrentDbSet.Where(m => m.RegId == id).OrderBy(m => m.Detector).ThenBy(m => m.DiskPosition).Load();
+                    using (var r = new DataBase.RegataContext())
+                    {
+                        var regs = r.MeasurementsRegisters.Where(mr => mr.IrradiationDate == date && mr.Type == (int)_mType).Select(mr => mr.Id).ToArray();
+                        mainForm.MainRDGV.CurrentDbSet.Where(m => regs.Contains(m.RegId)).OrderBy(m => m.Detector).ThenBy(m => m.DiskPosition).Load();
+                    }
                 }
                 mainForm.MainRDGV.DataSource = mainForm.MainRDGV.CurrentDbSet.Local.ToBindingList();
 

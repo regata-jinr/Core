@@ -69,22 +69,22 @@ namespace Regata.Core.DataBase
             }
         }
 
-        public string UserRoles
+        public string UserRoles(string userId = "")
         {
-            get
+         
+            using (var conn = new SqlConnection(ConString))
+            {
+                var cs = new SqlConnectionStringBuilder(ConString);
+                if (string.IsNullOrEmpty(userId))
+                    userId = cs.UserID;
+                using (var cmd = new SqlCommand($"declare @results varchar(500) select @results = coalesce(@results + ',', '') +  a.Role from ( select distinct Role from UserRoles where UserName = '{userId}' and Role is not NULL) as a; select @results as roles;", conn))
                 {
-                using (var conn = new SqlConnection(ConString))
-                {
-                    var cs = new SqlConnectionStringBuilder(ConString);
-                    using (var cmd = new SqlCommand($"declare @results varchar(500) select @results = coalesce(@results + ',', '') +  a.Role from ( select distinct Role from UserRoles where UserName = '{cs.UserID}' and Role is not NULL) as a; select @results as roles;", conn))
-                    {
-                        conn.Open();
-                        object o = cmd.ExecuteScalar();
-                        if (o == null || DBNull.Value == o) 
-                            return string.Empty;
-                        
-                        return o.ToString();
-                    }
+                    conn.Open();
+                    object o = cmd.ExecuteScalar();
+                    if (o == null || DBNull.Value == o)
+                        return string.Empty;
+
+                    return o.ToString();
                 }
             }
         }

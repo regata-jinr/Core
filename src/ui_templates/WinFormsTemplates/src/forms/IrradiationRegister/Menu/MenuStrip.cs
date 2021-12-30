@@ -23,7 +23,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
         private ToolStripMenuItem _registerParametersMenu;
         private ToolStripMenuItem _displaySetsParam;
         private ToolStripMenuItem _channelMenuStrip;
-        //public ToolStripMenuItem _samplesToDetectors;
+        public ToolStripMenuItem _samplesToDetectors;
 
         private void InitMenuStrip()
         {
@@ -43,9 +43,9 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 _changeRegisterDate.Name = "ChangeDateMenu";
                 _changeRegisterDate.Click += _changeRegisterDate_Click;
 
-                //_samplesToDetectors = new ToolStripMenuItem();
-                //_samplesToDetectors.Name = "SamplesToDetectors";
-                //_samplesToDetectors.Click += _samplesToDetectors_Click; ;
+                _samplesToDetectors = new ToolStripMenuItem();
+                _samplesToDetectors.Name = "SamplesToDetectors";
+                _samplesToDetectors.Click += _samplesToDetectors_Click; ;
 
                 _channelMenuStrip = new ToolStripMenuItem();
                 _channelMenuStrip.Name = "ChannelMenuStrip";
@@ -71,7 +71,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
 
                 //mainForm.MenuStrip.Items.Insert(0, VerbosityItems.EnumMenuItem);
                 mainForm.MenuStrip.Items.Insert(0, _channelMenuStrip);
-                //mainForm.MenuStrip.Items.Insert(0, _samplesToDetectors);
+                mainForm.MenuStrip.Items.Insert(0, _samplesToDetectors);
                 mainForm.MenuStrip.Items.Insert(0, _registerParametersMenu);
                 mainForm.MenuStrip.Items.Insert(0, _changeRegisterDate);
               
@@ -82,16 +82,20 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
             }
         }
 
-        //private void _samplesToDetectors_Click(object sender, EventArgs e)
-        //{
-        //    var ln = _loadNumber;
-        //    if (!ln.HasValue) return;
-        //    var sf = new ContainersToDetectorsForm(new string[] { "D1", "D2", "D3", "D4" }, ln.Value);
-        //    sf.Show();
-        //    //sf.buttonExportToCSV.Visible = false;
-        //    sf.buttonExportToExcel.Visible = false;
-        //    sf.buttonFillMeasurementRegister.Visible = false;
-        //}
+        private void _samplesToDetectors_Click(object sender, EventArgs e)
+        {
+            var ln = _loadNumber;
+            if (!ln.HasValue) return;
+            var sf = new ContainersToDetectorsForm(new string[] { "D1", "D2", "D3", "D4" }, ln.Value);
+            sf.Show();
+            sf.buttonExportToCSV.Visible = false;
+            sf.buttonFillMeasurementRegister.Visible = false;
+            sf.buttonExportToExcel.Visible = false;
+#if NETFRAMEWORK
+            sf.buttonExportToExcel.Visible = true;
+            sf.buttonExportToExcel.Click += (s, ee) => { sf.ExportToExcel(mainForm.MainRDGV.CurrentDbSet.Local); };
+#endif
+        }
 
         private async void DisplaySetsParam_CheckedChanged(object sender, EventArgs e)
         {

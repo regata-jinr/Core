@@ -1,8 +1,28 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+	  <Title>CNF</Title>
+	  <TargetFramework>net5.0-windows</TargetFramework>
+	  <PackageId>Regata.Core.CNF</PackageId>
+	  <PackageVersion>1.0.0</PackageVersion>
+	  <Platform>x86</Platform>
+	  <PlatformTarget>x86</PlatformTarget>
+	  <Authors>Boris Rumyantsev</Authors>
+	  <Company>REGATA|FLNP</Company>
+	  <Owners>JINR</Owners>
+	  <PublishRepositoryUrl>true</PublishRepositoryUrl>
+	  <RepositoryUrl>https://github.com/regata-jinr/Core</RepositoryUrl>
+	  <PackageProjectUrl>https://github.com/regata-jinr/Core</PackageProjectUrl>
+	  <Description>The package contains a library for cnf file interactions</Description>
+	  <Copyright>REGATA|JINR (C) 2021</Copyright>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+	<ItemGroup>
+		
+	<Reference Include="Interop.CanberraDataAccessLib">
+		<HintPath>$(ARTIFACTS)\..\libs\Interop.CanberraDataAccessLib.dll</HintPath>
+	</Reference>
+	</ItemGroup>
 
 </Project>
 

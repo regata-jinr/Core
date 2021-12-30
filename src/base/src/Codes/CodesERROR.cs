@@ -734,8 +734,9 @@ namespace Regata.Core
         public const int ERR_UI_WF_FILL_1TABL_TAB_UNREG            = 3874;
         public const int ERR_UI_WF_FILL_2TABL_TAB_UNREG            = 3875;
         public const int ERR_WF_IRR_REG_DWNL_SPECTRA_UNREG         = 3876;
-        
+        public const int ERR_UI_WF_EXPORT_TO_EXCEL_UNREG           = 3877;
 
+        
 
 
 

@@ -41,9 +41,26 @@ namespace Regata.Core.DataBase.Models
         public string    Note           { get; set; }
 
         [NotMapped]
-        public string SetKey => $"{CountryCode}-{ClientNumber}-{Year}-{SetNumber}-{SetIndex}";
+        public string SetKey
+        {
+            get
+            {
+                if (Year == "s" || Year == "m")
+                    return $"{Year}-{SetNumber}-{SetIndex}-{SampleNumber}";
+                return $"{CountryCode}-{ClientNumber}-{Year}-{SetNumber}-{SetIndex}";
+            }
+        }
+
         [NotMapped]
-        public string SampleKey => $"{SetIndex}-{SampleNumber}";
+        public string SampleKey
+        {
+            get
+            {
+                if (Year == "s" || Year == "m")
+                    return SetNumber;
+                return $"{SetIndex}-{SampleNumber}";
+            }
+        }
         public override string ToString() => $"{SetKey}-{SampleNumber}";
 
         public static readonly IReadOnlyDictionary<IrradiationType, string> TypeToString = new Dictionary<IrradiationType, string> { { IrradiationType.sli, "SLI" }, { IrradiationType.lli, "LLI" }};
@@ -60,12 +77,12 @@ namespace Regata.Core.DataBase.Models
             this.SetIndex            = ir2.SetIndex       ;
             this.SampleNumber        = ir2.SampleNumber   ;
             this.Type                = ir2.Type           ;
-            this.DateTimeStart       = ir2.DateTimeStart  ;
-            this.Duration            = ir2.Duration       ;
-            this.DateTimeFinish      = ir2.DateTimeFinish ;
             this.Container           = ir2.Container      ;
             this.Position            = ir2.Position       ;
             this.Channel             = ir2.Channel        ;
+            this.DateTimeStart       = ir2.DateTimeStart  ;
+            this.Duration            = ir2.Duration       ;
+            this.DateTimeFinish      = ir2.DateTimeFinish ;
             this.LoadNumber          = ir2.LoadNumber     ;
             this.Rehandler           = ir2.Rehandler      ;
             this.Assistant           = ir2.Assistant      ;

@@ -43,7 +43,6 @@ namespace Regata.Core.Cloud
             try
             {
                 var cm = AdysTech.CredentialManager.CredentialManager.GetCredentials(GlobalSettings.Targets.DiskJinr);
-
                 _hostWebDavAPI += cm.UserName;
                 _httpClient = new HttpClient();
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{cm.UserName}:{cm.Password}")));
@@ -54,7 +53,8 @@ namespace Regata.Core.Cloud
             //catch ()
             catch (Exception ex)
             {
-                Report.Notify(new Message(Codes.ERR_CLD_CON_UNREG) { DetailedText = ex.ToString() });
+                // FIXME: OCCURRES when downloading. download should run separate from target init
+                //Report.Notify(new Message(Codes.ERR_CLD_CON_UNREG) { DetailedText = ex.ToString() });
             }
         }
 
@@ -69,9 +69,8 @@ namespace Regata.Core.Cloud
         {
             try
             {
-
-                if (ct.IsCancellationRequested)
-                    return false;
+                if (_httpClient == null) return false;
+                if (ct.IsCancellationRequested) return false;
 
                 Report.Notify(new Message(Codes.INFO_CLD_RMV_FILE));
                 if (!await IsExistsAsync(path, ct)) return true;
@@ -90,6 +89,8 @@ namespace Regata.Core.Cloud
         {
             try
             {
+                if (_httpClient == null) return false;
+
                 if (ct.IsCancellationRequested)
                     return false;
 
@@ -126,6 +127,8 @@ namespace Regata.Core.Cloud
         {
             try
             {
+                if (_httpClient == null) return string.Empty;
+
                 if (ct.IsCancellationRequested)
                     return string.Empty;
                 Report.Notify(new Message(Codes.INFO_CLD_FL_SHRNG));
@@ -159,6 +162,7 @@ namespace Regata.Core.Cloud
         {
             try 
             {
+                if (_httpClient == null) return false;
                 if (ct.IsCancellationRequested)
                     return false;
             Report.Notify(new Message(Codes.INFO_CLD_IS_EXST));
@@ -177,6 +181,8 @@ namespace Regata.Core.Cloud
         {
             try
             {
+                if (_httpClient == null) return;
+
                 Report.Notify(new Message(Codes.INFO_CLD_CRT_DIR));
 
                 if (ct.IsCancellationRequested)
@@ -205,6 +211,8 @@ namespace Regata.Core.Cloud
         {
             try
             {
+                if (_httpClient == null) return;
+
                 if (ct.IsCancellationRequested)
                     return;
 
@@ -254,6 +262,8 @@ namespace Regata.Core.Cloud
         {
             try
             {
+                if (_httpClient == null) return null;
+
                 if (cancellationToken.IsCancellationRequested)
                     return null;
 

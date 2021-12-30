@@ -9,11 +9,13 @@
  *                                                                         *
  ***************************************************************************/
 
+using Microsoft.EntityFrameworkCore;
 using Regata.Core.DataBase;
 using Regata.Core.DataBase.Models;
 using Regata.Core.Settings;
 using Regata.Core.UI.WinForms.Items;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -31,7 +33,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
         private int _uid;
         private ToolStripStatusLabel _userLabel;
 
-
+        private Dictionary<string, int> _logId = new Dictionary<string, int>();
 
         public IrradiationRegister(DateTime dateTime,  IrradiationType irrType, int? loadNumber = null)
         {
@@ -106,8 +108,8 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
 #if NETFRAMEWORK
             var dict = new Dictionary<Status, MessageBoxIcon>() 
             { 
-                { Status.Error, MessageBoxIcon.Error },
-                { Status.Info,  MessageBoxIcon.Information },
+                { Status.Error,   MessageBoxIcon.Error },
+                { Status.Info,    MessageBoxIcon.Information },
                 { Status.Success, MessageBoxIcon.Information },
                 { Status.Warning, MessageBoxIcon.Warning }, 
             };
@@ -165,10 +167,25 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 mainForm.MainRDGV.Columns["Position"].Visible                      = false;
                 CheckedContainerArrayControl.Visible                               = false;
                 controlsMovingInContainer.Visible                                  = false;
+                controlsRepack.Visible                                             = false;
+                _selRowRepackers.Visible                                           = false;
             }
             // FIXME: doesn't work properly
             ColorizeDGV(mainForm.MainRDGV);
 
+            //_logId[]
+
+            using (var rc = new RegataContext())
+            {
+                var repackers = await rc.Users.AsNoTracking().Where(u => u.Role.Contains("rehandler")).ToArrayAsync();
+                foreach (var u in repackers)
+                {
+                        _comboBoxRepackers.Items.Add(u.Login);
+                        _logId[u.Login] = u.Id;
+                }
+            }
+            _comboBoxRepackers.SelectedItem = null;
+            _comboBoxRepackers.SelectedText = "Assing repacker to selected samples";
 
             Labels.SetControlsLabels(mainForm);
 #if !DEBUG
@@ -180,7 +197,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
         {
             using (var r = new RegataContext())
             {
-                var roles = r.UserRoles;
+                var roles = r.UserRoles();
 
                 if (!roles.Contains("operator") && !roles.Contains("rehandler") && !roles.Contains("db_owner"))
                     mainForm.BottomLayoutPanel.Visible = false;

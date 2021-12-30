@@ -24,10 +24,11 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
     enum Direction : short { Negative = -1, Positive = 1 }
     public partial class IrradiationRegister
     {
+        public ControlsGroupBox controlsRepack;
         public ControlsGroupBox controlsIrrParams;
         public ControlsGroupBox controlsTimeChanged;
         public CheckedArrayControl<short?> CheckedContainerArrayControl;
-        //public Button buttonRehandle;
+        public ComboBox _comboBoxRepackers;
         public Button buttonAssingNowDateTime;
         public DurationControl DurationControl;
         public DateTimePicker TimePicker;
@@ -46,7 +47,6 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 TimePicker.Dock = DockStyle.Fill;
                 TimePicker.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Point);
                 controlsTimeChanged = new ControlsGroupBox(new Control[] { TimePicker }) { Name = "controlsTimeChanged" };
-                //TimePicker.MouseLeave += (s, e) => { mainForm.MainRDGV.Focus(); };
                 CheckedContainerArrayControl = new CheckedArrayControl<short?>(new short?[] { 1, 2, 3, 4, 5, 6, 7, 8 }, multiSelection: false) { Name = "CheckedArrayControlContainers" };
                 buttonAssingNowDateTime = new Button() { AutoSize = false, Dock = DockStyle.Fill, Name = "buttonAssingNowDateTime" };
                 CheckedContainerArrayControl.SelectItem(1);
@@ -69,8 +69,16 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 controlsMovingInContainer._tableLayoutPanel.RowStyles[0].Height = 10F;
                 controlsMovingInContainer._tableLayoutPanel.RowStyles[1].Height = 10F;
 
+                _comboBoxRepackers = new ComboBox() { Name = "comboBoxRepackers" };
+                _comboBoxRepackers.Dock = DockStyle.Fill;
+                _comboBoxRepackers.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Point);
+                _comboBoxRepackers.SelectedIndexChanged += (s, e) => { mainForm.MainRDGV.FillDbSetValues("Rehandler", _logId[_comboBoxRepackers.SelectedItem.ToString()]); };
+
+                controlsRepack = new ControlsGroupBox(new Control[] { _comboBoxRepackers }) { Name = "controlsRepack" };
+
+
                 mainForm.FunctionalLayoutPanel.Controls.Add(controlsIrrParams, 1, 0);
-                //mainForm.FunctionalLayoutPanel.Controls.Add(controlsMovingInContainer, 2, 0);
+                mainForm.FunctionalLayoutPanel.Controls.Add(controlsRepack, 2, 0);
 
                 mainForm.buttonsRegForm._tableLayoutPanel.Controls.RemoveAt(3); ;
                 mainForm.buttonsRegForm._tableLayoutPanel.Controls.Add(controlsMovingInContainer);
@@ -139,8 +147,8 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
             {
                 short? maxPosition = 0;
 
-                if (mainForm.MainRDGV.CurrentDbSet.Local.Where(m => m.Container == currentContainer && m.Position.HasValue).Any())
-                    maxPosition = mainForm.MainRDGV.CurrentDbSet.Local.Where(m => m.Container == currentContainer).Select(m => m.Position).Max();
+                //if (mainForm.MainRDGV.CurrentDbSet.Local.Where(m => m.Container == currentContainer && m.Position.HasValue).Any())
+                //    maxPosition = mainForm.MainRDGV.CurrentDbSet.Local.Where(m => m.Container == currentContainer).Select(m => m.Position).Max();
 
                 foreach (var c in mainForm.MainRDGV.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).Where(c => c >= 0).Distinct().OrderBy(c => c))
                 {
@@ -243,6 +251,7 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
                 if (m == null || !m.DateTimeStart.HasValue) continue;
                 m.DateTimeStart = dt.Value.Date + TimePicker.Value.TimeOfDay;
                 m.DateTimeFinish = m.DateTimeStart.Value.AddSeconds(DurationControl.Duration.TotalSeconds);
+                m.Assistant = _uid;
                 mainForm.MainRDGV.CurrentDbSet.Update(m);
 
             }

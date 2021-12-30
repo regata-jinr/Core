@@ -34,6 +34,8 @@ namespace Regata.Core.UI.WinForms.Forms.Irradiations
 
         private void AddRecord(Sample smp)
         {
+            if (_displaySetsParam.Checked)
+                return;
             //mainForm.buttonClearRegister.Enabled = true;
             buttonAssingNowDateTime.Enabled = true;
             mainForm.MainRDGV.ClearSelection();

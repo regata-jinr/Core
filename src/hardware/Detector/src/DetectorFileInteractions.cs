@@ -79,7 +79,7 @@ namespace Regata.Core.Hardware
                 if (File.Exists(FullFileSpectraName))
                 {
                     AddEfficiencyCalibrationToFile(FullFileSpectraName, CurrentMeasurement.Height.Value);
-                    //await SpectraTools.UploadFileToCloudAsync(FullFileSpectraName, new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(60)).Token);
+                    await SpectraTools.UploadFileToCloudAsync(FullFileSpectraName, new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(30)).Token);
                     Report.Notify(new DetectorMessage(Codes.SUCC_DET_FILE_SAVED));
                 }
                 else

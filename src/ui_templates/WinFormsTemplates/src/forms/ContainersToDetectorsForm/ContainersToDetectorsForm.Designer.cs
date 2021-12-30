@@ -58,9 +58,9 @@ namespace Regata.Core.UI.WinForms.Forms
             MainLabelDesc.UseCompatibleTextRendering = true;
 
 
-            buttonExportToCSV = new Button() { Name = "buttonExportToCSV",  UseVisualStyleBackColor = true, AutoSize = true };
-            buttonExportToExcel = new Button() { Name = "buttonExportToExcel", UseVisualStyleBackColor = true, AutoSize = true };
-            buttonFillMeasurementRegister = new Button() { Name = "buttonFillMeasurementRegister", UseVisualStyleBackColor = true, AutoSize = true };
+            buttonExportToCSV = new Button() { Name = "buttonExportToCSV",  UseVisualStyleBackColor = true, Dock = DockStyle.Fill };
+            buttonExportToExcel = new Button() { Name = "buttonExportToExcel", UseVisualStyleBackColor = true, Dock = DockStyle.Fill };
+            buttonFillMeasurementRegister = new Button() { Name = "buttonFillMeasurementRegister", UseVisualStyleBackColor = true, Dock = DockStyle.Fill };
 
 
             // 
@@ -74,8 +74,8 @@ namespace Regata.Core.UI.WinForms.Forms
             tableLayoutPanelMain.Name = "tableLayoutPanelMain";
             tableLayoutPanelMain.RowCount = 3;
             tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 80F));
-            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 70F));
+            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tableLayoutPanelMain.Controls.Add(MainLabelDesc, 0, 0);
             tableLayoutPanelMain.Dock = DockStyle.Fill;
             tableLayoutPanelMain.TabIndex = 9;
