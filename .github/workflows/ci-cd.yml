@@ -3,7 +3,8 @@ name: CORE_CD
 on:
   push:
     branches:
-      - master
+      # uncomment line below to run actions after push to master branch
+      # - master 
 
 jobs:
   build:
@@ -19,7 +20,6 @@ jobs:
       with:
         fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
 
-    # Build app
-    - name:  Build app and create lib files
-      run: .\build.ps1 -Release -IgnoreTest
+    - name:  Build and Pack app then copy packages and libs to specific directories
+      run: .\build.ps1 -Pack
 

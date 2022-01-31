@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\hardware\Detector\Detector.csproj" />
-    <ProjectReference Include="..\..\..\src\base\base.csproj" />
+    <ProjectReference Include="..\..\..\src\base\Base.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -20,9 +20,9 @@ using CsvHelper.Configuration;
 using System.Globalization;
 //using Microsoft.Office.Interop.Excel;
 
-namespace Regata.Core
+namespace Regata.Core.DataIO
 {
-    public static class ExportData
+    public static class Import
     {
         // TODO: add tests for parsed data
         /// <summary>

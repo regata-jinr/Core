@@ -1,83 +1,77 @@
 # R E G A T A &nbsp;&nbsp; C O R E
 
-Regata Core is the software framework of our experiment.
-It contains more than 20 DLLs and represents our basics activities.
+Regata Core представляет собой платформу, унифицирующую работу программ нашего [сектора](http://regata.jinr.ru/).
 
-- [R E G A T A &nbsp;&nbsp; C O R E](#r-e-g-a-t-a--c-o-r-e)
-  - [Base](#base)
-    - [Codes](#codes)
-    - [Messages](#messages)
-    - [Report](#report)
-    - [Settings](#settings)
-  - [Cloud](#cloud)
-  - [Cnf](#cnf)
-  - [Database](#database)
-    - [MS-SQL](#ms-sql)
-    - [POSTGRES](#postgres)
-  - [Export](#export)
-    - [Excel](#excel)
-    - [CSV](#csv)
-    - [GoogleSheets](#googlesheets)
-  - [Hardware](#hardware)
-    - [Detector](#detector)
-    - [SampleChanger](#samplechanger)
-    - [Scales](#scales)
-  - [UI Templates](#ui-templates)
-    - [WinForms](#winforms)
-  - [Thoughts about future of the Regata software](#thoughts-about-future-of-the-regata-software)
+## Введение
 
-## [Base](https://github.com/regata-jinr/Core/tree/master/src/base)
+Платформа RegataCore представляет собой монолитный репозиторий разделенный на 10 библиотек, некоторые из которых связаны между собой.
 
-### [Codes](https://github.com/regata-jinr/Core/tree/master/src/base#report)
+Основные потребности сектора - связь с базой данных для работы с информацией об образцах, стандартах, мониторах, облучениях и измерениях.
 
-### [Messages](https://github.com/regata-jinr/Core/tree/master/src/base#report)
+Предполагалось, что программы будут доступны только через использование удаленного доступа на Windows Server. Таким образом вся архитектура платформы заточена на использование на сервере, что дает возможность опустить работу связанною с безопасностью:
 
-### [Report](https://github.com/regata-jinr/Core/tree/master/src/base#report)
+- аутинтификация в БД (на сервере будет выполнятся через пользователя)
+- передача адреса сервера БД
 
-### [Settings](https://github.com/regata-jinr/Core/tree/master/src/base#settings)
+Кроме того, работа на сервере делает ненужной систему развертывания на основе GitHub actions программ-клиентов для конечных пользователей.
 
-## [Cloud](https://github.com/regata-jinr/Core/tree/master/src/cloud)
+Программный стек на данный момент(02.2022):
 
-## [Cnf](https://github.com/regata-jinr/Core/tree/master/src/cnf)
+- [.NET5](https://docs.microsoft.com/en-us/dotnet/core/introduction)
+- [Microsoft Sql Server 2017 (Linux)](https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-overview?view=sql-server-ver15)
+- [EF Core](https://docs.microsoft.com/en-us/ef/core/)
+- [MS Test](https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-mstest)
+- [NuGet](https://www.nuget.org/)
+- [Git](https://git-scm.com/)
+- [GitHub](https://github.com/)
+- [WinForms](https://docs.microsoft.com/en-us/dotnet/desktop/winforms/?view=netdesktop-6.0)
+- [NLog](https://nlog-project.org/)
+- [CredentialManager](https://github.com/AdysTech/CredentialManager)
 
-## [Database](https://github.com/regata-jinr/Core/tree/master/src/database)
+От двух последних позиций можно избавиться заменив их на входящие в состав .net библиотеки:
+- NLog -> [ILogger](https://docs.microsoft.com/en-us/dotnet/core/extensions/logging?tabs=command-line)
+- CredentialManager на [Microsoft.PowerShell.Security](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/?view=powershell-7.2)
 
-### [MS-SQL](https://github.com/regata-jinr/Core/tree/master/src/database/mssql)
+Переход на собственный Windows Server также решает проблему доступа к данным. Сейчас мы используем вирутальную машину развернутую на [JinrCloud](https://cloud.jinr.ru/) с MS Sql Server 2017 for Linux, но после перехода на Windows Server, мы перейдем на MS Sql Server 2019. Так как сервер располагается в зале с экспериментальной установкой, соединение может быть настроено по локальной сети, что снимает проблему доступа к базе во время проведения эксперимента.
 
-### [POSTGRES](https://github.com/regata-jinr/Core/tree/master/src/database/postgres)
+Всё разработанное программное обеспечение находится в облачном репозитории GitHub https://github.com/regata-jinr под лицензией [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
-## [Export](https://github.com/regata-jinr/Core/tree/master/src/export)
-  
-### [Excel](https://github.com/regata-jinr/Core/tree/master/src/export/csv)
-  
-### [CSV](https://github.com/regata-jinr/Core/tree/master/src/export/excel)
+Указанный программный стек и Windows Server выбран не просто так.
+Мы имеем сильную зависимость в виде программ входящих в состав экспериментальной установки. Наши HPGE детекторы подключатся к ОС Windows. Также программа обработки спектров и библиотеки автоматизации доступны только под этой ОС.
 
-### [GoogleSheets](https://github.com/regata-jinr/Core/tree/master/src/export/google_sheets)
+## Сборка
 
-## [Hardware](https://github.com/regata-jinr/Core/tree/master/src/hardware)
+Сборка программ может осуществляться как через Visual Studio, так и с помощью коммандной строки. Для упрощения сборки написан powershell скрипт [build](\build.ps1), который позволяет рекурсивно (добавление новых проектов не требует изменений в скрипте) производить:
 
-### [Detector](https://github.com/regata-jinr/Core/tree/master/src/hardware/Detector)
+- сборку всех или выбранного по именам проектов с указанной конфигурации
+- тестирование выбранных проектов
+- упаковку собираемых библиотек в nuget пакет, для последующего подключения к программам-клиентам и копирование пакетов в единую директорию packages\regata.core.[name]\version
+- копирование файлов динамических библиотек в единую директорию, которую удобно использовать для ссылок: artifacts\Release\[Name]
 
-### [SampleChanger](https://github.com/regata-jinr/Core/tree/master/src/hardware/SampleChanger)
+Пример использования скрипта:
 
-### [Scales](https://github.com/regata-jinr/Core/tree/master/src/hardware/Scales)
+```powershell
+.\build.ps1 -Release -IgnoreTest -Name base
+Microsoft (R) Build Engine version 17.0.0+c9eb9dd64 for .NET
+Copyright (C) Microsoft Corporation. All rights reserved.
 
-## [UI Templates](https://github.com/regata-jinr/Core/tree/master/src/ui_templates)
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Base -> D:\GoogleDrive\Job\flnp\dev\regata\Core\artifacts\Release\Base\Base.dll
 
-### [WinForms](https://github.com/regata-jinr/Core/tree/master/src/ui_templates/WinFormsTemplates)
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
 
-## Thoughts about future of the Regata software
+Time Elapsed 00:00:00.29
+```
+
+
+## Добавление модулей в проект
 
 Many of needed function already implemented in differences frameworks.
 
-> **Looks like [WinUI](https://docs.microsoft.com/en-us/windows/apps/winui/) is a future of desktop development for windows**
-> ![img](https://docs.microsoft.com/en-us/windows/apps/images/platforms-winui3.png)
-
-E.g. UWP  provides a [guidelines for app settings](https://docs.microsoft.com/en-us/windows/uwp/design/app-settings/guidelines-for-app-settings)
-
-It means that I can't avoid parsing settings file and view it as separate forms because it available by default.
-
-The first question is what framework should I use for development. Here is some limitations that I have to keep in mind:
+Here is some limitations that I have to keep in mind:
 
 - We strongly depend from GENIE2K packages. That means users should have windows only for working.
 - Some of additional functionality (e.g. [CalcConc](https://github.com/regata-jinr/CalcConc)) should be local, i.e. support working without internet connection. I think this is the reason why we should stay on desktop application instead of web because I want to use one framework for all apps.
@@ -91,4 +85,51 @@ Here is also some useful info that we will use in future versions of our applica
 
 - [Versioning](https://github.com/dotnet/Nerdbank.GitVersioning)
 - [Deployment](https://github.com/microsoft/github-actions-for-desktop-apps)
-- [Processing response from github about latest release](https://github.com/NickeManarin/ScreenToGif/blob/9952ae7f833fe49d1f409edcc70953de26799ec6/ScreenToGif/Model/ApplicationViewModel.cs#L818)
+
+В состав платформы входят следующие модули:
+
+## [Base](src/Base/README.md)
+
+Предоставляет классы описывающие системы и компоненты, лежащие в основе всех используемых програм:
+
+- [Codes](src/Base/Codes/README.md) используется для описания ошибок разных уровней. Каждой обрабатываемой и необрабатываемой ситуации ставится в соответствии код, обладающий определенным форматом, из которого можно определеить статус ситуации и ее номер, по которому можно найти место возникновение ситуации и её описание.
+
+- [Messages](src/Base/Messages/README.md) содержит базовый класс для сообщения, который используется для логов и отображения через графический интерфейс пользователя(ГИП)
+
+- [Report](src/Base/Report/README.md) библиотека оповещения о статусе программ. Позволяет вести журналирование, уведомлять пользователя о возникновении ситуаций через ГИП, а также электронную почту.
+
+- [Settings](src/Base/Settings/README.md) библиотека настроек приложений. На основе этой библиотеки все необходимые настойки можно выделить в класс, который будет сериализирован при изменении параметров или десериализирован при загрузке приложения из определенного файла настроек.
+
+- [Database](src/Base/Database/README.md) библиотека взаимодействия с базой данных. Мы используем [EF Core](https://docs.microsoft.com/en-us/ef/core/). Библиотека включается в себя модели описывающие наши данные, а также контекстный менеджер для обращения и работы с ними.
+
+## [Cloud](src/Cloud/README.md)
+
+Библиотека взаимодейтсвия с [облачным сервисом ОИЯИ](disk.jinr.ru), который используется для хранения спектров образцов и других файлов сектора.
+
+## [CNF](src/CNF/readme.md)
+
+Библиотека взаимодействия с файлами спектров (.cnf) позволяет читать и записывать данные в уже существующий спектр. Используется для программы просмотра информации в спектрах.
+
+
+## [DataIO](src/DataIO/README.md)
+
+Библиотека экспорта и импорта табличных данных.
+
+Поддерживается импорт из GoogleSheet и CSV, планируется поддержка Excel.
+  
+## [Hardware](src/Hardware/README.md)
+
+Библиотеки взаимодействия с оборудованием.
+
+- [Detector](src/Hardware/Detector/README.md) библиотека взаимодействия с детектором HPGe Canberra.
+
+- [SampleChanger](src/Hardware/SampleChanger/README.md) бибилотека взаимодействия с устройством смены образцов Xemo Systec
+
+- [Scales](src/Hardware/Scales/README.md) библиотека взаимодействия с весами
+
+## [UI Templates](src/UItemplates/README.md)
+
+Содержит шаблоны интерфейсов. Палнируется перейти от winforms на [.NET Multi-platform App UI](https://docs.microsoft.com/en-us/dotnet/maui/what-is-maui).
+
+- [WinForms](src/UItemplates/WinFormsTemplates/README.md) Библиотека содержащая шаблоны интерфейсов на WinForms.
+

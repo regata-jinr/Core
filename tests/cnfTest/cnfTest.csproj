@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\cnf\cnf.csproj" />
+    <ProjectReference Include="..\..\src\cnf\CNF.csproj" />
   </ItemGroup>
 
 </Project>

@@ -57,8 +57,8 @@
 
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\base\base.csproj" />
-	  <ProjectReference Include="..\..\cloud\cloud.csproj" />
+	  <ProjectReference Include="..\..\base\Base.csproj" />
+	  <ProjectReference Include="..\..\cloud\Cloud.csproj" />
 	</ItemGroup>
 
   <ItemGroup>

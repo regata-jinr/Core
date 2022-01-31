@@ -20,13 +20,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\base\base.csproj" />
+		<ProjectReference Include="..\..\base\Base.csproj" />
 		<None Include="..\..\..\libs\XemoDll.dll" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
 		<PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
 	</ItemGroup>
 
 	<Target Name="AddPackageToSource" AfterTargets="Pack" Condition="'$(Configuration)' == 'Release'">
-		<Exec Command="nuget add bin\Release\$(PackageId).$(PackageVersion).nupkg -Source $(ARTIFACTS)\..\packages\"/>
+		<Exec Command="nuget add bin\Release\$(PackageId).$(PackageVersion).nupkg -Source $(ARTIFACTS)\..\packages\" />
 	</Target>
 
 </Project>

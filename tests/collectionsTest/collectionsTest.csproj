@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\collections\collections.csproj" />
+    <ProjectReference Include="..\..\src\collections\Collections.csproj" />
   </ItemGroup>
 
 </Project>
