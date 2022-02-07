@@ -63,7 +63,7 @@
 	</Target>
 
 	<Target Name="AddPackageToSource" AfterTargets="Pack" Condition="'$(Configuration)' == 'Release'">
-		<Exec Command="nuget add bin\Release\$(PackageId).$(PackageVersion).nupkg -Source $(ARTIFACTS)\..\packages\"/>
+		<Exec Command="nuget add bin\Release\$(PackageId).$(PackageVersion).nupkg -Source Regata.Core"/>
 	</Target>
 	
 

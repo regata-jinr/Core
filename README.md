@@ -4,9 +4,9 @@ Regata Core представляет собой платформу, унифиц
 
 ## Введение
 
-Платформа RegataCore представляет собой монолитный репозиторий разделенный на 10 библиотек, некоторые из которых связаны между собой.
+RegataCore имеет монолитную архитектуру и состоит 18 библиотек, некоторые из которых связаны между собой.
 
-Основные потребности сектора - связь с базой данных для работы с информацией об образцах, стандартах, мониторах, облучениях и измерениях.
+Основные потребности сектора - связь с базой данных для работы с информацией об образцах, стандартах, мониторах, облучениях и измерениях, а также работа с оборудованием.
 
 Предполагалось, что программы будут доступны только через использование удаленного доступа на Windows Server. Таким образом вся архитектура платформы заточена на использование на сервере, что дает возможность опустить работу связанною с безопасностью:
 
@@ -66,27 +66,32 @@ Build succeeded.
 Time Elapsed 00:00:00.29
 ```
 
-
 ## Добавление модулей в проект
 
-Many of needed function already implemented in differences frameworks.
+Все модули имееют единое пространство имен, корневым пространством является пространство
 
-Here is some limitations that I have to keep in mind:
+```csharp
+Regata.Core
+```
 
-- We strongly depend from GENIE2K packages. That means users should have windows only for working.
-- Some of additional functionality (e.g. [CalcConc](https://github.com/regata-jinr/CalcConc)) should be local, i.e. support working without internet connection. I think this is the reason why we should stay on desktop application instead of web because I want to use one framework for all apps.
-- Some of users still using windows 7, but I believe that we should not be freeze by this and update all of the system to latest, or support windows 7 also. Here is some problem in case of we will use [MSIX](https://docs.microsoft.com/en-us/windows/msix/overview) for deployment.
+Подключить модуль можно двумя способами:
 
-I think the best solution for us is **[UWP](https://docs.microsoft.com/en-us/windows/uwp/get-started/universal-application-platform-guide)**.
+- добавить в ручную ссылку на dll проекта в файл csproj, для этого я использовал переменную окружения REGATA_ARTIFACTS, которая содержит путь к директории с библиотеками и создается автоматически при запуски скрипта сборки.
 
-As I can see [Microsoft.Terminal](https://github.com/microsoft/terminal/search?q=xaml) use XAML as GUI language and distributed via few channel including github releases, that priority channel for us.
 
-Here is also some useful info that we will use in future versions of our applications about:
+```xml
+  <ItemGroup>
+        <Reference Include="base">
+          <HintPath>$(REGATA_ARTIFACTS)\dlls\$(Configuration)\base\base.dll</HintPath>
+        </Reference>
+  </ItemGroup>
+```
 
-- [Versioning](https://github.com/dotnet/Nerdbank.GitVersioning)
-- [Deployment](https://github.com/microsoft/github-actions-for-desktop-apps)
+- используя пакетный менеджер nuget (предпочтительный способ, так как позволяет переключаться между версиями)
 
-В состав платформы входят следующие модули:
+```powrshell
+dotnet add .\MyProj.csproj package Regata.Core.Base  -s $env:REGATA_ARTIFACTS\packages\
+```
 
 ## [Base](src/Base/README.md)
 

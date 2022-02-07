@@ -31,8 +31,21 @@ param
     [string]$Name
 )
 
-$od = "artifacts"
-$pd = "packages"
+$art = [System.Environment]::GetEnvironmentVariable('REGATA_ARTIFACTS', [System.EnvironmentVariableTarget]::User)
+
+if ([System.String]::IsNullOrEmpty($art)){
+    #setx REGATA_ARTIFACTS [System.IO.Path]::Combine($(pwd), 'artifacts')
+    [System.Environment]::SetEnvironmentVariable('REGATA_ARTIFACTS', [System.IO.Path]::Combine($(pwd), 'artifacts'), [System.EnvironmentVariableTarget]::User)
+    $art = [System.Environment]::GetEnvironmentVariable('REGATA_ARTIFACTS', [System.EnvironmentVariableTarget]::User)
+}
+
+if (-Not (Test-Path $art)){
+    mkdir $art > Null
+    mkdir ([System.IO.Path]::Combine($art, 'dlls')) > Null
+    mkdir ([System.IO.Path]::Combine($art, 'packages')) > Null
+}
+
+$od = 'artifacts\dlls'
 
 function GetProjects {
     param 
