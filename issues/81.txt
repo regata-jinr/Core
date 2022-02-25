@@ -1,0 +1,11 @@
+title:	Move labels from DB to labels.json
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, data base, ui-winforms
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	81
+--
+I have already mentioned that usage db for language switching was a bad idea, but actually I can move it to json files very easy.

@@ -1,0 +1,16 @@
+title:	Add custom Exception classes
+state:	OPEN
+author:	bdrum
+labels:	enhancement, report
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	71
+--
+Creation of custom RegataException class based on Exception class that will wrap current report logic  will allow us to create flexible ExceptionHandling and Reporting system.
+
+- RegataExpection : Exception
+    - DetectorException : RegataException
+    - SampleChangerException : RegataException
+    - ...

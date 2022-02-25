@@ -1,0 +1,12 @@
+title:	CheckedArrayControl returns selected item but not checked
+state:	OPEN
+author:	bdrum
+labels:	invalid, ui-winforms
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	58
+--
+SelectedItem property of custom CheckedArrayControl  returns selectedItem, but idea is that it should returns checked item.
+Change API and logic.

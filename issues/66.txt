@@ -1,0 +1,15 @@
+title:	Unified velocity changing
+state:	OPEN
+author:	bdrum
+labels:	invalid, hardware-sc
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	66
+--
+Now velocity from settings doesn't affect to device.
+
+I have found out what value should fit the maximums for each axis.
+Check if specified values exceeds the maxima and in this case set maxima.
+Increasing a velocity should perform via multiplying by scaling factor.

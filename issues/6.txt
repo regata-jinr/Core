@@ -1,0 +1,17 @@
+title:	Description of notification by code
+state:	OPEN
+author:	bdrum
+labels:	report
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	6
+--
+In the report service we have unique code for each state.
+
+I have to 
+- [ ] implement mechanism to link code with description
+    - [ ] description should contain few field such as subject, tech_mesage, base_message, ...
+    - [ ] we will keep descriptions  in file. in this case we can provide different languages
+- [ ] write descriptions of each code

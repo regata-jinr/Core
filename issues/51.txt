@@ -1,0 +1,32 @@
+title:	Getting list of available detectors
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, hardware-detector
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	51
+--
+I would like to have list only from available detectors, not all devices on machine.
+
+I can request such list asynchronous with cancel by timeout in order to avoid freezing.
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+~~~csharp
+ var dev1 = new DeviceAccess();
+dev1.Connect("D1", ConnectOptions.aReadWrite);
+Console.WriteLine(dev1.IsConnected);
+var dev2 = new DeviceAccess();
+dev2.Connect("D1", ConnectOptions.aReadWrite);
+~~~
+
+Such code working fine. New instance of DeviceAccess allows to connect the same detector twice.
+In case of handle connection from mvcg IsDetectorAvailable("D1") working correctly.
+
+[I can test it via running putview and pvopen processes](https://github.com/regata-jinr/Core/issues/52)
+
+--

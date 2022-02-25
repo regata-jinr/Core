@@ -1,0 +1,19 @@
+title:	Events vs async
+state:	CLOSED
+author:	bdrum
+labels:	question, hardware-sc
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	78
+--
+Now I use async approach for managing xemo devices moving, but perhaps it is better to use events based approach. 
+Listener get event about reaching position and depend of it run next transition.
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+We use both in current solution
+--

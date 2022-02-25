@@ -1,0 +1,11 @@
+title:	Add weight for standards and monitors
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, hardware-detector, data base
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	57
+--
+Now I've added weight only for samples (#56), but also weight for standards and monitors should be added.

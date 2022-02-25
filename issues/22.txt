@@ -1,0 +1,11 @@
+title:	Control levels codes
+state:	OPEN
+author:	bdrum
+labels:	enhancement, report
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	22
+--
+Now I can test only uniqueness of codes, but also I have to add checking for level bins - INFO from 1 to 999.

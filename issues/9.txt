@@ -1,0 +1,11 @@
+title:	[NotMapped] fields visible in RDGV
+state:	OPEN
+author:	bdrum
+labels:	bug, ui-winforms, regata-data-grid-view
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	9
+--
+Model's fileds that mark as not mapped still visible in rdgv.

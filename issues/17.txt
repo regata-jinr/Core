@@ -1,0 +1,11 @@
+title:	Data sorting
+state:	OPEN
+author:	bdrum
+labels:	enhancement, ui-winforms, regata-data-grid-view
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	17
+--
+Add sorting by click on column  header. Sorting should support nesting so in case of click to column a and then to column b, sorting should be done by A and then B

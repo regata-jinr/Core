@@ -1,0 +1,39 @@
+title:	Error handling via XemoDll.ML_ErrorCallBack(ptr)
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, hardware-sc
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	60
+--
+XemoDLL has error handling via pointer to a function.
+
+[In c# I can use it.](https://stackoverflow.com/questions/29300465/passing-function-pointer-in-c-sharp) It very useful because it will allow me to avoid frequent state checking and to handle error on common manner. 
+author:	bdrum
+association:	member
+edited:	true
+status:	none
+--
+Test this 
+
+~~~csharp
+        private ErrorHandlerDelegate ErrorHandlerDel { get; set; }
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate IntPtr ErrorHandlerDelegate(IntPtr ptr);
+
+        [DllImport("XemoDll.dll", EntryPoint = "_ML_ErrorCallBack@4", ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern void ML_ErrorCallBackDelegate(ErrorHandlerDelegate edel);
+
+        private IntPtr ErrorHandler(IntPtr errNo)
+        {
+            Report.Notify(new Message((int)errNo) { Head = $"Getting error from xemo device: {SerialNumber}"});
+            ErrorOccurred?.Invoke(SerialNumber, (int)errNo);
+            return IntPtr.Zero;
+        }
+~~~
+
+Wrap xemo error codes to our codes and add new ones
+--

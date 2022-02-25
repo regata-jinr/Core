@@ -1,0 +1,16 @@
+title:	Create and store state of instances of types
+state:	OPEN
+author:	bdrum
+labels:	enhancement, report
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	75
+--
+It is very useful to save states of instances of complex types in some running points.
+
+E.g. state of sample changer could contain axis positions, reference switches, err state, and so on. 
+We can save such state in the some running points, e.g. before measurement start or in case of error.
+
+It will allow us to detect problems fast and will very good addition part for logs.

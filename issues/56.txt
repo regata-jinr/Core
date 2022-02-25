@@ -1,0 +1,15 @@
+title:	Add weight to spectra
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, hardware-detector, data base
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	56
+--
+I have two weight records for LLI:
+
+weight
+reweight
+When I have to add this info to file spectra?

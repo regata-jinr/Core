@@ -1,0 +1,20 @@
+title:	Catch hardware switches and error
+state:	CLOSED
+author:	bdrum
+labels:	invalid, question, hardware-sc
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	69
+--
+I can control XEMO via dll and it provides their own dll with GUI. In case of error message box will appear.
+But in case I can not use errorcallback, how to catch this errors...
+Background task that we did it with tracking position?
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Duplicate of #60 
+--

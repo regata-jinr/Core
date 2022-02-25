@@ -1,0 +1,14 @@
+title:	Implement movement by zones
+state:	OPEN
+author:	bdrum
+labels:	enhancement, hardware-sc
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	79
+--
+During each movement we can track position and check it with predefined zones.
+Zones could be differ by speed and safety.
+In speed zone (e.g. (MaxY, [HomeX;AboveCellInternalDiskX]) we can increase speed.
+In safety zones we can deny some movement. In case of inside detector shield app can move only along Y axis.

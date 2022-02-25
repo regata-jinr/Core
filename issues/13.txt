@@ -1,0 +1,11 @@
+title:	Data validation
+state:	OPEN
+author:	bdrum
+labels:	enhancement, ui-winforms, regata-data-grid-view
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	13
+--
+Actually I have internal mechanism of data validation from dgv. I think I just have to wrap exception of it to my Report service.

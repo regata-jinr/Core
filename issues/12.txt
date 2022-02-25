@@ -1,0 +1,11 @@
+title:	Filling selected cells by value
+state:	OPEN
+author:	bdrum
+labels:	enhancement, ui-winforms, regata-data-grid-view
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	12
+--
+The good idea is implementing column one type or one column cells selection. This means that if user starting selecting process from ColumnA even in case he continue to move mouse along another column only cells of ColumnA will be selected.

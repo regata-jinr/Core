@@ -1,0 +1,17 @@
+title:	Find out what is rated current for each motor
+state:	OPEN
+author:	bdrum
+labels:	question, hardware-sc
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	64
+--
+On page 60 of  625-11-09_Xemo_Equipment_Manual_Web page 30 written
+
+~~~
+As a rule, the power current tolerance is inscribed on the motors as “rated current”.
+~~~
+
+What is this current value?

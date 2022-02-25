@@ -1,0 +1,13 @@
+title:	DurationControl auto scaling
+state:	OPEN
+author:	bdrum
+labels:	ui-winforms
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	46
+--
+I like the idea to use layouts in DurationCntrol, but it doesn't allow to me use autoscale option as well as it happens with buttons.
+
+How to increase fonts of labels and numerics with increasing form size?

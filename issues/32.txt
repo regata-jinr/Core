@@ -1,0 +1,11 @@
+title:	Read only mode for RDGV
+state:	CLOSED
+author:	bdrum
+labels:	ui-winforms, regata-data-grid-view
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	32
+--
+Flag and constructor option for read only mode of rdgv.

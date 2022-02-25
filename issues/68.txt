@@ -1,0 +1,13 @@
+title:	Add bound positions to DB
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, hardware-sc, data base
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	68
+--
+I can save bound positions to DB and read it from measurements.
+
+Prepare model for these points and add it into db.

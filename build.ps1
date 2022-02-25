@@ -34,7 +34,6 @@ param
 $art = [System.Environment]::GetEnvironmentVariable('REGATA_ARTIFACTS', [System.EnvironmentVariableTarget]::User)
 
 if ([System.String]::IsNullOrEmpty($art)){
-    #setx REGATA_ARTIFACTS [System.IO.Path]::Combine($(pwd), 'artifacts')
     [System.Environment]::SetEnvironmentVariable('REGATA_ARTIFACTS', [System.IO.Path]::Combine($(pwd), 'artifacts'), [System.EnvironmentVariableTarget]::User)
     $art = [System.Environment]::GetEnvironmentVariable('REGATA_ARTIFACTS', [System.EnvironmentVariableTarget]::User)
 }

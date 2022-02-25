@@ -1,0 +1,11 @@
+title:	Data filtering
+state:	OPEN
+author:	bdrum
+labels:	enhancement, ui-winforms, regata-data-grid-view
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	15
+--
+Is an important feature to filter initial data in rdgv. Filtering should be nested and should support reseting to initial state without data losses.

@@ -1,0 +1,44 @@
+title:	Support of language switching
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, labels
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	19
+--
+Provide mechanism for getting labels with supporting language switching 
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+How to avoid usage such construction in each Form?
+
+~~~csharp
+    public FormConstructor()
+        {
+            InitializeComponent();
+           
+            LangItem.CheckedChanged += Labels_LanguageItemChanged;
+            Labels.LanguageChanged += Labels_LanguageChanged;
+
+            Labels.CurrentLanguage = Settings.Language.English;
+            // ...
+        }
+
+        private void Labels_LanguageItemChanged()
+        {
+            Labels.CurrentLanguage = LangItem.CheckedItem;
+        }
+
+        private void Labels_LanguageChanged()
+        {
+            Labels.SetControlsLabels(this.Controls);
+            LangItem.CheckedChanged -= Labels_LanguageItemChanged;
+            LangItem.CheckItem(Labels.CurrentLanguage);
+            LangItem.CheckedChanged += Labels_LanguageItemChanged;
+        }
+~~~
+--

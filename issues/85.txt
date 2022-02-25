@@ -1,0 +1,13 @@
+title:	Reduce accuracy during tracking position
+state:	OPEN
+author:	bdrum
+labels:	hardware-sc
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	85
+--
+Right now during tracking position we require full matching of coordinates. We have step motor with one step accuracy 0.1mm it is too small.
+
+We have to reduce accuracy and allow some delta **into direction of movement**.

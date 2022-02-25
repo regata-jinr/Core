@@ -1,0 +1,25 @@
+title:	Incorrect form text
+state:	CLOSED
+author:	bdrum
+labels:	bug, labels
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	54
+--
+SetLabel has not effect to text of a form.
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+The reason is that 
+
+~~~csharp
+ Labels.SetControlsLabels(mainForm.Controls);
+~~~
+
+I don't pass Form control itself to the function.
+
+--

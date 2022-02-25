@@ -1,0 +1,53 @@
+title:	Language spreading on forms
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, question
+comments:	1
+assignees:	bdrum
+projects:	UI template (Done)
+milestone:	
+number:	1
+--
+**Switching language is one of the basic feature that should be implemented one time.**
+_It means just changing of text or labels for ui elements._
+
+### There are few mechanism for keeping few languages in the applications:
+
+1.  **In the code**
+    _Pros:_
+👍   Very fast
+👍   Runtime
+👍  User can't impact on it
+    _Cons:_
+ 👎  Dirty codebase
+ 👎  Required to reset labels that have result of events.
+
+2. **In the side file**
+    _Pros:_
+👍   Clean codebase
+    _Cons:_
+👎   Relatively slow
+👎   User can lost file or break it (additional functional for reset file)
+ 👎  Required to reset labels that have result of events.
+
+3. **In the DataBase**
+    _Pros:_
+👍   Clean codebase
+👍   Changes not impact to app
+    _Cons:_
+👎   Relatively slow
+
+### Also the open question is switching mechanism: 
+
+:thought_balloon: Should we run application with predefined language setting, i.e. in case of switch app will be restart.
+Actually is default way in WinForm via localization feature.
+
+:thought_balloon: The other form of switching is like in some website:
+You can switch it from any form. So it means that all already opened form will be also automatically translated. Actually it looks preferable and not hard for implementation via events and static classes of settings that correspond with main idea of setting class that should be single for whole application.
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Data base variant has been chosen.
+--

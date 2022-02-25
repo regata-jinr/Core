@@ -1,0 +1,15 @@
+title:	UI Patterns
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, question
+comments:	0
+assignees:	bdrum
+projects:	UI template (Done)
+milestone:	
+number:	2
+--
+The idea of the issue is creation of all list of forms, controls and interactions between them.
+
+Then detection of patterns in this list and using this pattern as base or template for new version of software.
+
+So, first of all we should decide which data required and how we will process them?

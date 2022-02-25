@@ -1,0 +1,17 @@
+title:	New irradiation register
+state:	OPEN
+author:	bdrum
+labels:	enhancement
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	84
+--
+Add further functional:
+
+- [ ] Colorize by containers
+- [ ] In case of changing container for new sample it should go to correct position in the table
+
+
+

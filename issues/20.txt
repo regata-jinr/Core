@@ -1,0 +1,18 @@
+title:	Mechanism of labels using
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, labels
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	20
+--
+Create storage for code errors and unique names of conrols that provide to user change language in runtime. Such storage also should bind control names with human readable text.
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+New infrastructure will based on windows server and each app will be local for it. So db will be allow always. This means that we can use it for the labels storing.
+--

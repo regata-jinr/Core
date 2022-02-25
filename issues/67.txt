@@ -1,0 +1,18 @@
+title:	Error handling for SampleChanger class
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, hardware-sc
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	67
+--
+Wrap method to Regata.Core.Report services
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Duplicate of #60 
+--

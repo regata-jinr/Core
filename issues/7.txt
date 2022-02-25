@@ -1,0 +1,31 @@
+title:	Table interaction pattern
+state:	CLOSED
+author:	bdrum
+labels:	ui-winforms, regata-data-grid-view
+comments:	1
+assignees:	bdrum
+projects:	UI template (Done)
+milestone:	
+number:	7
+--
+Almost each form in our apps have a table.
+
+Here is the list of functions and states of the table:
+
+- [x] Read information from db
+- [x] Save information to db (automatically choose update or insert)
+- [x] Data validation
+- [x] Converting of internal field names to human understandable column header with support of switching language
+- [x] Set readonly columns
+- [x] Show/hide selected columns
+- [x] Save state of the table. This means that hided columns names should be save to file settings and load after running.
+
+I think the best way to implement this is abstract generic class based on datagridview where the generic type is data model class.
+
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Done. See RegataDataGridView. For other features see label "regata-data-grid-view"
+--

@@ -1,0 +1,29 @@
+title:	Export data to excel
+state:	OPEN
+author:	bdrum
+labels:	enhancement, ui-winforms, regata-data-grid-view
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	14
+--
+I think the best way to do it is use preliminary step to exporting into csv and then open csv file via excel app.
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+~~~powershell
+➜ gci -Path 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs' -Filter *excel*
+
+    Directory: C:\ProgramData\Microsoft\Windows\Start Menu\Programs
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---          19.08.2020     9:50           2413 Excel.lnk
+&'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Excel.lnk' .\data.csv 
+~~~
+
+Will open csv in excel, but in raw format :( I.e. without styles, alignments and fitting.
+--

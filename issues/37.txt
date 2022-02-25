@@ -1,0 +1,14 @@
+title:	Working with ComPort
+state:	OPEN
+author:	bdrum
+labels:	hardware-scales
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	37
+--
+What is the best scheme for working with comport?
+
+- open port for each weighting
+- open port one time per weighting session

@@ -1,0 +1,13 @@
+title:	Set up MSBuild
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, question, autoupdate
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	27
+--
+Now the problem is that we have 20 dll files as a products of Regata.Core. In case I'm using it inside Regata.Core solution this fine, because I can just reference to a specific project, e.g. almost each assembly  references to Regata.Core.Report.dll.
+
+I have to setup msbuild  build all projects and run all tests in solution to specific folder and use this folder for referencing in other projects.

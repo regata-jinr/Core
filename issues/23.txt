@@ -1,0 +1,11 @@
+title:	Stress tests for detector
+state:	OPEN
+author:	bdrum
+labels:	hardware-detector
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	23
+--
+Cove by test stress behaviour of detector. E.g. usage of busy detector or with non working VDM service.

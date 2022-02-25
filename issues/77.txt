@@ -1,0 +1,13 @@
+title:	Set up versioning system
+state:	OPEN
+author:	bdrum
+labels:	enhancement, question
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	77
+--
+Create correct autoincrement versioning system based on [this repo](https://github.com/dotnet/Nerdbank.GitVersioning)
+
+

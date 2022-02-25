@@ -1,0 +1,27 @@
+title:	Merge all libraries to the one repo
+state:	CLOSED
+author:	bdrum
+labels:	enhancement
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	3
+--
+I think that all code should be combine into the one repo like [dotnet/runtime](https://github.com/dotnet/runtime)
+
+For example 
+- Regata
+- Regata/Hardware/Detector.dll
+- Regata/Hardware/SampleChanger.dll
+- Regata/Core/Settings/Settings.dll
+- Regata/DataBase/Context/
+- Regata/DataBase/Models/
+- Regata/GUI/WinFormsPrimitives/
+...
+
+After that I can use this libraries in other application repoes.
+
+How to merge commits into one repo.
+Split development to the branches. See  [dotnet/runtime](https://github.com/dotnet/runtime)
+Prepare cicd for nuget?

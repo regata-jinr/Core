@@ -1,0 +1,18 @@
+title:	Settings form
+state:	OPEN
+author:	bdrum
+labels:	ui-winforms
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	8
+--
+Each app will have it own settings based on settings of used assemblies and classes.
+
+So I have to prepare general settings form that read json files and parse it to correspond winforms components based on general types.
+
+There are plenty programs that already have this. E.g. vscode, or vs studio:
+
+![image](https://user-images.githubusercontent.com/16210997/103075352-7dc33980-45dc-11eb-952f-6c6dbb257c1b.png)
+

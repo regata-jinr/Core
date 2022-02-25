@@ -1,8 +1,8 @@
 name: CORE_CD
 
-on:
-  push:
-    branches:
+# on:
+#  push:
+#    branches:
       # uncomment line below to run actions after push to master branch
       # - master 
 

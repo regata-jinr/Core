@@ -1,0 +1,11 @@
+title:	Support undo operations
+state:	OPEN
+author:	bdrum
+labels:	enhancement, ui-winforms, regata-data-grid-view
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	18
+--
+It will be great feature in case of user be able to undo maded operations including data changes.

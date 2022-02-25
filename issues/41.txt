@@ -1,0 +1,11 @@
+title:	Provide annotations for models fields
+state:	OPEN
+author:	bdrum
+labels:	data base
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	41
+--
+Now I'm using model representation of the data. [It has a powerful annotations mechanism](https://docs.microsoft.com/en-us/ef/core/modeling/entity-properties?tabs=data-annotations%2Cwithout-nrt) that can validate the data automatically.

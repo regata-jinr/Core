@@ -1,0 +1,39 @@
+title:	Test of language switching for multiform apps
+state:	OPEN
+author:	bdrum
+labels:	ui-winforms, settings, labels
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	49
+--
+The idea of language switching is that switching from any form should call switching for rest app forms.
+
+Here the schema of such behavior for testing purposes:
+
+- Create first form based on RegisterForm with name TestLangSwitching1
+- Create second form based on RegisterForm with name TestLangSwitching2
+- Fill UILabels table with special text field
+- Test correct language loading from setting file
+- Switch language by performing click on lang item from first form
+- Check switching fact for both forms
+- Repeat with opposite order 
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Multiswitching does not work now:
+
+In order to switch language we have to add such instructions for each form based on RegisterForm:
+
+~~~csharp
+ var rf = new RegisterForm<Measurement>(Settings<MeasurementsSettings>.CurrentSettings.CurrentLanguage);
+ rf.LangItem.CheckItem(Settings<MeasurementsSettings>.CurrentSettings.CurrentLanguage);
+ rf.LangItem.CheckedChanged += () => { Settings<MeasurementsSettings>.CurrentSettings.CurrentLanguage = rf.LangItem.CheckedItem; Labels.SetControlsLabels(rf.Controls); };
+
+// in the end of constructor
+Labels.SetControlsLabels(rf.Controls); 
+~~~
+--

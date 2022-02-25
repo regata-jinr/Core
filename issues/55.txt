@@ -1,0 +1,87 @@
+title:	CopyBlock instruction from CAL file to Detector doesn't work
+state:	OPEN
+author:	bdrum
+labels:	bug, hardware-detector
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	55
+--
+I have to upload efficiency calibration files to detector, but I can't because of unhandled exception:
+
+~~~csharp
+            DeviceAccess d = null;
+            DataAccess effFile = null;
+
+            try
+            {
+                effFile = new DataAccess();
+                effFile.Open(@"C:\GENIE2K\CALFILES\Efficiency\D1\D1-eff-2,5.CAL");
+
+                d = new DeviceAccess();
+                d.Connect("D1");
+                effFile.CopyBlock(d, CanberraDataAccessLib.ClassCodes.CAM_CLS_GEOM);
+            }
+            finally
+            {
+                d?.Disconnect();
+                if (effFile != null && effFile.IsOpen)
+                    effFile.Close();
+            }
+
+~~~
+
+Returns 
+
+~~~
+Unhandled exception. System.Runtime.InteropServices.COMException (0x80010105): The server threw an exception. (0x80010105 (RPC_E_SERVERFAULT))
+   at CanberraDataAccessLib.DataAccessClass.CopyBlock(Object Destination, ClassCodes lClass, ParamCodes lParam)
+   at WorkFlowCore.Program.Main(String[] args) in Program.cs:line 35
+~~~
+
+It doesn't work with GENIE2k version 3.4.1_rev02 (Nov 2016), but the code is working with version 3.4.0.2877 (Mar 2015).
+For version 3.4.0.2877 (Mar 2015) the problem is that we can't open DSA-LX detectors via MVCG with version 3.4.0.2877 (Mar 2015).
+
+~~~powershell
+.NET SDK (reflecting any global.json):
+ Version:   5.0.401
+ Commit:    4bef5f3dbf
+
+Runtime Environment:
+ OS Name:     Windows
+ OS Version:  10.0.19043
+ OS Platform: Windows
+ RID:         win10-x64
+~~~
+
+In the same time we can add efficiency calibration via the same command directly into the spectra file and it works fine for any version of GENIE2k:
+
+~~~csharp
+            DataAccess effFile = null;
+            DataAccess spctr = null;
+
+            try
+            {
+                effFile = new DataAccess();
+                effFile.Open(@"C:\GENIE2K\CALFILES\Efficiency\D1\D1-eff-10.CAL");
+
+                spctr = new DataAccess();
+                spctr.Open(@"D:\Spectra\2020\09\kji\1006421.cnf", OpenMode.dReadWrite);
+
+                effFile.CopyBlock(spctr, CanberraDataAccessLib.ClassCodes.CAM_CLS_GEOM);
+
+                spctr.Save("");
+
+
+            }
+            finally
+            {
+                if (effFile != null && effFile.IsOpen)
+                    effFile.Close();
+
+                if (spctr != null && spctr.IsOpen)
+                    spctr.Close();
+
+            }
+~~~

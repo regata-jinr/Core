@@ -1,0 +1,14 @@
+title:	Different between Rpos and Apos
+state:	OPEN
+author:	bdrum
+labels:	question, hardware-sc
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	63
+--
+As I can see here it is not difference:
+
+![image](https://user-images.githubusercontent.com/16210997/130069087-f058a93a-1c02-4384-838f-23b4f2a958fe.png)
+

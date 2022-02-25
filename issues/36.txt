@@ -1,0 +1,25 @@
+title:	Settings GUI representation
+state:	CLOSED
+author:	bdrum
+labels:	ui-winforms, settings
+comments:	2
+assignees:	bdrum
+projects:	
+milestone:	
+number:	36
+--
+We have to special item that could be used for representing settings of classes as DropDownMenuItems in MenuStrip
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Settings should be represented for whole app and dropdown menu item will show a settings form.
+--
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Duplicate of #8 
+--

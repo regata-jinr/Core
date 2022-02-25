@@ -1,0 +1,13 @@
+title:	UI should be based on layouts
+state:	CLOSED
+author:	bdrum
+labels:	ui-winforms
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	43
+--
+Now during the testing my templates form I've occurred many bugs related with ui elements position and alignments.
+
+I can avoid it if add layouts for each field of Register Form. 

@@ -1,0 +1,18 @@
+title:	PositionReached event fires wrong
+state:	CLOSED
+author:	bdrum
+labels:	bug, hardware-sc
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	76
+--
+PositionReached event fires when device is starting to move to a position, but not when a position reached.
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Seems this linked with wrong position tracking...
+--

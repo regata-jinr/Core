@@ -1,0 +1,33 @@
+title:	To wrap movement methods into tasks
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, hardware-sc
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	62
+--
+In such case 
+
+~~~csharp
+  public void Home()
+        {
+            HomeY();
+            HomeX();
+            HomeC();
+        }
+~~~
+
+Sample changer will make reference run for all axes simultaneously. It's dangerous.
+
+We have to wrap movement methods to tasks and process task result or set continuation. 
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+![image](https://user-images.githubusercontent.com/16210997/129912662-a6c6cad5-ab50-4e8c-85e3-bd5ce5ca3267.png)
+
+I have to check that Still method lock main thread till operation not complete.
+--

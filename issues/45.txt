@@ -1,0 +1,11 @@
+title:	Disable EF core tracking for read-only data 
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, data base
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	45
+--
+It will increase performance. 

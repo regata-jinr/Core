@@ -1,0 +1,15 @@
+title:	Shared doc/sheet for comments errors 
+state:	OPEN
+author:	bdrum
+labels:	enhancement, report
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	74
+--
+I can generate unique google sheet or doc for each app and add link to menustrip in order to user can leave feedback.
+E.g. such columns could be used
+Description, author, type, approved, screenshot
+
+It also could be used as a mechanism for approving changes by manager via authorized comment.  

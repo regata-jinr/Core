@@ -1,0 +1,23 @@
+title:	Implement ArrayControl
+state:	CLOSED
+author:	bdrum
+labels:	bug, enhancement, ui-winforms
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	44
+--
+ArrayControl should be a control that represents set of radio buttons with values from a given array.
+It should be based on DetectorItem and extended it to Height and similar entities.
+
+
+author:	bdrum
+association:	member
+edited:	true
+status:	none
+--
+Doesn't work.
+
+Fix and add tests
+--

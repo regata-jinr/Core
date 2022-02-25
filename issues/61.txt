@@ -1,0 +1,11 @@
+title:	Emergency stop
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, hardware-sc
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	61
+--
+How to guarantee stop after error? I can call MB_Stop(axis), but in case of connection broken it looks like xemo will continue to run last command. I have to have something like force stop.

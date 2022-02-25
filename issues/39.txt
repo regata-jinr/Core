@@ -1,0 +1,12 @@
+title:	Fill detailed text for message
+state:	OPEN
+author:	bdrum
+labels:	invalid, report
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	39
+--
+For registered messages with specific exceptions of unregistered error with general Exception 
+fill Message.DetailedText with Exception.ToString()

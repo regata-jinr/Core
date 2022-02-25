@@ -1,0 +1,11 @@
+title:	Can't run GENIE2K\EXEFILES programmatically
+state:	CLOSED
+author:	bdrum
+labels:	bug, hardware-detector
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	52
+--
+Don't understand why process run has no effects...

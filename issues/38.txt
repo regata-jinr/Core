@@ -1,0 +1,12 @@
+title:	Authentication via Kerberos not MS SQL 
+state:	OPEN
+author:	bdrum
+labels:	data base
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	38
+--
+In case of we have server-client scheme we can avoid authentication in data base.
+If user log in to the server the app just get his role.

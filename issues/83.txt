@@ -1,0 +1,11 @@
+title:	Incorrect movement when changing disks
+state:	CLOSED
+author:	bdrum
+labels:	invalid, hardware-sc
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	83
+--
+In case of movement from one disk to another, device should goes up a bit because of in opposite case it will damage containers.

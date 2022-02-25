@@ -1,0 +1,13 @@
+title:	Redundancy of GlobalSettings class
+state:	CLOSED
+author:	bdrum
+labels:	question, settings
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	48
+--
+Now since time I don't see the necessary of separate GlobalSettings class.
+
+Why just Settings<TSettings> can't have such global properties as language and so on?

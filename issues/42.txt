@@ -1,0 +1,20 @@
+title:	Register Form items will be a read-only properties
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, ui-winforms
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	42
+--
+As well as python pandas dataframe allow to get columns as class field we can use enum items on the same manner.
+
+Perhaps it's not so good for encapsulation, but anyway we have to provide mechanism to control e.g. subscription of added items.
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+This is a bad idea, because such behavior of python because of it interpreter. Here I can't get the same.
+--

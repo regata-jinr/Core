@@ -1,0 +1,11 @@
+title:	Upload settings to detector
+state:	CLOSED
+author:	bdrum
+labels:	invalid, hardware-detector
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	53
+--
+Now only default values

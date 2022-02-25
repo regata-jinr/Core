@@ -1,0 +1,52 @@
+title:	Registers form prototype
+state:	CLOSED
+author:	bdrum
+labels:	ui-winforms
+comments:	3
+assignees:	bdrum
+projects:	
+milestone:	
+number:	30
+--
+We can provide the same form for all types of registers:
+
+- irradiations
+- measurements
+- m.b. even for weighting
+
+The base of such form will be the next one:
+
+![image](https://user-images.githubusercontent.com/16210997/105503024-22699180-5cd7-11eb-9ab6-05ded6190472.png)
+
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Third field shouldn't use rdgv.
+
+It should be separated control and have constructor with two parameters:
+
+- first int is the number of tabs
+- second int is the number of dgv on the each tab
+
+All logic such as queries and initialization of dgv will be external based on datasource property.
+
+The question is how to generate dgv or I have to predefined it for a big number case as null? 
+--
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Now concerning the field 4
+
+What is the best way to generalize functionality and pass the data from field 3 to 2?
+--
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Let's go to #35 
+--

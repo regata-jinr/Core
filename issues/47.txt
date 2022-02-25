@@ -1,0 +1,29 @@
+title:	DataGridView at TabsPane are filling too slow
+state:	OPEN
+author:	bdrum
+labels:	invalid, ui-winforms
+comments:	2
+assignees:	bdrum
+projects:	
+milestone:	
+number:	47
+--
+Figure out of this
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+The problem was that there was separate query for each control. So we have very much queries just to get string.
+
+We can avoid it if we will load all labels, but now if I will do it in static constructor of Labels it will not allow us to split label by form name. I have to load it in the constructor of the form and figure out switching language by the default mechanism using resources.
+--
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+If we will work in such manner switching language for different forms will not work. As well as we have to split tests from one to each functionality:
+switching
+different forms switching
+--

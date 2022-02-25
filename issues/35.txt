@@ -1,0 +1,33 @@
+title:	Register form dataflow
+state:	CLOSED
+author:	bdrum
+labels:	ui-winforms
+comments:	2
+assignees:	bdrum
+projects:	
+milestone:	
+number:	35
+--
+In the issue #30  we announce generalized view for registers.
+
+Now let's think how we can generalized passing of data from DGVTabPaneControl to RDataGridView via functional field?
+
+
+author:	bdrum
+association:	member
+edited:	true
+status:	none
+--
+Functional field allows us to manipulate main table, but manipulations could be different. It may make changes to main table or fill the main table from additional table from DGVTabControl.
+
+Anyway manipulation strictly depends about type of register and could not be generalized.
+
+But what we can do it provides easy access to selected cells from dgv from active tab page
+--
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Functional field based on TableLayoutPanel. User will be able to add any control to that field and functionality.
+--

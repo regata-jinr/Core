@@ -1,0 +1,24 @@
+title:	Packaging via build.ps1
+state:	OPEN
+author:	bdrum
+labels:	invalid, build
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	86
+--
+Right now nuget package will be generated only in vase of build via VS.
+
+I have to add RunPack function to build.ps1
+
+I can do this with further command
+```poweshell
+nuget pack .\src\Base\Base.csproj -Build  -Properties Configuration=Release
+```
+
+However in this case something wrong with file path:
+
+```powershell
+Could not find a part of the path '...\src\Base\bin\Release\Base\bin\Release'.
+```

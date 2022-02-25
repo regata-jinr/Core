@@ -1,0 +1,16 @@
+title:	Combine registers functional into the template
+state:	OPEN
+author:	bdrum
+labels:	invalid, ui-winforms
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	80
+--
+Despite on the fact of existing RegisterForm template it's very much the same work for really closer functional of registers:
+
+- In Measurements.Desktop I have empty Measurements register that could be filled
+- In DBC I should have both registers: Irradiation as for viewing and also for filling and Measurement register only for viewing.
+
+Now I just copy paste already implemented functional from Measurements.Desktop, but it's obviously I have to combine how many functionality as possible into already existed template.

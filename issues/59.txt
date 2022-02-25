@@ -1,0 +1,21 @@
+title:	Identify xemo com port by serial number
+state:	CLOSED
+author:	bdrum
+labels:	enhancement, hardware-sc
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	59
+--
+Via windows register I can identify serial number - com port:
+
+![image](https://user-images.githubusercontent.com/16210997/129560517-193d882e-7b92-4137-a4fe-fad1634db097.png)
+
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+As you can see on screenshot key has 'A' character at the end. We have to use regexp for searching sn device pattern 'd{6}'
+--

@@ -1,0 +1,11 @@
+title:	Download background spectra from cloud
+state:	OPEN
+author:	bdrum
+labels:	enhancement, cloud
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	25
+--
+Now users can't download spectra of background. We have to implement this feature. 

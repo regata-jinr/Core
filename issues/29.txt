@@ -1,0 +1,18 @@
+title:	Logging shoud be optional
+state:	CLOSED
+author:	bdrum
+labels:	invalid
+comments:	1
+assignees:	bdrum
+projects:	
+milestone:	
+number:	29
+--
+Now in case of settings of logger are not specified the app will crash with NullReference exception.
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+github lags
+--

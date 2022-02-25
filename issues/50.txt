@@ -1,0 +1,12 @@
+title:	Test UI with weak machines 
+state:	OPEN
+author:	bdrum
+labels:	enhancement, invalid
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	50
+--
+Not each of my user has modern pc.
+I have to add test of ui for VM with a lack of resources. 

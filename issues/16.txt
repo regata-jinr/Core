@@ -1,0 +1,11 @@
+title:	Data colorizing
+state:	OPEN
+author:	bdrum
+labels:	enhancement, ui-winforms, regata-data-grid-view
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	16
+--
+Add opportunity to colorize a rdgv data based on some logic. E.g. group with the same value should have the same colors

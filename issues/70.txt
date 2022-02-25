@@ -1,0 +1,13 @@
+title:	Initialization
+state:	CLOSED
+author:	bdrum
+labels:	question, hardware-sc
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	70
+--
+Initialization procedure always should make reference run and set reference coordinates.
+We have to be sure that real position is match with current coordinate in opposite device could be corrupted.
+

@@ -1,0 +1,13 @@
+title:	Reset cancellation token after end of sample changer movement
+state:	CLOSED
+author:	bdrum
+labels:	invalid, hardware-sc
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	72
+--
+After reaching each position I have TaskCancelledException.
+
+Reset cancellation token via Dispose.

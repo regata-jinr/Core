@@ -1,0 +1,13 @@
+title:	Change log scheme
+state:	OPEN
+author:	bdrum
+labels:	logs
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	40
+--
+I've extended notification logic which based on Messages. 
+
+New log scheme have to fit to Message

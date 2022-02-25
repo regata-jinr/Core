@@ -1,0 +1,40 @@
+title:	DB synchronization mechanism
+state:	OPEN
+author:	bdrum
+labels:	data base
+comments:	2
+assignees:	bdrum
+projects:	
+milestone:	
+number:	33
+--
+In order to avoid crashes because of internet connection lost and situation when we can't get information from DB, we are going to active use local copies of main db.
+
+PC with Measurements program will have local copy of db. PC with irradiation controller will be connected to this PC by local network and use the same local copy of DB.
+
+PC with scales will be used by the same schema.
+
+This means that before start of experiment we have to sync db (upload all needed information from main db to local) and then synchronized it (or writing twice to local and to main).
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Actually it's only two cases when active db connection is needed:
+1. Before start of experiment
+
+In this case to synchronize local db with remote we can do two things:
+- doing it before start but in this case we can lost the time, because user can put new information to remote db a long time before starting measurements
+- using some server utility that will be listen on some port and wait signal for synchronization. It could be better because in this case we able to avoid seeking synchronization data part. 
+
+2. During the experiment
+
+
+--
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+In case we will go to new infrastructure schema with usage of Windows Server in experimental room, we can avoid this problem, because connection with winserv will be local.
+--

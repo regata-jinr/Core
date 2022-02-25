@@ -1,0 +1,11 @@
+title:	Report service doesn't support breaking signals
+state:	OPEN
+author:	bdrum
+labels:	invalid, report
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	21
+--
+In case of error code has given to Report.Notify should generate stop signal for execution.

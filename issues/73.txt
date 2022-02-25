@@ -1,0 +1,12 @@
+title:	Remove redundant moving to maxY when change disk position
+state:	CLOSED
+author:	bdrum
+labels:	invalid, hardware-sc
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	73
+--
+Now getting the sample from neighbor cell sc moves to max y position.
+I have to change this behavior for these positions. It has to change disk position without moving along y.

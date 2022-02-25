@@ -1,0 +1,20 @@
+title:	New control with predefined tabs and dgv
+state:	CLOSED
+author:	bdrum
+labels:	ui-winforms
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	34
+--
+Regarded with comment from #30 we have to implement control based on TabControl.
+
+It should have:
+
+- [x] Number of pages number and number of dgvs on each page in constructor
+- [x] Some size linked parameter. I think we can use float number from 0 to 1 which lead to size of right dgv.
+- [x] Pages property that allows to get TabPageCollection
+- [x] ActivePage proeprty that return selected tab
+- [x] indexer based on [i,j] where i - page index, j dgv index
+- [x] label above each dgv

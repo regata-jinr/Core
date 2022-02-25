@@ -1,0 +1,23 @@
+title:	Test switching of the polarity switches
+state:	OPEN
+author:	bdrum
+labels:	question, hardware-sc
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	65
+--
+I can switch limits and reference switcher. In order to do this I have to use 
+
+~~~csharp
+ XemoDLL.MB_IoSet(axisNum, 0, 3, XemoConst.InPolarity, value);
+~~~
+
+~~~
+_InPolarity(_x.2) = 1 Invert polarity of the reference switch if it is an opener
+_InPolarity(_x.0..1) = 3 Invert polarity of the limit switch (3 dec. -> 1111) if opener
+_InPolarity(10.0..3) = 15 Invert polarity of the inputs In0 to In3 (15 -> 1111) 
+_InPolarity(10.0) = 1 "Polarity" of the dig. entry 10.0 will be changed to opener 
+_InPolarity(0.0..2) = 7 "Polarity" the limit switch (inputs 0 and 1) and of the reference switch (input 2) of motor X (port 0) will be changed to opener. The binary statement "7" means that the last 3 bits (bits 0 to 2) are set (111).
+~~~

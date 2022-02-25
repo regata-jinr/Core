@@ -1,0 +1,24 @@
+title:	Scheme of the tool
+state:	CLOSED
+author:	bdrum
+labels:	report
+comments:	0
+assignees:	bdrum
+projects:	Single notification tool (Done)
+milestone:	
+number:	4
+--
+## Types of notifications
+
+I think like in general these are:
+
+- operation success and finishing messages
+- warning messages, something wrong but it is not critical
+- error message, that requires interaction with user 
+
+## How to show messages
+
+- different gui (UWP, winforms)
+- email
+- logs
+

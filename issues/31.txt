@@ -1,0 +1,13 @@
+title:	Duration control
+state:	CLOSED
+author:	bdrum
+labels:	ui-winforms
+comments:	0
+assignees:	bdrum
+projects:	
+milestone:	
+number:	31
+--
+Implement a control that have such interface 
+![image](https://user-images.githubusercontent.com/16210997/106152908-03fc0e00-618f-11eb-9ff7-14d3708744fb.png)
+and have a TimeSpan as value

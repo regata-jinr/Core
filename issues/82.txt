@@ -1,0 +1,25 @@
+title:	Add regata_logger user to db
+state:	OPEN
+author:	bdrum
+labels:	invalid, data base
+comments:	2
+assignees:	bdrum
+projects:	
+milestone:	
+number:	82
+--
+In order to write logs and read basic messages I can create hidden db user
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Also it could be useful for XemoHandleManagment - for reading positions.
+--
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+And for spectra sharing
+--

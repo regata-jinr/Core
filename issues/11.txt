@@ -1,0 +1,46 @@
+title:	PopUp messages
+state:	OPEN
+author:	bdrum
+labels:	enhancement, ui-winforms, report
+comments:	2
+assignees:	bdrum
+projects:	
+milestone:	
+number:	11
+--
+Notifications based on message box paused the interface and have poor funtionality. I have to provide mechanism for displaying pop up messages without breaking in case of info messages (auto closing also should be supported) and pausing process in csae of errors. Let's consider such notification based on TaskDialogPage class.
+
+Proposed functional:
+
+- [x] Static call aka MessageBox.Show()
+- [x] Status depends view
+- [x] Auto recognition status by code
+- [x] AutoClose option with progress bar
+- [x] Detailed text in expander
+- [ ] Mailto hyperlink in the footer 
+- [x] Opening dialogs should not impact to each other
+- [x] Fill text by code in the same manner as labels
+- [ ] PopUp message has to appear in two manners (bool pauseApp): 
+    - [ ] Freeze the app and wait till user do not provide actions (error and some warnings). i.e. returning TaskDialogResult for switching, it needed e.g. when I want to user approvement to remove samples from register.
+    - [ ] Show message and continue running, in case of info, success and some warnings
+
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+Caption: [Level] Name
+
+Main Field: basic descritpion dll place level icon
+
+Footer: in case of unregistered error exception to string 
+--
+author:	bdrum
+association:	member
+edited:	false
+status:	none
+--
+How to pass parameter to PopUp message?
+
+E.g. I would like to show what exactly Detector has paused or something else...
+--
